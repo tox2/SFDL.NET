@@ -1,0 +1,63 @@
+﻿<Controls:MetroWindow x:Name="SFDL_MainWindow" x:Class="MainWindow"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+                      xmlns:p="clr-namespace:SFDL.NET3.My.Resources"
+                      Title="SFDL.NET 3"
+                      Height="518.78"
+                      Width="793.136">
+    <StackPanel>
+        <Menu x:Name="MainMenu">
+            <MenuItem Header="{x:Static p:Strings.Title2}">
+                <MenuItem Header="Einstellungen"/>
+                <MenuItem Header="Beenden"/>
+            </MenuItem>
+            <MenuItem Header="Bearbeiten">
+                <MenuItem Header="Alle fertigen Downloads entfernen"/>
+                <MenuItem Header="Alle Downloads entfernen"/>
+                <MenuItem Header="SFDL Datei schließen"/>
+                <Separator/>
+                <MenuItem Header="Alle Dateien makieren"/>
+                <MenuItem Header="Alle Dateien demakieren"/>
+                <Separator/>
+                <MenuItem Header="Alle Pakete einklappen"/>
+                <MenuItem Header="Alle Pakete erweitern"/>
+            </MenuItem>
+            <MenuItem Header="Extras">
+                <MenuItem Header="Nach dem Download">
+                    <MenuItem Header="SFDL Loader schließen" IsCheckable="True"/>
+                    <MenuItem Header="PC herunterfahren" IsCheckable="True"/>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Hilfe"/>
+
+        </Menu>
+        <ToolBar x:Name="MainToolBar">
+            <Button Content="Download starten" IsEnabled="{Binding ButtonDownloadStartEnabled}"/>
+            <Button Content="Download stoppen" IsEnabled="{Binding ButtonDownloadStopEnabled}"/>
+            <Separator/>
+            <Button Content="Instant Video" IsEnabled="{Binding ButtonInstantVideoEnabled}"/>
+            <Separator/>
+            <TextBox Controls:TextBoxHelper.UseFloatingWatermark="True" Controls:TextBoxHelper.Watermark="Max KB/s"/>
+
+        </ToolBar>
+        <ListView x:Name="ListView_DownloadItems" Height="396">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Dateiname" Width="150"/>
+                    <GridViewColumn Header="Dateigröße" Width="150"/>
+                    <GridViewColumn Header="Fortschritt" Width="100"/>
+                    <GridViewColumn Header="Status" Width="100"/>
+                    <GridViewColumn Header="Geschwindigkeit"/>
+                </GridView>
+            </ListView.View>
+
+        </ListView>
+        <Expander x:Name="Expander_Tasks" Header="Tasks">
+            <ListView x:Name="ListViewTasks" Height="100">
+
+            </ListView>
+        </Expander>
+        <StatusBar x:Name="MainStatusBar" />
+    </StackPanel>
+</Controls:MetroWindow>
