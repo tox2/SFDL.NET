@@ -1,42 +1,111 @@
-﻿<Controls:MetroWindow x:Name="SFDL_MainWindow" x:Class="MainWindow"
+﻿<Controls:MetroWindow
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
                       xmlns:p="clr-namespace:SFDL.NET3.My.Resources"
+                      xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="SFDL_MainWindow" x:Class="MainWindow"
                       Title="SFDL.NET 3"
                       Height="518.78"
-                      Width="793.136">
+                      Width="793.136" SizeToContent="WidthAndHeight">
     <StackPanel>
         <Menu x:Name="MainMenu">
-            <MenuItem Header="{x:Static p:Strings.Title2}">
-                <MenuItem Header="Einstellungen"/>
-                <MenuItem Header="Beenden"/>
-            </MenuItem>
-            <MenuItem Header="Bearbeiten">
-                <MenuItem Header="Alle fertigen Downloads entfernen"/>
-                <MenuItem Header="Alle Downloads entfernen"/>
-                <MenuItem Header="SFDL Datei schließen"/>
-                <Separator/>
-                <MenuItem Header="Alle Dateien makieren"/>
-                <MenuItem Header="Alle Dateien demakieren"/>
-                <Separator/>
-                <MenuItem Header="Alle Pakete einklappen"/>
-                <MenuItem Header="Alle Pakete erweitern"/>
-            </MenuItem>
-            <MenuItem Header="Extras">
-                <MenuItem Header="Nach dem Download">
-                    <MenuItem Header="SFDL Loader schließen" IsCheckable="True"/>
-                    <MenuItem Header="PC herunterfahren" IsCheckable="True"/>
+            <MenuItem Header="{x:Static p:Strings.MainMenu_File}">
+                <MenuItem.Icon>
+                    <Image Source="Resources/Icons/appbar.tiles.four.png" Width="32" Height="32"></Image>
+                </MenuItem.Icon>
+                <MenuItem Header="{x:Static p:Strings.MainMenu_File_Settings}">
+                    <MenuItem.Icon>
+                        <Image Source="Resources/Icons/appbar.cog.png" Width="32" Height="32"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{x:Static p:Strings.MainMenu_File_Exit}">
+                    <MenuItem.Icon>
+                        <Image Source="Resources/Icons/appbar.power.png" Width="32" Height="32"></Image>
+                    </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="Hilfe"/>
+            
+            <MenuItem Header="{x:Static p:Strings.MainMenu_Modify}">
+                <MenuItem.Icon>
+                    <Image Source="Resources/Icons/appbar.edit.png" Width="32" Height="32"></Image>
+                </MenuItem.Icon>
+                <MenuItem Header="{x:Static p:Strings.MainMenu_Modify_RemoveAllCompletedDownloads}">
+                    <MenuItem.Icon>
+                        <Image Source="Resources/Icons/appbar.close.png" Width="32" Height="32"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{x:Static p:Strings.MainMenu_Modify_CloseAlleDownloads}">
+                    <MenuItem.Icon>
+                        <Image Source="Resources/Icons/appbar.delete.png" Width="32" Height="32"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{x:Static p:Strings.MainMenu_Modify_CloseSFDLFile}">
+                    <MenuItem.Icon>
+                        <Image Source="Resources/Icons/appbar.page.delete.png" Width="32" Height="32"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="{x:Static p:Strings.MainMenu_Modifiy_MarkAllFiles}">
+                    <MenuItem.Icon>
+                        <Image Source="Resources/Icons/appbar.checkmark.png" Width="32" Height="32"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{x:Static p:Strings.MainMenu_Modifiy_UnmarkAllFiles}">
+                    <MenuItem.Icon>
+                        <Image Source="Resources/Icons/appbar.checkmark.uncrossed.png" Width="32" Height="32"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="{x:Static p:Strings.MainMenu_Modifiy_CollapeseAllPackages}">
+                    <MenuItem.Icon>
+                        <Image Source="Resources/Icons/appbar.arrow.collapsed.png" Width="32" Height="32"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{x:Static p:Strings.MainMenu_Modifiy_ExpandAllPackages}">
+                    <MenuItem.Icon>
+                        <Image Source="Resources/Icons/appbar.arrow.expand.png" Width="32" Height="32"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="{x:Static p:Strings.MainMenu_Extra}">
+                <MenuItem.Icon>
+                    <Image Source="Resources/Icons/appbar.star.png" Width="32" Height="32"></Image>
+                </MenuItem.Icon>
+                <MenuItem Header="{x:Static p:Strings.MainMenu_Extra_AfterDownload}">
+                    <MenuItem.Icon>
+                        <Image Source="Resources/Icons/appbar.door.leave.png" Width="32" Height="32"></Image>
+                    </MenuItem.Icon>
+                    <MenuItem Header="{x:Static p:Strings.MainMenu_Extra_AfterDownload_ExitLoader}" IsCheckable="True">
+                        <MenuItem.Icon>
+                            <Image Source="Resources/Icons/appbar.power.png" Width="32" Height="32"></Image>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{x:Static p:Strings.MainMenu_Extra_AfterDownload_ShutdownComputer}" IsCheckable="True">
+                        <MenuItem.Icon>
+                            <Image Source="Resources/Icons/appbar.monitor.delete.png" Width="32" Height="32"></Image>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="{x:Static p:Strings.MainMenu_Help}">
+                <MenuItem.Icon>
+                    <Image Source="Resources/Icons/appbar.book.perspective.help.png" Width="32" Height="32"></Image>
+                </MenuItem.Icon>
+                <MenuItem Header="{x:Static p:Strings.MainMenu_Help}">
+                    <MenuItem.Icon>
+                        <Image Source="Resources/Icons/appbar.information.circle.png" Width="32" Height="32"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
 
         </Menu>
         <ToolBar x:Name="MainToolBar">
-            <Button Content="Download starten" IsEnabled="{Binding ButtonDownloadStartEnabled}"/>
-            <Button Content="Download stoppen" IsEnabled="{Binding ButtonDownloadStopEnabled}"/>
+            <Image Source="Resources/Icons/appbar.control.play.png" Width="32" Height="32" ></Image>
+            <Button Content="{x:Static p:Strings.MainToolBar_StartDownload}" IsEnabled="{Binding ButtonDownloadStartEnabled}"/>
+            <Image Source="Resources/Icons/appbar.control.stop.png" Width="32" Height="32" ></Image>
+            <Button Content="{x:Static p:Strings.MainToolBar_StopDownload}" IsEnabled="{Binding ButtonDownloadStopEnabled}"/>
             <Separator/>
-            <Button Content="Instant Video" IsEnabled="{Binding ButtonInstantVideoEnabled}"/>
+            <Button Content="{x:Static p:Strings.MainToolbar_InstandVideo}" IsEnabled="{Binding ButtonInstantVideoEnabled}"/>
             <Separator/>
             <TextBox Controls:TextBoxHelper.UseFloatingWatermark="True" Controls:TextBoxHelper.Watermark="Max KB/s"/>
 
@@ -54,9 +123,7 @@
 
         </ListView>
         <Expander x:Name="Expander_Tasks" Header="Tasks">
-            <ListView x:Name="ListViewTasks" Height="100">
-
-            </ListView>
+            <ListView x:Name="ListViewTasks" Height="100"/>
         </Expander>
         <StatusBar x:Name="MainStatusBar" />
     </StackPanel>

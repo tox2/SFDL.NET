@@ -45,12 +45,12 @@ Namespace My.Resources
                 Return resourceMan
             End Get
         End Property
-
+        
         '''<summary>
         '''  Überschreibt die CurrentUICulture-Eigenschaft des aktuellen Threads für alle
         '''  Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
         '''</summary>
-        <Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>
+        <Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
         Public Property Culture() As Global.System.Globalization.CultureInfo
             Get
                 Return resourceCulture

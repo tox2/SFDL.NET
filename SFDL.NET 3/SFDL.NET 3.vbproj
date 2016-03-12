@@ -54,6 +54,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.2.4.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -177,6 +178,72 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Entypo-license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.card.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.control.play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.cog.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.page.copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.power.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.tiles.four.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.arrow.expand.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.arrow.collapsed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.checkmark.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.checkmark.uncrossed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.gauge.75.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.page.delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.star.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.door.leave.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.monitor.delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.book.perspective.help.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.information.circle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.control.stop.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

@@ -117,7 +117,79 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Title2" xml:space="preserve">
-    <value>Test</value>
+  <data name="ListView_DownloadItems_Header_Filename" xml:space="preserve">
+    <value>Filename</value>
+  </data>
+  <data name="ListView_DownloadItems_Header_Filesize" xml:space="preserve">
+    <value>Filesize</value>
+  </data>
+  <data name="ListView_DownloadItems_Header_Progress" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="ListView_DownloadItems_Header_Speed" xml:space="preserve">
+    <value>Speed</value>
+  </data>
+  <data name="ListView_DownloadItems_Header_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="MainMenu_Extra" xml:space="preserve">
+    <value>Extras</value>
+  </data>
+  <data name="MainMenu_Extra_AfterDownload" xml:space="preserve">
+    <value>After Download</value>
+  </data>
+  <data name="MainMenu_Extra_AfterDownload_ExitLoader" xml:space="preserve">
+    <value>Close SFDL Loader</value>
+  </data>
+  <data name="MainMenu_Extra_AfterDownload_ShutdownComputer" xml:space="preserve">
+    <value>Shutdown Computer</value>
+  </data>
+  <data name="MainMenu_File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="MainMenu_File_Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="MainMenu_File_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="MainMenu_Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="MainMenu_Help_About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="MainMenu_Modifiy_CollapeseAllPackages" xml:space="preserve">
+    <value>Collapse all packages</value>
+  </data>
+  <data name="MainMenu_Modifiy_ExpandAllPackages" xml:space="preserve">
+    <value>Expand all packages</value>
+  </data>
+  <data name="MainMenu_Modifiy_MarkAllFiles" xml:space="preserve">
+    <value>Mark all Files</value>
+  </data>
+  <data name="MainMenu_Modifiy_UnmarkAllFiles" xml:space="preserve">
+    <value>Unmark all Files</value>
+  </data>
+  <data name="MainMenu_Modify" xml:space="preserve">
+    <value>Modify</value>
+  </data>
+  <data name="MainMenu_Modify_CloseAlleDownloads" xml:space="preserve">
+    <value>Remove all Downloads</value>
+  </data>
+  <data name="MainMenu_Modify_CloseSFDLFile" xml:space="preserve">
+    <value>Close SFDL File</value>
+  </data>
+  <data name="MainMenu_Modify_RemoveAllCompletedDownloads" xml:space="preserve">
+    <value>Remove all completed Downloads</value>
+  </data>
+  <data name="MainToolbar_InstandVideo" xml:space="preserve">
+    <value>Instant Video</value>
+  </data>
+  <data name="MainToolBar_StartDownload" xml:space="preserve">
+    <value>Start download</value>
+  </data>
+  <data name="MainToolBar_StopDownload" xml:space="preserve">
+    <value>Stop Download</value>
   </data>
 </root>
