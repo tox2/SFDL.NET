@@ -252,5 +252,38 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\appbar.control.stop.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.folder.open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.code.xml.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.connection.quality.veryhigh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.chat.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.hourglass.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.notification.above.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.people.up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.user.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.leaderboard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.interface.textbox.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
