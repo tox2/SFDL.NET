@@ -1,12 +1,12 @@
-﻿<Controls:MetroWindow x:Class="SFDL.NET3.SettingsWindow"
-                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                      xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
-                      xmlns:p="clr-namespace:SFDL.NET3.My.Resources"
-                      xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="SFDL_SettingsWindow"
-                      Title="Einstellungen"
-                      Height="343.137"
-                      Width="798.53" WindowStartupLocation="CenterOwner">
+﻿<Controls:MetroWindow
+        x:Class="SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SFDL.NET3"
+        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+        mc:Ignorable="d" Height="922.255" Width="775.843" SizeToContent="WidthAndHeight" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" IsMaxRestoreButtonEnabled="False">
     <Grid>
         <StackPanel Orientation="Horizontal" >
             <StackPanel>
@@ -34,10 +34,10 @@
                         <StackPanel Orientation="Horizontal" >
 
                             <StackPanel >
-                                <TextBox x:Name="txt_download_path" HorizontalAlignment="Left" Height="23" Margin="5,5,0,0" TextWrapping="Wrap" Width="298" Controls:TextBoxHelper.UseFloatingWatermark="True" Controls:TextBoxHelper.Watermark="Download Verzeichnis"/>
+                                <TextBox x:Name="txt_download_path" HorizontalAlignment="Left" Height="23" Margin="5,5,0,0" TextWrapping="Wrap" Width="248" Controls:TextBoxHelper.UseFloatingWatermark="True" Controls:TextBoxHelper.Watermark="Download Verzeichnis"/>
                                 <CheckBox Content="Unterordner pro Download erstellen" Margin="5,5,0,0"></CheckBox>
-                                <RadioButton Content="SFDL Dateiname verwenden" Margin="30,5,0,0"/>
-                                <RadioButton Content="SFDL Beschreibung verwenden" Margin="30,5,0,0"/>
+                                <RadioButton Content="SFDL Dateiname verwenden" Margin="30,5,0,0" GroupName="DownloadDir"/>
+                                <RadioButton Content="SFDL Beschreibung verwenden" Margin="30,5,0,0" GroupName="DownloadDir"/>
                                 <CheckBox Content="Unterordner pro Paket erstellen" Margin="5,5,0,5"></CheckBox>
                             </StackPanel>
                             <StackPanel >
@@ -46,9 +46,53 @@
                         </StackPanel>
                     </Grid>
                 </GroupBox>
+                <GroupBox x:Name="groupBox_UnrarSettings" Header="UnRAR Einstellungen">
+                    <Grid>
+                        <StackPanel Orientation="Horizontal" >
+                            <StackPanel>
+                                <CheckBox Content="Archive nach dem Download Automatisch entpacken" Margin="5,5,0,0"></CheckBox>
+                                <CheckBox Content="Archive nach erfolgreichem Entpacken löschen" Margin="5,5,0,0"></CheckBox>
+                                <CheckBox Content="Kennwortliste zum Entpacken verwenden" Margin="5,5,0,0"></CheckBox>
+                                <Separator Margin="5,10,5,5"/>
+                                <Label Content="Kennwortliste:" ></Label>
+                                <StackPanel Orientation="Horizontal" >
+                                    <ListBox x:Name="listBox_unrar_passwords" Height="100" Width="298" BorderThickness="1"/>
+                                    <StackPanel >
+                                        <Button Width="24" Height="24" Content="+" Margin="5,5,5,0"></Button>
+                                        <Button Width="24" Height="24" Content="-" Margin="5,5,5,0"></Button>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Remote Control">
+                    <StackPanel >
+                        <CheckBox Content="Remote Control aktivieren" Margin="5"></CheckBox>
+                        <StackPanel Orientation="Horizontal" >
+                            <Label Content="IP Adresse:"></Label>
+                            <TextBox Width="141"></TextBox>
+                            <Label Content="Port:" ></Label>
+                            <Controls:NumericUpDown Maximum="65000" Minimum="1" Value="9090" Width="112" Margin="5,0"/>
+                        </StackPanel>
+                        <Separator Margin="0,10,0,5">
+                            
+                        </Separator>
+                        <Label Content="API Keys" ></Label>
+                        <StackPanel Orientation="Horizontal" >
+                            <ListBox x:Name="listBox_api_keys" Height="100" Width="298" BorderThickness="1" Margin="0,0,0,5"/>
+                            <StackPanel >
+                                <Button Width="24" Height="24" Content="+" Margin="5,5,5,0"></Button>
+                                <Button Width="24" Height="24" Content="-" Margin="5,5,5,0"></Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+                <Button Content="Einstellungen Speichern" Margin="10,15,10,10">
+                </Button>
             </StackPanel>
             <StackPanel>
-                <GroupBox x:Name="groupBox_AdvancedSettings" Header="Erweiterte Einstellungen" Margin="5" Height="117">
+                <GroupBox x:Name="groupBox_AdvancedSettings" Header="Erweiterte Einstellungen" Margin="5">
                     <Grid>
                         <StackPanel Orientation="Horizontal">
                             <StackPanel >
@@ -76,6 +120,35 @@
                                 <Controls:NumericUpDown Maximum="100" Minimum="1" Value="1" Width="147" Margin="5,5,5,0"/>
                                 <Controls:NumericUpDown Maximum="120" Minimum="1" Value="1" Width="147" Margin="5,5,5,0"/>
                             </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Speedreport Einstellungen" >
+                    <Grid>
+                        <StackPanel >
+                            <RadioButton Content="Speedreport nach dem Download anzeigen" Margin="5,5,0,0" GroupName="Speedreport"></RadioButton>
+                            <RadioButton Content="Speedreport in Datei schreiben" Margin="5,5,0,0" GroupName="Speedreport"></RadioButton>
+                            <RadioButton Content="Speedreport nicht anzeigen" Margin="5,5,0,5" GroupName="Speedreport"></RadioButton>
+                            <Separator Margin="5" ></Separator>
+                            <TextBox Controls:TextBoxHelper.UseFloatingWatermark="True" Controls:TextBoxHelper.Watermark="Benutzername" Margin="5,5,0,0"/>
+                            <TextBox Controls:TextBoxHelper.UseFloatingWatermark="True" Controls:TextBoxHelper.Watermark="Verbindung" Margin="5,5,0,0"/>
+                            <TextBox Controls:TextBoxHelper.UseFloatingWatermark="True" Controls:TextBoxHelper.Watermark="Kommentar" Margin="5,5,0,5"/>
+                            <Separator Margin="5" ></Separator>
+                            <ToolBar>
+                                <MenuItem Header="Variablen">
+                                    <MenuItem Header="Benutzername"/>
+                                    <MenuItem Header="Verbindung"/>
+                                    <MenuItem Header="Kommentar"/>
+                                    <MenuItem Header="Download Geschwindigkeit"/>
+                                    <MenuItem Header="SFDL Informationen">
+                                        <MenuItem Header="Beschreibung"/>
+                                        <MenuItem Header="Upper"/>
+                                        <MenuItem Header="Gesamtdownloadgröße"/>
+                                    </MenuItem>
+                                    <MenuItem Header="Benötigte Downloadzeit"/>
+                                </MenuItem>
+                            </ToolBar>
+                            <RichTextBox BorderThickness="1" Height="123" />
                         </StackPanel>
                     </Grid>
                 </GroupBox>
