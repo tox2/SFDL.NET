@@ -136,7 +136,7 @@
     <value>Extras</value>
   </data>
   <data name="MainMenu_Extra_AfterDownload" xml:space="preserve">
-    <value>After Download</value>
+    <value>Nach dem Download</value>
   </data>
   <data name="MainMenu_Extra_AfterDownload_ExitLoader" xml:space="preserve">
     <value>SFDL Loader schließen</value>
@@ -191,5 +191,8 @@
   </data>
   <data name="MainToolBar_StopDownload" xml:space="preserve">
     <value>Download stoppen</value>
+  </data>
+  <data name="Expander_Header_Tasks" xml:space="preserve">
+    <value>Tasks</value>
   </data>
 </root>

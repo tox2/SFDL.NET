@@ -13,12 +13,12 @@
                 <MenuItem.Icon>
                     <Image Source="Resources/Icons/appbar.tiles.four.png" Width="32" Height="32"></Image>
                 </MenuItem.Icon>
-                <MenuItem Header="{x:Static p:Strings.MainMenu_File_Settings}">
+                <MenuItem x:Name="cmd_Settings" Header="{x:Static p:Strings.MainMenu_File_Settings}">
                     <MenuItem.Icon>
                         <Image Source="Resources/Icons/appbar.cog.png" Width="32" Height="32"></Image>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="{x:Static p:Strings.MainMenu_File_Exit}">
+                <MenuItem x:Name="cmd_exit_app" Header="{x:Static p:Strings.MainMenu_File_Exit}">
                     <MenuItem.Icon>
                         <Image Source="Resources/Icons/appbar.power.png" Width="32" Height="32"></Image>
                     </MenuItem.Icon>
@@ -113,16 +113,16 @@
         <ListView x:Name="ListView_DownloadItems" Height="396">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Dateiname" Width="150"/>
-                    <GridViewColumn Header="Dateigröße" Width="150"/>
-                    <GridViewColumn Header="Fortschritt" Width="100"/>
-                    <GridViewColumn Header="Status" Width="100"/>
-                    <GridViewColumn Header="Geschwindigkeit"/>
+                    <GridViewColumn Header="{x:Static p:Strings.ListView_DownloadItems_Header_Filename}" Width="150"/>
+                    <GridViewColumn Header="{x:Static p:Strings.ListView_DownloadItems_Header_Filesize}" Width="150"/>
+                    <GridViewColumn Header="{x:Static p:Strings.ListView_DownloadItems_Header_Progress}" Width="100"/>
+                    <GridViewColumn Header="{x:Static p:Strings.ListView_DownloadItems_Header_Status}" Width="100"/>
+                    <GridViewColumn Header="{x:Static p:Strings.ListView_DownloadItems_Header_Speed}"/>
                 </GridView>
             </ListView.View>
 
         </ListView>
-        <Expander x:Name="Expander_Tasks" Header="Tasks">
+        <Expander x:Name="Expander_Tasks" Header="{x:Static p:Strings.Expander_Header_Tasks}">
             <ListView x:Name="ListViewTasks" Height="100"/>
         </Expander>
         <StatusBar x:Name="MainStatusBar" />

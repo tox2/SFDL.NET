@@ -192,4 +192,7 @@
   <data name="MainToolBar_StopDownload" xml:space="preserve">
     <value>Stop Download</value>
   </data>
+  <data name="Expander_Header_Tasks" xml:space="preserve">
+    <value>Tasks</value>
+  </data>
 </root>
