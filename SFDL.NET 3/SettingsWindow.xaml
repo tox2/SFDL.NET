@@ -1,14 +1,19 @@
-﻿<Controls:MetroWindow
-        x:Class="SettingsWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SFDL.NET3"
-        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
-        mc:Ignorable="d" WindowStartupLocation="CenterOwner" IsMaxRestoreButtonEnabled="False" Width="393.686" SizeToContent="Height"
-        BorderBrush="Black"
-        BorderThickness="1" Icon="Resources/Icons/appbar.settings.png">
+﻿<Controls:MetroWindow x:Class="SettingsWindow"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:local="clr-namespace:SFDL.NET3"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      xmlns:p="clr-namespace:SFDL.NET3.My.Resources"
+                      Width="393.686"
+                      BorderBrush="Black"
+                      BorderThickness="1"
+                      Icon="Resources/Icons/appbar.settings.png"
+                      IsMaxRestoreButtonEnabled="False"
+                      SizeToContent="Height"
+                      WindowStartupLocation="CenterOwner"
+                      mc:Ignorable="d">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -20,80 +25,148 @@
     </Window.Resources>
 
     <Grid>
-        <StackPanel Grid.ColumnSpan="3" >
-            <TabControl Controls:TabControlHelper.IsUnderlined="True" >
-                <TabItem Header="Grundeinstellungen" Controls:ControlsHelper.HeaderFontSize="15">
+        <StackPanel Grid.ColumnSpan="3">
+            <TabControl Controls:TabControlHelper.IsUnderlined="True">
+                <TabItem Controls:ControlsHelper.HeaderFontSize="15" Header="{x:Static p:Strings.Settings_GeneralSettings}">
                     <Grid>
-                        <StackPanel >
-                            <GroupBox x:Name="groupBox_general_Settings" Header="Allgemeine Einstellungen">
+                        <StackPanel>
+                            <GroupBox x:Name="groupBox_general_Settings" Header="{x:Static p:Strings.Settings_GeneralSettings}">
                                 <Grid>
                                     <StackPanel Orientation="Horizontal">
                                         <StackPanel>
-                                            <CheckBox x:Name="chk_block_standby" Content="Standby blockieren" HorizontalAlignment="Left" Margin="5,5,5,0" VerticalAlignment="Top"/>
-                                            <CheckBox x:Name="chk_minimize_to_tray" Content="Ins Tray minimieren" HorizontalAlignment="Left" Margin="5,5,5,0" VerticalAlignment="Top"/>
-                                            <CheckBox x:Name="chk_clicknload" Content="Click'n'Load aktivieren" HorizontalAlignment="Left" Margin="5,5,5,0" VerticalAlignment="Top"/>
+                                            <CheckBox x:Name="chk_block_standby"
+                                                      Margin="5,5,5,0"
+                                                      HorizontalAlignment="Left"
+                                                      VerticalAlignment="Top"
+                                                      Content="{x:Static p:Strings.Settings_PreventStandy}" />
+                                            <CheckBox x:Name="chk_minimize_to_tray"
+                                                      Margin="5,5,5,0"
+                                                      HorizontalAlignment="Left"
+                                                      VerticalAlignment="Top"
+                                                      Content="{x:Static p:Strings.Settings_MinimizeToTray}" />
+                                            <CheckBox x:Name="chk_clicknload"
+                                                      Margin="5,5,5,0"
+                                                      HorizontalAlignment="Left"
+                                                      VerticalAlignment="Top"
+                                                      Content="{x:Static p:Strings.Settings_ClicknLoad}" />
                                         </StackPanel>
                                         <StackPanel>
-                                            <CheckBox x:Name="chk_instant_video" Content="Instant Video aktivieren" HorizontalAlignment="Left" Margin="5,5,5,0" VerticalAlignment="Top"/>
-                                            <CheckBox x:Name="chk_search_updates" Content="Nach Updates suchen" HorizontalAlignment="Left" Margin="5,5,5,0" VerticalAlignment="Top"/>
-                                            <StackPanel Orientation="Horizontal" >
-                                                <RadioButton x:Name="rd_lang_german" Content="Deutsch" Margin="5,5,5,0" GroupName="Language"></RadioButton>
-                                                <RadioButton x:Name="rd_lang_english" Content="English" Margin="5,5,5,0" GroupName="Language"></RadioButton>
+                                            <CheckBox x:Name="chk_instant_video"
+                                                      Margin="5,5,5,0"
+                                                      HorizontalAlignment="Left"
+                                                      VerticalAlignment="Top"
+                                                      Content="{x:Static p:Strings.Settings_InstantVideo}" />
+                                            <CheckBox x:Name="chk_search_updates"
+                                                      Margin="5,5,5,0"
+                                                      HorizontalAlignment="Left"
+                                                      VerticalAlignment="Top"
+                                                      Content="{x:Static p:Strings.Settings_SearchUpdates}" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <RadioButton x:Name="rd_lang_german"
+                                                             Margin="5,5,5,0"
+                                                             Content="{x:Static p:Strings.Settings_Language_German}"
+                                                             GroupName="Language" />
+                                                <RadioButton x:Name="rd_lang_english"
+                                                             Margin="5,5,5,0"
+                                                             Content="{x:Static p:Strings.Settings_Language_English}"
+                                                             GroupName="Language" />
                                             </StackPanel>
-                                           
+
                                         </StackPanel>
                                     </StackPanel>
                                 </Grid>
                             </GroupBox>
-                            <GroupBox x:Name="groupBox_DownloadSettings" Header="Download Einstellungen">
+                            <GroupBox x:Name="groupBox_DownloadSettings" Header="{x:Static p:Strings.Settings_DownloadSettings}">
                                 <Grid>
-                                    <StackPanel Orientation="Horizontal" >
+                                    <StackPanel Orientation="Horizontal">
 
-                                        <StackPanel >
-                                            <TextBox x:Name="txt_download_path" HorizontalAlignment="Left" Height="23" Margin="5,5,0,0" IsReadOnly="True" Controls:TextBoxHelper.UseFloatingWatermark="True" Controls:TextBoxHelper.Watermark="Download Verzeichnis" Width="208"/>
-                                            <CheckBox x:Name="chk_create_download_subfolder" Content="Unterordner pro Download erstellen" Margin="5,5,0,0"></CheckBox>
-                                            <RadioButton x:Name="radio_download_subfolder_filename" Content="SFDL Dateiname verwenden" Margin="30,5,0,0" GroupName="DownloadDir"/>
-                                            <RadioButton x:Name="radio_download_subfolder_description" Content="SFDL Beschreibung verwenden" Margin="30,5,0,0" GroupName="DownloadDir"/>
-                                            <CheckBox x:Name="chk_create_package_subfolder" Content="Unterordner pro Paket erstellen" Margin="5,5,0,5"></CheckBox>
+                                        <StackPanel>
+                                            <TextBox x:Name="txt_download_path"
+                                                     Width="208"
+                                                     Height="23"
+                                                     Margin="5,5,0,0"
+                                                     HorizontalAlignment="Left"
+                                                     Controls:TextBoxHelper.UseFloatingWatermark="True"
+                                                     Controls:TextBoxHelper.Watermark="{x:Static p:Strings.Settings_DownloadDir}"
+                                                     IsReadOnly="True" />
+                                            <CheckBox x:Name="chk_create_download_subfolder"
+                                                      Margin="5,5,0,0"
+                                                      Content="{x:Static p:Strings.Settings_CreateSubfolderEachDownload}" />
+                                            <RadioButton x:Name="radio_download_subfolder_filename"
+                                                         Margin="30,5,0,0"
+                                                         Content="{x:Static p:Strings.Settings_Subfolder_UseFilename}"
+                                                         GroupName="DownloadDir" />
+                                            <RadioButton x:Name="radio_download_subfolder_description"
+                                                         Margin="30,5,0,0"
+                                                         Content="{x:Static p:Strings.Settings_Subfolder_UseDescription}"
+                                                         GroupName="DownloadDir" />
+                                            <CheckBox x:Name="chk_create_package_subfolder"
+                                                      Margin="5,5,0,5"
+                                                      Content="{x:Static p:Strings.Settings_CreateSubfolderEachPackage}" />
                                         </StackPanel>
-                                        <StackPanel >
+                                        <StackPanel>
                                             <Button x:Name="cmd_search_download_path" Margin="0">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Source="Resources/Icons/appbar.folder.open.png" Width="24"/>
-                                                    <TextBlock Margin="0,4,0,0">Durchsuchen</TextBlock>
+                                                    <Image Width="24" Source="Resources/Icons/appbar.folder.open.png" />
+                                                    <TextBlock Margin="0,4,0,0" Text="{x:Static p:Strings.VariousStrings_SearchFolderFile}" />
                                                 </StackPanel>
                                             </Button>
                                         </StackPanel>
                                     </StackPanel>
                                 </Grid>
                             </GroupBox>
-                            <GroupBox x:Name="groupBox_AdvancedDownloadSettings" Header="Erweiterte Download Einstellungen">
+                            <GroupBox x:Name="groupBox_AdvancedDownloadSettings" Header="{x:Static p:Strings.Settings_AdvancedDownloadSettings}">
                                 <Grid>
                                     <StackPanel Orientation="Horizontal">
-                                        <StackPanel >
-                                            <Label Content="Existierende Datei:" Margin="5,5,5,0"></Label>
-                                            <Label Content="Maximale Threads:" Margin="5,5,5,0"></Label>
-                                            <Label Content="Maximale Retries:" Margin="5,5,5,0"></Label>
-                                            <Label Content="Wartezeit zwischen Retries:" Margin="5,5,5,0"></Label>
+                                        <StackPanel>
+                                            <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_ExistingFile}" />
+                                            <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_MaximumThreads}" />
+                                            <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_MaximumRetries}" />
+                                            <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_WaitTimeRetries}" />
                                         </StackPanel>
                                         <StackPanel>
-                                            <ComboBox x:Name="comB_file_handling" Width="147" Controls:TextBoxHelper.UseFloatingWatermark="True" Margin="5,5,5,0" Controls:TextBoxHelper.Watermark="Existierende Datei">
-                                                <ComboBoxItem Content="Fortsetzen"/>
-                                                <ComboBoxItem Content="Überschreiben"/>
+                                            <ComboBox x:Name="comB_file_handling"
+                                                      Width="147"
+                                                      Margin="5,5,5,0"
+                                                      Controls:TextBoxHelper.UseFloatingWatermark="True"
+                                                      Controls:TextBoxHelper.Watermark="Existierende Datei">
+                                                <ComboBoxItem Content="{x:Static p:Strings.Settings_ExistingFile_Append}" />
+                                                <ComboBoxItem Content="{x:Static p:Strings.Settings_ExistingFile_Overwrite}" />
                                             </ComboBox>
-                                            <Controls:NumericUpDown x:Name="num_max_threads" Maximum="100" Minimum="1" Value="1" Width="147" Margin="5,5,5,0"/>
-                                            <Controls:NumericUpDown x:Name="num_max_retries" Maximum="100" Minimum="1" Value="1" Width="147" Margin="5,5,5,0"/>
-                                            <Controls:NumericUpDown x:Name="num_wait_retries" Maximum="120" Minimum="1" Value="1" Width="147" Margin="5,5,5,0"/>
+                                            <Controls:NumericUpDown x:Name="num_max_threads"
+                                                                    Width="147"
+                                                                    Margin="5,5,5,0"
+                                                                    Maximum="100"
+                                                                    Minimum="1"
+                                                                    Value="1" />
+                                            <Controls:NumericUpDown x:Name="num_max_retries"
+                                                                    Width="147"
+                                                                    Margin="5,5,5,0"
+                                                                    Maximum="100"
+                                                                    Minimum="1"
+                                                                    Value="1" />
+                                            <Controls:NumericUpDown x:Name="num_wait_retries"
+                                                                    Width="147"
+                                                                    Margin="5,5,5,0"
+                                                                    Maximum="120"
+                                                                    Minimum="1"
+                                                                    Value="1" />
                                         </StackPanel>
                                     </StackPanel>
                                 </Grid>
                             </GroupBox>
-                            <GroupBox x:Name="groupBox_AdvancedSettings" Header="Erweiterte Einstellungen" Margin="5">
+                            <GroupBox x:Name="groupBox_AdvancedSettings"
+                                      Margin="5"
+                                      Header="Erweiterte Einstellungen">
                                 <Grid>
                                     <StackPanel Orientation="Horizontal">
-                                        <StackPanel >
-                                            <CheckBox x:Name="chk_mark_all_container_files" Content="Alle Dateien im Container makrieren" Margin="5,5,5,0"></CheckBox>
-                                            <CheckBox x:Name="chk_delete_sfdl_after_open" Content="SFDL Datei nach dem öffnen löschen" Margin="5,5,5,0"></CheckBox>
+                                        <StackPanel>
+                                            <CheckBox x:Name="chk_mark_all_container_files"
+                                                      Margin="5,5,5,0"
+                                                      Content="{x:Static p:Strings.Settings_MarkAllFilesInContainer}" />
+                                            <CheckBox x:Name="chk_delete_sfdl_after_open"
+                                                      Margin="5,5,5,0"
+                                                      Content="{x:Static p:Strings.Settings_RemoveSFDL}" />
                                         </StackPanel>
                                     </StackPanel>
                                 </Grid>
@@ -101,23 +174,40 @@
                         </StackPanel>
                     </Grid>
                 </TabItem>
-                <TabItem Header="UnRAR Einstellungen" Controls:ControlsHelper.HeaderFontSize="15">
+                <TabItem Controls:ControlsHelper.HeaderFontSize="15" Header="{x:Static p:Strings.Settings_UnrarSettings}">
                     <Grid>
-                        <StackPanel >
-                            <GroupBox x:Name="groupBox_UnrarSettings" Header="UnRAR Einstellungen">
+                        <StackPanel>
+                            <GroupBox x:Name="groupBox_UnrarSettings" Header="{x:Static p:Strings.Settings_UnrarSettings}">
                                 <Grid>
-                                    <StackPanel Orientation="Horizontal" >
+                                    <StackPanel Orientation="Horizontal">
                                         <StackPanel>
-                                            <CheckBox x:Name="chk_extract_archives" Content="Archive nach dem Download Automatisch entpacken" Margin="5,5,0,0"></CheckBox>
-                                            <CheckBox x:Name="chk_delete_archives" Content="Archive nach erfolgreichem Entpacken löschen" Margin="5,5,0,0"></CheckBox>
-                                            <CheckBox x:Name="chk_use_pwlist" Content="Kennwortliste zum Entpacken verwenden" Margin="5,5,0,0"></CheckBox>
-                                            <Separator Margin="5,10,5,5"/>
-                                            <Label Content="Kennwortliste:" ></Label>
-                                            <StackPanel Orientation="Horizontal" >
-                                                <ListBox x:Name="listBox_unrar_passwords" Height="100" Width="298" BorderThickness="1"/>
-                                                <StackPanel >
-                                                    <Button x:Name="cmd_add_unrar_pw" Width="24" Height="24" Content="+" Margin="5,5,5,0"></Button>
-                                                    <Button x:Name="cmd_remove_unrar_pw" Width="24" Height="24" Content="-" Margin="5,5,5,0"></Button>
+                                            <CheckBox x:Name="chk_extract_archives"
+                                                      Margin="5,5,0,0"
+                                                      Content="{x:Static p:Strings.Settings_AutomaticUnRAR}" />
+                                            <CheckBox x:Name="chk_delete_archives"
+                                                      Margin="5,5,0,0"
+                                                      Content="{x:Static p:Strings.Settings_RemoveRARFiles}" />
+                                            <CheckBox x:Name="chk_use_pwlist"
+                                                      Margin="5,5,0,0"
+                                                      Content="{x:Static p:Strings.Settings_UseUnRARPasswordList}" />
+                                            <Separator Margin="5,10,5,5" />
+                                            <Label Content="{x:Static p:Strings.Settings_PasswordList}" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <ListBox x:Name="listBox_unrar_passwords"
+                                                         Width="298"
+                                                         Height="100"
+                                                         BorderThickness="1" />
+                                                <StackPanel>
+                                                    <Button x:Name="cmd_add_unrar_pw"
+                                                            Width="24"
+                                                            Height="24"
+                                                            Margin="5,5,5,0"
+                                                            Content="+" />
+                                                    <Button x:Name="cmd_remove_unrar_pw"
+                                                            Width="24"
+                                                            Height="24"
+                                                            Margin="5,5,5,0"
+                                                            Content="-" />
                                                 </StackPanel>
                                             </StackPanel>
                                         </StackPanel>
@@ -127,111 +217,139 @@
                         </StackPanel>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Speedreport Einstellungen" Controls:ControlsHelper.HeaderFontSize="15">
+                <TabItem Controls:ControlsHelper.HeaderFontSize="15" Header="{x:Static p:Strings.Settings_SpeedreportSettings}">
                     <Grid>
-                        <StackPanel >
-                            <GroupBox Header="Speedreport Einstellungen" >
+                        <StackPanel>
+                            <GroupBox Header="{x:Static p:Strings.Settings_SpeedreportSettings}">
                                 <Grid>
                                     <StackPanel>
-                                        <RadioButton x:Name="radio_show_speedreport" Content="Speedreport nach dem Download anzeigen" Margin="5,5,0,0" GroupName="Speedreport"></RadioButton>
-                                        <RadioButton x:Name="radio_write_speedreport_file" Content="Speedreport in Datei schreiben" Margin="5,5,0,0" GroupName="Speedreport"></RadioButton>
-                                        <RadioButton x:Name="radio_hide_speedreport" Content="Speedreport nicht anzeigen" Margin="5,5,0,5" GroupName="Speedreport"></RadioButton>
-                                        <Separator Margin="5" ></Separator>
-                                        <TextBox x:Name="txt_speedreport_username" Controls:TextBoxHelper.UseFloatingWatermark="True" Controls:TextBoxHelper.Watermark="Benutzername" Margin="5,5,5,0"/>
-                                        <TextBox x:Name="txt_speedreport_connection" Controls:TextBoxHelper.UseFloatingWatermark="True" Controls:TextBoxHelper.Watermark="Verbindung" Margin="5,5,5,0"/>
-                                        <TextBox x:Name="txt_speedreport_comment" Controls:TextBoxHelper.UseFloatingWatermark="True" Controls:TextBoxHelper.Watermark="Kommentar" Margin="5"/>
-                                        <Separator Margin="5" ></Separator>
+                                        <RadioButton x:Name="radio_show_speedreport"
+                                                     Margin="5,5,0,0"
+                                                     Content="{x:Static p:Strings.Settings_ShowSpeedreportAfterDownload}"
+                                                     GroupName="Speedreport" />
+                                        <RadioButton x:Name="radio_write_speedreport_file"
+                                                     Margin="5,5,0,0"
+                                                     Content="{x:Static p:Strings.Settings_WriteSpeedreportToFile}"
+                                                     GroupName="Speedreport" />
+                                        <RadioButton x:Name="radio_hide_speedreport"
+                                                     Margin="5,5,0,5"
+                                                     Content="{x:Static p:Strings.Settings_HideSpeedreport}"
+                                                     GroupName="Speedreport" />
+                                        <Separator Margin="5" />
+                                        <TextBox x:Name="txt_speedreport_username"
+                                                 Margin="5,5,5,0"
+                                                 Controls:TextBoxHelper.UseFloatingWatermark="True"
+                                                 Controls:TextBoxHelper.Watermark="{x:Static p:Strings.VariousStrings_Username}" />
+                                        <TextBox x:Name="txt_speedreport_connection"
+                                                 Margin="5,5,5,0"
+                                                 Controls:TextBoxHelper.UseFloatingWatermark="True"
+                                                 Controls:TextBoxHelper.Watermark="{x:Static p:Strings.VariousStrings_Comment}" />
+                                        <TextBox x:Name="txt_speedreport_comment"
+                                                 Margin="5"
+                                                 Controls:TextBoxHelper.UseFloatingWatermark="True"
+                                                 Controls:TextBoxHelper.Watermark="{x:Static p:Strings.VariousStrings_Comment}" />
+                                        <Separator Margin="5" />
                                         <ToolBar Margin="5,0">
                                             <Menu>
-                                                <MenuItem Header="Variablen">
+                                                <MenuItem Header="{x:Static p:Strings.VariousStrings_Variables}">
                                                     <MenuItem.Icon>
-                                                        <Image Source="Resources/Icons/appbar.code.xml.png" Width="24" >
-                                                        </Image>
+                                                        <Image Width="24" Source="Resources/Icons/appbar.code.xml.png" />
                                                     </MenuItem.Icon>
-                                                    <MenuItem Header="Benutzername">
+                                                    <MenuItem Header="{x:Static p:Strings.VariousStrings_Username}">
                                                         <MenuItem.Icon>
-                                                            <Image Source="Resources/Icons/appbar.user.png" Width="24" >
-                                                            </Image>
+                                                            <Image Width="24" Source="Resources/Icons/appbar.user.png" />
                                                         </MenuItem.Icon>
                                                     </MenuItem>
-                                                    <MenuItem Header="Verbindung">
+                                                    <MenuItem Header="{x:Static p:Strings.VariousStrings_Connection}">
                                                         <MenuItem.Icon>
-                                                            <Image Source="Resources/Icons/appbar.connection.quality.veryhigh.png" Width="24" >
-                                                            </Image>
+                                                            <Image Width="24" Source="Resources/Icons/appbar.connection.quality.veryhigh.png" />
                                                         </MenuItem.Icon>
                                                     </MenuItem>
-                                                    <MenuItem Header="Kommentar">
+                                                    <MenuItem Header="{x:Static p:Strings.VariousStrings_Comment}">
                                                         <MenuItem.Icon>
-                                                            <Image Source="Resources/Icons/appbar.notification.above.png" Width="24" >
-                                                            </Image>
+                                                            <Image Width="24" Source="Resources/Icons/appbar.notification.above.png" />
                                                         </MenuItem.Icon>
                                                     </MenuItem>
-                                                    <MenuItem Header="Download Geschwindigkeit">
+                                                    <MenuItem Header="{x:Static p:Strings.VariousStrings_DownloadSpeed}">
                                                         <MenuItem.Icon>
-                                                            <Image Source="Resources/Icons/appbar.gauge.75.png" Width="24" >
-                                                            </Image>
+                                                            <Image Width="24" Source="Resources/Icons/appbar.gauge.75.png" />
                                                         </MenuItem.Icon>
                                                     </MenuItem>
-                                                    <MenuItem Header="SFDL Informationen">
+                                                    <MenuItem Header="{x:Static p:Strings.VariousStrings_SFDLInformation}">
                                                         <MenuItem.Icon>
-                                                            <Image Source="Resources/Icons/appbar.information.circle.png" Width="24" >
-                                                            </Image>
+                                                            <Image Width="24" Source="Resources/Icons/appbar.information.circle.png" />
                                                         </MenuItem.Icon>
-                                                        <MenuItem Header="Beschreibung">
+                                                        <MenuItem Header="{x:Static p:Strings.VariousStrings_Description}">
                                                             <MenuItem.Icon>
-                                                                <Image Source="Resources/Icons/appbar.interface.textbox.png" Width="24" >
-                                                                </Image>
+                                                                <Image Width="24" Source="Resources/Icons/appbar.interface.textbox.png" />
                                                             </MenuItem.Icon>
                                                         </MenuItem>
-                                                        <MenuItem Header="Upper">
+                                                        <MenuItem Header="{x:Static p:Strings.VariousStrings_Uploader}">
                                                             <MenuItem.Icon>
-                                                                <Image Source="Resources/Icons/appbar.people.up.png" Width="24" >
-                                                                </Image>
+                                                                <Image Width="24" Source="Resources/Icons/appbar.people.up.png" />
                                                             </MenuItem.Icon>
                                                         </MenuItem>
-                                                        <MenuItem Header="Gesamtdownloadgröße">
+                                                        <MenuItem Header="{x:Static p:Strings.VariousStrings_FullDownloadSize}">
                                                             <MenuItem.Icon>
-                                                                <Image Source="Resources/Icons/appbar.leaderboard.png" Width="24" >
-                                                                </Image>
+                                                                <Image Width="24" Source="Resources/Icons/appbar.leaderboard.png" />
                                                             </MenuItem.Icon>
                                                         </MenuItem>
                                                     </MenuItem>
-                                                    <MenuItem Header="Benötigte Downloadzeit">
+                                                    <MenuItem Header="{x:Static p:Strings.VariousStrings_NeededDownloadTime}">
                                                         <MenuItem.Icon>
-                                                            <Image Source="Resources/Icons/appbar.hourglass.png" Width="24" >
-                                                            </Image>
+                                                            <Image Width="24" Source="Resources/Icons/appbar.hourglass.png" />
                                                         </MenuItem.Icon>
                                                     </MenuItem>
                                                 </MenuItem>
                                             </Menu>
                                         </ToolBar>
-                                        <RichTextBox x:Name="rtb_speedreport_template" BorderThickness="1" Height="123" Margin="5" />
+                                        <RichTextBox x:Name="rtb_speedreport_template"
+                                                     Height="123"
+                                                     Margin="5"
+                                                     BorderThickness="1" />
                                     </StackPanel>
                                 </Grid>
                             </GroupBox>
                         </StackPanel>
                     </Grid>
                 </TabItem>
-                <TabItem Header="RemoteControl" Controls:ControlsHelper.HeaderFontSize="15">
-                    <StackPanel >
-                        <GroupBox Header="Remote Control">
-                            <StackPanel >
-                                <CheckBox x:Name="chk_remote_control_enabled" Content="Remote Control aktivieren" Margin="5"></CheckBox>
-                                <StackPanel Orientation="Horizontal" >
-                                    <Label Content="IP Adresse:"></Label>
-                                    <TextBox x:Name="txt_remote_control_ip" Width="141"></TextBox>
-                                    <Label Content="Port:" ></Label>
-                                    <Controls:NumericUpDown x:Name="num_remote_control_port" Maximum="65000" Minimum="1" Value="9090" Width="112" Margin="5,0"/>
+                <TabItem Controls:ControlsHelper.HeaderFontSize="15" Header="{x:Static p:Strings.Settings_RemoteControl}">
+                    <StackPanel>
+                        <GroupBox Header="{x:Static p:Strings.Settings_RemoteControl}">
+                            <StackPanel>
+                                <CheckBox x:Name="chk_remote_control_enabled"
+                                          Margin="5"
+                                          Content="{x:Static p:Strings.Settings_RemoteControl_Enable}" />
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{x:Static p:Strings.Settings_IPAdress}" />
+                                    <TextBox x:Name="txt_remote_control_ip" Width="141" />
+                                    <Label Content="{x:Static p:Strings.Settings_Port}" />
+                                    <Controls:NumericUpDown x:Name="num_remote_control_port"
+                                                            Width="112"
+                                                            Margin="5,0"
+                                                            Maximum="65000"
+                                                            Minimum="1"
+                                                            Value="9090" />
                                 </StackPanel>
-                                <Separator Margin="0,10,0,5">
-
-                                </Separator>
-                                <Label Content="API Keys" ></Label>
-                                <StackPanel Orientation="Horizontal" >
-                                    <ListBox x:Name="listBox_api_keys" Height="100" Width="298" BorderThickness="1" Margin="0,0,0,5"/>
-                                    <StackPanel >
-                                        <Button x:Name="cmd_add_api_key" Width="24" Height="24" Content="+" Margin="5,5,5,0"></Button>
-                                        <Button x:Name="cmd_remove_api_key" Width="24" Height="24" Content="-" Margin="5,5,5,0"></Button>
+                                <Separator Margin="0,10,0,5" />
+                                <Label Content="{x:Static p:Strings.Settings_APIKeys}" />
+                                <StackPanel Orientation="Horizontal">
+                                    <ListBox x:Name="listBox_api_keys"
+                                             Width="298"
+                                             Height="100"
+                                             Margin="0,0,0,5"
+                                             BorderThickness="1" />
+                                    <StackPanel>
+                                        <Button x:Name="cmd_add_api_key"
+                                                Width="24"
+                                                Height="24"
+                                                Margin="5,5,5,0"
+                                                Content="+" />
+                                        <Button x:Name="cmd_remove_api_key"
+                                                Width="24"
+                                                Height="24"
+                                                Margin="5,5,5,0"
+                                                Content="-" />
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
@@ -241,8 +359,8 @@
             </TabControl>
             <Button x:Name="cmd_save_settings" Margin="150,5">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="Resources/Icons/appbar.save.png" Width="24" />
-                    <TextBlock Margin="0,4,0,0">Speichern</TextBlock>
+                    <Image Width="24" Source="Resources/Icons/appbar.save.png" />
+                    <TextBlock Margin="0,4,0,0" Text="{x:Static p:Strings.VariousStrings_Save}" />
                 </StackPanel>
             </Button>
         </StackPanel>
