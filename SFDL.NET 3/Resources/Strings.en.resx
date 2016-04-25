@@ -136,10 +136,10 @@
     <value>Extras</value>
   </data>
   <data name="MainMenu_Extra_AfterDownload" xml:space="preserve">
-    <value>After Download</value>
+    <value>After download</value>
   </data>
   <data name="MainMenu_Extra_AfterDownload_ExitLoader" xml:space="preserve">
-    <value>Close SFDL Loader</value>
+    <value>Close SFDL loader</value>
   </data>
   <data name="MainMenu_Extra_AfterDownload_ShutdownComputer" xml:space="preserve">
     <value>Shutdown Computer</value>
@@ -166,22 +166,22 @@
     <value>Expand all packages</value>
   </data>
   <data name="MainMenu_Modifiy_MarkAllFiles" xml:space="preserve">
-    <value>Mark all Files</value>
+    <value>Mark all files</value>
   </data>
   <data name="MainMenu_Modifiy_UnmarkAllFiles" xml:space="preserve">
-    <value>Unmark all Files</value>
+    <value>Unmark all files</value>
   </data>
   <data name="MainMenu_Modify" xml:space="preserve">
     <value>Modify</value>
   </data>
   <data name="MainMenu_Modify_CloseAlleDownloads" xml:space="preserve">
-    <value>Remove all Downloads</value>
+    <value>Remove all downloads</value>
   </data>
   <data name="MainMenu_Modify_CloseSFDLFile" xml:space="preserve">
-    <value>Close SFDL File</value>
+    <value>Close SFDL file</value>
   </data>
   <data name="MainMenu_Modify_RemoveAllCompletedDownloads" xml:space="preserve">
-    <value>Remove all completed Downloads</value>
+    <value>Remove all completed downloads</value>
   </data>
   <data name="MainToolbar_InstandVideo" xml:space="preserve">
     <value>Instant Video</value>
@@ -194,5 +194,155 @@
   </data>
   <data name="Expander_Header_Tasks" xml:space="preserve">
     <value>Tasks</value>
+  </data>
+  <data name="Settings_AdvancedDownloadSettings" xml:space="preserve">
+    <value>Advanced download settings</value>
+  </data>
+  <data name="Settings_AdvancedSettings" xml:space="preserve">
+    <value>Advanced Settings</value>
+  </data>
+  <data name="Settings_APIKeys" xml:space="preserve">
+    <value>API Keys</value>
+  </data>
+  <data name="Settings_AutomaticUnRAR" xml:space="preserve">
+    <value>unpack archives after download Automatically</value>
+  </data>
+  <data name="Settings_ClicknLoad" xml:space="preserve">
+    <value>Activate Click'n'Load</value>
+  </data>
+  <data name="Settings_CreateSubfolderEachDownload" xml:space="preserve">
+    <value>Create subfolder each download</value>
+  </data>
+  <data name="Settings_CreateSubfolderEachPackage" xml:space="preserve">
+    <value>Create Subfolder each package</value>
+  </data>
+  <data name="Settings_DownloadDir" xml:space="preserve">
+    <value>Download Directory</value>
+  </data>
+  <data name="Settings_DownloadSettings" xml:space="preserve">
+    <value>Download Settings</value>
+  </data>
+  <data name="Settings_ExistingFile" xml:space="preserve">
+    <value>Existing file:</value>
+  </data>
+  <data name="Settings_ExistingFile_Append" xml:space="preserve">
+    <value>Append</value>
+  </data>
+  <data name="Settings_ExistingFile_Overwrite" xml:space="preserve">
+    <value>Overwrite</value>
+  </data>
+  <data name="Settings_GeneralSettings" xml:space="preserve">
+    <value>General Settings</value>
+  </data>
+  <data name="Settings_HideSpeedreport" xml:space="preserve">
+    <value>Don't show speedreport</value>
+  </data>
+  <data name="Settings_InstantVideo" xml:space="preserve">
+    <value>Activate Instant Video</value>
+  </data>
+  <data name="Settings_IPAdress" xml:space="preserve">
+    <value>IP Address:</value>
+  </data>
+  <data name="Settings_Language_English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Settings_Language_German" xml:space="preserve">
+    <value>German</value>
+  </data>
+  <data name="Settings_MarkAllFilesInContainer" xml:space="preserve">
+    <value>Mark all files in container</value>
+  </data>
+  <data name="Settings_MaximumRetries" xml:space="preserve">
+    <value>maximun retries:</value>
+  </data>
+  <data name="Settings_MaximumThreads" xml:space="preserve">
+    <value>Maximum threads:</value>
+  </data>
+  <data name="Settings_MinimizeToTray" xml:space="preserve">
+    <value>Minimize to tray</value>
+  </data>
+  <data name="Settings_PasswordList" xml:space="preserve">
+    <value>Password List:</value>
+  </data>
+  <data name="Settings_Port" xml:space="preserve">
+    <value>Port:</value>
+  </data>
+  <data name="Settings_PreventStandy" xml:space="preserve">
+    <value>Prevent standby</value>
+  </data>
+  <data name="Settings_RemoteControl" xml:space="preserve">
+    <value>Remote Control</value>
+  </data>
+  <data name="Settings_RemoteControl_Enable" xml:space="preserve">
+    <value>Activate Remote Control</value>
+  </data>
+  <data name="Settings_RemoveRARFiles" xml:space="preserve">
+    <value>Delete archives after unrar successful</value>
+  </data>
+  <data name="Settings_RemoveSFDL" xml:space="preserve">
+    <value>Delete SFDL file after opening</value>
+  </data>
+  <data name="Settings_SearchUpdates" xml:space="preserve">
+    <value>Search for updates</value>
+  </data>
+  <data name="Settings_ShowSpeedreportAfterDownload" xml:space="preserve">
+    <value>Show Speedreport after download</value>
+  </data>
+  <data name="Settings_SpeedreportSettings" xml:space="preserve">
+    <value>Speedreport Settings</value>
+  </data>
+  <data name="Settings_Subfolder_UseDescription" xml:space="preserve">
+    <value>Use SFDL description</value>
+  </data>
+  <data name="Settings_Subfolder_UseFilename" xml:space="preserve">
+    <value>Use SFDL filename</value>
+  </data>
+  <data name="Settings_UnrarSettings" xml:space="preserve">
+    <value>UnRAR Settings</value>
+  </data>
+  <data name="Settings_UseUnRARPasswordList" xml:space="preserve">
+    <value>Use Passwordlist for Unrar</value>
+  </data>
+  <data name="Settings_WaitTimeRetries" xml:space="preserve">
+    <value>Wait time between retries:</value>
+  </data>
+  <data name="Settings_WriteSpeedreportToFile" xml:space="preserve">
+    <value>Write Speedreport to file</value>
+  </data>
+  <data name="VariousStrings_Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="VariousStrings_Connection" xml:space="preserve">
+    <value>Connection</value>
+  </data>
+  <data name="VariousStrings_Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="VariousStrings_DownloadSpeed" xml:space="preserve">
+    <value>Download speed</value>
+  </data>
+  <data name="VariousStrings_FullDownloadSize" xml:space="preserve">
+    <value>Total download size</value>
+  </data>
+  <data name="VariousStrings_NeededDownloadTime" xml:space="preserve">
+    <value>Required download time</value>
+  </data>
+  <data name="VariousStrings_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="VariousStrings_SearchFolderFile" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="VariousStrings_SFDLInformation" xml:space="preserve">
+    <value>SFDL Information</value>
+  </data>
+  <data name="VariousStrings_Uploader" xml:space="preserve">
+    <value>Uploader</value>
+  </data>
+  <data name="VariousStrings_Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="VariousStrings_Variables" xml:space="preserve">
+    <value>Variables</value>
   </data>
 </root>

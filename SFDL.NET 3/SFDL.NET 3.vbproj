@@ -55,6 +55,7 @@
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.2.4.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -76,9 +77,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\XAML Converter\ExistingFileHandlingConverter.vb" />
+    <Compile Include="Classes\XAML Converter\InvertBooleanConverter.vb" />
+    <Compile Include="Classes\DelegateCommand.vb" />
+    <Compile Include="Classes\DispatchService.vb" />
+    <Compile Include="Classes\Models\RemoteControlSettings.vb" />
+    <Compile Include="Classes\Models\Settings.vb" />
+    <Compile Include="Classes\Models\SpeedreportSettings.vb" />
+    <Compile Include="Classes\Models\UnRARSettings.vb" />
+    <Compile Include="Classes\NativeMethods.vb" />
+    <Compile Include="Classes\StandbyHandler.vb" />
+    <Compile Include="Classes\ViewModels\SettingsViewModel.vb" />
+    <Compile Include="Classes\ViewModels\ViewModelBase.vb" />
+    <Compile Include="Classes\XAML Converter\LangauageConverter.vb" />
     <Compile Include="MainWindow.xaml.vb">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Modules\GlobalVars.vb" />
+    <Compile Include="Modules\XMLHelper.vb" />
     <Compile Include="Resources\Strings.en.Designer.vb">
       <DependentUpon>Strings.en.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -285,5 +301,6 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\appbar.interface.textbox.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

@@ -17,6 +17,9 @@
 
     <Window.Resources>
         <ResourceDictionary>
+            <local:InvertBooleanConverter x:Key="boolConvert" />
+            <local:ExistingFileHandlingConverter x:Key="filehandlingconvert" />
+            <local:LangauageConverter x:Key="langconvert" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Icons.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
@@ -38,38 +41,49 @@
                                                       Margin="5,5,5,0"
                                                       HorizontalAlignment="Left"
                                                       VerticalAlignment="Top"
-                                                      Content="{x:Static p:Strings.Settings_PreventStandy}" />
+                                                      Content="{x:Static p:Strings.Settings_PreventStandy}"
+                                                      IsChecked="{Binding PreventStandby}" />
                                             <CheckBox x:Name="chk_minimize_to_tray"
                                                       Margin="5,5,5,0"
                                                       HorizontalAlignment="Left"
                                                       VerticalAlignment="Top"
-                                                      Content="{x:Static p:Strings.Settings_MinimizeToTray}" />
+                                                      Content="{x:Static p:Strings.Settings_MinimizeToTray}"
+                                                      IsChecked="{Binding Send2Tray}" />
                                             <CheckBox x:Name="chk_clicknload"
                                                       Margin="5,5,5,0"
                                                       HorizontalAlignment="Left"
                                                       VerticalAlignment="Top"
-                                                      Content="{x:Static p:Strings.Settings_ClicknLoad}" />
+                                                      Content="{x:Static p:Strings.Settings_ClicknLoad}"
+                                                      IsChecked="{Binding ClicknLoad}" />
                                         </StackPanel>
                                         <StackPanel>
                                             <CheckBox x:Name="chk_instant_video"
                                                       Margin="5,5,5,0"
                                                       HorizontalAlignment="Left"
                                                       VerticalAlignment="Top"
-                                                      Content="{x:Static p:Strings.Settings_InstantVideo}" />
+                                                      Content="{x:Static p:Strings.Settings_InstantVideo}"
+                                                      IsChecked="{Binding InstantVideo}" />
                                             <CheckBox x:Name="chk_search_updates"
                                                       Margin="5,5,5,0"
                                                       HorizontalAlignment="Left"
                                                       VerticalAlignment="Top"
-                                                      Content="{x:Static p:Strings.Settings_SearchUpdates}" />
+                                                      Content="{x:Static p:Strings.Settings_SearchUpdates}"
+                                                      IsChecked="{Binding SearchUpdates}" />
                                             <StackPanel Orientation="Horizontal">
                                                 <RadioButton x:Name="rd_lang_german"
                                                              Margin="5,5,5,0"
                                                              Content="{x:Static p:Strings.Settings_Language_German}"
-                                                             GroupName="Language" />
+                                                             GroupName="Language"
+                                                             IsChecked="{Binding Language,
+                                                                                 Converter={StaticResource langconvert},
+                                                                                 ConverterParameter=de}" />
                                                 <RadioButton x:Name="rd_lang_english"
                                                              Margin="5,5,5,0"
                                                              Content="{x:Static p:Strings.Settings_Language_English}"
-                                                             GroupName="Language" />
+                                                             GroupName="Language"
+                                                             IsChecked="{Binding Language,
+                                                                                 Converter={StaticResource langconvert},
+                                                                                 ConverterParameter=en}" />
                                             </StackPanel>
 
                                         </StackPanel>
@@ -88,24 +102,34 @@
                                                      HorizontalAlignment="Left"
                                                      Controls:TextBoxHelper.UseFloatingWatermark="True"
                                                      Controls:TextBoxHelper.Watermark="{x:Static p:Strings.Settings_DownloadDir}"
-                                                     IsReadOnly="True" />
+                                                     IsReadOnly="True"
+                                                     Text="{Binding DownloadDirectory}" />
                                             <CheckBox x:Name="chk_create_download_subfolder"
                                                       Margin="5,5,0,0"
-                                                      Content="{x:Static p:Strings.Settings_CreateSubfolderEachDownload}" />
+                                                      Content="{x:Static p:Strings.Settings_CreateSubfolderEachDownload}"
+                                                      IsChecked="{Binding CreateDownloadDir}" />
                                             <RadioButton x:Name="radio_download_subfolder_filename"
                                                          Margin="30,5,0,0"
                                                          Content="{x:Static p:Strings.Settings_Subfolder_UseFilename}"
-                                                         GroupName="DownloadDir" />
+                                                         GroupName="DownloadDir"
+                                                         IsChecked="{Binding CreateDownloadDirUseFilename}"
+                                                         IsEnabled="{Binding CreateDownloadDir}" />
                                             <RadioButton x:Name="radio_download_subfolder_description"
                                                          Margin="30,5,0,0"
                                                          Content="{x:Static p:Strings.Settings_Subfolder_UseDescription}"
-                                                         GroupName="DownloadDir" />
+                                                         GroupName="DownloadDir"
+                                                         IsChecked="{Binding CreateDownloadDirUseDescription}"
+                                                         IsEnabled="{Binding CreateDownloadDir}" />
                                             <CheckBox x:Name="chk_create_package_subfolder"
                                                       Margin="5,5,0,5"
-                                                      Content="{x:Static p:Strings.Settings_CreateSubfolderEachPackage}" />
+                                                      Content="{x:Static p:Strings.Settings_CreateSubfolderEachPackage}"
+                                                      IsChecked="{Binding CreateDownloadDir,
+                                                                          Converter={StaticResource boolConvert}}" />
                                         </StackPanel>
                                         <StackPanel>
-                                            <Button x:Name="cmd_search_download_path" Margin="0">
+                                            <Button x:Name="cmd_search_download_path"
+                                                    Margin="0"
+                                                    Command="{Binding SelectDownloadFolderCommand}">
                                                 <StackPanel Orientation="Horizontal">
                                                     <Image Width="24" Source="Resources/Icons/appbar.folder.open.png" />
                                                     <TextBlock Margin="0,4,0,0" Text="{x:Static p:Strings.VariousStrings_SearchFolderFile}" />
@@ -125,32 +149,38 @@
                                             <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_WaitTimeRetries}" />
                                         </StackPanel>
                                         <StackPanel>
-                                            <ComboBox x:Name="comB_file_handling"
-                                                      Width="147"
-                                                      Margin="5,5,5,0"
-                                                      Controls:TextBoxHelper.UseFloatingWatermark="True"
-                                                      Controls:TextBoxHelper.Watermark="Existierende Datei">
-                                                <ComboBoxItem Content="{x:Static p:Strings.Settings_ExistingFile_Append}" />
-                                                <ComboBoxItem Content="{x:Static p:Strings.Settings_ExistingFile_Overwrite}" />
-                                            </ComboBox>
+                                            <StackPanel Margin="0,8,0,0" Orientation="Horizontal">
+                                                <RadioButton Margin="0,0,5,0"
+                                                             Content="{x:Static p:Strings.Settings_ExistingFile_Append}"
+                                                             GroupName="FileHandling"
+                                                             IsChecked="{Binding ExistingFileHandling,
+                                                                                 Converter={StaticResource filehandlingconvert},
+                                                                                 ConverterParameter=ResumeFile}" />
+                                                <RadioButton Content="{x:Static p:Strings.Settings_ExistingFile_Overwrite}"
+                                                             GroupName="FileHandling"
+                                                             IsChecked="{Binding ExistingFileHandling,
+                                                                                 Converter={StaticResource filehandlingconvert},
+                                                                                 ConverterParameter=OverwriteFile}" />
+                                            </StackPanel>
+
                                             <Controls:NumericUpDown x:Name="num_max_threads"
                                                                     Width="147"
                                                                     Margin="5,5,5,0"
                                                                     Maximum="100"
                                                                     Minimum="1"
-                                                                    Value="1" />
+                                                                    Value="{Binding MaxDownloadThreads}" />
                                             <Controls:NumericUpDown x:Name="num_max_retries"
                                                                     Width="147"
                                                                     Margin="5,5,5,0"
                                                                     Maximum="100"
                                                                     Minimum="1"
-                                                                    Value="1" />
+                                                                    Value="{Binding MaxRetry}" />
                                             <Controls:NumericUpDown x:Name="num_wait_retries"
                                                                     Width="147"
                                                                     Margin="5,5,5,0"
                                                                     Maximum="120"
                                                                     Minimum="1"
-                                                                    Value="1" />
+                                                                    Value="{Binding RetryWaitTime}" />
                                         </StackPanel>
                                     </StackPanel>
                                 </Grid>
@@ -163,10 +193,12 @@
                                         <StackPanel>
                                             <CheckBox x:Name="chk_mark_all_container_files"
                                                       Margin="5,5,5,0"
-                                                      Content="{x:Static p:Strings.Settings_MarkAllFilesInContainer}" />
+                                                      Content="{x:Static p:Strings.Settings_MarkAllFilesInContainer}"
+                                                      IsChecked="{Binding MarkAllContainerFiles}" />
                                             <CheckBox x:Name="chk_delete_sfdl_after_open"
                                                       Margin="5,5,5,0"
-                                                      Content="{x:Static p:Strings.Settings_RemoveSFDL}" />
+                                                      Content="{x:Static p:Strings.Settings_RemoveSFDL}"
+                                                      IsChecked="{Binding DeleteSFDLAfterOpen}" />
                                         </StackPanel>
                                     </StackPanel>
                                 </Grid>
@@ -357,7 +389,9 @@
                     </StackPanel>
                 </TabItem>
             </TabControl>
-            <Button x:Name="cmd_save_settings" Margin="150,5">
+            <Button x:Name="cmd_save_settings"
+                    Margin="150,5"
+                    Command="{Binding SaveSettingsCommand}">
                 <StackPanel Orientation="Horizontal">
                     <Image Width="24" Source="Resources/Icons/appbar.save.png" />
                     <TextBlock Margin="0,4,0,0" Text="{x:Static p:Strings.VariousStrings_Save}" />
