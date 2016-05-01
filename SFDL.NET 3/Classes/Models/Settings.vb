@@ -17,9 +17,9 @@
     Public Property MarkAllContainerFiles As Boolean = False
     Public Property SearchUpdates As Boolean = True
     Public Property InstantVideo As Boolean = False
-    Public Property UnRARSettings As UnRARSettings
-    Public Property SpeedReportSettings As SpeedreportSettings
-    Public Property RemoteControlSettings As RemoteControlSettings
+    Public Property UnRARSettings As New UnRARSettings
+    Public Property SpeedReportSettings As New SpeedreportSettings
+    Public Property RemoteControlSettings As New RemoteControlSettings
 
 End Class
 

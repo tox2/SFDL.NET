@@ -2,11 +2,13 @@
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+                      xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                       xmlns:local="clr-namespace:SFDL.NET3"
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:p="clr-namespace:SFDL.NET3.My.Resources"
                       Width="393.686"
+                      Dialog:DialogParticipation.Register="{Binding}"
                       BorderBrush="Black"
                       BorderThickness="1"
                       Icon="Resources/Icons/appbar.settings.png"
@@ -19,6 +21,7 @@
         <ResourceDictionary>
             <local:InvertBooleanConverter x:Key="boolConvert" />
             <local:ExistingFileHandlingConverter x:Key="filehandlingconvert" />
+            <local:SpeedreportVisibilityConverter x:Key="SpeedreportVisibilityConverter" />
             <local:LangauageConverter x:Key="langconvert" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Icons.xaml" />
@@ -97,7 +100,7 @@
                                         <StackPanel>
                                             <TextBox x:Name="txt_download_path"
                                                      Width="208"
-                                                     Height="23"
+                                                     Height="42"
                                                      Margin="5,5,0,0"
                                                      HorizontalAlignment="Left"
                                                      Controls:TextBoxHelper.UseFloatingWatermark="True"
@@ -128,7 +131,7 @@
                                         </StackPanel>
                                         <StackPanel>
                                             <Button x:Name="cmd_search_download_path"
-                                                    Margin="0"
+                                                    Margin="0,5,0,0"
                                                     Command="{Binding SelectDownloadFolderCommand}">
                                                 <StackPanel Orientation="Horizontal">
                                                     <Image Width="24" Source="Resources/Icons/appbar.folder.open.png" />
@@ -215,30 +218,38 @@
                                         <StackPanel>
                                             <CheckBox x:Name="chk_extract_archives"
                                                       Margin="5,5,0,0"
-                                                      Content="{x:Static p:Strings.Settings_AutomaticUnRAR}" />
+                                                      Content="{x:Static p:Strings.Settings_AutomaticUnRAR}"
+                                                      IsChecked="{Binding UnRARAfterDownload}" />
                                             <CheckBox x:Name="chk_delete_archives"
                                                       Margin="5,5,0,0"
-                                                      Content="{x:Static p:Strings.Settings_RemoveRARFiles}" />
+                                                      Content="{x:Static p:Strings.Settings_RemoveRARFiles}"
+                                                      IsChecked="{Binding DeleteAfterUnRAR}" />
                                             <CheckBox x:Name="chk_use_pwlist"
                                                       Margin="5,5,0,0"
-                                                      Content="{x:Static p:Strings.Settings_UseUnRARPasswordList}" />
+                                                      Content="{x:Static p:Strings.Settings_UseUnRARPasswordList}"
+                                                      IsChecked="{Binding UseUnRARPasswordList}" />
                                             <Separator Margin="5,10,5,5" />
                                             <Label Content="{x:Static p:Strings.Settings_PasswordList}" />
                                             <StackPanel Orientation="Horizontal">
                                                 <ListBox x:Name="listBox_unrar_passwords"
                                                          Width="298"
                                                          Height="100"
-                                                         BorderThickness="1" />
+                                                         BorderThickness="1"
+                                                         ItemsSource="{Binding UnRARPasswordList}"
+                                                         SelectedItem="{Binding SelectedUnRARPassword,
+                                                                                Mode=TwoWay}" />
                                                 <StackPanel>
                                                     <Button x:Name="cmd_add_unrar_pw"
                                                             Width="24"
                                                             Height="24"
                                                             Margin="5,5,5,0"
+                                                            Command="{Binding AddUnRARPasswordCommand}"
                                                             Content="+" />
                                                     <Button x:Name="cmd_remove_unrar_pw"
                                                             Width="24"
                                                             Height="24"
                                                             Margin="5,5,5,0"
+                                                            Command="{Binding RemoveUnRARPasswordCommand}"
                                                             Content="-" />
                                                 </StackPanel>
                                             </StackPanel>
@@ -258,28 +269,40 @@
                                         <RadioButton x:Name="radio_show_speedreport"
                                                      Margin="5,5,0,0"
                                                      Content="{x:Static p:Strings.Settings_ShowSpeedreportAfterDownload}"
-                                                     GroupName="Speedreport" />
+                                                     GroupName="Speedreport"
+                                                     IsChecked="{Binding SpeedreportVisibility,
+                                                                         Converter={StaticResource SpeedreportVisibilityConverter},
+                                                                         ConverterParameter=ShowSpeedreport}" />
                                         <RadioButton x:Name="radio_write_speedreport_file"
                                                      Margin="5,5,0,0"
                                                      Content="{x:Static p:Strings.Settings_WriteSpeedreportToFile}"
-                                                     GroupName="Speedreport" />
+                                                     GroupName="Speedreport"
+                                                     IsChecked="{Binding SpeedreportVisibility,
+                                                                         Converter={StaticResource SpeedreportVisibilityConverter},
+                                                                         ConverterParameter=Speedreport2File}" />
                                         <RadioButton x:Name="radio_hide_speedreport"
                                                      Margin="5,5,0,5"
                                                      Content="{x:Static p:Strings.Settings_HideSpeedreport}"
-                                                     GroupName="Speedreport" />
+                                                     GroupName="Speedreport"
+                                                     IsChecked="{Binding SpeedreportVisibility,
+                                                                         Converter={StaticResource SpeedreportVisibilityConverter},
+                                                                         ConverterParameter=HideSpeedreport}" />
                                         <Separator Margin="5" />
                                         <TextBox x:Name="txt_speedreport_username"
                                                  Margin="5,5,5,0"
                                                  Controls:TextBoxHelper.UseFloatingWatermark="True"
-                                                 Controls:TextBoxHelper.Watermark="{x:Static p:Strings.VariousStrings_Username}" />
+                                                 Controls:TextBoxHelper.Watermark="{x:Static p:Strings.VariousStrings_Username}"
+                                                 Text="{Binding SpeedreportUsername}" />
                                         <TextBox x:Name="txt_speedreport_connection"
                                                  Margin="5,5,5,0"
                                                  Controls:TextBoxHelper.UseFloatingWatermark="True"
-                                                 Controls:TextBoxHelper.Watermark="{x:Static p:Strings.VariousStrings_Comment}" />
+                                                 Controls:TextBoxHelper.Watermark="{x:Static p:Strings.VariousStrings_Connection}"
+                                                 Text="{Binding SpeedreportConnection}" />
                                         <TextBox x:Name="txt_speedreport_comment"
                                                  Margin="5"
                                                  Controls:TextBoxHelper.UseFloatingWatermark="True"
-                                                 Controls:TextBoxHelper.Watermark="{x:Static p:Strings.VariousStrings_Comment}" />
+                                                 Controls:TextBoxHelper.Watermark="{x:Static p:Strings.VariousStrings_Comment}"
+                                                 Text="{Binding SpeedreportComment}" />
                                         <Separator Margin="5" />
                                         <ToolBar Margin="5,0">
                                             <Menu>
@@ -287,22 +310,30 @@
                                                     <MenuItem.Icon>
                                                         <Image Width="24" Source="Resources/Icons/appbar.code.xml.png" />
                                                     </MenuItem.Icon>
-                                                    <MenuItem Header="{x:Static p:Strings.VariousStrings_Username}">
+                                                    <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                              CommandParameter="username"
+                                                              Header="{x:Static p:Strings.VariousStrings_Username}">
                                                         <MenuItem.Icon>
                                                             <Image Width="24" Source="Resources/Icons/appbar.user.png" />
                                                         </MenuItem.Icon>
                                                     </MenuItem>
-                                                    <MenuItem Header="{x:Static p:Strings.VariousStrings_Connection}">
+                                                    <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                              CommandParameter="connection"
+                                                              Header="{x:Static p:Strings.VariousStrings_Connection}">
                                                         <MenuItem.Icon>
                                                             <Image Width="24" Source="Resources/Icons/appbar.connection.quality.veryhigh.png" />
                                                         </MenuItem.Icon>
                                                     </MenuItem>
-                                                    <MenuItem Header="{x:Static p:Strings.VariousStrings_Comment}">
+                                                    <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                              CommandParameter="comment"
+                                                              Header="{x:Static p:Strings.VariousStrings_Comment}">
                                                         <MenuItem.Icon>
                                                             <Image Width="24" Source="Resources/Icons/appbar.notification.above.png" />
                                                         </MenuItem.Icon>
                                                     </MenuItem>
-                                                    <MenuItem Header="{x:Static p:Strings.VariousStrings_DownloadSpeed}">
+                                                    <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                              CommandParameter="downloadspeed"
+                                                              Header="{x:Static p:Strings.VariousStrings_DownloadSpeed}">
                                                         <MenuItem.Icon>
                                                             <Image Width="24" Source="Resources/Icons/appbar.gauge.75.png" />
                                                         </MenuItem.Icon>
@@ -311,23 +342,31 @@
                                                         <MenuItem.Icon>
                                                             <Image Width="24" Source="Resources/Icons/appbar.information.circle.png" />
                                                         </MenuItem.Icon>
-                                                        <MenuItem Header="{x:Static p:Strings.VariousStrings_Description}">
+                                                        <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                                  CommandParameter="sfdl_description"
+                                                                  Header="{x:Static p:Strings.VariousStrings_Description}">
                                                             <MenuItem.Icon>
                                                                 <Image Width="24" Source="Resources/Icons/appbar.interface.textbox.png" />
                                                             </MenuItem.Icon>
                                                         </MenuItem>
-                                                        <MenuItem Header="{x:Static p:Strings.VariousStrings_Uploader}">
+                                                        <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                                  CommandParameter="sfdl_uploader"
+                                                                  Header="{x:Static p:Strings.VariousStrings_Uploader}">
                                                             <MenuItem.Icon>
                                                                 <Image Width="24" Source="Resources/Icons/appbar.people.up.png" />
                                                             </MenuItem.Icon>
                                                         </MenuItem>
-                                                        <MenuItem Header="{x:Static p:Strings.VariousStrings_FullDownloadSize}">
+                                                        <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                                  CommandParameter="sfdl_downloadsize"
+                                                                  Header="{x:Static p:Strings.VariousStrings_FullDownloadSize}">
                                                             <MenuItem.Icon>
                                                                 <Image Width="24" Source="Resources/Icons/appbar.leaderboard.png" />
                                                             </MenuItem.Icon>
                                                         </MenuItem>
                                                     </MenuItem>
-                                                    <MenuItem Header="{x:Static p:Strings.VariousStrings_NeededDownloadTime}">
+                                                    <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                              CommandParameter="downloadtime"
+                                                              Header="{x:Static p:Strings.VariousStrings_NeededDownloadTime}">
                                                         <MenuItem.Icon>
                                                             <Image Width="24" Source="Resources/Icons/appbar.hourglass.png" />
                                                         </MenuItem.Icon>
@@ -335,16 +374,20 @@
                                                 </MenuItem>
                                             </Menu>
                                         </ToolBar>
-                                        <RichTextBox x:Name="rtb_speedreport_template"
-                                                     Height="123"
-                                                     Margin="5"
-                                                     BorderThickness="1" />
+                                        <TextBox x:Name="txt_speedreport_template"
+                                                 Height="123"
+                                                 Margin="5"
+                                                 AcceptsReturn="True"
+                                                 BorderThickness="1"
+                                                 Text="{Binding SpeedreportTemplate}"
+                                                 TextWrapping="Wrap" />
                                     </StackPanel>
                                 </Grid>
                             </GroupBox>
                         </StackPanel>
                     </Grid>
                 </TabItem>
+                <!-- Evtl. später einbauen
                 <TabItem Controls:ControlsHelper.HeaderFontSize="15" Header="{x:Static p:Strings.Settings_RemoteControl}">
                     <StackPanel>
                         <GroupBox Header="{x:Static p:Strings.Settings_RemoteControl}">
@@ -388,6 +431,7 @@
                         </GroupBox>
                     </StackPanel>
                 </TabItem>
+                -->
             </TabControl>
             <Button x:Name="cmd_save_settings"
                     Margin="150,5"

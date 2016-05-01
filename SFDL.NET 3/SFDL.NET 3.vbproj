@@ -90,6 +90,7 @@
     <Compile Include="Classes\ViewModels\SettingsViewModel.vb" />
     <Compile Include="Classes\ViewModels\ViewModelBase.vb" />
     <Compile Include="Classes\XAML Converter\LangauageConverter.vb" />
+    <Compile Include="Classes\XAML Converter\SpeedreportVisibilityConverter.vb" />
     <Compile Include="MainWindow.xaml.vb">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -117,6 +118,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\IconsNonShared.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -195,12 +200,6 @@
       <Project>{49d50cbf-389f-4366-80e2-db45f74ab0b1}</Project>
       <Name>SFDL.FTP</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\WindowsIcons-license.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Entypo-license.txt" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\appbar.card.png" />
@@ -301,6 +300,11 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\appbar.interface.textbox.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\WindowsIcons-license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Entypo-license.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
