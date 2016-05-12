@@ -53,6 +53,10 @@
       <HintPath>..\packages\MahApps.Metro.1.2.4.0\lib\net45\MahApps.Metro.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.3.3\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -77,6 +81,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\Models\ContainerSession.vb" />
+    <Compile Include="Classes\Models\ContainerSessionState.vb" />
+    <Compile Include="Classes\Models\DownloadItem.vb" />
+    <Compile Include="Classes\Models\Task.vb" />
+    <Compile Include="Classes\Models\UnRARChain.vb" />
+    <Compile Include="Classes\ViewModels\MainViewModel.vb" />
     <Compile Include="Classes\XAML Converter\ExistingFileHandlingConverter.vb" />
     <Compile Include="Classes\XAML Converter\InvertBooleanConverter.vb" />
     <Compile Include="Classes\DelegateCommand.vb" />
@@ -94,7 +104,8 @@
     <Compile Include="MainWindow.xaml.vb">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Modules\GlobalVars.vb" />
+    <Compile Include="Modules\LogHelper.vb" />
+    <Compile Include="Modules\SFDLFileHelper.vb" />
     <Compile Include="Modules\XMLHelper.vb" />
     <Compile Include="Resources\Strings.en.Designer.vb">
       <DependentUpon>Strings.en.resx</DependentUpon>
@@ -196,9 +207,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SFDL.FTP\net_ftp\FTPLibrary\SFDL.FTP.csproj">
-      <Project>{49d50cbf-389f-4366-80e2-db45f74ab0b1}</Project>
-      <Name>SFDL.FTP</Name>
+    <ProjectReference Include="..\..\SFDL.Container\SFDL.Container\SFDL.Container.vbproj">
+      <Project>{d2fe83a4-c5ba-4e87-8435-c01362ae8467}</Project>
+      <Name>SFDL.Container</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SFDL.FTP\ArxOne.Ftp\ArxOne.Ftp.csproj">
+      <Project>{2ffe845d-2e4f-440e-8b9f-17afcb9d166b}</Project>
+      <Name>ArxOne.Ftp</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -305,6 +320,21 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Entypo-license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\appbar.control.fastforward.variant.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.check.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.control.fastforward.variant.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Classes\Interfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

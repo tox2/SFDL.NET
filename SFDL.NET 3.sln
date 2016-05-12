@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SFDL.NET 3", "SFDL.NET 3\SFDL.NET 3.vbproj", "{BDE926A1-8C4F-489A-838F-9116B4CA8F29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFDL.FTP", "..\SFDL.FTP\net_ftp\FTPLibrary\SFDL.FTP.csproj", "{49D50CBF-389F-4366-80E2-DB45F74AB0B1}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SFDL.Container", "..\SFDL.Container\SFDL.Container\SFDL.Container.vbproj", "{D2FE83A4-C5BA-4E87-8435-C01362AE8467}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArxOne.Ftp", "..\SFDL.FTP\ArxOne.Ftp\ArxOne.Ftp.csproj", "{2FFE845D-2E4F-440E-8B9F-17AFCB9D166B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +19,14 @@ Global
 		{BDE926A1-8C4F-489A-838F-9116B4CA8F29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDE926A1-8C4F-489A-838F-9116B4CA8F29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDE926A1-8C4F-489A-838F-9116B4CA8F29}.Release|Any CPU.Build.0 = Release|Any CPU
-		{49D50CBF-389F-4366-80E2-DB45F74AB0B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{49D50CBF-389F-4366-80E2-DB45F74AB0B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{49D50CBF-389F-4366-80E2-DB45F74AB0B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{49D50CBF-389F-4366-80E2-DB45F74AB0B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2FE83A4-C5BA-4E87-8435-C01362AE8467}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2FE83A4-C5BA-4E87-8435-C01362AE8467}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2FE83A4-C5BA-4E87-8435-C01362AE8467}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2FE83A4-C5BA-4E87-8435-C01362AE8467}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FFE845D-2E4F-440E-8B9F-17AFCB9D166B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FFE845D-2E4F-440E-8B9F-17AFCB9D166B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FFE845D-2E4F-440E-8B9F-17AFCB9D166B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FFE845D-2E4F-440E-8B9F-17AFCB9D166B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

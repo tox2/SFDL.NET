@@ -305,7 +305,7 @@ Public Class SettingsViewModel
 
         Dim _new_password As String = String.Empty
 
-        _new_password = Await DialogCoordinator.Instance.ShowInputAsync(Me, "Passwort hinzufügen", "Bitte gebe das Kennwort ein welche du hinzufügen möchtest")
+        _new_password = Await DialogCoordinator.Instance.ShowInputAsync(Me, My.Resources.Strings.Settings_Input_AddUnRARPassword_Title, My.Resources.Strings.Settings_Input_AddUnRARPassword_Message)
 
         If Not _settings.UnRARSettings.UnRARPasswordList.Contains(_new_password) Then
             Me.UnRARPasswordList.Add(_new_password)
@@ -325,7 +325,7 @@ Public Class SettingsViewModel
 
             Dim _style As MessageDialogStyle = MessageDialogStyle.AffirmativeAndNegative
 
-            If Await DialogCoordinator.Instance.ShowMessageAsync(Me, "Passwort entfernen", "Willst du das ausgewählte Passwort entfernen?", _style) = MessageDialogResult.Affirmative Then
+            If Await DialogCoordinator.Instance.ShowMessageAsync(Me, My.Resources.Strings.Settings_Question_RemoveUnRARPassword_Title, My.Resources.Strings.Settings_Question_RemoveUnRARPassword_Message, _style) = MessageDialogResult.Affirmative Then
                 Me.UnRARPasswordList.Remove(_selected_unrar_password)
             End If
 

@@ -345,4 +345,19 @@
   <data name="VariousStrings_Variables" xml:space="preserve">
     <value>Variables</value>
   </data>
+  <data name="Settings_Input_AddUnRARPassword_Message" xml:space="preserve">
+    <value>Please enter the password which you want to add</value>
+  </data>
+  <data name="Settings_Input_AddUnRARPassword_Title" xml:space="preserve">
+    <value>Add Password</value>
+  </data>
+  <data name="Settings_Question_RemoveUnRARPassword_Message" xml:space="preserve">
+    <value>Want to remove the selected password?</value>
+  </data>
+  <data name="Settings_Question_RemoveUnRARPassword_Title" xml:space="preserve">
+    <value>Remove Password</value>
+  </data>
+  <data name="MainMenu_File_OpenFile" xml:space="preserve">
+    <value>Open</value>
+  </data>
 </root>

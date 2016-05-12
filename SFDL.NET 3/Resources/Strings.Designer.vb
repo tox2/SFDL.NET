@@ -173,6 +173,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Öffnen ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property MainMenu_File_OpenFile() As String
+            Get
+                Return ResourceManager.GetString("MainMenu_File_OpenFile", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Einstellungen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property MainMenu_File_Settings() As String
@@ -425,6 +434,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Bitte gebe das Kennwort ein welche du hinzufügen möchtest ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property Settings_Input_AddUnRARPassword_Message() As String
+            Get
+                Return ResourceManager.GetString("Settings_Input_AddUnRARPassword_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Passwort hinufügen ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property Settings_Input_AddUnRARPassword_Title() As String
+            Get
+                Return ResourceManager.GetString("Settings_Input_AddUnRARPassword_Title", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Instant Video aktivieren ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_InstantVideo() As String
@@ -520,6 +547,24 @@ Namespace My.Resources
         Public Shared ReadOnly Property Settings_PreventStandy() As String
             Get
                 Return ResourceManager.GetString("Settings_PreventStandy", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Willst du das ausgewählte Passwort entfernen? ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property Settings_Question_RemoveUnRARPassword_Message() As String
+            Get
+                Return ResourceManager.GetString("Settings_Question_RemoveUnRARPassword_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Passwort entfernen ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property Settings_Question_RemoveUnRARPassword_Title() As String
+            Get
+                Return ResourceManager.GetString("Settings_Question_RemoveUnRARPassword_Title", resourceCulture)
             End Get
         End Property
         
