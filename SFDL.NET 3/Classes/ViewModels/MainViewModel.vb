@@ -4,10 +4,10 @@ Imports SFDL.NET3
 Public Class MainViewModel
     Inherits ViewModelBase
 
+    Private _curr_selected_item As DownloadItem = Nothing
+
     Public Sub New()
-
         CreateView()
-
     End Sub
 
 #Region "Private Subs"
@@ -85,8 +85,6 @@ Decrypt:
 
                                                                                        End Sub)
 
-                                                UpdateGroups
-
                                                 If _bulk_result = False Then
                                                     Throw New Exception("Bulk Filelist konnte nicht ermittelt werden")
                                                 End If
@@ -102,7 +100,6 @@ Decrypt:
 
 
     End Sub
-
 
 #End Region
 
@@ -207,6 +204,49 @@ Decrypt:
 
 #End Region
 
+#Region "ListView ContextMenu Commands and Properites"
+
+    Public Property SelectedDownloadItem As DownloadItem
+        Set(value As DownloadItem)
+            _curr_selected_item = value
+            RaisePropertyChanged("SelectedDownloadItem")
+        End Set
+        Get
+            Return _curr_selected_item
+        End Get
+    End Property
+
+
+    Public ReadOnly Property CloseSFDLContainerCommand() As ICommand
+        Get
+            Return New DelegateCommand(AddressOf CloseSFDLContainer)
+        End Get
+    End Property
+
+    Private Sub CloseSFDLContainer()
+
+        If Not IsNothing(SelectedDownloadItem) Then
+
+            Dim _container_sessionid As Guid
+
+            _container_sessionid = SelectedDownloadItem.ParentContainerID
+
+            Dim _tmp_list As New List(Of DownloadItem)
+
+            _tmp_list = DownloadItems.Where(Function(myitem) SelectedDownloadItem.ParentContainerID.Equals(myitem.ParentContainerID)).ToList
+
+            For Each _item In _tmp_list
+                DownloadItems.Remove(_item)
+            Next
+
+            ContainerSessions.Remove(ContainerSessions.Where(Function(mysession) mysession.ContainerSessionID.Equals(_container_sessionid))(0))
+
+        End If
+
+    End Sub
+
+#End Region
+
 #Region "Tasks"
 
     Private _active_tasks As New ObjectModel.ObservableCollection(Of Task)
@@ -234,11 +274,6 @@ Decrypt:
 #End Region
 
 #Region "Container Sessions"
-
-    Private Sub UpdateGroups()
-
-
-    End Sub
 
     Private _container_sessions As New ObjectModel.ObservableCollection(Of ContainerSession)
 

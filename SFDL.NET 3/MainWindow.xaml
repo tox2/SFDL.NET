@@ -70,13 +70,6 @@
                                Source="Resources/Icons/appbar.delete.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="{x:Static p:Strings.MainMenu_Modify_CloseSFDLFile}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.page.delete.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
                 <Separator />
                 <MenuItem Header="{x:Static p:Strings.MainMenu_Modifiy_MarkAllFiles}">
                     <MenuItem.Icon>
@@ -171,7 +164,9 @@
         </ToolBar>
         <ListView x:Name="ListView_DownloadItems"
                   Height="396"
-                  ItemsSource="{Binding DownloadItems}">
+                  ItemsSource="{Binding DownloadItems}"
+                  SelectedItem="{Binding SelectedDownloadItem,
+                                         Mode=TwoWay}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn>
@@ -229,6 +224,18 @@
                     </GroupStyle.ContainerStyle>
                 </GroupStyle>
             </ListView.GroupStyle>
+
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="{Binding CloseSFDLContainerCommand}" Header="{x:Static p:Strings.MainMenu_Modify_CloseSFDLFile}">
+                        <MenuItem.Icon>
+                            <Image Width="32"
+                                   Height="32"
+                                   Source="Resources/Icons/appbar.page.delete.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </ListView.ContextMenu>
 
         </ListView>
         <Expander x:Name="Expander_Tasks" Header="{x:Static p:Strings.Expander_Header_Tasks}">

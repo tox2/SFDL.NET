@@ -81,8 +81,13 @@
         For Each _package In _containersession.ContainerFile.Packages
             For Each _file In _package.FileList
                 'ToDo: Prüfen ob eintrage plausibel sind
-                _file.PackageName = _package.Name
-                _tmp_list.Add(New DownloadItem(_file))
+
+                Using _dl_item As New DownloadItem(_file)
+                    _dl_item.PackageName = _package.Name
+                    _dl_item.ParentContainerID = _containersession.ContainerSessionID
+                    _tmp_list.Add(_dl_item)
+                End Using
+
             Next
         Next
 
