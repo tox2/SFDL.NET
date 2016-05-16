@@ -191,9 +191,20 @@
                         </GridViewColumn.CellTemplate>
 
                     </GridViewColumn>
-                    <GridViewColumn Width="100"
-                                    DisplayMemberBinding="{Binding DownloadStatus}"
-                                    Header="{x:Static p:Strings.ListView_DownloadItems_Header_Status}" />
+                    <GridViewColumn Width="100" Header="{x:Static p:Strings.ListView_DownloadItems_Header_Status}">
+
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Width="16"
+                                           Height="16"
+                                           Source="{Binding DownloadStatusImage}" />
+                                    <TextBlock Text="{Binding DownloadStatus}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+
+                    </GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding DownloadSpeed}" Header="{x:Static p:Strings.ListView_DownloadItems_Header_Speed}" />
                 </GridView>
             </ListView.View>
