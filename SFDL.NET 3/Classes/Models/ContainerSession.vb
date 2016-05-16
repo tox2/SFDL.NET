@@ -3,6 +3,7 @@
         Me.ContainerSessionID = Guid.NewGuid
         Me.ContainerFile = _container
         Me.SessionState = ContainerSessionState.Queued
+        Me.Priority = 0
     End Sub
 
     Public Property ContainerSessionID As Guid
@@ -15,5 +16,6 @@
     Public Property ActiveThreads As Integer
     Public Property UnRarChains As New List(Of UnRARChain)
     Public Property DownloadItems As New List(Of DownloadItem)
+    Public Property Priority As Integer = 0 '0 is Default -> All Container Sessions are equal
 
 End Class
