@@ -9,5 +9,4 @@ Public Class MainWindow
         LogHelper.GenerateLogConfig()
 
     End Sub
-
 End Class

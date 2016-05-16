@@ -76,11 +76,17 @@
 
     Sub GenerateContainerSessionDownloadItems(ByVal _containersession As ContainerSession)
 
+        Dim _tmp_list As New List(Of DownloadItem)
+
         For Each _package In _containersession.ContainerFile.Packages
             For Each _file In _package.FileList
-                _containersession.DownloadItems.Add(New DownloadItem(_file))
+                'ToDo: Prüfen ob eintrage plausibel sind
+                _file.PackageName = _package.Name
+                _tmp_list.Add(New DownloadItem(_file))
             Next
         Next
+
+        _containersession.DownloadItems.AddRange(_tmp_list)
 
     End Sub
 

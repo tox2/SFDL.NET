@@ -1,10 +1,26 @@
-﻿Imports SFDL.NET3
+﻿Imports System.Collections.Specialized
+Imports SFDL.NET3
 
 Public Class MainViewModel
     Inherits ViewModelBase
 
+    Public Sub New()
+
+        CreateView()
+
+    End Sub
 
 #Region "Private Subs"
+
+    Private Sub CreateView()
+
+        Dim view As CollectionView = DirectCast(CollectionViewSource.GetDefaultView(DownloadItems), CollectionView)
+
+        Dim groupDescription As New PropertyGroupDescription("PackageName")
+
+        view.GroupDescriptions.Add(groupDescription)
+
+    End Sub
 
     Private Sub OpenSFDLFile(ByVal _sfdl_container_path As String)
 
@@ -53,21 +69,25 @@ Decrypt:
                                                 _mycontainer_session.ContainerFileName = IO.Path.GetFileNameWithoutExtension(_sfdl_container_path)
                                                 _mycontainer_session.ContainerFilePath = _sfdl_container_path
 
-                                                If GetBulkFileList(_mycontainer_session) = True Then
+                                                Dim _bulk_result As Boolean
 
-                                                    GenerateContainerSessionDownloadItems(_mycontainer_session)
+                                                _bulk_result = GetBulkFileList(_mycontainer_session)
 
-                                                    DispatchService.DispatchService.Invoke(Sub()
+                                                GenerateContainerSessionDownloadItems(_mycontainer_session)
 
-                                                                                               For Each _item In _mycontainer_session.DownloadItems
-                                                                                                   DownloadItems.Add(_item)
-                                                                                               Next
+                                                DispatchService.DispatchService.Invoke(Sub()
 
-                                                                                               ContainerSessions.Add(_mycontainer_session)
+                                                                                           For Each _item In _mycontainer_session.DownloadItems
+                                                                                               DownloadItems.Add(_item)
+                                                                                           Next
 
-                                                                                           End Sub)
+                                                                                           ContainerSessions.Add(_mycontainer_session)
 
-                                                Else
+                                                                                       End Sub)
+
+                                                UpdateGroups
+
+                                                If _bulk_result = False Then
                                                     Throw New Exception("Bulk Filelist konnte nicht ermittelt werden")
                                                 End If
 
@@ -88,7 +108,7 @@ Decrypt:
 
 #Region "Button States"
 
-    Private _button_downloadstart_enabled As Boolean
+    Private _button_downloadstart_enabled As Boolean = True
 
     Public Property ButtonDownloadStartEnabled As Boolean
         Set(value As Boolean)
@@ -100,7 +120,7 @@ Decrypt:
         End Get
     End Property
 
-    Private _button_downloadstop_enabled As Boolean
+    Private _button_downloadstop_enabled As Boolean = False
 
     Public Property ButtonDownloadStopEnabled As Boolean
         Set(value As Boolean)
@@ -112,7 +132,7 @@ Decrypt:
         End Get
     End Property
 
-    Private _button_instantvideo_enabled As Boolean
+    Private _button_instantvideo_enabled As Boolean = False
     Public Property ButtonInstantVideoEnabled As Boolean
         Set(value As Boolean)
             _button_instantvideo_enabled = value
@@ -178,6 +198,12 @@ Decrypt:
 
     End Sub
 
+    Public ReadOnly Property StartDownloadCommand As ICommand
+        Get
+
+        End Get
+    End Property
+
 
 #End Region
 
@@ -209,6 +235,11 @@ Decrypt:
 
 #Region "Container Sessions"
 
+    Private Sub UpdateGroups()
+
+
+    End Sub
+
     Private _container_sessions As New ObjectModel.ObservableCollection(Of ContainerSession)
 
     Public Property ContainerSessions As ObjectModel.ObservableCollection(Of ContainerSession)
@@ -229,16 +260,6 @@ Decrypt:
             RaisePropertyChanged("DownloadItems")
         End Set
         Get
-
-            '_download_items.Clear()
-
-            'For Each _session In ContainerSessions
-
-            '    For Each _item In _session.DownloadItems
-            '        _download_items.Add(_item)
-            '    Next
-            'Next
-
             Return _download_items
         End Get
     End Property
