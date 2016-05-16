@@ -488,15 +488,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Alle Dateien im Container markieren ähnelt.
-        '''</summary>
-        Public Shared ReadOnly Property Settings_MarkAllFilesInContainer() As String
-            Get
-                Return ResourceManager.GetString("Settings_MarkAllFilesInContainer", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Maximale Retries: ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_MaximumRetries() As String
@@ -520,6 +511,15 @@ Namespace My.Resources
         Public Shared ReadOnly Property Settings_MinimizeToTray() As String
             Get
                 Return ResourceManager.GetString("Settings_MinimizeToTray", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Dateien im Container nicht automatisch auswählen ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property Settings_NotMarkAllFilesInContainer() As String
+            Get
+                Return ResourceManager.GetString("Settings_NotMarkAllFilesInContainer", resourceCulture)
             End Get
         End Property
         

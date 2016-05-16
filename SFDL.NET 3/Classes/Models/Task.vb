@@ -1,5 +1,9 @@
-﻿Public Class Task
+﻿Imports System.ComponentModel
 
+Public Class Task
+    Implements INotifyPropertyChanged
+
+    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
     Private _taskdisplaytext As String = String.Empty
     Private _taskstatusimage As String = String.Empty
     Private _taskstatus As TaskStatus
@@ -11,6 +15,10 @@
         _taskstatus = TaskStatus.Running
         _taskstatusimage = "Resources/Icons/appbar.control.fastforward.variant.png"
 
+    End Sub
+
+    Public Sub RaisePropertyChanged(ByVal propertyName As String)
+        RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
     End Sub
 
     Public Sub SetTaskStatus(ByVal _status As TaskStatus, ByVal _displaytext As String)
@@ -34,9 +42,14 @@
             Case TaskStatus.RanToCompletion
 
                 _taskstatusimage = "Resources/Icons/appbar.check.png"
-                RaiseEvent TaskDone(Me)
 
         End Select
+
+        RaisePropertyChanged("TaskStatusImage")
+        RaisePropertyChanged("TaskDisplayText")
+        RaisePropertyChanged("TaskStatus")
+
+        RaiseEvent TaskDone(Me)
 
     End Sub
 

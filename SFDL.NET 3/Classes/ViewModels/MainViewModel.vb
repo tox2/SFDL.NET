@@ -5,8 +5,10 @@ Public Class MainViewModel
     Inherits ViewModelBase
 
     Private _curr_selected_item As DownloadItem = Nothing
+    Private _settings As New Settings
 
     Public Sub New()
+        _settings = Application.Current.Resources("Settings")
         CreateView()
     End Sub
 
@@ -69,11 +71,17 @@ Decrypt:
                                                 _mycontainer_session.ContainerFileName = IO.Path.GetFileNameWithoutExtension(_sfdl_container_path)
                                                 _mycontainer_session.ContainerFilePath = _sfdl_container_path
 
+                                                GenerateContainerFingerprint(_mycontainer_session)
+
+                                                If Not ContainerSessions.Where(Function(mycon) mycon.Fingerprint.Equals(_mycontainer_session.Fingerprint)).Count = 0 Then
+                                                    Throw New Exception("Dieser SFDL Container ist bereits geöffnet!")
+                                                End If
+
                                                 Dim _bulk_result As Boolean
 
                                                 _bulk_result = GetBulkFileList(_mycontainer_session)
 
-                                                GenerateContainerSessionDownloadItems(_mycontainer_session)
+                                                GenerateContainerSessionDownloadItems(_mycontainer_session, _settings.NotMarkAllContainerFiles)
 
                                                 DispatchService.DispatchService.Invoke(Sub()
 
@@ -239,7 +247,7 @@ Decrypt:
                 DownloadItems.Remove(_item)
             Next
 
-            ContainerSessions.Remove(ContainerSessions.Where(Function(mysession) mysession.ContainerSessionID.Equals(_container_sessionid))(0))
+            ContainerSessions.Remove(ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_container_sessionid))(0))
 
         End If
 

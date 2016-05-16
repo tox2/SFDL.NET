@@ -249,8 +249,8 @@
   <data name="Settings_Language_German" xml:space="preserve">
     <value>German</value>
   </data>
-  <data name="Settings_MarkAllFilesInContainer" xml:space="preserve">
-    <value>Mark all files in container</value>
+  <data name="Settings_NotMarkAllFilesInContainer" xml:space="preserve">
+    <value>Mark files in the container not automatically</value>
   </data>
   <data name="Settings_MaximumRetries" xml:space="preserve">
     <value>maximun retries:</value>

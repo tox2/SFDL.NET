@@ -264,8 +264,8 @@
   <data name="Settings_IPAdress" xml:space="preserve">
     <value>IP Adresse:</value>
   </data>
-  <data name="Settings_MarkAllFilesInContainer" xml:space="preserve">
-    <value>Alle Dateien im Container markieren</value>
+  <data name="Settings_NotMarkAllFilesInContainer" xml:space="preserve">
+    <value>Dateien im Container nicht automatisch auswählen</value>
   </data>
   <data name="Settings_MaximumRetries" xml:space="preserve">
     <value>Maximale Retries:</value>

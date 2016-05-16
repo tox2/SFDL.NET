@@ -25,6 +25,24 @@
 
     End Function
 
+    Sub GenerateContainerFingerprint(ByRef _container_session As ContainerSession)
+
+        Dim _fingerprint As String = String.Empty
+
+        _fingerprint = _container_session.ContainerFile.MaxDownloadThreads.ToString
+        _fingerprint = _fingerprint & _container_session.ContainerFile.Connection.Host
+        _fingerprint = _fingerprint & _container_session.ContainerFile.Connection.Port
+        _fingerprint = _fingerprint & _container_session.ContainerFile.Connection.Username
+        _fingerprint = _fingerprint & _container_session.ContainerFile.Packages.Count
+
+        If Not _container_session.ContainerFile.Packages.Count = 0 Then
+            _fingerprint = _fingerprint & _container_session.ContainerFile.Packages(0).Name
+        End If
+
+        _container_session.Fingerprint = System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(_fingerprint))
+
+    End Sub
+
     Sub DecryptSFDLContainer(ByRef _container As Container.Container, ByVal _password As String)
 
         Dim _decrypt_helper As New SFDL.Container.Decrypt
@@ -74,7 +92,7 @@
 
     End Sub
 
-    Sub GenerateContainerSessionDownloadItems(ByVal _containersession As ContainerSession)
+    Sub GenerateContainerSessionDownloadItems(ByVal _containersession As ContainerSession, ByVal _mark_files As Boolean)
 
         Dim _tmp_list As New List(Of DownloadItem)
 
@@ -83,9 +101,18 @@
                 'ToDo: Prüfen ob eintrage plausibel sind
 
                 Using _dl_item As New DownloadItem(_file)
+
                     _dl_item.PackageName = _package.Name
-                    _dl_item.ParentContainerID = _containersession.ContainerSessionID
+                    _dl_item.ParentContainerID = _containersession.ID
+
+                    If _mark_files = False Then
+                        _dl_item.isSelected = True
+                    Else
+                        _dl_item.isSelected = False
+                    End If
+
                     _tmp_list.Add(_dl_item)
+
                 End Using
 
             Next

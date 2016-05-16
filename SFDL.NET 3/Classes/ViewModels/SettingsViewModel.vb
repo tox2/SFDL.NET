@@ -139,13 +139,13 @@ Public Class SettingsViewModel
             Return _settings.RetryWaitTime
         End Get
     End Property
-    Public Property MarkAllContainerFiles As Boolean
+    Public Property NotMarkAllContainerFiles As Boolean
         Set(value As Boolean)
-            _settings.MarkAllContainerFiles = value
+            _settings.NotMarkAllContainerFiles = value
             RaisePropertyChanged("MarkAllContainerFiles")
         End Set
         Get
-            Return _settings.MarkAllContainerFiles
+            Return _settings.NotMarkAllContainerFiles
         End Get
     End Property
     Public Property DeleteSFDLAfterOpen As Boolean

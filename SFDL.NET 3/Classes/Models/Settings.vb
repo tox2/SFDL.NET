@@ -14,7 +14,7 @@
     Public Property MaxDownloadThreads As Integer = 3
     Public Property MaxRetry As Integer = 3
     Public Property RetryWaitTime As Integer = 3
-    Public Property MarkAllContainerFiles As Boolean = False
+    Public Property NotMarkAllContainerFiles As Boolean = False
     Public Property SearchUpdates As Boolean = True
     Public Property InstantVideo As Boolean = False
     Public Property UnRARSettings As New UnRARSettings
