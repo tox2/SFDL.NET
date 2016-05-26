@@ -24,7 +24,7 @@
     Public Property DownloadStatus As Status = Status.Queued
     Public Property DownloadSpeed As String = String.Empty
     Public Property ParentContainerID As Guid
-    Public Property DownloadStatusImage As String
+    Public Property DownloadStatusImage As String = "Resources/Icons/appbar.clock.png"
 
     Public Enum Status
         Queued

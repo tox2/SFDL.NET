@@ -322,9 +322,6 @@
     <Resource Include="Resources\Entypo-license.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\appbar.control.fastforward.variant.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Icons\appbar.check.png" />
   </ItemGroup>
   <ItemGroup>
@@ -335,6 +332,18 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Classes\Interfaces\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.clock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.movie.clapper.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\throttle_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.layer.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

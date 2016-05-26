@@ -13,155 +13,211 @@
                       BorderBrush="Black"
                       BorderThickness="1"
                       SizeToContent="WidthAndHeight">
-    <StackPanel>
-        <Menu x:Name="MainMenu">
-            <MenuItem Header="{x:Static p:Strings.MainMenu_File}">
-                <MenuItem.Icon>
-                    <Image Width="32"
-                           Height="32"
-                           Source="Resources/Icons/appbar.tiles.four.png" />
-                </MenuItem.Icon>
-                <MenuItem x:Name="cmd_open_file"
-                          Command="{Binding OpenSFDLCommand}"
-                          Header="{x:Static p:Strings.MainMenu_File_OpenFile}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.folder.open.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem x:Name="cmd_Settings"
-                          Command="{Binding ShowSettingsDialogCommand}"
-                          Header="{x:Static p:Strings.MainMenu_File_Settings}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.cog.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem x:Name="cmd_exit_app"
-                          Command="{Binding ExitApplicationCommand}"
-                          Header="{x:Static p:Strings.MainMenu_File_Exit}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.power.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-            </MenuItem>
 
-            <MenuItem Header="{x:Static p:Strings.MainMenu_Modify}">
-                <MenuItem.Icon>
-                    <Image Width="32"
-                           Height="32"
-                           Source="Resources/Icons/appbar.edit.png" />
-                </MenuItem.Icon>
-                <MenuItem Header="{x:Static p:Strings.MainMenu_Modify_RemoveAllCompletedDownloads}">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Icons.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Controls:MetroWindow.Flyouts>
+        <Controls:FlyoutsControl x:Name="ContainerInfoFlyout">
+            <Controls:Flyout Width="250"
+                             Header="Container Infos"
+                             IsOpen="{Binding ContainerInfoOpen}"
+                             Position="Right"
+                             Theme="Light" >
+
+                <Grid>
+                    
+                </Grid>
+            </Controls:Flyout>
+        </Controls:FlyoutsControl>
+    </Controls:MetroWindow.Flyouts>
+
+    <StackPanel>
+
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35" />
+                <RowDefinition Height="35" />
+            </Grid.RowDefinitions>
+
+            <Menu x:Name="MainMenu" Grid.Row="0">
+                <MenuItem Header="{x:Static p:Strings.MainMenu_File}">
                     <MenuItem.Icon>
                         <Image Width="32"
                                Height="32"
-                               Source="Resources/Icons/appbar.close.png" />
+                               Source="Resources/Icons/appbar.tiles.four.png" />
                     </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="{x:Static p:Strings.MainMenu_Modify_CloseAlleDownloads}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.delete.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator />
-                <MenuItem Header="{x:Static p:Strings.MainMenu_Modifiy_MarkAllFiles}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.checkmark.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="{x:Static p:Strings.MainMenu_Modifiy_UnmarkAllFiles}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.checkmark.uncrossed.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator />
-                <MenuItem Header="{x:Static p:Strings.MainMenu_Modifiy_CollapeseAllPackages}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.arrow.collapsed.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="{x:Static p:Strings.MainMenu_Modifiy_ExpandAllPackages}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.arrow.expand.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-            </MenuItem>
-            <MenuItem Header="{x:Static p:Strings.MainMenu_Extra}">
-                <MenuItem.Icon>
-                    <Image Width="32"
-                           Height="32"
-                           Source="Resources/Icons/appbar.star.png" />
-                </MenuItem.Icon>
-                <MenuItem Header="{x:Static p:Strings.MainMenu_Extra_AfterDownload}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.door.leave.png" />
-                    </MenuItem.Icon>
-                    <MenuItem Header="{x:Static p:Strings.MainMenu_Extra_AfterDownload_ExitLoader}" IsCheckable="True">
+                    <MenuItem x:Name="cmd_open_file"
+                              Command="{Binding OpenSFDLCommand}"
+                              Header="{x:Static p:Strings.MainMenu_File_OpenFile}">
+                        <MenuItem.Icon>
+                            <Image Width="32"
+                                   Height="32"
+                                   Source="Resources/Icons/appbar.folder.open.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="cmd_Settings"
+                              Command="{Binding ShowSettingsDialogCommand}"
+                              Header="{x:Static p:Strings.MainMenu_File_Settings}">
+                        <MenuItem.Icon>
+                            <Image Width="32"
+                                   Height="32"
+                                   Source="Resources/Icons/appbar.cog.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="cmd_exit_app"
+                              Command="{Binding ExitApplicationCommand}"
+                              Header="{x:Static p:Strings.MainMenu_File_Exit}">
                         <MenuItem.Icon>
                             <Image Width="32"
                                    Height="32"
                                    Source="Resources/Icons/appbar.power.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="{x:Static p:Strings.MainMenu_Extra_AfterDownload_ShutdownComputer}" IsCheckable="True">
+                </MenuItem>
+
+                <MenuItem Header="{x:Static p:Strings.MainMenu_Modify}">
+                    <MenuItem.Icon>
+                        <Image Width="32"
+                               Height="32"
+                               Source="Resources/Icons/appbar.edit.png" />
+                    </MenuItem.Icon>
+                    <MenuItem Header="{x:Static p:Strings.MainMenu_Modify_RemoveAllCompletedDownloads}">
                         <MenuItem.Icon>
                             <Image Width="32"
                                    Height="32"
-                                   Source="Resources/Icons/appbar.monitor.delete.png" />
+                                   Source="Resources/Icons/appbar.close.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{x:Static p:Strings.MainMenu_Modify_CloseAlleDownloads}">
+                        <MenuItem.Icon>
+                            <Image Width="32"
+                                   Height="32"
+                                   Source="Resources/Icons/appbar.delete.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Header="{x:Static p:Strings.MainMenu_Modifiy_MarkAllFiles}">
+                        <MenuItem.Icon>
+                            <Image Width="32"
+                                   Height="32"
+                                   Source="Resources/Icons/appbar.checkmark.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{x:Static p:Strings.MainMenu_Modifiy_UnmarkAllFiles}">
+                        <MenuItem.Icon>
+                            <Image Width="32"
+                                   Height="32"
+                                   Source="Resources/Icons/appbar.checkmark.uncrossed.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Header="{x:Static p:Strings.MainMenu_Modifiy_CollapeseAllPackages}">
+                        <MenuItem.Icon>
+                            <Image Width="32"
+                                   Height="32"
+                                   Source="Resources/Icons/appbar.arrow.collapsed.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{x:Static p:Strings.MainMenu_Modifiy_ExpandAllPackages}">
+                        <MenuItem.Icon>
+                            <Image Width="32"
+                                   Height="32"
+                                   Source="Resources/Icons/appbar.arrow.expand.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
-            </MenuItem>
-            <MenuItem Header="{x:Static p:Strings.MainMenu_Help}">
-                <MenuItem.Icon>
-                    <Image Width="32"
-                           Height="32"
-                           Source="Resources/Icons/appbar.book.perspective.help.png" />
-                </MenuItem.Icon>
+                <MenuItem Header="{x:Static p:Strings.MainMenu_Extra}">
+                    <MenuItem.Icon>
+                        <Image Width="32"
+                               Height="32"
+                               Source="Resources/Icons/appbar.star.png" />
+                    </MenuItem.Icon>
+                    <MenuItem Header="{x:Static p:Strings.MainMenu_Extra_AfterDownload}">
+                        <MenuItem.Icon>
+                            <Image Width="32"
+                                   Height="32"
+                                   Source="Resources/Icons/appbar.door.leave.png" />
+                        </MenuItem.Icon>
+                        <MenuItem Header="{x:Static p:Strings.MainMenu_Extra_AfterDownload_ExitLoader}" IsCheckable="True">
+                            <MenuItem.Icon>
+                                <Image Width="32"
+                                       Height="32"
+                                       Source="Resources/Icons/appbar.power.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{x:Static p:Strings.MainMenu_Extra_AfterDownload_ShutdownComputer}" IsCheckable="True">
+                            <MenuItem.Icon>
+                                <Image Width="32"
+                                       Height="32"
+                                       Source="Resources/Icons/appbar.monitor.delete.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+                </MenuItem>
                 <MenuItem Header="{x:Static p:Strings.MainMenu_Help}">
                     <MenuItem.Icon>
                         <Image Width="32"
                                Height="32"
-                               Source="Resources/Icons/appbar.information.circle.png" />
+                               Source="Resources/Icons/appbar.book.perspective.help.png" />
                     </MenuItem.Icon>
+                    <MenuItem Header="{x:Static p:Strings.MainMenu_Help}">
+                        <MenuItem.Icon>
+                            <Image Width="32"
+                                   Height="32"
+                                   Source="Resources/Icons/appbar.information.circle.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
-            </MenuItem>
 
-        </Menu>
-        <ToolBar x:Name="MainToolBar">
-            <Image Width="32"
-                   Height="32"
-                   Source="Resources/Icons/appbar.control.play.png" />
-            <Button Command="{Binding StartDownloadCommand}"
-                    Content="{x:Static p:Strings.MainToolBar_StartDownload}"
-                    IsEnabled="{Binding ButtonDownloadStartEnabled}" />
-            <Image Width="32"
-                   Height="32"
-                   Source="Resources/Icons/appbar.control.stop.png" />
-            <Button Content="{x:Static p:Strings.MainToolBar_StopDownload}" IsEnabled="{Binding ButtonDownloadStopEnabled}" />
-            <Separator />
-            <Button Content="{x:Static p:Strings.MainToolbar_InstandVideo}" IsEnabled="{Binding ButtonInstantVideoEnabled}" />
-            <Separator />
-            <TextBox Controls:TextBoxHelper.UseFloatingWatermark="True" Controls:TextBoxHelper.Watermark="Max KB/s" />
+            </Menu>
+            <ToolBar x:Name="MainToolBar"
+                     Grid.Row="1"
+                     VerticalAlignment="Top">
+                <Image Width="32"
+                       Height="32"
+                       Source="Resources/Icons/appbar.control.play.png" />
+                <Button Command="{Binding StartDownloadCommand}"
+                        Content="{x:Static p:Strings.MainToolBar_StartDownload}"
+                        IsEnabled="{Binding ButtonDownloadStartEnabled}" />
+                <Image Width="32"
+                       Height="32"
+                       Source="Resources/Icons/appbar.control.stop.png" />
+                <Button Content="{x:Static p:Strings.MainToolBar_StopDownload}" IsEnabled="{Binding ButtonDownloadStopEnabled}" />
+                <Separator Margin="5,2" />
+                <Image Width="32"
+                       Height="32"
+                       Source="Resources/Icons/appbar.movie.clapper.png" />
+                <Button Content="{x:Static p:Strings.MainToolbar_InstandVideo}" IsEnabled="{Binding ButtonInstantVideoEnabled}" />
+                <Separator Margin="5,2" />
+                <Image Width="32"
+                       Height="32"
+                       Margin="0,0,5,0"
+                       Source="Resources/Icons/throttle_icon.png" />
+                <TextBox Width="80"
+                         Controls:TextBoxHelper.UseFloatingWatermark="True"
+                         Controls:TextBoxHelper.Watermark="Max KB/s" />
+            </ToolBar>
+            <Button Grid.Row="1"
+                    Width="40"
+                    Height="40"
+                    Margin="0,0,10,0"
+                    HorizontalAlignment="Right"
+                    Background="White"
+                    BorderThickness="0"
+                    Command="{Binding ShowContainerInfoCommand}">
+                <StackPanel>
+                    <Image Source="Resources/Icons/appbar.layer.png" />
+                </StackPanel>
+            </Button>
+        </Grid>
 
-        </ToolBar>
         <ListView x:Name="ListView_DownloadItems"
                   Height="396"
                   ItemsSource="{Binding DownloadItems}"
@@ -196,8 +252,8 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Width="16"
-                                           Height="16"
+                                    <Image Width="20"
+                                           Height="20"
                                            Source="{Binding DownloadStatusImage}" />
                                     <TextBlock Text="{Binding DownloadStatus}" />
                                 </StackPanel>
@@ -218,13 +274,24 @@
                                     <ControlTemplate>
                                         <Expander IsExpanded="True">
                                             <Expander.Header>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock VerticalAlignment="Bottom"
-                                                               FontSize="12"
-                                                               FontWeight="Bold"
-                                                               Foreground="White"
-                                                               Text="{Binding Name}" />
-                                                </StackPanel>
+                                                <DockPanel LastChildFill="False">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock VerticalAlignment="Bottom"
+                                                                   FontSize="12"
+                                                                   FontWeight="Bold"
+                                                                   Foreground="White"
+                                                                   Text="{Binding Name}" />
+                                                    </StackPanel>
+                                                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                                        <TextBlock Margin="0,0,2,0"
+                                                                   Foreground="White"
+                                                                   Text="Serverstandort:" />
+                                                        <Image Width="32" Height="32" />
+                                                        <TextBlock Margin="0,0,2,0" Text="{Binding PackageName}" />
+                                                        <Separator Foreground="White" />
+                                                    </StackPanel>
+                                                </DockPanel>
+
                                             </Expander.Header>
                                             <ItemsPresenter />
                                         </Expander>
@@ -271,4 +338,5 @@
         </Expander>
         <StatusBar x:Name="MainStatusBar" />
     </StackPanel>
+
 </Controls:MetroWindow>

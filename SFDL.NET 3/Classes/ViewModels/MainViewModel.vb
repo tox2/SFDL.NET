@@ -6,6 +6,7 @@ Public Class MainViewModel
 
     Private _curr_selected_item As DownloadItem = Nothing
     Private _settings As New Settings
+    Private _container_info_shown As Boolean = False
 
     Public Sub New()
         _settings = Application.Current.Resources("Settings")
@@ -21,6 +22,10 @@ Public Class MainViewModel
         Dim groupDescription As New PropertyGroupDescription("PackageName")
 
         view.GroupDescriptions.Add(groupDescription)
+
+        'Dim groupDescription2 As New PropertyGroupDescription("ParentContainerID")
+
+        'view.GroupDescriptions.Add(groupDescription2)
 
     End Sub
 
@@ -205,9 +210,23 @@ Decrypt:
 
     Public ReadOnly Property StartDownloadCommand As ICommand
         Get
-
+            Return New DelegateCommand(AddressOf StartDownload)
         End Get
     End Property
+
+    Private Sub StartDownload()
+
+    End Sub
+
+    Public ReadOnly Property ShowContainerInfoCommand As ICommand
+        Get
+            Return New DelegateCommand(AddressOf ShowContainerInfo)
+        End Get
+    End Property
+
+    Private Sub ShowContainerInfo()
+        Me.ContainerInfoOpen = True
+    End Sub
 
 
 #End Region
@@ -308,5 +327,16 @@ Decrypt:
     End Property
 
 #End Region
+
+    Public Property ContainerInfoOpen As Boolean
+        Set(value As Boolean)
+            _container_info_shown = value
+            RaisePropertyChanged("ContainerInfoOpen")
+        End Set
+        Get
+            Return _container_info_shown
+        End Get
+    End Property
+
 
 End Class
