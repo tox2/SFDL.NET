@@ -28,10 +28,42 @@
                              Header="Container Infos"
                              IsOpen="{Binding ContainerInfoOpen}"
                              Position="Right"
-                             Theme="Light" >
+                             Theme="Light">
 
                 <Grid>
-                    
+                    <StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label Margin="0,0,5,0"
+                                   Content="SFDL wählen:"
+                                   FontWeight="Bold" />
+                            <ComboBox x:Name="ComB_Container_Info"
+                                      DisplayMemberPath="DisplayName"
+                                      ItemsSource="{Binding ContainerSessions}" />
+                        </StackPanel>
+
+                        <Separator Margin="3,5" />
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Uploader:"
+                                   FontSize="14"
+                                   FontWeight="Bold" />
+                            <Label x:Name="txt_containerinfo_upper" FontSize="14" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Server Standort:"
+                                   FontSize="14"
+                                   FontWeight="Bold" />
+                            <Image x:Name="img_containerinfo_serverlocation"
+                                   Width="32"
+                                   Height="32"
+                                   Margin="0,0,2,0" />
+                            <Label x:Name="txt_containerinfo_serverlocation" FontSize="14" />
+                        </StackPanel>
+
+                    </StackPanel>
+
                 </Grid>
             </Controls:Flyout>
         </Controls:FlyoutsControl>

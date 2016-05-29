@@ -76,6 +76,12 @@ Decrypt:
                                                 _mycontainer_session.ContainerFileName = IO.Path.GetFileNameWithoutExtension(_sfdl_container_path)
                                                 _mycontainer_session.ContainerFilePath = _sfdl_container_path
 
+                                                If String.IsNullOrWhiteSpace(_mycontainer.Description) Then
+                                                    _mycontainer_session.DisplayName = _mycontainer_session.ContainerFileName
+                                                Else
+                                                    _mycontainer_session.DisplayName = _mycontainer.Description
+                                                End If
+
                                                 GenerateContainerFingerprint(_mycontainer_session)
 
                                                 If Not ContainerSessions.Where(Function(mycon) mycon.Fingerprint.Equals(_mycontainer_session.Fingerprint)).Count = 0 Then

@@ -8,12 +8,13 @@
 
     Public Property ID As Guid
     Public Property ContainerFile As SFDL.Container.Container
-    Public Property ContainerFileName As String
-    Public Property ContainerFilePath As String
-    Public Property SessionState As ContainerSessionState
+    Public Property DisplayName As String = String.Empty
+    Public Property ContainerFileName As String = String.Empty
+    Public Property ContainerFilePath As String = String.Empty
+    Public Property SessionState As ContainerSessionState = ContainerSessionState.Queued
     Public Property DownloadStartedTime As Date
     Public Property DownloadStoppedTime As Date
-    Public Property ActiveThreads As Integer
+    Public Property ActiveThreads As Integer = 0
     Public Property UnRarChains As New List(Of UnRARChain)
     Public Property DownloadItems As New List(Of DownloadItem)
     Public Property Priority As Integer = 0 '0 is Default -> All Container Sessions are equal

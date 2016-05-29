@@ -106,6 +106,7 @@
     </Compile>
     <Compile Include="Modules\LogHelper.vb" />
     <Compile Include="Modules\SFDLFileHelper.vb" />
+    <Compile Include="Modules\WhoisHelper.vb" />
     <Compile Include="Modules\XMLHelper.vb" />
     <Compile Include="Resources\Strings.en.Designer.vb">
       <DependentUpon>Strings.en.resx</DependentUpon>
