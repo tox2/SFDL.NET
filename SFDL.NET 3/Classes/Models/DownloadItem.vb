@@ -10,7 +10,12 @@ Public Class DownloadItem
         RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
     End Sub
 
-    Private _download_speed As String
+    Private _download_speed As String = String.Empty
+    Private _selected As Boolean = False
+    Private _download_progress As Integer = 0
+    Private _parent_container_id As Guid
+    Private _status_image As String = "Resources/Icons/appbar.clock.png"
+    Private _status As Status = Status.Queued
 
     Public Sub New(ByVal _fileitem As SFDL.Container.FileItem)
 
@@ -29,9 +34,33 @@ Public Class DownloadItem
 
     End Sub
 
-    Public Property isSelected As Boolean = False
-    Public Property DownloadProgress As Integer = 0
-    Public Property DownloadStatus As Status = Status.Queued
+    Public Property isSelected As Boolean
+        Set(value As Boolean)
+            _selected = value
+            RaisePropertyChanged("isSelected")
+        End Set
+        Get
+            Return _selected
+        End Get
+    End Property
+    Public Property DownloadProgress As Integer
+        Set(value As Integer)
+            _download_progress = value
+            RaisePropertyChanged("DownloadProgress")
+        End Set
+        Get
+            Return _download_progress
+        End Get
+    End Property
+    Public Property DownloadStatus As Status
+        Set(value As Status)
+            _status = value
+            RaisePropertyChanged("DownloadStatus")
+        End Set
+        Get
+            Return _status
+        End Get
+    End Property
     Public Property DownloadSpeed As String
         Set(value As String)
             _download_speed = value
@@ -42,7 +71,23 @@ Public Class DownloadItem
         End Get
     End Property
     Public Property ParentContainerID As Guid
-    Public Property DownloadStatusImage As String = "Resources/Icons/appbar.clock.png"
+        Set(value As Guid)
+            _parent_container_id = value
+            RaisePropertyChanged("ParentContainerID")
+        End Set
+        Get
+            Return _parent_container_id
+        End Get
+    End Property
+    Public Property DownloadStatusImage As String
+        Set(value As String)
+            _status_image = value
+            RaisePropertyChanged("DownloadStatusImage")
+        End Set
+        Get
+            Return _status_image
+        End Get
+    End Property
 
     Public Enum Status
         Queued
