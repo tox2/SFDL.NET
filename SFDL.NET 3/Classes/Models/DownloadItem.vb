@@ -1,6 +1,16 @@
-﻿Public Class DownloadItem
+﻿Imports System.ComponentModel
+
+Public Class DownloadItem
     Inherits SFDL.Container.FileItem
     Implements IDisposable
+    Implements INotifyPropertyChanged
+
+    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+    Public Sub RaisePropertyChanged(ByVal propertyName As String)
+        RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+    End Sub
+
+    Private _download_speed As String
 
     Public Sub New(ByVal _fileitem As SFDL.Container.FileItem)
 
@@ -22,7 +32,15 @@
     Public Property isSelected As Boolean = False
     Public Property DownloadProgress As Integer = 0
     Public Property DownloadStatus As Status = Status.Queued
-    Public Property DownloadSpeed As String = String.Empty
+    Public Property DownloadSpeed As String
+        Set(value As String)
+            _download_speed = value
+            RaisePropertyChanged("DownloadSpeed")
+        End Set
+        Get
+            Return _download_speed
+        End Get
+    End Property
     Public Property ParentContainerID As Guid
     Public Property DownloadStatusImage As String = "Resources/Icons/appbar.clock.png"
 

@@ -127,6 +127,36 @@ Decrypt:
 
     End Sub
 
+    Private Sub PreDownloadCheck()
+
+        'Check if Download is Running?
+
+        'Check if any Item is marked
+
+        'Check if Download Directory Exists
+
+
+    End Sub
+
+    Private Sub StartDownload()
+
+        Try
+
+            PreDownloadCheck()
+
+
+            DownloadContainerItems(2, DownloadItems.ToList)
+
+
+
+
+        Catch ex As Exception
+
+        End Try
+
+
+    End Sub
+
 #End Region
 
 #Region "Button States"
@@ -226,10 +256,6 @@ Decrypt:
             Return New DelegateCommand(AddressOf StartDownload)
         End Get
     End Property
-
-    Private Sub StartDownload()
-
-    End Sub
 
     Public ReadOnly Property ShowContainerInfoCommand As ICommand
         Get
