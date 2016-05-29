@@ -7,7 +7,7 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SFDL.NET 3", "SFDL.NET 3\SF
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SFDL.Container", "..\SFDL.Container\SFDL.Container\SFDL.Container.vbproj", "{D2FE83A4-C5BA-4E87-8435-C01362AE8467}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArxOne.Ftp", "..\SFDL.FTP\ArxOne.Ftp\ArxOne.Ftp.csproj", "{2FFE845D-2E4F-440E-8B9F-17AFCB9D166B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFDL.FTP", "..\SFDL.FTP\ArxOne.Ftp\SFDL.FTP.csproj", "{2FFE845D-2E4F-440E-8B9F-17AFCB9D166B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

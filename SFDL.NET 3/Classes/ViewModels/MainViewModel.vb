@@ -146,8 +146,9 @@ Decrypt:
 
             Dim _thread_count_pool As Integer = _settings.MaxDownloadThreads
             Dim _itemdownloadlist As New List(Of DownloadItem)
-            Dim _log As NLog.Logger = NLog.LogManager.GetLogger("DownloadHelper")
             Dim _tasklist As New List(Of System.Threading.Tasks.Task)
+            Dim _log As NLog.Logger = NLog.LogManager.GetLogger("StartDownload")
+            Dim _download_helper As New DownloadHelper
 
             'Check if rdy for Download
             PreDownloadCheck()
@@ -175,7 +176,7 @@ Decrypt:
                         _itemdownloadlist.AddRange(DownloadItems.Where(Function(myitem) myitem.ParentContainerID.Equals(_session.ID) And myitem.DownloadStatus = DownloadItem.Status.Queued).Take(_thread_count))
 
                         _tasklist.Add(System.Threading.Tasks.Task.Run(Sub()
-                                                                          DownloadContainerItems(_thread_count, _itemdownloadlist)
+                                                                          _download_helper.DownloadContainerItems(_thread_count, _itemdownloadlist, _session.ContainerFile.Connection)
                                                                       End Sub))
                     End If
 

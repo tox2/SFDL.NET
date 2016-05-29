@@ -125,34 +125,11 @@
     Function GetBulkFileList(ByRef _container_session As ContainerSession) As Boolean
 
         Dim _ftp As ArxOne.Ftp.FtpClient
-        Dim _creds As Net.NetworkCredential
-        Dim _ftp_client_param As New ArxOne.Ftp.FtpClientParameters
         Dim _rt As Boolean = True
 
         Try
 
-            With _container_session.ContainerFile.Connection
-
-                If .AuthRequired = True Then
-                    _creds = New Net.NetworkCredential(.Username, .Password)
-                Else
-                    _creds = New Net.NetworkCredential("anonymous", "Password")
-                End If
-
-                With _ftp_client_param
-                    .ActiveTransferHost = Net.IPAddress.Parse(_container_session.ContainerFile.Connection.Host)
-                    .AnonymousPassword = "sfdl@anon.net"
-                    .Passive = True
-                    .SslProtocols = Security.Authentication.SslProtocols.None
-                    .ChannelProtection = ArxOne.Ftp.FtpProtection.Ftp
-                    .DefaultEncoding = System.Text.Encoding.UTF8
-                End With
-
-                _ftp = New ArxOne.Ftp.FtpClient(New Uri(String.Format("ftp://{0}:{1}", .Host, .Port)), _creds, _ftp_client_param)
-
-                _ftp.ServerType.ToString()
-
-            End With
+            SetupFTPClient(_ftp, _container_session.ContainerFile.Connection)
 
             For Each _package In _container_session.ContainerFile.Packages.Where(Function(mypackage) mypackage.BulkFolderMode = True)
 

@@ -105,6 +105,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Modules\DownloadHelper.vb" />
+    <Compile Include="Modules\FTPHelper.vb" />
     <Compile Include="Modules\LogHelper.vb" />
     <Compile Include="Modules\SFDLFileHelper.vb" />
     <Compile Include="Modules\WhoisHelper.vb" />
@@ -213,9 +214,9 @@
       <Project>{d2fe83a4-c5ba-4e87-8435-c01362ae8467}</Project>
       <Name>SFDL.Container</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SFDL.FTP\ArxOne.Ftp\ArxOne.Ftp.csproj">
+    <ProjectReference Include="..\..\SFDL.FTP\ArxOne.Ftp\SFDL.FTP.csproj">
       <Project>{2ffe845d-2e4f-440e-8b9f-17afcb9d166b}</Project>
-      <Name>ArxOne.Ftp</Name>
+      <Name>SFDL.FTP</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
