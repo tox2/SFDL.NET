@@ -46,6 +46,8 @@ Public Class MainViewModel
 
                                             Try
 
+                                                Dim _bulk_result As Boolean
+
                                                 If GetContainerVersion(_sfdl_container_path) = 0 Or GetContainerVersion(_sfdl_container_path) > 10 Then
                                                     Throw New Exception("Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!")
                                                 End If
@@ -88,11 +90,15 @@ Decrypt:
                                                     Throw New Exception("Dieser SFDL Container ist bereits geöffnet!")
                                                 End If
 
-                                                Dim _bulk_result As Boolean
-
-                                                _bulk_result = GetBulkFileList(_mycontainer_session)
+                                                If Not _mycontainer_session.ContainerFile.Packages.Where(Function(mypackage) mypackage.BulkFolderMode = True).Count = 0 Then
+                                                    _bulk_result = GetBulkFileList(_mycontainer_session)
+                                                End If
 
                                                 GenerateContainerSessionDownloadItems(_mycontainer_session, _settings.NotMarkAllContainerFiles)
+
+                                                If _bulk_result = False And _mycontainer_session.DownloadItems.Count = 0 Then
+                                                    Throw New Exception("Öffnen fehlgeschlagen - Bulk Package konnte nicht gelesen werden")
+                                                End If
 
                                                 DispatchService.DispatchService.Invoke(Sub()
 
@@ -104,15 +110,16 @@ Decrypt:
 
                                                                                        End Sub)
 
-                                                If _bulk_result = False Then
-                                                    Throw New Exception("Bulk Filelist konnte nicht ermittelt werden")
+                                                If _bulk_result = False And Not _mycontainer_session.DownloadItems.Count = 0 Then
+                                                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "SFDL teilweise geöffnet - Ein oder mehrere Packages konnten nicht gelesen werden.")
+                                                Else
+                                                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "SFDL geöffnet")
                                                 End If
+
 
                                             Catch ex As Exception
                                                 _mytask.SetTaskStatus(TaskStatus.Faulted, ex.Message)
                                             End Try
-
-                                            _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "SFDL geöffnet")
 
                                         End Sub)
 

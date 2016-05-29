@@ -150,6 +150,8 @@
 
                 _ftp = New ArxOne.Ftp.FtpClient(New Uri(String.Format("ftp://{0}:{1}", .Host, .Port)), _creds, _ftp_client_param)
 
+                _ftp.ServerType.ToString()
+
             End With
 
             For Each _package In _container_session.ContainerFile.Packages.Where(Function(mypackage) mypackage.BulkFolderMode = True)
@@ -161,7 +163,7 @@
             Next
 
         Catch ex As Exception
-            _rt = True
+            _rt = False
             _log.Error(ex, ex.Message)
         End Try
 
