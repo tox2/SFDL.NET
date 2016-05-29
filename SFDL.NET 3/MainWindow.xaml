@@ -314,14 +314,6 @@
                                                                    Foreground="White"
                                                                    Text="{Binding Name}" />
                                                     </StackPanel>
-                                                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                                                        <TextBlock Margin="0,0,2,0"
-                                                                   Foreground="White"
-                                                                   Text="Serverstandort:" />
-                                                        <Image Width="32" Height="32" />
-                                                        <TextBlock Margin="0,0,2,0" Text="{Binding PackageName}" />
-                                                        <Separator Foreground="White" />
-                                                    </StackPanel>
                                                 </DockPanel>
 
                                             </Expander.Header>

@@ -100,6 +100,8 @@ Decrypt:
                                                     Throw New Exception("Öffnen fehlgeschlagen - Bulk Package konnte nicht gelesen werden")
                                                 End If
 
+                                                'ToDo: Parse/Generate UnRAR Chains
+
                                                 DispatchService.DispatchService.Invoke(Sub()
 
                                                                                            For Each _item In _mycontainer_session.DownloadItems
@@ -129,26 +131,77 @@ Decrypt:
 
     Private Sub PreDownloadCheck()
 
-        'Check if Download is Running?
+        'ToDo: Check if Download is Running?
 
-        'Check if any Item is marked
+        'ToDo: Check if any Item is marked
 
-        'Check if Download Directory Exists
+        'ToDo: Check if Download Directory Exists
 
 
     End Sub
 
-    Private Sub StartDownload()
+    Private Async Sub StartDownload()
 
         Try
 
+            Dim _thread_count_pool As Integer = _settings.MaxDownloadThreads
+            Dim _itemdownloadlist As New List(Of DownloadItem)
+            Dim _log As NLog.Logger = NLog.LogManager.GetLogger("DownloadHelper")
+            Dim _tasklist As New List(Of System.Threading.Tasks.Task)
+
+            'Check if rdy for Download
             PreDownloadCheck()
 
+            While Not ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0
 
-            DownloadContainerItems(2, DownloadItems.ToList)
+                'Query Download Items
+                For Each _session In ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning)
+
+                    Dim _thread_count As Integer = 0
+
+                    If Not _session.ContainerFile.MaxDownloadThreads > _thread_count_pool Then
+                        _thread_count = _session.ContainerFile.MaxDownloadThreads
+                        _thread_count_pool -= _thread_count
+                    Else
+                        If Not _thread_count_pool = 0 Then
+                            _thread_count = _thread_count_pool
+                        Else
+                            _log.Info("Alle verfügbaren Threads sind vergeben!")
+                        End If
+                    End If
+
+                    If Not _thread_count = 0 Then
+
+                        _itemdownloadlist.AddRange(DownloadItems.Where(Function(myitem) myitem.ParentContainerID.Equals(_session.ID) And myitem.DownloadStatus = DownloadItem.Status.Queued).Take(_thread_count))
+
+                        _tasklist.Add(System.Threading.Tasks.Task.Run(Sub()
+                                                                          DownloadContainerItems(_thread_count, _itemdownloadlist)
+                                                                      End Sub))
+                    End If
+
+                Next
 
 
+                'Warten bis dieser Download Chunk Fertig ist
 
+                Await Threading.Tasks.Task.WhenAll(_tasklist)
+
+                _thread_count_pool = _settings.MaxDownloadThreads 'Reset
+
+                'ToDO: Prüfen welche Container Sessions nun ggf. fertig heruntergeladen sind.
+                For Each _session In ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning)
+
+                    If DownloadItems.Where(Function(myitem) myitem.DownloadStatus = DownloadItem.Status.Queued).Count = 0 Then 'Alle Items sind heruntergeladen
+                        _session.SessionState = ContainerSessionState.DownloadComplete
+                        'ToDo: generate Speedreport
+                        'ToDo: Unrar Items
+                    End If
+
+                Next
+
+            End While
+
+            Debug.WriteLine("Alle Downloads abgeschlossen!!")
 
         Catch ex As Exception
 
