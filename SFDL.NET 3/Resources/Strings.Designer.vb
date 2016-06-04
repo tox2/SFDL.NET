@@ -65,6 +65,96 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Download abgeschlossen ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadStatus_Completed() As String
+            Get
+                Return ResourceManager.GetString("DownloadStatus_Completed", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Download abgeschlossen (Checksumme: Fehler) ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadStatus_Completed_HashInvalid() As String
+            Get
+                Return ResourceManager.GetString("DownloadStatus_Completed_HashInvalid", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Download abgeschlossen (Checksumme: OK) ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadStatus_Completed_HashValid() As String
+            Get
+                Return ResourceManager.GetString("DownloadStatus_Completed_HashValid", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Unbekannte Fehler ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadStatus_Failed() As String
+            Get
+                Return ResourceManager.GetString("DownloadStatus_Failed", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Fehler - Dateiname zu lang ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadStatus_Failed_FileNameTooLong() As String
+            Get
+                Return ResourceManager.GetString("DownloadStatus_Failed_FileNameTooLong", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Fehler - Zu wenig Speicherplatz ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadStatus_Failed_NotEnoughDiskSpace() As String
+            Get
+                Return ResourceManager.GetString("DownloadStatus_Failed_NotEnoughDiskSpace", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Fehler - Server voll ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadStatus_Failed_ServerFull() As String
+            Get
+                Return ResourceManager.GetString("DownloadStatus_Failed_ServerFull", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Wartend ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadStatus_Queued() As String
+            Get
+                Return ResourceManager.GetString("DownloadStatus_Queued", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Download läuft ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadStatus_Running() As String
+            Get
+                Return ResourceManager.GetString("DownloadStatus_Running", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Download gestoppt ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadStatus_Stopped() As String
+            Get
+                Return ResourceManager.GetString("DownloadStatus_Stopped", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Tasks ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Expander_Header_Tasks() As String

@@ -360,4 +360,34 @@
   <data name="MainMenu_File_OpenFile" xml:space="preserve">
     <value>Öffnen</value>
   </data>
+  <data name="DownloadStatus_Completed" xml:space="preserve">
+    <value>Download abgeschlossen</value>
+  </data>
+  <data name="DownloadStatus_Completed_HashInvalid" xml:space="preserve">
+    <value>Download abgeschlossen (Checksumme: Fehler)</value>
+  </data>
+  <data name="DownloadStatus_Completed_HashValid" xml:space="preserve">
+    <value>Download abgeschlossen (Checksumme: OK)</value>
+  </data>
+  <data name="DownloadStatus_Failed" xml:space="preserve">
+    <value>Unbekannte Fehler</value>
+  </data>
+  <data name="DownloadStatus_Failed_FileNameTooLong" xml:space="preserve">
+    <value>Fehler - Dateiname zu lang</value>
+  </data>
+  <data name="DownloadStatus_Failed_NotEnoughDiskSpace" xml:space="preserve">
+    <value>Fehler - Zu wenig Speicherplatz</value>
+  </data>
+  <data name="DownloadStatus_Failed_ServerFull" xml:space="preserve">
+    <value>Fehler - Server voll</value>
+  </data>
+  <data name="DownloadStatus_Queued" xml:space="preserve">
+    <value>Wartend</value>
+  </data>
+  <data name="DownloadStatus_Running" xml:space="preserve">
+    <value>Download läuft</value>
+  </data>
+  <data name="DownloadStatus_Stopped" xml:space="preserve">
+    <value>Download gestoppt</value>
+  </data>
 </root>

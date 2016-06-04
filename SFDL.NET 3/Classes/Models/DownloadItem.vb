@@ -14,8 +14,9 @@ Public Class DownloadItem
     Private _selected As Boolean = False
     Private _download_progress As Integer = 0
     Private _parent_container_id As Guid
-    Private _status_image As String = "Resources/Icons/appbar.clock.png"
+    Private _status_image As String = "Resources/Icons/appbar.sign.parking.png"
     Private _status As Status = Status.None
+    Private _status_string As String = String.Empty
 
     Public Sub New(ByVal _fileitem As SFDL.Container.FileItem)
 
@@ -59,16 +60,77 @@ Public Class DownloadItem
             Return _download_progress
         End Get
     End Property
+
+    Public ReadOnly Property DownloadStatusString
+        Get
+
+            Select Case Me.DownloadStatus
+
+                Case Status.None
+
+                    Return String.Empty
+
+                Case Status.Queued
+
+                    Return My.Resources.Strings.DownloadStatus_Queued
+
+                Case Status.Running
+
+                    Return My.Resources.Strings.DownloadStatus_Running
+
+                Case Status.Stopped
+
+                    Return My.Resources.Strings.DownloadStatus_Stopped
+
+                Case Status.Completed
+
+                    Return My.Resources.Strings.DownloadStatus_Completed
+
+                Case Status.Completed_HashInvalid
+
+                    Return My.Resources.Strings.DownloadStatus_Completed_HashInvalid
+
+                Case Status.Completed_HashValid
+
+                    Return My.Resources.Strings.DownloadStatus_Completed_HashValid
+
+                Case Status.Failed
+
+                    Return My.Resources.Strings.DownloadStatus_Failed
+
+                Case Status.Failed_FileNameTooLong
+
+                    Return My.Resources.Strings.DownloadStatus_Failed_FileNameTooLong
+
+                Case Status.Failed_NotEnoughDiskSpace
+
+                    Return My.Resources.Strings.DownloadStatus_Failed_NotEnoughDiskSpace
+
+                Case Status.Failed_ServerFull
+
+                    Return My.Resources.Strings.DownloadStatus_Failed_ServerFull
+
+                Case Else
+
+                    Return My.Resources.Strings.DownloadStatus_Failed
+
+            End Select
+
+        End Get
+    End Property
+
     Public Property DownloadStatus As Status
         Set(value As Status)
             _status = value
+
             RaisePropertyChanged("DownloadStatus")
+            RaisePropertyChanged("DownloadStatusString")
 
             Select Case value
 
                 Case Status.None
 
-                    Me.DownloadStatusImage = String.Empty
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.sign.parking.png"
 
                 Case Status.Completed
 
@@ -86,13 +148,17 @@ Public Class DownloadItem
 
                     Me.DownloadStatusImage = "Resources/Icons/appbar.control.stop.png"
 
-                Case Status.CompletedHashValid
+                Case Status.Completed_HashValid
 
                     Me.DownloadStatusImage = "Resources/Icons/appbar.check.png"
 
-                Case Status.CompletedHashInvalid
+                Case Status.Completed_HashInvalid
 
                     Me.DownloadStatusImage = "Resources/Icons/appbar.alert.png"
+
+                Case Status.Completed_HashInvalid
+
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.stop.png"
 
             End Select
 
@@ -137,9 +203,13 @@ Public Class DownloadItem
         Queued
         Running
         Stopped
+        Failed
+        Failed_FileNameTooLong
+        Failed_NotEnoughDiskSpace
+        Failed_ServerFull
         Completed
-        CompletedHashValid
-        CompletedHashInvalid
+        Completed_HashValid
+        Completed_HashInvalid
     End Enum
 
 #Region "IDisposable Support"

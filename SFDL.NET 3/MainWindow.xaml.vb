@@ -7,6 +7,7 @@ Public Class MainWindow
         Me.DataContext = New MainViewModel
         ' Fügen Sie Initialisierungen nach dem InitializeComponent()-Aufruf hinzu.
         LogHelper.GenerateLogConfig()
+        Application.Current.Resources.Add("DownloadStopped", False)
 
     End Sub
 

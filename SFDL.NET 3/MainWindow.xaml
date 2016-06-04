@@ -4,6 +4,7 @@
                       xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
                       xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
                       xmlns:System="clr-namespace:System;assembly=mscorlib"
+                      xmlns:local="clr-namespace:SFDL.NET3"
                       xmlns:p="clr-namespace:SFDL.NET3.My.Resources"
                       x:Name="SFDL_MainWindow"
                       Title="SFDL.NET 3"
@@ -16,6 +17,7 @@
 
     <Window.Resources>
         <ResourceDictionary>
+            <local:InvertBooleanConverter x:Key="boolConvert" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -217,11 +219,14 @@
                        Source="Resources/Icons/appbar.control.play.png" />
                 <Button Command="{Binding StartDownloadCommand}"
                         Content="{x:Static p:Strings.MainToolBar_StartDownload}"
-                        IsEnabled="{Binding ButtonDownloadStartEnabled}" />
+                        IsEnabled="{Binding ButtonDownloadStartStop}" />
                 <Image Width="32"
                        Height="32"
                        Source="Resources/Icons/appbar.control.stop.png" />
-                <Button Content="{x:Static p:Strings.MainToolBar_StopDownload}" IsEnabled="{Binding ButtonDownloadStopEnabled}" />
+                <Button Command="{Binding StopDownloadCommand}"
+                        Content="{x:Static p:Strings.MainToolBar_StopDownload}"
+                        IsEnabled="{Binding ButtonDownloadStartStop,
+                                            Converter={StaticResource boolConvert}}" />
                 <Separator Margin="5,2" />
                 <Image Width="32"
                        Height="32"
@@ -287,7 +292,7 @@
                                     <Image Width="20"
                                            Height="20"
                                            Source="{Binding DownloadStatusImage}" />
-                                    <TextBlock Text="{Binding DownloadStatus}" />
+                                    <TextBlock Text="{Binding DownloadStatusString}" />
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>

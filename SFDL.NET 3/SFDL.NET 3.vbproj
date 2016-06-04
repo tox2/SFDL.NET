@@ -81,6 +81,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\Exceptions\NotEnoughFreeDiskSpaceException.vb" />
     <Compile Include="Classes\Exceptions\FileNameTooLongException.vb" />
     <Compile Include="Classes\Models\ContainerSession.vb" />
     <Compile Include="Classes\Models\ContainerSessionState.vb" />
@@ -359,6 +360,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\appbar.cabinet.in.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.sign.parking.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

@@ -132,7 +132,7 @@ Class DownloadHelper
 
                 Using _local_write_stream As New IO.FileStream(_item.LocalFile, _filemode, IO.FileAccess.Write, IO.FileShare.None, 8192, False)
 
-                    While bytesRead > 0  'ToDo: CHeck if Download is stopped
+                    While bytesRead > 0 And Application.Current.Resources("DownloadStopped") = False
 
                         Dim _tmp_percent_downloaded As Double = 0
                         Dim _new_perc As Integer = 0
@@ -183,6 +183,14 @@ Class DownloadHelper
                 End Using
 
             End Using
+
+        Catch ex As NotEnoughFreeDiskSpaceException
+            _log.Error(ex, ex.Message)
+            _item.DownloadStatus = NET3.DownloadItem.Status.Failed_NotEnoughDiskSpace
+
+        Catch ex As FileNameTooLongException
+            _log.Warn(ex, ex.Message)
+            _item.DownloadStatus = NET3.DownloadItem.Status.Failed_FileNameTooLong
 
         Catch ex As Exception
             _log.Error(ex.Message) 'ToDo: Retry Handling
@@ -260,10 +268,10 @@ Class DownloadHelper
 
                     If HashHelper.MD5FileHash(_item.LocalFile).ToLower.Equals(_item.FileHash.ToLower) Then
                         _log.Info("MD5 Hash is Valid!")
-                        _item.DownloadStatus = NET3.DownloadItem.Status.CompletedHashValid
+                        _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashValid
                     Else
                         _log.Info("MD5 Hash Invalid")
-                        _item.DownloadStatus = NET3.DownloadItem.Status.CompletedHashInvalid
+                        _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashInvalid
                     End If
 
                 Case Container.HashType.SHA1
@@ -272,10 +280,10 @@ Class DownloadHelper
 
                     If HashHelper.SHA1FileHash(_item.LocalFile).ToLower.Equals(_item.FileHash.ToLower) Then
                         _log.Info("SHA1 Hash is Valid!")
-                        _item.DownloadStatus = NET3.DownloadItem.Status.CompletedHashValid
+                        _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashValid
                     Else
                         _log.Info("SHA1 Hash Invalid")
-                        _item.DownloadStatus = NET3.DownloadItem.Status.CompletedHashInvalid
+                        _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashInvalid
                     End If
 
                 Case Container.HashType.CRC
@@ -284,10 +292,10 @@ Class DownloadHelper
 
                     If HashHelper.CRC32FileHash(_item.LocalFile).ToLower.Equals(_item.FileHash.ToLower) Then
                         _log.Info("CRC Hash is Valid!")
-                        _item.DownloadStatus = NET3.DownloadItem.Status.CompletedHashValid
+                        _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashValid
                     Else
                         _log.Info("CRC Hash Invalid")
-                        _item.DownloadStatus = NET3.DownloadItem.Status.CompletedHashInvalid
+                        _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashInvalid
                     End If
 
             End Select

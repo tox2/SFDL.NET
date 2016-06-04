@@ -133,14 +133,23 @@ Decrypt:
 
     Private Sub PreDownloadCheck()
 
-        'ToDo: Check if Download is Running?
+        Try
 
-        'ToDo: Check if any Item is marked
+            If Application.Current.Resources("DownloadStopped") = True Then
+                Throw New Exception("Download is already Running!")
+            End If
 
-        'ToDo: Check if Download Directory Exists
+            If DownloadItems.Where(Function(myitem) myitem.DownloadStatus = DownloadItem.Status.Queued).Count = 0 Then
+                Throw New Exception("You must select minumum 1 Item to Download!")
+            End If
 
-        'ToDO: Check Free Disk Space
+            If IO.Directory.Exists(_settings.DownloadDirectory) = False Then
+                Throw New Exception("Download Verzeichnis existiert nicht!")
+            End If
 
+        Catch ex As Exception
+            'TodO: SHow Error Message 2 User
+        End Try
 
     End Sub
 
@@ -155,6 +164,8 @@ Decrypt:
 
             'Check if rdy for Download
             PreDownloadCheck()
+
+            Me.ButtonDownloadStartStop = False
 
             While Not ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0
 
@@ -179,8 +190,6 @@ Decrypt:
                     If Not _thread_count = 0 Then
 
                         _session.SessionState = ContainerSessionState.DownloadRunning
-
-                        'ToDo: Download Verzeichnis ermitteln unf ggf. erstellen
 
                         For Each _dlitem In DownloadItems.Where(Function(myitem) (myitem.ParentContainerID.Equals(_session.ID) And myitem.DownloadStatus = DownloadItem.Status.Queued)).Take(_thread_count)
                             _dlitem.DownloadStatus = DownloadItem.Status.Running
@@ -219,6 +228,7 @@ Decrypt:
             End While
 
             Debug.WriteLine("Alle Downloads abgeschlossen!!")
+            Me.ButtonDownloadStartStop = True
 
         Catch ex As Exception
 
@@ -227,31 +237,27 @@ Decrypt:
 
     End Sub
 
+    Private Async Sub StopDownload()
+
+        Application.Current.Resources("DownloadStopped") = True
+
+        Me.ButtonDownloadStartStop = True
+
+    End Sub
+
 #End Region
 
 #Region "Button States"
 
-    Private _button_downloadstart_enabled As Boolean = True
+    Private _button_downloadstartstop_enabled As Boolean = True
 
-    Public Property ButtonDownloadStartEnabled As Boolean
+    Public Property ButtonDownloadStartStop As Boolean
         Set(value As Boolean)
-            _button_downloadstart_enabled = value
-            RaisePropertyChanged("ButtonDownloadStartEnabled")
+            _button_downloadstartstop_enabled = value
+            RaisePropertyChanged("ButtonDownloadStartStop")
         End Set
         Get
-            Return _button_downloadstart_enabled
-        End Get
-    End Property
-
-    Private _button_downloadstop_enabled As Boolean = False
-
-    Public Property ButtonDownloadStopEnabled As Boolean
-        Set(value As Boolean)
-            _button_downloadstop_enabled = value
-            RaisePropertyChanged("ButtonDownloadStopEnabled")
-        End Set
-        Get
-            Return _button_downloadstop_enabled
+            Return _button_downloadstartstop_enabled
         End Get
     End Property
 
@@ -327,6 +333,12 @@ Decrypt:
         End Get
     End Property
 
+    Public ReadOnly Property StopDownloadCommand As ICommand
+        Get
+            Return New DelegateCommand(AddressOf StopDownload)
+        End Get
+    End Property
+
     Public ReadOnly Property ShowContainerInfoCommand As ICommand
         Get
             Return New DelegateCommand(AddressOf ShowContainerInfo)
@@ -351,7 +363,6 @@ Decrypt:
             Return _curr_selected_item
         End Get
     End Property
-
 
     Public ReadOnly Property CloseSFDLContainerCommand() As ICommand
         Get
