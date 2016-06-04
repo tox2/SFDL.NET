@@ -349,6 +349,35 @@ Decrypt:
         Me.ContainerInfoOpen = True
     End Sub
 
+    Public ReadOnly Property MarkAllItemsCommand As ICommand
+        Get
+            Return New DelegateCommand(AddressOf MarkAllItems)
+        End Get
+    End Property
+
+    Private Sub MarkAllItems()
+
+        For Each _item In DownloadItems
+            _item.isSelected = True
+        Next
+
+    End Sub
+
+    Public ReadOnly Property UnmarkAllItemsCommand As ICommand
+        Get
+            Return New DelegateCommand(AddressOf UnmarkAllItems)
+        End Get
+    End Property
+
+    Private Sub UnmarkAllItems()
+
+
+        For Each _item In DownloadItems
+            _item.isSelected = False
+        Next
+
+    End Sub
+
 
 #End Region
 
