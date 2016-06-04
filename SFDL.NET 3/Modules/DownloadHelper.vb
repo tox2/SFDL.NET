@@ -7,6 +7,14 @@ Class DownloadHelper
     Private _ftp_client_list As New Dictionary(Of Guid, ArxOne.Ftp.FtpClient)
     Private _obj_ftp_client_list_lock As New Object
 
+    Sub DisposeFTPClients()
+
+        For Each _client In _ftp_client_list
+            _client.Value.Dispose()
+        Next
+
+    End Sub
+
     Sub DownloadContainerItems(items As List(Of DownloadItem), ByVal _download_dir As String, ByVal _connection_info As SFDL.Container.Connection)
 
         Dim _tasks = New List(Of System.Threading.Tasks.Task)
@@ -58,7 +66,7 @@ Class DownloadHelper
 
                     Dim _entry As ArxOne.Ftp.FtpEntry
 
-                    _entry = _ftp_client.Platform.Parse(_ftpitem, _item.DirectoryPath)
+                    _entry = FTPHelper.TryParseLine(_ftpitem, _item.DirectoryPath)
 
                     If _entry.Name.Equals(_item.FileName) Then
                         _item.FileSize = _entry.Size
@@ -192,6 +200,9 @@ Class DownloadHelper
             _log.Warn(ex, ex.Message)
             _item.DownloadStatus = NET3.DownloadItem.Status.Failed_FileNameTooLong
 
+        Catch ex As ArxOne.Ftp.Exceptions.FtpException
+            _log.Error(ex, ex.Message)
+
         Catch ex As Exception
             _log.Error(ex.Message) 'ToDo: Retry Handling
         End Try
@@ -208,6 +219,9 @@ Class DownloadHelper
         Dim _hashtype As Container.HashType
 
         Try
+
+            _item.DownloadProgress = 100
+            _item.DownloadSpeed = String.Empty
 
             If _item.HashType = Container.HashType.None Then
 
@@ -302,6 +316,8 @@ Class DownloadHelper
 
         Catch ex As Exception
             _log.Error(ex.Message)
+        Finally
+            _ftp_client.Dispose()
         End Try
 
 

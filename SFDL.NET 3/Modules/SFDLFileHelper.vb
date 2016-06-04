@@ -145,15 +145,19 @@
             _log.Error(ex, ex.Message)
         End Try
 
+        _ftp.Dispose()
+
         Return _rt
 
     End Function
+
 
     Function GetRecursiveListing(ByVal _bulk_folder As String, ByVal _ftp As ArxOne.Ftp.FtpClient, ByVal _packagename As String) As List(Of SFDL.Container.FileItem)
 
         Dim _ftp_path As New ArxOne.Ftp.FtpPath(_bulk_folder)
         Dim _rt_list As New List(Of SFDL.Container.FileItem)
         Dim _mylog As NLog.Logger = NLog.LogManager.GetLogger("BulkRecursiveListing")
+        Dim _ftp_unix_platform As New ArxOne.Ftp.Platform.UnixFtpPlatform
 
         Try
 
@@ -163,7 +167,7 @@
 
                     Dim _entry As ArxOne.Ftp.FtpEntry
 
-                    _entry = _ftp.Platform.Parse(_item, _bulk_folder)
+                    _entry = FTPHelper.TryParseLine(_item, _bulk_folder)
 
                     If Not IsNothing(_entry) Then
 

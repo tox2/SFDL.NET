@@ -131,7 +131,9 @@ Decrypt:
 
     End Sub
 
-    Private Sub PreDownloadCheck()
+    Private Function PreDownloadCheck() As Boolean
+
+        Dim _rt As Boolean = True
 
         Try
 
@@ -148,89 +150,114 @@ Decrypt:
             End If
 
         Catch ex As Exception
+            _rt = False
             'TodO: SHow Error Message 2 User
         End Try
 
-    End Sub
+        Return _rt
+
+    End Function
 
     Private Async Sub StartDownload()
+
+        Dim _download_helper As New DownloadHelper
+        Dim _log As NLog.Logger = NLog.LogManager.GetLogger("StartDownload")
 
         Try
 
             Dim _thread_count_pool As Integer = _settings.MaxDownloadThreads
             Dim _tasklist As New List(Of System.Threading.Tasks.Task)
-            Dim _log As NLog.Logger = NLog.LogManager.GetLogger("StartDownload")
-            Dim _download_helper As New DownloadHelper
+
+
+            'Cleanup
+            'Reset ContainerSession State
+            For Each _session In ContainerSessions
+                _session.SessionState = ContainerSessionState.Queued
+            Next
+
+            For Each _dlitem In DownloadItems.Where(Function(myitem) myitem.isSelected = True)
+                _dlitem.DownloadStatus = DownloadItem.Status.Queued
+                _dlitem.DownloadProgress = 0
+                _dlitem.DownloadSpeed = String.Empty
+            Next
 
             'Check if rdy for Download
-            PreDownloadCheck()
+            If PreDownloadCheck() = True Then
 
-            Me.ButtonDownloadStartStop = False
+                Me.ButtonDownloadStartStop = False
 
-            While Not ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0
+                While Not ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0
 
-                Dim _itemdownloadlist As New List(Of DownloadItem)
+                    Dim _itemdownloadlist As New List(Of DownloadItem)
 
-                'Query Download Items
-                For Each _session In ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning)
+                    'Query Download Items
+                    For Each _session In ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning)
 
-                    Dim _thread_count As Integer = 0
+                        Dim _thread_count As Integer = 0
 
-                    If Not _session.ContainerFile.MaxDownloadThreads > _thread_count_pool Then
-                        _thread_count = _session.ContainerFile.MaxDownloadThreads
-                        _thread_count_pool -= _thread_count
-                    Else
-                        If Not _thread_count_pool = 0 Then
-                            _thread_count = _thread_count_pool
+                        If Not _session.ContainerFile.MaxDownloadThreads > _thread_count_pool Then
+                            _thread_count = _session.ContainerFile.MaxDownloadThreads
+                            _thread_count_pool -= _thread_count
                         Else
-                            _log.Info("Alle verfügbaren Threads sind vergeben!")
-                        End If
-                    End If
-
-                    If Not _thread_count = 0 Then
-
-                        _session.SessionState = ContainerSessionState.DownloadRunning
-
-                        For Each _dlitem In DownloadItems.Where(Function(myitem) (myitem.ParentContainerID.Equals(_session.ID) And myitem.DownloadStatus = DownloadItem.Status.Queued)).Take(_thread_count)
-                            _dlitem.DownloadStatus = DownloadItem.Status.Running
-                            _itemdownloadlist.Add(_dlitem)
-                        Next
-
-                        If Not _itemdownloadlist.Count = 0 Then
-
-                            _tasklist.Add(System.Threading.Tasks.Task.Run(Sub()
-                                                                              _download_helper.DownloadContainerItems(_itemdownloadlist, _settings.DownloadDirectory, _session.ContainerFile.Connection)
-                                                                          End Sub))
-
+                            If Not _thread_count_pool = 0 Then
+                                _thread_count = _thread_count_pool
+                            Else
+                                _log.Info("Alle verfügbaren Threads sind vergeben!")
+                            End If
                         End If
 
-                    End If
+                        If Not _thread_count = 0 Then
 
-                Next
+                            _session.SessionState = ContainerSessionState.DownloadRunning
 
-                'Warten bis dieser Download Chunk Fertig ist
+                            For Each _dlitem In DownloadItems.Where(Function(myitem) (myitem.ParentContainerID.Equals(_session.ID) And myitem.DownloadStatus = DownloadItem.Status.Queued)).Take(_thread_count)
+                                _dlitem.DownloadStatus = DownloadItem.Status.Running
+                                _itemdownloadlist.Add(_dlitem)
+                            Next
 
-                Await Threading.Tasks.Task.WhenAll(_tasklist)
+                            If Not _itemdownloadlist.Count = 0 Then
 
-                _thread_count_pool = _settings.MaxDownloadThreads 'Reset
+                                _tasklist.Add(System.Threading.Tasks.Task.Run(Sub()
+                                                                                  _download_helper.DownloadContainerItems(_itemdownloadlist, _settings.DownloadDirectory, _session.ContainerFile.Connection)
+                                                                              End Sub))
 
-                'ToDO: Prüfen welche Container Sessions nun ggf. fertig heruntergeladen sind.
-                For Each _session In ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning)
+                            End If
 
-                    If DownloadItems.Where(Function(myitem) myitem.DownloadStatus = DownloadItem.Status.Queued).Count = 0 Then 'Alle Items sind heruntergeladen
-                        _session.SessionState = ContainerSessionState.DownloadComplete
-                        'ToDo: generate Speedreport
-                        'ToDo: Unrar Items
-                    End If
+                        End If
 
-                Next
+                    Next
 
-            End While
+                    'Warten bis dieser Download Chunk Fertig ist
 
-            Debug.WriteLine("Alle Downloads abgeschlossen!!")
-            Me.ButtonDownloadStartStop = True
+                    Await Threading.Tasks.Task.WhenAll(_tasklist)
+
+                    _thread_count_pool = _settings.MaxDownloadThreads 'Reset
+
+                    'ToDO: Prüfen welche Container Sessions nun ggf. fertig heruntergeladen sind.
+                    For Each _session In ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning)
+
+                        If DownloadItems.Where(Function(myitem) myitem.DownloadStatus = DownloadItem.Status.Queued).Count = 0 Then 'Alle Items sind heruntergeladen
+                            _session.SessionState = ContainerSessionState.DownloadComplete
+                            'ToDo: generate Speedreport
+                            'ToDo: Unrar Items
+                        End If
+
+                    Next
+
+                End While
+
+                Debug.WriteLine("Alle Downloads abgeschlossen!!")
+
+            Else
+                _log.Warn("Pre Check nicht bestanden -> Starte keinen Download")
+            End If
 
         Catch ex As Exception
+            _log.Error(ex, ex.Message)
+        Finally
+
+            Me.ButtonDownloadStartStop = True
+            _download_helper.DisposeFTPClients()
 
         End Try
 

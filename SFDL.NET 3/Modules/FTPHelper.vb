@@ -29,6 +29,9 @@ Module FTPHelper
 
             _ftp_client = New ArxOne.Ftp.FtpClient(New Uri(String.Format("ftp://{0}:{1}", .Host, .Port)), _creds, _ftp_client_param)
 
+            _log.Info(_ftp_client.SendSingleCommand("STAT").Code.Code)
+
+
         End With
 
         AddHandler _ftp_client.Reply, AddressOf _log_ftp
@@ -64,5 +67,26 @@ Module FTPHelper
         _log.Info(_log_line)
 
     End Sub
+
+    Function TryParseLine(ByVal _item As String, _parent_folder As String)
+
+        Dim _ftp_unix_platform As New ArxOne.Ftp.Platform.UnixFtpPlatform
+        Dim _ftp_windows_platform As New ArxOne.Ftp.Platform.WindowsFtpPlatform
+        Dim _ftp_filezilla_platform As New ArxOne.Ftp.Platform.WindowsFileZillaFtpPlatform
+        Dim _rt As ArxOne.Ftp.FtpEntry = Nothing
+
+        _rt = _ftp_unix_platform.Parse(_item, _parent_folder)
+
+        If IsNothing(_rt) Then
+            _rt = _ftp_windows_platform.Parse(_item, _parent_folder)
+        End If
+
+        If IsNothing(_rt) Then
+            _rt = _ftp_filezilla_platform.Parse(_item, _parent_folder)
+        End If
+
+        Return _rt
+
+    End Function
 
 End Module
