@@ -162,6 +162,7 @@ Decrypt:
 
         Dim _download_helper As New DownloadHelper
         Dim _log As NLog.Logger = NLog.LogManager.GetLogger("StartDownload")
+        Dim _dl_Stopped As Boolean = Application.Current.Resources("DownloadStopped")
 
         Try
 
@@ -186,7 +187,7 @@ Decrypt:
 
                 Me.ButtonDownloadStartStop = False
 
-                While Not ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0
+                While Not ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0 Or _dl_Stopped = False
 
                     Dim _itemdownloadlist As New List(Of DownloadItem)
 
@@ -243,6 +244,8 @@ Decrypt:
                         End If
 
                     Next
+
+                    _dl_Stopped = Application.Current.Resources("DownloadStopped")
 
                 End While
 

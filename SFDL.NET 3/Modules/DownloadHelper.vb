@@ -247,24 +247,25 @@ Class DownloadHelper
 
                 If Not String.IsNullOrWhiteSpace(_hashcommand) Then
                     _log.Info("Server Support Hash Alogrightm {0}", _hashcommand)
+
+                    _reply = _ftp_client.Session.SendCommand(_hashcommand, _item.FullPath)
+
+                    If _reply.Code.IsSuccess = True Then
+
+                        _log.Info("Hash Serverseitig erfolgreich ermittelt!")
+
+                        _item.HashType = _hashtype
+                        _tmp_hash = _reply.Lines(0).ToString.Replace(_item.FullPath, "")
+                        _tmp_hash = _tmp_hash.Replace(Chr(34), "")
+                        _item.FileHash = _tmp_hash.Trim
+                    Else
+                        _log.Error("Hash konnte nicht ermittelt werden!")
+                    End If
+
                 Else
                     _log.Info("Server does not Support any Hash Algorithm")
                 End If
 
-
-                _reply = _ftp_client.Session.SendCommand(_hashcommand, _item.FullPath)
-
-                If _reply.Code.IsSuccess = True Then
-
-                    _log.Info("Hash Serverseitig erfolgreich ermittelt!")
-
-                    _item.HashType = _hashtype
-                    _tmp_hash = _reply.Lines(0).ToString.Replace(_item.FullPath, "")
-                    _tmp_hash = _tmp_hash.Replace(Chr(34), "")
-                    _item.FileHash = _tmp_hash.Trim
-                Else
-                    _log.Error("Hash konnte nicht ermittelt werden!")
-                End If
 
             Else
                 _log.Info("Download Item has already an Hash (provided via SFDL Container)")
