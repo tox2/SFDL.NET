@@ -81,6 +81,7 @@ Class DownloadHelper
         Dim _settings As New Settings
         Dim _filemode As IO.FileMode
         Dim _restart As Long = 0
+        Dim _disk_free_space As Long
 
         'IO Stream Variablen
         Const Length As Integer = 256
@@ -99,15 +100,24 @@ Class DownloadHelper
 
         Try
 
+            If String.IsNullOrWhiteSpace(_item.LocalFile) Then
+                Throw New Exception("Dateipfad ist leer!")
+            End If
+
+            If _item.LocalFile.Length >= 255 Then
+                Throw New FileNameTooLongException("Dateipfad ist zu lang! - Kann Datei nicht schreiben!")
+            End If
+
             GetItemFileSize(_item, _ftp_client)
 
-            _item.LocalFile = IO.Path.Combine(_settings.DownloadDirectory, _item.FileName) 'ToDo: Einstellungen beachten (Subfolder etc)
+            _disk_free_space = My.Computer.FileSystem.GetDriveInfo(IO.Path.GetPathRoot(_settings.DownloadDirectory)).AvailableFreeSpace
 
-            'ToDO: Check Download Path is exceeding 255 Chars
+            _log.Info("Freier Speicherplatz: {0}", _disk_free_space)
 
-            'ToDO: Check FRee Disk Space
+            If _item.FileSize > _disk_free_space Then
+                Throw New Exception("Zu wenig Speicherplatz!")
+            End If
 
-            'ToDO: Set Filemode to append or create
             If _settings.ExistingFileHandling = ExistingFileHandling.ResumeFile And IO.File.Exists(_item.LocalFile) Then
                 _filemode = IO.FileMode.Append
                 _restart = New IO.FileInfo(_item.LocalFile).Length

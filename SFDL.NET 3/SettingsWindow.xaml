@@ -107,27 +107,14 @@
                                                      Controls:TextBoxHelper.Watermark="{x:Static p:Strings.Settings_DownloadDir}"
                                                      IsReadOnly="True"
                                                      Text="{Binding DownloadDirectory}" />
-                                            <CheckBox x:Name="chk_create_download_subfolder"
+                                            <CheckBox x:Name="chk_create_container_subfolder"
                                                       Margin="5,5,0,0"
-                                                      Content="{x:Static p:Strings.Settings_CreateSubfolderEachDownload}"
-                                                      IsChecked="{Binding CreateDownloadDir}" />
-                                            <RadioButton x:Name="radio_download_subfolder_filename"
-                                                         Margin="30,5,0,0"
-                                                         Content="{x:Static p:Strings.Settings_Subfolder_UseFilename}"
-                                                         GroupName="DownloadDir"
-                                                         IsChecked="{Binding CreateDownloadDirUseFilename}"
-                                                         IsEnabled="{Binding CreateDownloadDir}" />
-                                            <RadioButton x:Name="radio_download_subfolder_description"
-                                                         Margin="30,5,0,0"
-                                                         Content="{x:Static p:Strings.Settings_Subfolder_UseDescription}"
-                                                         GroupName="DownloadDir"
-                                                         IsChecked="{Binding CreateDownloadDirUseDescription}"
-                                                         IsEnabled="{Binding CreateDownloadDir}" />
+                                                      Content="Unterordner pro Container erstellen"
+                                                      IsChecked="{Binding CreateContainerSubFolder}" />
                                             <CheckBox x:Name="chk_create_package_subfolder"
                                                       Margin="5,5,0,5"
                                                       Content="{x:Static p:Strings.Settings_CreateSubfolderEachPackage}"
-                                                      IsChecked="{Binding CreateDownloadDir,
-                                                                          Converter={StaticResource boolConvert}}" />
+                                                      IsChecked="{Binding CreatePackageSubfolder}" />
                                         </StackPanel>
                                         <StackPanel>
                                             <Button x:Name="cmd_search_download_path"

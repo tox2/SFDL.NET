@@ -104,6 +104,7 @@
 
                     _dl_item.PackageName = _package.Name
                     _dl_item.ParentContainerID = _containersession.ID
+                    _dl_item.LocalFile = GetDownloadFilePath(Application.Current.Resources("Settings"), _containersession, _dl_item)
 
                     If _mark_files = False Then
                         _dl_item.isSelected = True
@@ -200,6 +201,66 @@
         End Try
 
         Return _rt_list
+
+    End Function
+
+    Private Function CleanDownloadPathInput(strIn As String) As String
+        ' Replace invalid characters with empty strings.
+
+        Dim _rt As String = String.Empty
+        Dim _org_filename As String = String.Empty
+
+        Try
+
+            If Not String.IsNullOrWhiteSpace(strIn) Then
+
+                _org_filename = IO.Path.GetFileName(strIn)
+
+                _rt = strIn.Replace(_org_filename, "")
+
+                _rt = IO.Path.Combine(_rt, Text.RegularExpressions.Regex.Replace(_org_filename, "[^\w\.@-]", ""))
+
+            End If
+
+        Catch e As TimeoutException
+            Return String.Empty
+        End Try
+
+        Return _rt
+
+    End Function
+
+    Function GetDownloadFilePath(ByVal _settings As Settings, ByVal _container_session As ContainerSession, ByVal _item As DownloadItem) As String
+
+        Dim _download_dir As String = String.Empty
+        Dim _tmp_last_sub_dir As String = String.Empty
+        Dim _dowload_local_filename As String = String.Empty
+
+        Try
+
+            If _settings.CreateContainerSubfolder Then
+                _download_dir = IO.Path.Combine(_settings.DownloadDirectory, _container_session.DisplayName)
+            Else
+                _download_dir = _settings.DownloadDirectory
+            End If
+
+            If _settings.CreatePackageSubfolder Then
+                _download_dir = IO.Path.Combine(_download_dir, _item.PackageName)
+            End If
+
+            If Not IO.Directory.Exists(_download_dir) Then
+                IO.Directory.CreateDirectory(_download_dir)
+            End If
+
+            _dowload_local_filename = IO.Path.Combine(_download_dir, _item.FileName)
+
+        Catch ex As Exception
+            _log.Error(ex, ex.Message)
+        End Try
+
+        _dowload_local_filename = CleanDownloadPathInput(_dowload_local_filename)
+
+        Return _dowload_local_filename
 
     End Function
 

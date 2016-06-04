@@ -75,32 +75,22 @@ Public Class SettingsViewModel
             Return _settings.DownloadDirectory
         End Get
     End Property
-    Public Property CreateDownloadDir As Boolean
+    Public Property CreateContainerSubFolder As Boolean
         Set(value As Boolean)
-            _settings.CreateDownloadDir = value
-            _settings.CreatePackageSubfolder = Not value
-            RaisePropertyChanged("CreateDownloadDir")
+            _settings.CreateContainerSubfolder = value
+            RaisePropertyChanged("CreateContainerSubFolder")
         End Set
         Get
-            Return _settings.CreateDownloadDir
+            Return _settings.CreateContainerSubfolder
         End Get
     End Property
-    Public Property CreateDownloadDirUseFilename As Boolean
+
+    Public Property CreatePackageSubfolder As Boolean
         Set(value As Boolean)
-            _settings.CreateDownloadDirUseFilename = value
-            RaisePropertyChanged("CreateDownloadDirUseFilename")
+            _settings.CreatePackageSubfolder = value
         End Set
         Get
-            Return _settings.CreateDownloadDirUseFilename
-        End Get
-    End Property
-    Public Property CreateDownloadDirUseDescription As Boolean
-        Set(value As Boolean)
-            _settings.CreateDownloadDirUseDescription = value
-            RaisePropertyChanged("CreateDownloadDirUseDescription")
-        End Set
-        Get
-            Return _settings.CreateDownloadDirUseDescription
+            Return _settings.CreatePackageSubfolder
         End Get
     End Property
     Public Property ExistingFileHandling As ExistingFileHandling

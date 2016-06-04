@@ -81,6 +81,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\Exceptions\FileNameTooLongException.vb" />
     <Compile Include="Classes\Models\ContainerSession.vb" />
     <Compile Include="Classes\Models\ContainerSessionState.vb" />
     <Compile Include="Classes\Models\DownloadItem.vb" />
