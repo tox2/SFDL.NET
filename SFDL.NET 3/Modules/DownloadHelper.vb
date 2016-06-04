@@ -79,6 +79,8 @@ Class DownloadHelper
     Private Sub DownloadItem(ByVal _item As DownloadItem, ByVal _ftp_client As ArxOne.Ftp.FtpClient)
 
         Dim _settings As New Settings
+        Dim _filemode As IO.FileMode
+        Dim _restart As Long = 0
 
         'IO Stream Variablen
         Const Length As Integer = 256
@@ -105,14 +107,20 @@ Class DownloadHelper
 
             'ToDO: Check FRee Disk Space
 
-            Using _ftp_read_stream = ArxOne.Ftp.FtpClientUtility.Retr(_ftp_client, New ArxOne.Ftp.FtpPath(_item.FullPath), ArxOne.Ftp.FtpTransferMode.Binary)
+            'ToDO: Set Filemode to append or create
+            If _settings.ExistingFileHandling = ExistingFileHandling.ResumeFile And IO.File.Exists(_item.LocalFile) Then
+                _filemode = IO.FileMode.Append
+                _restart = New IO.FileInfo(_item.LocalFile).Length
+            Else
+                _filemode = IO.FileMode.Create
+            End If
 
-                'ToDO: Set Filemode to append or create
+            Using _ftp_read_stream = ArxOne.Ftp.FtpClientUtility.Retr(_ftp_client, New ArxOne.Ftp.FtpPath(_item.FullPath), ArxOne.Ftp.FtpTransferMode.Binary, _restart)
 
                 buffer = New Byte(8192) {}
                 bytesRead = _ftp_read_stream.Read(buffer, 0, buffer.Length)
 
-                Using _local_write_stream As New IO.FileStream(_item.LocalFile, IO.FileMode.Create, IO.FileAccess.Write, IO.FileShare.None, 8192, False)
+                Using _local_write_stream As New IO.FileStream(_item.LocalFile, _filemode, IO.FileAccess.Write, IO.FileShare.None, 8192, False)
 
                     While bytesRead > 0  'ToDo: CHeck if Download is stopped
 
