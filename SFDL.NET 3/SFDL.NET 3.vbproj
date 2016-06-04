@@ -106,6 +106,7 @@
     </Compile>
     <Compile Include="Modules\DownloadHelper.vb" />
     <Compile Include="Modules\FTPHelper.vb" />
+    <Compile Include="Modules\HashHelper.vb" />
     <Compile Include="Modules\LogHelper.vb" />
     <Compile Include="Modules\SFDLFileHelper.vb" />
     <Compile Include="Modules\WhoisHelper.vb" />
@@ -213,6 +214,10 @@
     <ProjectReference Include="..\..\SFDL.Container\SFDL.Container\SFDL.Container.vbproj">
       <Project>{d2fe83a4-c5ba-4e87-8435-c01362ae8467}</Project>
       <Name>SFDL.Container</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SFDL.CRC32\src\crc32\SFDL.CRC32.csproj">
+      <Project>{2f44f389-b431-45bc-9434-dddacd0ea34a}</Project>
+      <Name>SFDL.CRC32</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\SFDL.FTP\ArxOne.Ftp\SFDL.FTP.csproj">
       <Project>{2ffe845d-2e4f-440e-8b9f-17afcb9d166b}</Project>
@@ -347,6 +352,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\appbar.layer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.alert.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.cabinet.in.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

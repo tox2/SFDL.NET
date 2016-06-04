@@ -137,6 +137,8 @@ Decrypt:
 
         'ToDo: Check if Download Directory Exists
 
+        'ToDO: Check Free Disk Space
+
 
     End Sub
 
@@ -145,7 +147,6 @@ Decrypt:
         Try
 
             Dim _thread_count_pool As Integer = _settings.MaxDownloadThreads
-            Dim _itemdownloadlist As New List(Of DownloadItem)
             Dim _tasklist As New List(Of System.Threading.Tasks.Task)
             Dim _log As NLog.Logger = NLog.LogManager.GetLogger("StartDownload")
             Dim _download_helper As New DownloadHelper
@@ -154,6 +155,8 @@ Decrypt:
             PreDownloadCheck()
 
             While Not ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0
+
+                Dim _itemdownloadlist As New List(Of DownloadItem)
 
                 'Query Download Items
                 For Each _session In ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning)
@@ -173,15 +176,26 @@ Decrypt:
 
                     If Not _thread_count = 0 Then
 
-                        _itemdownloadlist.AddRange(DownloadItems.Where(Function(myitem) myitem.ParentContainerID.Equals(_session.ID) And myitem.DownloadStatus = DownloadItem.Status.Queued).Take(_thread_count))
+                        _session.SessionState = ContainerSessionState.DownloadRunning
 
-                        _tasklist.Add(System.Threading.Tasks.Task.Run(Sub()
-                                                                          _download_helper.DownloadContainerItems(_thread_count, _itemdownloadlist, _session.ContainerFile.Connection)
-                                                                      End Sub))
+                        'ToDo: Download Verzeichnis ermitteln unf ggf. erstellen
+
+                        For Each _dlitem In DownloadItems.Where(Function(myitem) (myitem.ParentContainerID.Equals(_session.ID) And myitem.DownloadStatus = DownloadItem.Status.Queued)).Take(_thread_count)
+                            _dlitem.DownloadStatus = DownloadItem.Status.Running
+                            _itemdownloadlist.Add(_dlitem)
+                        Next
+
+                        If Not _itemdownloadlist.Count = 0 Then
+
+                            _tasklist.Add(System.Threading.Tasks.Task.Run(Sub()
+                                                                              _download_helper.DownloadContainerItems(_itemdownloadlist, _settings.DownloadDirectory, _session.ContainerFile.Connection)
+                                                                          End Sub))
+
+                        End If
+
                     End If
 
                 Next
-
 
                 'Warten bis dieser Download Chunk Fertig ist
 

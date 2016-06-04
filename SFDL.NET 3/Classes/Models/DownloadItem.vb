@@ -15,7 +15,7 @@ Public Class DownloadItem
     Private _download_progress As Integer = 0
     Private _parent_container_id As Guid
     Private _status_image As String = "Resources/Icons/appbar.clock.png"
-    Private _status As Status = Status.Queued
+    Private _status As Status = Status.None
 
     Public Sub New(ByVal _fileitem As SFDL.Container.FileItem)
 
@@ -38,6 +38,13 @@ Public Class DownloadItem
         Set(value As Boolean)
             _selected = value
             RaisePropertyChanged("isSelected")
+
+            If value = True Then
+                Me.DownloadStatus = Status.Queued
+            Else
+                Me.DownloadStatus = Status.None
+            End If
+
         End Set
         Get
             Return _selected
@@ -56,6 +63,39 @@ Public Class DownloadItem
         Set(value As Status)
             _status = value
             RaisePropertyChanged("DownloadStatus")
+
+            Select Case value
+
+                Case Status.None
+
+                    Me.DownloadStatusImage = String.Empty
+
+                Case Status.Completed
+
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.check.png"
+
+                Case Status.Queued
+
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.clock.png"
+
+                Case Status.Running
+
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.cabinet.in.png"
+
+                Case Status.Stopped
+
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.control.stop.png"
+
+                Case Status.CompletedHashValid
+
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.check.png"
+
+                Case Status.CompletedHashInvalid
+
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.alert.png"
+
+            End Select
+
         End Set
         Get
             Return _status
@@ -89,11 +129,17 @@ Public Class DownloadItem
         End Get
     End Property
 
+    Public Property LocalFile As String = String.Empty
+
+
     Public Enum Status
+        None
         Queued
         Running
         Stopped
         Completed
+        CompletedHashValid
+        CompletedHashInvalid
     End Enum
 
 #Region "IDisposable Support"

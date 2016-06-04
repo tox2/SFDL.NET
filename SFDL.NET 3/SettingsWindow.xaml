@@ -197,7 +197,7 @@
                                             <CheckBox x:Name="chk_mark_all_container_files"
                                                       Margin="5,5,5,0"
                                                       Content="{x:Static p:Strings.Settings_NotMarkAllFilesInContainer}"
-                                                      IsChecked="{Binding MarkAllContainerFiles}" />
+                                                      IsChecked="{Binding NotMarkAllContainerFiles}" />
                                             <CheckBox x:Name="chk_delete_sfdl_after_open"
                                                       Margin="5,5,5,0"
                                                       Content="{x:Static p:Strings.Settings_RemoveSFDL}"

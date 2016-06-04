@@ -178,6 +178,8 @@
                                 _file_item.FileName = _entry.Path.GetFileName
                                 _file_item.FileSize = _entry.Size
                                 _file_item.PackageName = _packagename
+                                _file_item.DirectoryPath = _bulk_folder
+                                _file_item.HashType = Container.HashType.None
 
                                 _rt_list.Add(_file_item)
 
