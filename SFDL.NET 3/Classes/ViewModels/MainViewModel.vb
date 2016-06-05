@@ -183,7 +183,7 @@ Decrypt:
 
                 Me.ButtonDownloadStartStop = False
 
-                While Not ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count
+                While Not ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0
 
                     Dim _itemdownloadlist As New List(Of DownloadItem)
                     Dim _tasklist As New List(Of System.Threading.Tasks.Task)
@@ -249,7 +249,7 @@ Decrypt:
 
                 End While
 
-                Log.Info("Alle Downloads abgeschlossen!!")
+                _log.Info("Alle Downloads abgeschlossen!!")
 
             Else
                 _log.Warn("Pre Check nicht bestanden -> Starte keinen Download")
