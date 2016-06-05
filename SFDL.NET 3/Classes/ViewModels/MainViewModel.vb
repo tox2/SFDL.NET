@@ -264,13 +264,12 @@ Decrypt:
 
 #Region "Await Any Task"
 
-
-
                     _tasklist.RemoveAll(Function(mytask) mytask.Status = TaskStatus.RanToCompletion)
 
-                    Await Threading.Tasks.Task.WhenAny(_tasklist)
-
-                    _thread_count_pool = _settings.MaxDownloadThreads - _tasklist.Where(Function(mytask) mytask.Status = TaskStatus.Running).Count
+                    If Not _tasklist.Count = 0 Then
+                        Await Threading.Tasks.Task.WhenAny(_tasklist)
+                        _thread_count_pool = _settings.MaxDownloadThreads - _tasklist.Where(Function(mytask) mytask.Status = TaskStatus.Running).Count
+                    End If
 
                     _log.Debug("Noch {0} Freie Tasks im ThreadPool", _thread_count_pool)
 

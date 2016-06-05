@@ -364,5 +364,11 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\appbar.sign.parking.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.dimension.line.width.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.cup.full.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

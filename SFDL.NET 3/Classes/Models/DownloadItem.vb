@@ -159,9 +159,22 @@ Public Class DownloadItem
 
                     Me.DownloadStatusImage = "Resources/Icons/appbar.alert.png"
 
-                Case Status.Completed_HashInvalid
+                Case Status.Failed
 
                     Me.DownloadStatusImage = "Resources/Icons/appbar.stop.png"
+
+                Case Status.Failed_FileNameTooLong
+
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.dimension.line.width.png"
+
+                Case Status.Failed_NotEnoughDiskSpace
+
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.stop.png"
+
+                Case Status.Failed_ServerFull
+
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.cup.full.png"
+
 
             End Select
 

@@ -194,6 +194,8 @@ Class DownloadHelper
 
             End Using
 
+            _item.DownloadStatus = NET3.DownloadItem.Status.Completed
+
             If Application.Current.Resources("DownloadStopped") = True Then
                 _log.Info("Download wurde gestoppt!")
                 _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
@@ -210,8 +212,16 @@ Class DownloadHelper
         Catch ex As ArxOne.Ftp.Exceptions.FtpException
             _log.Error(ex, ex.Message)
 
+            If ex.InnerException.Message.Contains("Maximum login limit has been reached") Then
+                _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerFull
+            Else
+                _item.DownloadStatus = NET3.DownloadItem.Status.Failed
+            End If
+
+
         Catch ex As Exception
             _log.Error(ex.Message) 'ToDo: Retry Handling
+            _item.DownloadStatus = NET3.DownloadItem.Status.Failed
         Finally
             PostDownload(_item, _ftp_client)
         End Try
@@ -229,7 +239,7 @@ Class DownloadHelper
 
             _item.DownloadSpeed = String.Empty
 
-            If Application.Current.Resources("DownloadStopped") = False Then
+            If Application.Current.Resources("DownloadStopped") = False And _item.DownloadStatus = NET3.DownloadItem.Status.Completed Then
 
                 If _item.HashType = Container.HashType.None Then
 
@@ -329,6 +339,7 @@ Class DownloadHelper
 
         Catch ex As Exception
             _log.Error(ex.Message)
+            _item.DownloadStatus = NET3.DownloadItem.Status.Failed
         Finally
             RaiseEvent ItemDownloadComplete(_item)
         End Try
