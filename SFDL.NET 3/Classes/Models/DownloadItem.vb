@@ -17,6 +17,7 @@ Public Class DownloadItem
     Private _status_image As String = "Resources/Icons/appbar.sign.parking.png"
     Private _status As Status = Status.None
     Private _status_string As String = String.Empty
+    Private _id As Guid
 
     Public Sub New(ByVal _fileitem As SFDL.Container.FileItem)
 
@@ -32,6 +33,8 @@ Public Class DownloadItem
         Me.HashType = _fileitem.HashType
         Me.PackageName = _fileitem.PackageName
         Me.isSelected = True
+
+        _id = New Guid
 
     End Sub
 
@@ -196,6 +199,12 @@ Public Class DownloadItem
     End Property
 
     Public Property LocalFile As String = String.Empty
+
+    Public ReadOnly Property ID As Guid
+        Get
+
+        End Get
+    End Property
 
 
     Public Enum Status

@@ -158,18 +158,20 @@ Decrypt:
 
         Dim _download_helper As New DownloadHelper
         Dim _log As NLog.Logger = NLog.LogManager.GetLogger("StartDownload")
+        Dim _tasklist As New List(Of System.Threading.Tasks.Task)
 
         Try
 
             Dim _thread_count_pool As Integer = _settings.MaxDownloadThreads
 
-            'Cleanup
+#Region "Cleanup"
+
 
             Application.Current.Resources("DownloadStopped") = False
 
-            'Reset ContainerSession State
             For Each _session In ContainerSessions
                 _session.SessionState = ContainerSessionState.Queued
+                _session.ActiveThreads = 0
             Next
 
             For Each _dlitem In DownloadItems.Where(Function(myitem) myitem.isSelected = True)
@@ -178,31 +180,52 @@ Decrypt:
                 _dlitem.DownloadSpeed = String.Empty
             Next
 
-            'Check if rdy for Download
+#End Region
             If PreDownloadCheck() = True Then
 
                 Me.ButtonDownloadStartStop = False
 
+                AddHandler _download_helper.ItemDownloadComplete, AddressOf ItemDownloadCompleteEvent
+
                 While Not ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0
 
-                    Dim _itemdownloadlist As New List(Of DownloadItem)
-                    Dim _tasklist As New List(Of System.Threading.Tasks.Task)
+#Region "Query Download Items"
 
-                    'Query Download Items
+                    Dim _itemdownloadlist As New Dictionary(Of ContainerSession, List(Of DownloadItem))
+
                     For Each _session In ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning)
 
                         Dim _thread_count As Integer = 0
+                        Dim _session_itemlist As New List(Of DownloadItem)
 
-                        If Not _session.ContainerFile.MaxDownloadThreads > _thread_count_pool Then
-                            _thread_count = _session.ContainerFile.MaxDownloadThreads
-                            _thread_count_pool -= _thread_count
-                        Else
-                            If Not _thread_count_pool = 0 Then
-                                _thread_count = _thread_count_pool
-                            Else
-                                _log.Info("Alle verfügbaren Threads sind vergeben!")
+                        _log.Debug("Threads Verfügbar im Pool: {0}", _thread_count_pool)
+
+                        SyncLock _session.SynLock 'Ensure Active Thread Count is not modified
+
+                            _log.Debug("Session Maximal {0} Threads - Davon sind {1} aktiv", _session.ContainerFile.MaxDownloadThreads, _session.ActiveThreads)
+
+                            If Not _session.ContainerFile.MaxDownloadThreads = _session.ActiveThreads Then
+
+                                If Not (_session.ContainerFile.MaxDownloadThreads - _session.ActiveThreads) > _thread_count_pool Then
+                                    _thread_count = _session.ContainerFile.MaxDownloadThreads - _session.ActiveThreads
+                                Else
+                                    If Not _thread_count_pool = 0 Then
+                                        _thread_count = _thread_count_pool
+                                    Else
+                                        _log.Info("Alle verfügbaren Threads sind vergeben!")
+                                    End If
+                                End If
+
                             End If
-                        End If
+
+                            _log.Debug("Thread Count: {0}", _thread_count)
+
+                            _thread_count_pool -= _thread_count
+                            _session.ActiveThreads += _thread_count
+
+                            _log.Debug("Session hat nun {0} aktive Threads", _session.ActiveThreads)
+
+                        End SyncLock
 
                         If Not _thread_count = 0 Then
 
@@ -210,37 +233,65 @@ Decrypt:
 
                             For Each _dlitem In DownloadItems.Where(Function(myitem) (myitem.ParentContainerID.Equals(_session.ID) And myitem.DownloadStatus = DownloadItem.Status.Queued)).Take(_thread_count)
                                 _dlitem.DownloadStatus = DownloadItem.Status.Running
-                                _itemdownloadlist.Add(_dlitem)
+                                _session_itemlist.Add(_dlitem)
                             Next
 
-                            If Not _itemdownloadlist.Count = 0 Then
-
-                                _tasklist.Add(System.Threading.Tasks.Task.Run(Sub()
-                                                                                  _download_helper.DownloadContainerItems(_itemdownloadlist, _settings.DownloadDirectory, _session.ContainerFile.Connection)
-                                                                              End Sub))
-
-                            End If
+                            _itemdownloadlist.Add(_session, _session_itemlist)
 
                         End If
 
                     Next
 
-                    'Warten bis dieser Download Chunk Fertig ist
+#End Region
 
-                    Await Threading.Tasks.Task.WhenAll(_tasklist)
+                    _log.Debug("Insgesamt {0} Items in der Downloadliste", _itemdownloadlist.Count)
 
-                    _thread_count_pool = _settings.MaxDownloadThreads 'Reset
+#Region "Start Download Tasks"
 
-                    'ToDO: Prüfen welche Container Sessions nun ggf. fertig heruntergeladen sind.
+                    If Not _itemdownloadlist.Count = 0 Then
+
+                        For Each _object In _itemdownloadlist
+
+                            _tasklist.Add(System.Threading.Tasks.Task.Run(Sub()
+                                                                              _download_helper.DownloadContainerItems(_object.Value, _settings.DownloadDirectory, _object.Key.ContainerFile.Connection)
+                                                                          End Sub))
+
+                        Next
+
+                    End If
+
+#End Region
+
+#Region "Await Any Task"
+
+
+
+                    _tasklist.RemoveAll(Function(mytask) mytask.Status = TaskStatus.RanToCompletion)
+
+                    Await Threading.Tasks.Task.WhenAny(_tasklist)
+
+                    _thread_count_pool = _settings.MaxDownloadThreads - _tasklist.Where(Function(mytask) mytask.Status = TaskStatus.Running).Count
+
+                    _log.Debug("Noch {0} Freie Tasks im ThreadPool", _thread_count_pool)
+
+#End Region
+
+
+#Region "Check if Download or Any Session is Complete"
+
+
+
                     For Each _session In ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning)
 
-                        If DownloadItems.Where(Function(myitem) myitem.DownloadStatus = DownloadItem.Status.Queued).Count = 0 Then 'Alle Items sind heruntergeladen
+                        If DownloadItems.Where(Function(myitem) myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Running).Count = 0 Then 'Alle Items sind heruntergeladen
                             _session.SessionState = ContainerSessionState.DownloadComplete
                             'ToDo: generate Speedreport
                             'ToDo: Unrar Items
                         End If
 
                     Next
+
+#End Region
 
                     If Application.Current.Resources("DownloadStopped") = True Then
                         _log.Info("Dowload wurde gestoppt!")
@@ -261,6 +312,28 @@ Decrypt:
             Me.ButtonDownloadStartStop = True
             _download_helper.DisposeFTPClients()
         End Try
+
+    End Sub
+
+    Private Sub ItemDownloadCompleteEvent(_item As DownloadItem)
+
+        System.Threading.Tasks.Task.Run(Sub()
+
+                                            Dim _log As NLog.Logger = NLog.LogManager.GetLogger("ItemDownloadCompleteEvent")
+
+                                            _log.Debug("Item {0} war als Download gequed und ist jetzt fertig - Reduziere aktiven Thread Count für diese Session", _item.FileName)
+
+                                            SyncLock ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).SynLock
+
+                                                If Not ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).ActiveThreads = 0 Then
+                                                    ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).ActiveThreads -= 1
+                                                End If
+
+                                            End SyncLock
+
+                                            _log.Debug("Session hat nun {0} Aktive Threads", ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).ActiveThreads)
+
+                                        End Sub)
 
     End Sub
 

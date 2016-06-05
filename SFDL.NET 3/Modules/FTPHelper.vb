@@ -89,7 +89,7 @@ Module FTPHelper
 
         End If
 
-        _log.Info(_log_line)
+        ' _log.Info(_log_line)
 
     End Sub
 

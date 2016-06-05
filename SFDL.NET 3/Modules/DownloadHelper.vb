@@ -7,6 +7,8 @@ Class DownloadHelper
     Private _ftp_client_list As New Dictionary(Of Guid, ArxOne.Ftp.FtpClient)
     Private _obj_ftp_client_list_lock As New Object
 
+    Public Event ItemDownloadComplete(ByVal _item As DownloadItem)
+
     Sub DisposeFTPClients()
 
         For Each _client In _ftp_client_list
@@ -210,9 +212,9 @@ Class DownloadHelper
 
         Catch ex As Exception
             _log.Error(ex.Message) 'ToDo: Retry Handling
+        Finally
+            PostDownload(_item, _ftp_client)
         End Try
-
-        PostDownload(_item, _ftp_client)
 
     End Sub
 
@@ -327,6 +329,8 @@ Class DownloadHelper
 
         Catch ex As Exception
             _log.Error(ex.Message)
+        Finally
+            RaiseEvent ItemDownloadComplete(_item)
         End Try
 
 
