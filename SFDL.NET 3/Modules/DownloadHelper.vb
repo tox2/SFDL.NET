@@ -192,6 +192,11 @@ Class DownloadHelper
 
             End Using
 
+            If Application.Current.Resources("DownloadStopped") = True Then
+                _log.Info("Download wurde gestoppt!")
+                _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
+            End If
+
         Catch ex As NotEnoughFreeDiskSpaceException
             _log.Error(ex, ex.Message)
             _item.DownloadStatus = NET3.DownloadItem.Status.Failed_NotEnoughDiskSpace
@@ -220,105 +225,108 @@ Class DownloadHelper
 
         Try
 
-            _item.DownloadProgress = 100
             _item.DownloadSpeed = String.Empty
 
-            If _item.HashType = Container.HashType.None Then
+            If Application.Current.Resources("DownloadStopped") = False Then
 
-                If _ftp_client.ServerFeatures.HasFeature("MD5") Then
-                    _hashcommand = "MD5"
-                    _hashtype = Container.HashType.MD5
-                End If
+                If _item.HashType = Container.HashType.None Then
 
-                If _ftp_client.ServerFeatures.HasFeature("XMD5") Then
-                    _hashcommand = "XMD5"
-                    _hashtype = Container.HashType.MD5
-                End If
-
-                If _ftp_client.ServerFeatures.HasFeature("XSHA1") Then
-                    _hashcommand = "XSHA1"
-                    _hashtype = Container.HashType.SHA1
-                End If
-
-                If _ftp_client.ServerFeatures.HasFeature("XCRC") Then
-                    _hashcommand = "XCRC"
-                    _hashtype = Container.HashType.CRC
-                End If
-
-                If Not String.IsNullOrWhiteSpace(_hashcommand) Then
-                    _log.Info("Server Support Hash Alogrightm {0}", _hashcommand)
-
-                    _reply = _ftp_client.Session.SendCommand(_hashcommand, _item.FullPath)
-
-                    If _reply.Code.IsSuccess = True Then
-
-                        _log.Info("Hash Serverseitig erfolgreich ermittelt!")
-
-                        _item.HashType = _hashtype
-                        _tmp_hash = _reply.Lines(0).ToString.Replace(_item.FullPath, "")
-                        _tmp_hash = _tmp_hash.Replace(Chr(34), "")
-                        _item.FileHash = _tmp_hash.Trim
-                    Else
-                        _log.Error("Hash konnte nicht ermittelt werden!")
+                    If _ftp_client.ServerFeatures.HasFeature("MD5") Then
+                        _hashcommand = "MD5"
+                        _hashtype = Container.HashType.MD5
                     End If
+
+                    If _ftp_client.ServerFeatures.HasFeature("XMD5") Then
+                        _hashcommand = "XMD5"
+                        _hashtype = Container.HashType.MD5
+                    End If
+
+                    If _ftp_client.ServerFeatures.HasFeature("XSHA1") Then
+                        _hashcommand = "XSHA1"
+                        _hashtype = Container.HashType.SHA1
+                    End If
+
+                    If _ftp_client.ServerFeatures.HasFeature("XCRC") Then
+                        _hashcommand = "XCRC"
+                        _hashtype = Container.HashType.CRC
+                    End If
+
+                    If Not String.IsNullOrWhiteSpace(_hashcommand) Then
+                        _log.Info("Server Support Hash Alogrightm {0}", _hashcommand)
+
+                        _reply = _ftp_client.Session.SendCommand(_hashcommand, _item.FullPath)
+
+                        If _reply.Code.IsSuccess = True Then
+
+                            _log.Info("Hash Serverseitig erfolgreich ermittelt!")
+
+                            _item.HashType = _hashtype
+                            _tmp_hash = _reply.Lines(0).ToString.Replace(_item.FullPath, "")
+                            _tmp_hash = _tmp_hash.Replace(Chr(34), "")
+                            _item.FileHash = _tmp_hash.Trim
+                        Else
+                            _log.Error("Hash konnte nicht ermittelt werden!")
+                        End If
+
+                    Else
+                        _log.Info("Server does not Support any Hash Algorithm")
+                    End If
+
 
                 Else
-                    _log.Info("Server does not Support any Hash Algorithm")
+                    _log.Info("Download Item has already an Hash (provided via SFDL Container)")
                 End If
 
+                Select Case _item.HashType
+
+                    Case Container.HashType.None
+
+                        _item.DownloadStatus = NET3.DownloadItem.Status.Completed
+
+                    Case Container.HashType.MD5
+
+                        _log.Info("Prüfe ob MD5 Hashes übereinstimmen")
+
+                        If HashHelper.MD5FileHash(_item.LocalFile).ToLower.Equals(_item.FileHash.ToLower) Then
+                            _log.Info("MD5 Hash is Valid!")
+                            _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashValid
+                        Else
+                            _log.Info("MD5 Hash Invalid")
+                            _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashInvalid
+                        End If
+
+                    Case Container.HashType.SHA1
+
+                        _log.Info("Prüfe ob SHA1 Hashes übereinstimmen")
+
+                        If HashHelper.SHA1FileHash(_item.LocalFile).ToLower.Equals(_item.FileHash.ToLower) Then
+                            _log.Info("SHA1 Hash is Valid!")
+                            _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashValid
+                        Else
+                            _log.Info("SHA1 Hash Invalid")
+                            _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashInvalid
+                        End If
+
+                    Case Container.HashType.CRC
+
+                        _log.Info("Prüfe ob CRC Hashes übereinstimmen")
+
+                        If HashHelper.CRC32FileHash(_item.LocalFile).ToLower.Equals(_item.FileHash.ToLower) Then
+                            _log.Info("CRC Hash is Valid!")
+                            _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashValid
+                        Else
+                            _log.Info("CRC Hash Invalid")
+                            _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashInvalid
+                        End If
+
+                End Select
 
             Else
-                _log.Info("Download Item has already an Hash (provided via SFDL Container)")
+                _log.Info("Download wurde gestoppt - Überspringe Hash Check")
             End If
-
-            Select Case _item.HashType
-
-                Case Container.HashType.None
-
-                    _item.DownloadStatus = NET3.DownloadItem.Status.Completed
-
-                Case Container.HashType.MD5
-
-                    _log.Info("Prüfe ob MD5 Hashes übereinstimmen")
-
-                    If HashHelper.MD5FileHash(_item.LocalFile).ToLower.Equals(_item.FileHash.ToLower) Then
-                        _log.Info("MD5 Hash is Valid!")
-                        _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashValid
-                    Else
-                        _log.Info("MD5 Hash Invalid")
-                        _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashInvalid
-                    End If
-
-                Case Container.HashType.SHA1
-
-                    _log.Info("Prüfe ob SHA1 Hashes übereinstimmen")
-
-                    If HashHelper.SHA1FileHash(_item.LocalFile).ToLower.Equals(_item.FileHash.ToLower) Then
-                        _log.Info("SHA1 Hash is Valid!")
-                        _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashValid
-                    Else
-                        _log.Info("SHA1 Hash Invalid")
-                        _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashInvalid
-                    End If
-
-                Case Container.HashType.CRC
-
-                    _log.Info("Prüfe ob CRC Hashes übereinstimmen")
-
-                    If HashHelper.CRC32FileHash(_item.LocalFile).ToLower.Equals(_item.FileHash.ToLower) Then
-                        _log.Info("CRC Hash is Valid!")
-                        _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashValid
-                    Else
-                        _log.Info("CRC Hash Invalid")
-                        _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashInvalid
-                    End If
-
-            End Select
 
         Catch ex As Exception
             _log.Error(ex.Message)
-        Finally
-            _ftp_client.Dispose()
         End Try
 
 

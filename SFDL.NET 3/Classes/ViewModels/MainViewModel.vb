@@ -137,10 +137,6 @@ Decrypt:
 
         Try
 
-            If Application.Current.Resources("DownloadStopped") = True Then
-                Throw New Exception("Download is already Running!")
-            End If
-
             If DownloadItems.Where(Function(myitem) myitem.DownloadStatus = DownloadItem.Status.Queued).Count = 0 Then
                 Throw New Exception("You must select minumum 1 Item to Download!")
             End If
@@ -162,15 +158,15 @@ Decrypt:
 
         Dim _download_helper As New DownloadHelper
         Dim _log As NLog.Logger = NLog.LogManager.GetLogger("StartDownload")
-        Dim _dl_Stopped As Boolean = Application.Current.Resources("DownloadStopped")
 
         Try
 
             Dim _thread_count_pool As Integer = _settings.MaxDownloadThreads
-            Dim _tasklist As New List(Of System.Threading.Tasks.Task)
-
 
             'Cleanup
+
+            Application.Current.Resources("DownloadStopped") = False
+
             'Reset ContainerSession State
             For Each _session In ContainerSessions
                 _session.SessionState = ContainerSessionState.Queued
@@ -187,9 +183,10 @@ Decrypt:
 
                 Me.ButtonDownloadStartStop = False
 
-                While Not ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0 Or _dl_Stopped = False
+                While Not ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count
 
                     Dim _itemdownloadlist As New List(Of DownloadItem)
+                    Dim _tasklist As New List(Of System.Threading.Tasks.Task)
 
                     'Query Download Items
                     For Each _session In ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning)
@@ -245,11 +242,14 @@ Decrypt:
 
                     Next
 
-                    _dl_Stopped = Application.Current.Resources("DownloadStopped")
+                    If Application.Current.Resources("DownloadStopped") = True Then
+                        _log.Info("Dowload wurde gestoppt!")
+                        Exit While
+                    End If
 
                 End While
 
-                Debug.WriteLine("Alle Downloads abgeschlossen!!")
+                Log.Info("Alle Downloads abgeschlossen!!")
 
             Else
                 _log.Warn("Pre Check nicht bestanden -> Starte keinen Download")
@@ -258,12 +258,9 @@ Decrypt:
         Catch ex As Exception
             _log.Error(ex, ex.Message)
         Finally
-
             Me.ButtonDownloadStartStop = True
             _download_helper.DisposeFTPClients()
-
         End Try
-
 
     End Sub
 
