@@ -21,10 +21,35 @@ Module FTPHelper
             With _ftp_client_param
                 .ActiveTransferHost = Net.IPAddress.Parse(_connection_info.Host)
                 .AnonymousPassword = "sfdl@anon.net"
-                .Passive = True
-                .SslProtocols = Security.Authentication.SslProtocols.None
-                .ChannelProtection = ArxOne.Ftp.FtpProtection.Ftp
-                .DefaultEncoding = System.Text.Encoding.UTF8
+
+                If _connection_info.DataConnectionType = Container.FTPDataConnectionType.Passive Then
+                    .Passive = True
+                Else
+                    .Passive = False
+                End If
+
+                .SslProtocols = _connection_info.SSLProtocol
+
+                Select Case _connection_info.CharacterEncoding
+
+                    Case Container.CharacterEncoding.ASCII
+
+                        .DefaultEncoding = System.Text.Encoding.ASCII
+
+                    Case Container.CharacterEncoding.Standard
+
+                        .DefaultEncoding = System.Text.Encoding.Default
+
+                    Case Container.CharacterEncoding.UTF7
+
+                        .DefaultEncoding = System.Text.Encoding.UTF7
+
+                    Case Container.CharacterEncoding.UTF8
+
+                        .DefaultEncoding = System.Text.Encoding.UTF8
+
+                End Select
+
             End With
 
             _ftp_client = New ArxOne.Ftp.FtpClient(New Uri(String.Format("ftp://{0}:{1}", .Host, .Port)), _creds, _ftp_client_param)
