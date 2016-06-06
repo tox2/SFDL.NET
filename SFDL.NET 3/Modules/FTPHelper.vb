@@ -54,7 +54,7 @@ Module FTPHelper
 
             _ftp_client = New ArxOne.Ftp.FtpClient(New Uri(String.Format("ftp://{0}:{1}", .Host, .Port)), _creds, _ftp_client_param)
 
-            _log.Info(_ftp_client.SendSingleCommand("STAT").Code.Code)
+            _ftp_client.SendSingleCommand("NOOP")
 
 
         End With
