@@ -46,6 +46,8 @@ Class DownloadHelper
 
         If IsNothing(ex.InnerException) = False Then
 
+            _item.DownloadStatus = NET3.DownloadItem.Status.Failed
+
             If ex.InnerException.Message.Contains("Code=421") Then ' Service not available, closing control connection. This may be a reply to any command if the service knows it must shut down.
 
                 If ex.InnerException.Message.ToLower.Contains("maximum login limit has been reached.") Then
@@ -60,80 +62,43 @@ Class DownloadHelper
                 _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ConnectionError
             End If
 
+            If ex.InnerException.Message.Contains("Code=426") Then 'Connection closed; transfer aborted.
+                _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ConnectionError
+            End If
+
+            If ex.InnerException.Message.Contains("Code=430") Then ' Invalid username or password
+                _item.DownloadStatus = NET3.DownloadItem.Status.Failed_AuthError
+            End If
+
+            If ex.InnerException.Message.Contains("Code=434") Then 'Requested host unavailable.
+                _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerDown
+            End If
+
+            If ex.InnerException.Message.Contains("Code=450") Then 'Requested file action not taken.
+                _item.DownloadStatus = NET3.DownloadItem.Status.Failed_FileNotFound
+            End If
+
+            If ex.InnerException.Message.Contains("Code=451") Then 'Requested action aborted. Local error in processing
+                _item.DownloadStatus = NET3.DownloadItem.Status.Failed_FileNotFound
+            End If
+
+            If ex.InnerException.Message.Contains("Code=452") Then 'Requested action aborted. Local error in processing
+                _item.DownloadStatus = NET3.DownloadItem.Status.Failed_FileNotFound
+            End If
+
+            If ex.InnerException.Message.Contains("Code=501") Then 'Syntax error in parameters or arguments.
+                _item.DownloadStatus = NET3.DownloadItem.Status.Failed_DirectoryNotFound
+            End If
+
+            If ex.InnerException.Message.Contains("Code=550") Then 'Requested action not taken. File unavailable (e.g., file not found, no access).
+                _item.DownloadStatus = NET3.DownloadItem.Status.Failed_FileNotFound
+            End If
+
+            If ex.InnerException.Message.Contains("Code=530") Then 'Not Logged in
+                _item.DownloadStatus = NET3.DownloadItem.Status.Failed_AuthError
+            End If
+
         End If
-
-
-        'Select Case ex.InnerException.Message
-
-        '    Case "421" ' Service not available, closing control connection. This may be a reply to any command if the service knows it must shut down.
-
-        '        If Exception.Message.ToString.ToLower.Contains("maximum login limit has been reached.") Then
-        '            UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.ServerFull)
-        '        Else
-        '            UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.ServerDown)
-        '        End If
-
-        '    Case "425" ' Can't open data connection.
-
-        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.ConnectionError)
-
-        '    Case "426" 'Connection closed; transfer aborted.
-
-        '                    'Download Stopped
-
-        '    Case "430" ' Invalid username or password
-
-        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.AuthError)
-
-        '    Case "434" 'Requested host unavailable.
-
-        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.ServerDown)
-
-        '    Case "450" 'Requested file action not taken.
-
-        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.FileNotFound)
-
-        '    Case "451" 'Requested action aborted. Local error in processing
-
-        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.InternalServerError)
-
-        '    Case "452"
-
-        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.InternalServerError)
-
-        '    Case "501" 'Syntax error in parameters or arguments.
-
-        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.DirectoryNotFound)
-
-        '    Case "502" 'Command not implemented.
-
-        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.InternalServerError)
-
-        '    Case "503" 'Bad sequence of commands.
-
-        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.InternalServerError)
-
-        '    Case "504" 'Command not implemented for that parameter
-
-        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.InternalServerError)
-
-        '    Case "530" 'Not logged in.
-
-        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.AuthError)
-
-        '    Case "550" 'Requested action not taken. File unavailable (e.g., file not found, no access).
-
-        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.FileNotFound)
-
-        '    Case "553" ' Requested action not taken. File name not allowed.
-
-        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.FileNotFound)
-
-        '    Case Else
-
-        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.UnknownError)
-
-        'End Select
 
     End Sub
 

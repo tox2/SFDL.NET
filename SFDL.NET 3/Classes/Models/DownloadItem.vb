@@ -236,6 +236,10 @@ Public Class DownloadItem
         Failed_ServerFull
         Failed_ServerDown
         Failed_ConnectionError
+        Failed_AuthError
+        Failed_FileNotFound
+        Failed_DirectoryNotFound
+        Failed_InternalServerError
         Completed
         Completed_HashValid
         Completed_HashInvalid
