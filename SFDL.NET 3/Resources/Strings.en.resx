@@ -360,4 +360,22 @@
   <data name="MainMenu_File_OpenFile" xml:space="preserve">
     <value>Open</value>
   </data>
+  <data name="DownloadStatus_Failed_AuthError" xml:space="preserve">
+    <value>Auth Error</value>
+  </data>
+  <data name="DownloadStatus_Failed_ConnectionError" xml:space="preserve">
+    <value>Connection failure</value>
+  </data>
+  <data name="DownloadStatus_Failed_DirectoryNotFound" xml:space="preserve">
+    <value>Directory not found</value>
+  </data>
+  <data name="DownloadStatus_Failed_FileNotFound" xml:space="preserve">
+    <value>File not found</value>
+  </data>
+  <data name="DownloadStatus_Failed_InternalServerError" xml:space="preserve">
+    <value>Server error</value>
+  </data>
+  <data name="DownloadStatus_Failed_ServerDown" xml:space="preserve">
+    <value>Server not reachable</value>
+  </data>
 </root>

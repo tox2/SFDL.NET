@@ -370,5 +370,11 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\appbar.cup.full.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.network.server.disconnect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.user.delete.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

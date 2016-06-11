@@ -113,6 +113,30 @@ Public Class DownloadItem
 
                     Return My.Resources.Strings.DownloadStatus_Failed_ServerFull
 
+                Case Status.Failed_ServerDown
+
+                    Return My.Resources.Strings.DownloadStatus_Failed_ServerDown
+
+                Case Status.Failed_AuthError
+
+                    Return My.Resources.Strings.DownloadStatus_Failed_AuthError
+
+                Case Status.Failed_ConnectionError
+
+                    Return My.Resources.Strings.DownloadStatus_Failed_ConnectionError
+
+                Case Status.Failed_FileNotFound
+
+                    Return My.Resources.Strings.DownloadStatus_Failed_FileNotFound
+
+                Case Status.Failed_DirectoryNotFound
+
+                    Return My.Resources.Strings.DownloadStatus_Failed_DirectoryNotFound
+
+                Case Status.Failed_InternalServerError
+
+                    Return My.Resources.Strings.DownloadStatus_Failed_InternalServerError
+
                 Case Else
 
                     Return My.Resources.Strings.DownloadStatus_Failed
@@ -175,6 +199,29 @@ Public Class DownloadItem
 
                     Me.DownloadStatusImage = "Resources/Icons/appbar.cup.full.png"
 
+                Case Status.Failed_ServerDown
+
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.network.server.disconnect.png"
+
+                Case Status.Failed_ConnectionError
+
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.network.server.disconnect.png"
+
+                Case Status.Failed_AuthError
+
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.user.delete.png"
+
+                Case Status.Failed_FileNotFound
+
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.page.delete.png"
+
+                Case Status.Failed_DirectoryNotFound
+
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.page.delete.png"
+
+                Case Status.Failed_InternalServerError
+
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.monitor.delete.png"
 
             End Select
 

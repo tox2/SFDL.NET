@@ -101,6 +101,33 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Authentifizierungs Fehler ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadStatus_Failed_AuthError() As String
+            Get
+                Return ResourceManager.GetString("DownloadStatus_Failed_AuthError", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Verbindungsfehler ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadStatus_Failed_ConnectionError() As String
+            Get
+                Return ResourceManager.GetString("DownloadStatus_Failed_ConnectionError", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Verzeichnis nicht gefunden ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadStatus_Failed_DirectoryNotFound() As String
+            Get
+                Return ResourceManager.GetString("DownloadStatus_Failed_DirectoryNotFound", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Fehler - Dateiname zu lang ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_Failed_FileNameTooLong() As String
@@ -110,11 +137,38 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Datei nicht gefunden ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadStatus_Failed_FileNotFound() As String
+            Get
+                Return ResourceManager.GetString("DownloadStatus_Failed_FileNotFound", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Serverfehler ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadStatus_Failed_InternalServerError() As String
+            Get
+                Return ResourceManager.GetString("DownloadStatus_Failed_InternalServerError", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Fehler - Zu wenig Speicherplatz ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_Failed_NotEnoughDiskSpace() As String
             Get
                 Return ResourceManager.GetString("DownloadStatus_Failed_NotEnoughDiskSpace", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Server nicht erreichbar ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadStatus_Failed_ServerDown() As String
+            Get
+                Return ResourceManager.GetString("DownloadStatus_Failed_ServerDown", resourceCulture)
             End Get
         End Property
         

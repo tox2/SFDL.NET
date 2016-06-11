@@ -390,4 +390,22 @@
   <data name="DownloadStatus_Stopped" xml:space="preserve">
     <value>Download gestoppt</value>
   </data>
+  <data name="DownloadStatus_Failed_AuthError" xml:space="preserve">
+    <value>Authentifizierungs Fehler</value>
+  </data>
+  <data name="DownloadStatus_Failed_ConnectionError" xml:space="preserve">
+    <value>Verbindungsfehler</value>
+  </data>
+  <data name="DownloadStatus_Failed_DirectoryNotFound" xml:space="preserve">
+    <value>Verzeichnis nicht gefunden</value>
+  </data>
+  <data name="DownloadStatus_Failed_FileNotFound" xml:space="preserve">
+    <value>Datei nicht gefunden</value>
+  </data>
+  <data name="DownloadStatus_Failed_InternalServerError" xml:space="preserve">
+    <value>Serverfehler</value>
+  </data>
+  <data name="DownloadStatus_Failed_ServerDown" xml:space="preserve">
+    <value>Server nicht erreichbar</value>
+  </data>
 </root>
