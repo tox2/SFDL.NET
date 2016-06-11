@@ -86,7 +86,7 @@
     <Compile Include="Classes\Models\ContainerSession.vb" />
     <Compile Include="Classes\Models\ContainerSessionState.vb" />
     <Compile Include="Classes\Models\DownloadItem.vb" />
-    <Compile Include="Classes\Models\Task.vb" />
+    <Compile Include="Classes\Models\AppTask.vb" />
     <Compile Include="Classes\Models\UnRARChain.vb" />
     <Compile Include="Classes\ViewModels\MainViewModel.vb" />
     <Compile Include="Classes\XAML Converter\ExistingFileHandlingConverter.vb" />

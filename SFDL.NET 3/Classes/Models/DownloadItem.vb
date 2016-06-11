@@ -215,9 +215,11 @@ Public Class DownloadItem
 
     Public ReadOnly Property ID As Guid
         Get
-
+            Return _id
         End Get
     End Property
+
+    Public Property SizeDownloaded As Long = 0
 
 
     Public Enum Status
@@ -225,6 +227,7 @@ Public Class DownloadItem
         Queued
         Running
         Stopped
+        Retry
         Failed
         Failed_FileNameTooLong
         Failed_NotEnoughDiskSpace

@@ -9,54 +9,7 @@ Class DownloadHelper
 
     Public Event ItemDownloadComplete(ByVal _item As DownloadItem)
 
-    Sub DisposeFTPClients()
-
-        For Each _client In _ftp_client_list
-            _client.Value.Dispose()
-        Next
-
-    End Sub
-
-    Sub DownloadContainerItems(items As List(Of DownloadItem), ByVal _download_dir As String, ByVal _connection_info As SFDL.Container.Connection)
-
-        Dim _tasks = New List(Of System.Threading.Tasks.Task)
-
-        Try
-
-            For Each _item As DownloadItem In items
-
-                Dim _dl_task As System.Threading.Tasks.Task
-                Dim _ftp_client As ArxOne.Ftp.FtpClient
-
-                SyncLock _obj_ftp_client_list_lock
-
-                    'Check if any FTP Client Exits for this Parent Container Session
-                    If Not _ftp_client_list.ContainsKey(_item.ParentContainerID) Then
-                        SetupFTPClient(_ftp_client, _connection_info)
-                        _ftp_client_list.Add(_item.ParentContainerID, _ftp_client)
-                    Else
-                        _ftp_client = _ftp_client_list(_item.ParentContainerID)
-                    End If
-
-                End SyncLock
-
-                'ToDo: Prüfen ob Verbindung zum Server hergestellt werden kann ->> Fehlerbehandlung
-
-                _dl_task = System.Threading.Tasks.Task.Run(Sub()
-                                                               DownloadItem(_item, _ftp_client)
-                                                           End Sub)
-                _tasks.Add(_dl_task)
-
-            Next
-
-            System.Threading.Tasks.Task.WhenAll(_tasks).Wait()
-
-        Catch ex As Exception
-            _log.Error(ex, ex.Message)
-        End Try
-
-
-    End Sub
+#Region "Private Subs"
 
     Private Sub GetItemFileSize(ByRef _item As DownloadItem, ByVal _ftp_client As ArxOne.Ftp.FtpClient)
 
@@ -86,7 +39,135 @@ Class DownloadHelper
 
     End Sub
 
-    Private Sub DownloadItem(ByVal _item As DownloadItem, ByVal _ftp_client As ArxOne.Ftp.FtpClient)
+    Private Sub ParseFTPException(ByVal ex As ArxOne.Ftp.Exceptions.FtpException, ByVal _item As DownloadItem)
+
+        'Select Case ex.InnerException
+
+        '    Case "421" ' Service not available, closing control connection. This may be a reply to any command if the service knows it must shut down.
+
+        '        If Exception.Message.ToString.ToLower.Contains("maximum login limit has been reached.") Then
+        '            UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.ServerFull)
+        '        Else
+        '            UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.ServerDown)
+        '        End If
+
+        '    Case "425" ' Can't open data connection.
+
+        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.ConnectionError)
+
+        '    Case "426" 'Connection closed; transfer aborted.
+
+        '                    'Download Stopped
+
+        '    Case "430" ' Invalid username or password
+
+        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.AuthError)
+
+        '    Case "434" 'Requested host unavailable.
+
+        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.ServerDown)
+
+        '    Case "450" 'Requested file action not taken.
+
+        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.FileNotFound)
+
+        '    Case "451" 'Requested action aborted. Local error in processing
+
+        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.InternalServerError)
+
+        '    Case "452"
+
+        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.InternalServerError)
+
+        '    Case "501" 'Syntax error in parameters or arguments.
+
+        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.DirectoryNotFound)
+
+        '    Case "502" 'Command not implemented.
+
+        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.InternalServerError)
+
+        '    Case "503" 'Bad sequence of commands.
+
+        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.InternalServerError)
+
+        '    Case "504" 'Command not implemented for that parameter
+
+        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.InternalServerError)
+
+        '    Case "530" 'Not logged in.
+
+        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.AuthError)
+
+        '    Case "550" 'Requested action not taken. File unavailable (e.g., file not found, no access).
+
+        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.FileNotFound)
+
+        '    Case "553" ' Requested action not taken. File name not allowed.
+
+        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.FileNotFound)
+
+        '    Case Else
+
+        '        UpdateItem(_ftp_thread_info.FileItem, UpdateItemEventType.UnknownError)
+
+        'End Select
+
+    End Sub
+
+
+#End Region
+
+    Sub DisposeFTPClients()
+
+        For Each _client In _ftp_client_list
+            _client.Value.Dispose()
+        Next
+
+    End Sub
+
+    Sub DownloadContainerItems(items As List(Of DownloadItem), ByVal _download_dir As String, ByVal _connection_info As SFDL.Container.Connection, ByVal _ct As System.Threading.CancellationToken)
+
+        Dim _tasks = New List(Of System.Threading.Tasks.Task)
+
+        Try
+
+            For Each _item As DownloadItem In items
+
+                Dim _dl_task As System.Threading.Tasks.Task
+                Dim _ftp_client As ArxOne.Ftp.FtpClient
+
+                SyncLock _obj_ftp_client_list_lock
+
+                    'Check if any FTP Client Exits for this Parent Container Session
+                    If Not _ftp_client_list.ContainsKey(_item.ParentContainerID) Then
+                        SetupFTPClient(_ftp_client, _connection_info)
+                        _ftp_client_list.Add(_item.ParentContainerID, _ftp_client)
+                    Else
+                        _ftp_client = _ftp_client_list(_item.ParentContainerID)
+                    End If
+
+                End SyncLock
+
+                'ToDo: Prüfen ob Verbindung zum Server hergestellt werden kann ->> Fehlerbehandlung
+
+                _dl_task = System.Threading.Tasks.Task.Run(Sub()
+                                                               DownloadItem(_item, _ftp_client, _ct)
+                                                           End Sub)
+                _tasks.Add(_dl_task)
+
+            Next
+
+            System.Threading.Tasks.Task.WhenAll(_tasks).Wait()
+
+        Catch ex As Exception
+            _log.Error(ex, ex.Message)
+        End Try
+
+
+    End Sub
+
+    Private Sub DownloadItem(ByVal _item As DownloadItem, ByVal _ftp_client As ArxOne.Ftp.FtpClient, ByVal _ct As System.Threading.CancellationToken)
 
         Dim _settings As New Settings
         Dim _filemode As IO.FileMode
@@ -135,71 +216,73 @@ Class DownloadHelper
                 _filemode = IO.FileMode.Create
             End If
 
-            Using _ftp_read_stream = ArxOne.Ftp.FtpClientUtility.Retr(_ftp_client, New ArxOne.Ftp.FtpPath(_item.FullPath), ArxOne.Ftp.FtpTransferMode.Binary, _restart)
+            If _filemode = (IO.FileMode.Append And _item.FileSize.Equals(New IO.FileInfo(_item.LocalFile).Length)) And Not _item.FileSize = 0 Then
+                _log.Info("Datei ist bereits vollständig - Überspringe FTP Connect!")
+                _item.SizeDownloaded = _item.FileSize
+            Else
 
-                buffer = New Byte(8192) {}
-                bytesRead = _ftp_read_stream.Read(buffer, 0, buffer.Length)
+                Using _ftp_read_stream = ArxOne.Ftp.FtpClientUtility.Retr(_ftp_client, New ArxOne.Ftp.FtpPath(_item.FullPath), ArxOne.Ftp.FtpTransferMode.Binary, _restart)
 
-                Using _local_write_stream As New IO.FileStream(_item.LocalFile, _filemode, IO.FileAccess.Write, IO.FileShare.None, 8192, False)
+                    buffer = New Byte(8192) {}
+                    bytesRead = _ftp_read_stream.Read(buffer, 0, buffer.Length)
 
-                    While bytesRead > 0 And Application.Current.Resources("DownloadStopped") = False
+                    Using _local_write_stream As New IO.FileStream(_item.LocalFile, _filemode, IO.FileAccess.Write, IO.FileShare.None, 8192, False)
 
-                        Dim _tmp_percent_downloaded As Double = 0
-                        Dim _new_perc As Integer = 0
-                        Dim _download_speed As String = String.Empty
+                        While bytesRead > 0 And _ct.IsCancellationRequested = False
 
-                        '  If _ftp_read_stream.Length > 0 Then
+                            Dim _tmp_percent_downloaded As Double = 0
+                            Dim _new_perc As Integer = 0
+                            Dim _download_speed As String = String.Empty
 
-                        _local_write_stream.Write(buffer, 0, bytesRead)
+                            _local_write_stream.Write(buffer, 0, bytesRead)
 
-                        bytesRead = _ftp_read_stream.Read(buffer, 0, Length)
-                        bytestotalread += bytesRead
+                            bytesRead = _ftp_read_stream.Read(buffer, 0, Length)
+                            bytestotalread += bytesRead
 
-                        elapsed = DateTime.Now.Subtract(_starttime)
+                            elapsed = DateTime.Now.Subtract(_starttime)
+                            bytesPerSec = CInt(If(elapsed.TotalSeconds < 1, bytestotalread, bytestotalread / elapsed.TotalSeconds))
 
-                        _tmp_percent_downloaded = CDbl(_local_write_stream.Position) / CDbl(_item.FileSize)
-                        _new_perc = CInt(_tmp_percent_downloaded * 100)
+#Region "Berechnung Download Speed / Fortschritt"
 
-                        bytesPerSec = CInt(If(elapsed.TotalSeconds < 1, bytestotalread, bytestotalread / elapsed.TotalSeconds))
+                            _tmp_percent_downloaded = CDbl(_local_write_stream.Position) / CDbl(_item.FileSize)
+                            _new_perc = CInt(_tmp_percent_downloaded * 100)
 
-                        '  End If
+                            If _new_perc <> _percent_downloaded Then 'Nicht jedesmal Updaten
 
-                        If _new_perc <> _percent_downloaded Then 'Nicht jedesmal Updaten
+                                Dim _tmp_speed As Double
 
-                            Dim _tmp_speed As Double
+                                _percent_downloaded = _new_perc
 
-                            _percent_downloaded = _new_perc
+                                _current = bytestotalread
+                                _ctime = DateTime.Now.Subtract(_starttime)
 
-                            _current = bytestotalread
-                            _ctime = DateTime.Now.Subtract(_starttime)
+                                _tmp_speed = Math.Round(bytesPerSec / 1024, 2)
 
-                            _tmp_speed = Math.Round(bytesPerSec / 1024, 2)
+                                If _tmp_speed >= 1024 Then
+                                    _download_speed = Math.Round(_tmp_speed / 1024, 2) & " MB/s"
+                                Else
+                                    _download_speed = _tmp_speed & " KB/s"
+                                End If
 
-                            If _tmp_speed >= 1024 Then
-                                _download_speed = Math.Round(_tmp_speed / 1024, 2) & " MB/s"
-                            Else
-                                _download_speed = _tmp_speed & " KB/s"
+                                _item.DownloadSpeed = _download_speed
+                                _item.DownloadProgress = _percent_downloaded
+                                _item.SizeDownloaded = bytestotalread
+
                             End If
 
-                            _item.DownloadSpeed = _download_speed
-                            _item.DownloadProgress = _percent_downloaded
+#End Region
 
-                        End If
+                            'ThrottleByteTransfer(_max_bytes_per_second, bytestotalread, _ctime, bytesPerSec)
 
-                        'ThrottleByteTransfer(_max_bytes_per_second, bytestotalread, _ctime, bytesPerSec)
+                        End While
 
-                    End While
+                    End Using
 
                 End Using
 
-            End Using
+            End If
 
             _item.DownloadStatus = NET3.DownloadItem.Status.Completed
-
-            If Application.Current.Resources("DownloadStopped") = True Then
-                _log.Info("Download wurde gestoppt!")
-                _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
-            End If
 
         Catch ex As NotEnoughFreeDiskSpaceException
             _log.Error(ex, ex.Message)
@@ -210,18 +293,31 @@ Class DownloadHelper
             _item.DownloadStatus = NET3.DownloadItem.Status.Failed_FileNameTooLong
 
         Catch ex As ArxOne.Ftp.Exceptions.FtpException
-            _log.Error(ex, ex.Message)
 
-            If ex.InnerException.Message.Contains("Maximum login limit has been reached") Then
-                _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerFull
+            If Application.Current.Resources("DownloadStopped") = True Then
+                _log.Info("Download wurde gestoppt!")
+                _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
             Else
-                _item.DownloadStatus = NET3.DownloadItem.Status.Failed
+                _log.Error(ex, ex.Message)
+                ParseFTPException(ex, _item)
             End If
+
+            'If ex.InnerException.Message.Contains("Maximum login limit has been reached") Then
+            '    _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerFull
+            'Else
+            '    _item.DownloadStatus = NET3.DownloadItem.Status.Failed
+            'End If
 
 
         Catch ex As Exception
-            _log.Error(ex.Message) 'ToDo: Retry Handling
-            _item.DownloadStatus = NET3.DownloadItem.Status.Failed
+            If Application.Current.Resources("DownloadStopped") = True Then
+                _log.Info("Download wurde gestoppt!")
+                _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
+            Else
+                _log.Error(ex, ex.Message)
+                ParseFTPException(ex, _item)
+            End If
+
         Finally
             PostDownload(_item, _ftp_client)
         End Try

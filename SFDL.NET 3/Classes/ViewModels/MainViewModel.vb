@@ -4,9 +4,12 @@ Imports SFDL.NET3
 Public Class MainViewModel
     Inherits ViewModelBase
 
-    Private _curr_selected_item As DownloadItem = Nothing
+
     Private _settings As New Settings
-    Private _container_info_shown As Boolean = False
+
+    Dim _eta_ts As New System.Threading.CancellationTokenSource()
+    Dim _dl_item_ts As New System.Threading.CancellationTokenSource()
+
 
     Public Sub New()
         _settings = Application.Current.Resources("Settings")
@@ -31,7 +34,7 @@ Public Class MainViewModel
 
     Private Sub OpenSFDLFile(ByVal _sfdl_container_path As String)
 
-        Dim _mytask As New Task(String.Format("SFDL Datei {0} wird geöffnet...", _sfdl_container_path))
+        Dim _mytask As New AppTask(String.Format("SFDL Datei {0} wird geöffnet...", _sfdl_container_path))
         Dim _mycontainer As New Container.Container
         Dim _mycontainer_session As ContainerSession
         Dim _decrypt_password As String
@@ -154,15 +157,117 @@ Decrypt:
 
     End Function
 
+    ''' <summary>
+    ''' Konvertiert eine Dezimale Zeitangabe in eine lesbare Angabe.
+    ''' </summary>
+    Public Function ConvertDecimal2Time(ByVal value As Double) As String
+        Try
+            Dim valueTime As TimeSpan = TimeSpan.FromMinutes(value)
+            If valueTime.Hours.Equals(0) Then
+                Return String.Format("{0:D2}:{1:D2}", valueTime.Minutes, valueTime.Seconds)
+            End If
+            Return String.Format("{0:D2}:{1:D2}:{2:D2}", valueTime.Hours, valueTime.Minutes, valueTime.Seconds)
+        Catch
+            Return "0"
+        End Try
+    End Function
+
+    Private Sub CalculateETA(ByVal _mytask As AppTask, _ct As System.Threading.CancellationToken)
+
+        Dim _percent_downloaded As Integer = 0
+
+        While _ct.IsCancellationRequested = False
+
+            Dim _total_speed As Double = 0
+            Dim _total_size As Double = 0
+            Dim _total_size_downloaded As Double = 0
+            Dim _size_remaining As Double = 0
+            Dim _time_remaining As Double = 0
+            Dim _percent_done As Integer = 0
+
+            Try
+
+                If (Me.WindowState = WindowState.Maximized Or Me.WindowState = WindowState.Normal) Or Me.TasksExpanded = True Then 'Nur berechnen wenn Window Sichtbar
+
+                    System.Threading.Tasks.Parallel.ForEach(DownloadItems.Where(Function(myitem) Not myitem.DownloadStatus = DownloadItem.Status.None Or Not myitem.DownloadStatus = DownloadItem.Status.Stopped), Sub(_item As DownloadItem)
+
+                                                                                                                                                                                                                       If Not String.IsNullOrWhiteSpace(_item.DownloadSpeed) Then
+
+                                                                                                                                                                                                                           Dim _raw_speed As String = _item.DownloadSpeed.ToString
+
+                                                                                                                                                                                                                           If _raw_speed.Contains("KB/s") Then
+                                                                                                                                                                                                                               _raw_speed = _raw_speed.Replace("KB/s", "").Trim
+                                                                                                                                                                                                                               _total_speed += Double.Parse(_raw_speed)
+                                                                                                                                                                                                                           Else
+
+                                                                                                                                                                                                                               If _raw_speed.Contains("MB/s") Then
+                                                                                                                                                                                                                                   _raw_speed = _raw_speed.Replace("MB/s", "").Trim
+                                                                                                                                                                                                                                   _total_speed += Double.Parse(_raw_speed) * 1024
+                                                                                                                                                                                                                               End If
+
+                                                                                                                                                                                                                           End If
+
+                                                                                                                                                                                                                       End If
+
+                                                                                                                                                                                                                       _total_size += _item.FileSize
+                                                                                                                                                                                                                       _total_size_downloaded += _item.SizeDownloaded
+
+
+                                                                                                                                                                                                                   End Sub)
+
+                    _percent_done = CInt((_total_size_downloaded / _total_size) * 100)
+
+                    If Not _percent_done = _percent_downloaded Then
+
+                        _percent_downloaded = _percent_done
+
+                        _size_remaining = _total_size - _total_size_downloaded
+
+                        If _size_remaining > 0 And _total_speed > 0 Then
+
+                            _time_remaining = Math.Round(Double.Parse(CStr(((_size_remaining / 1024) / _total_speed) / 60)), 2)
+
+                            If _total_speed >= 1024 Then
+                                _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - Speed: {0} MB/s | ETA: {1} | {2} %", Math.Round(_total_speed / 1024, 2), ConvertDecimal2Time(_time_remaining), CInt((_total_size_downloaded / _total_size) * 100)))
+                            Else
+                                _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - Speed: {0} KB/s | ETA: {1} | {2} %", Math.Round(_total_speed / 1024, 2), ConvertDecimal2Time(_time_remaining), CInt((_total_size_downloaded / _total_size) * 100)))
+                            End If
+
+                        Else
+                            _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - {0} %", CInt((_total_size_downloaded / _total_size) * 100)))
+                        End If
+
+                    End If
+
+                Else
+                    Debug.WriteLine("Keine Berechnung Windows ist runtergeklappt!")
+                End If
+
+            Catch ex As Exception
+
+            Finally
+                System.Threading.Thread.Sleep(1000)
+            End Try
+
+        End While
+
+        Debug.WriteLine("ETA While beendet!")
+
+    End Sub
+
     Private Async Sub StartDownload()
 
         Dim _download_helper As New DownloadHelper
         Dim _log As NLog.Logger = NLog.LogManager.GetLogger("StartDownload")
         Dim _tasklist As New List(Of System.Threading.Tasks.Task)
+        Dim _mytask As New AppTask("Download läuft")
+        Dim _thread_count_pool As Integer = 0
 
         Try
 
-            Dim _thread_count_pool As Integer = _settings.MaxDownloadThreads
+            _thread_count_pool = _settings.MaxDownloadThreads
+            _eta_ts = New System.Threading.CancellationTokenSource
+            _dl_item_ts = New System.Threading.CancellationTokenSource
 
 #Region "Cleanup"
 
@@ -186,6 +291,15 @@ Decrypt:
                 Me.ButtonDownloadStartStop = False
 
                 AddHandler _download_helper.ItemDownloadComplete, AddressOf ItemDownloadCompleteEvent
+
+                AddHandler _mytask.TaskDone, AddressOf TaskDoneEvent
+
+                ActiveTasks.Add(_mytask)
+
+                System.Threading.Tasks.Task.Run(Sub()
+                                                    CalculateETA(_mytask, _eta_ts.Token)
+                                                End Sub, _eta_ts.Token)
+
 
                 While Not ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0
 
@@ -233,6 +347,7 @@ Decrypt:
 
                             For Each _dlitem In DownloadItems.Where(Function(myitem) (myitem.ParentContainerID.Equals(_session.ID) And myitem.DownloadStatus = DownloadItem.Status.Queued)).Take(_thread_count)
                                 _dlitem.DownloadStatus = DownloadItem.Status.Running
+                                _dlitem.SizeDownloaded = 0
                                 _session_itemlist.Add(_dlitem)
                             Next
 
@@ -252,9 +367,13 @@ Decrypt:
 
                         For Each _object In _itemdownloadlist
 
-                            _tasklist.Add(System.Threading.Tasks.Task.Run(Sub()
-                                                                              _download_helper.DownloadContainerItems(_object.Value, _settings.DownloadDirectory, _object.Key.ContainerFile.Connection)
-                                                                          End Sub))
+                            For Each _item As DownloadItem In _object.Value
+
+                                _tasklist.Add(System.Threading.Tasks.Task.Run(Sub()
+                                                                                  _download_helper.DownloadContainerItems(New List(Of DownloadItem)() From {_item}, _settings.DownloadDirectory, _object.Key.ContainerFile.Connection, _dl_item_ts.Token)
+                                                                              End Sub, _dl_item_ts.Token))
+
+                            Next
 
                         Next
 
@@ -264,11 +383,16 @@ Decrypt:
 
 #Region "Await Any Task"
 
+
                     _tasklist.RemoveAll(Function(mytask) mytask.Status = TaskStatus.RanToCompletion)
 
+
                     If Not _tasklist.Count = 0 Then
+
                         Await Threading.Tasks.Task.WhenAny(_tasklist)
+
                         _thread_count_pool = _settings.MaxDownloadThreads - _tasklist.Where(Function(mytask) mytask.Status = TaskStatus.Running).Count
+
                     End If
 
                     _log.Debug("Noch {0} Freie Tasks im ThreadPool", _thread_count_pool)
@@ -282,7 +406,7 @@ Decrypt:
 
                     For Each _session In ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning)
 
-                        If DownloadItems.Where(Function(myitem) myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Running).Count = 0 Then 'Alle Items sind heruntergeladen
+                        If DownloadItems.Where(Function(myitem) (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Running) Or myitem.DownloadStatus = DownloadItem.Status.Retry).Count = 0 Then 'Alle Items sind heruntergeladen
                             _session.SessionState = ContainerSessionState.DownloadComplete
                             'ToDo: generate Speedreport
                             'ToDo: Unrar Items
@@ -308,8 +432,21 @@ Decrypt:
         Catch ex As Exception
             _log.Error(ex, ex.Message)
         Finally
+
+            System.Threading.Tasks.Task.Run(Sub()
+
+                                                _eta_ts.Cancel()
+                                                _dl_item_ts.Cancel()
+                                                Application.Current.Resources("DownloadStopped") = True
+                                                _download_helper.DisposeFTPClients()
+                                                _eta_ts.Dispose()
+                                                _dl_item_ts.Dispose()
+
+                                            End Sub).Wait()
+
+            _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "Download beendet!")
             Me.ButtonDownloadStartStop = True
-            _download_helper.DisposeFTPClients()
+
         End Try
 
     End Sub
@@ -338,7 +475,11 @@ Decrypt:
 
     Private Async Sub StopDownload()
 
-        Application.Current.Resources("DownloadStopped") = True
+        Await System.Threading.Tasks.Task.Run(Sub()
+                                                  Application.Current.Resources("DownloadStopped") = True
+                                                  _eta_ts.Cancel()
+                                                  _dl_item_ts.Cancel()
+                                              End Sub)
 
         Me.ButtonDownloadStartStop = True
 
@@ -482,6 +623,8 @@ Decrypt:
 
 #Region "ListView ContextMenu Commands and Properites"
 
+    Private _curr_selected_item As DownloadItem = Nothing
+
     Public Property SelectedDownloadItem As DownloadItem
         Set(value As DownloadItem)
             _curr_selected_item = value
@@ -522,11 +665,22 @@ Decrypt:
 
 #End Region
 
+    Private _window_state As System.Windows.WindowState = WindowState.Normal
+    Public Property WindowState As System.Windows.WindowState
+        Set(value As System.Windows.WindowState)
+            _window_state = value
+            RaisePropertyChanged("WindowState")
+        End Set
+        Get
+            Return _window_state
+        End Get
+    End Property
+
 #Region "Tasks"
 
-    Private _active_tasks As New ObjectModel.ObservableCollection(Of Task)
-    Public Property ActiveTasks As ObjectModel.ObservableCollection(Of Task)
-        Set(value As ObjectModel.ObservableCollection(Of Task))
+    Private _active_tasks As New ObjectModel.ObservableCollection(Of AppTask)
+    Public Property ActiveTasks As ObjectModel.ObservableCollection(Of AppTask)
+        Set(value As ObjectModel.ObservableCollection(Of AppTask))
             _active_tasks = value
             RaisePropertyChanged("ActiveTasks")
         End Set
@@ -535,15 +689,31 @@ Decrypt:
         End Get
     End Property
 
-    Private Sub TaskDoneEvent(e As Task)
+    Private Sub TaskDoneEvent(e As AppTask)
 
-        'Wait 5 Seconds
-        System.Threading.Thread.Sleep(5000)
-        DispatchService.DispatchService.Invoke(Sub()
-                                                   ActiveTasks.Remove(e)
-                                               End Sub)
+        System.Threading.Tasks.Task.Run(Sub()
+
+                                            'Wait 5 Seconds
+                                            System.Threading.Thread.Sleep(5000)
+                                            DispatchService.DispatchService.Invoke(Sub()
+                                                                                       ActiveTasks.Remove(e)
+                                                                                   End Sub)
+
+                                        End Sub)
 
     End Sub
+
+    Private _tasks_expanded As Boolean = False
+
+    Public Property TasksExpanded As Boolean
+        Set(value As Boolean)
+            _tasks_expanded = value
+            RaisePropertyChanged("TasksExpanded")
+        End Set
+        Get
+            Return _tasks_expanded
+        End Get
+    End Property
 
 
 #End Region
@@ -575,6 +745,8 @@ Decrypt:
     End Property
 
 #End Region
+
+    Private _container_info_shown As Boolean = False
 
     Public Property ContainerInfoOpen As Boolean
         Set(value As Boolean)

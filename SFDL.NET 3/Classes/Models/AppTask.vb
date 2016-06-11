@@ -1,6 +1,6 @@
 ﻿Imports System.ComponentModel
 
-Public Class Task
+Public Class AppTask
     Implements INotifyPropertyChanged
 
     Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
@@ -49,11 +49,13 @@ Public Class Task
         RaisePropertyChanged("TaskDisplayText")
         RaisePropertyChanged("TaskStatus")
 
-        RaiseEvent TaskDone(Me)
+        If Not _status = TaskStatus.Running Then
+            RaiseEvent TaskDone(Me)
+        End If
 
     End Sub
 
-    Public Event TaskDone(ByVal e As Task)
+    Public Event TaskDone(ByVal e As AppTask)
 
     Public ReadOnly Property TaskStatusImage As String
         Get
