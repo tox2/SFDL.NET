@@ -232,6 +232,8 @@ Public Class DownloadItem
         Failed_FileNameTooLong
         Failed_NotEnoughDiskSpace
         Failed_ServerFull
+        Failed_ServerDown
+        Failed_ConnectionError
         Completed
         Completed_HashValid
         Completed_HashInvalid

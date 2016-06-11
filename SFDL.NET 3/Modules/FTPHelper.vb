@@ -63,6 +63,15 @@ Module FTPHelper
         AddHandler _ftp_client.Request, AddressOf _log_ftp
         AddHandler _ftp_client.IOError, AddressOf _log_ftp
 
+        _ftp_client.Process(Function(myession As FtpSession)
+
+                                Dim lol
+
+                                Return lol
+
+                            End Function)
+
+
     End Sub
 
     Private Sub _log_ftp(sender As Object, e As ArxOne.Ftp.ProtocolMessageEventArgs)

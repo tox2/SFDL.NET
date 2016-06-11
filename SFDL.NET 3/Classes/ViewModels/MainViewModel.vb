@@ -45,8 +45,6 @@ Public Class MainViewModel
 
         ActiveTasks.Add(_mytask)
 
-        'System.Threading.Tasks.Task.Run(Sub()
-
         Try
 
                                                 Dim _bulk_result As Boolean
@@ -127,9 +125,6 @@ Decrypt:
                                             Catch ex As Exception
                                                 _mytask.SetTaskStatus(TaskStatus.Faulted, ex.Message)
                                             End Try
-
-        'End Sub)
-
 
 
     End Sub
@@ -481,7 +476,32 @@ Decrypt:
                                                   _dl_item_ts.Cancel()
                                               End Sub)
 
-        Me.ButtonDownloadStartStop = True
+        Me.ButtonDownloadStartStop = False
+
+    End Sub
+
+    Sub Test()
+
+        Dim _ftp_client As ArxOne.Ftp.FtpClient
+        Dim _session As ArxOne.Ftp.FtpSession
+
+        SetupFTPClient(_ftp_client, ContainerSessions(0).ContainerFile.Connection)
+
+        _session = _ftp_client.Session
+
+        ArxOne.Ftp.FtpClientUtility.List(_session.Connection.Client, "/")
+
+        Debug.WriteLine("LIST 1 fertig")
+
+        Debug.WriteLine("")
+
+        ArxOne.Ftp.FtpClientUtility.List(_session.Connection.Client, "/")
+
+        Debug.WriteLine("LIST 2 fertig")
+
+        Debug.WriteLine("")
+
+        _ftp_client.Dispose()
 
     End Sub
 

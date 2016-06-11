@@ -11,11 +11,11 @@ Class DownloadHelper
 
 #Region "Private Subs"
 
-    Private Sub GetItemFileSize(ByRef _item As DownloadItem, ByVal _ftp_client As ArxOne.Ftp.FtpClient)
+    Private Sub GetItemFileSize(ByRef _item As DownloadItem, ByVal _ftp_session As ArxOne.Ftp.FtpSession)
 
         Try
 
-            For Each _ftpitem In ArxOne.Ftp.FtpClientUtility.List(_ftp_client, _item.DirectoryPath)
+            For Each _ftpitem In ArxOne.Ftp.FtpClientUtility.List(_ftp_session.Connection.Client, _item.DirectoryPath, _ftp_session)
 
                 Try
 
@@ -41,7 +41,23 @@ Class DownloadHelper
 
     Private Sub ParseFTPException(ByVal ex As ArxOne.Ftp.Exceptions.FtpException, ByVal _item As DownloadItem)
 
-        'Select Case ex.InnerException
+
+        If ex.InnerException.Message.Contains("Code=421") Then ' Service not available, closing control connection. This may be a reply to any command if the service knows it must shut down.
+
+            If ex.InnerException.Message.ToLower.Contains("maximum login limit has been reached.") Then
+                _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerFull
+            Else
+                _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerDown
+            End If
+
+        End If
+
+        If ex.InnerException.Message.Contains("Code=425") Then '  Can't open data connection.
+            _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ConnectionError
+        End If
+
+
+        'Select Case ex.InnerException.Message
 
         '    Case "421" ' Service not available, closing control connection. This may be a reply to any command if the service knows it must shut down.
 
@@ -135,7 +151,8 @@ Class DownloadHelper
             For Each _item As DownloadItem In items
 
                 Dim _dl_task As System.Threading.Tasks.Task
-                Dim _ftp_client As ArxOne.Ftp.FtpClient
+                Dim _ftp_client As ArxOne.Ftp.FtpClient = Nothing
+                Dim _ftp_session As ArxOne.Ftp.FtpSession = Nothing
 
                 SyncLock _obj_ftp_client_list_lock
 
@@ -152,7 +169,7 @@ Class DownloadHelper
                 'ToDo: Prüfen ob Verbindung zum Server hergestellt werden kann ->> Fehlerbehandlung
 
                 _dl_task = System.Threading.Tasks.Task.Run(Sub()
-                                                               DownloadItem(_item, _ftp_client, _ct)
+                                                               DownloadItem(_item, _ftp_client.Session, _ct)
                                                            End Sub)
                 _tasks.Add(_dl_task)
 
@@ -167,7 +184,7 @@ Class DownloadHelper
 
     End Sub
 
-    Private Sub DownloadItem(ByVal _item As DownloadItem, ByVal _ftp_client As ArxOne.Ftp.FtpClient, ByVal _ct As System.Threading.CancellationToken)
+    Private Sub DownloadItem(ByVal _item As DownloadItem, ByVal _ftp_session As ArxOne.Ftp.FtpSession, ByVal _ct As System.Threading.CancellationToken)
 
         Dim _settings As New Settings
         Dim _filemode As IO.FileMode
@@ -200,7 +217,7 @@ Class DownloadHelper
                 Throw New FileNameTooLongException("Dateipfad ist zu lang! - Kann Datei nicht schreiben!")
             End If
 
-            GetItemFileSize(_item, _ftp_client)
+            GetItemFileSize(_item, _ftp_session)
 
             _disk_free_space = My.Computer.FileSystem.GetDriveInfo(IO.Path.GetPathRoot(_settings.DownloadDirectory)).AvailableFreeSpace
 
@@ -230,7 +247,7 @@ Class DownloadHelper
                 _item.SizeDownloaded = _item.FileSize
             Else
 
-                Using _ftp_read_stream = ArxOne.Ftp.FtpClientUtility.Retr(_ftp_client, New ArxOne.Ftp.FtpPath(_item.FullPath), ArxOne.Ftp.FtpTransferMode.Binary, _restart)
+                Using _ftp_read_stream = ArxOne.Ftp.FtpClientUtility.Retr(_ftp_session.Connection.Client, New ArxOne.Ftp.FtpPath(_item.FullPath), ArxOne.Ftp.FtpTransferMode.Binary, _restart, _ftp_session)
 
                     buffer = New Byte(8192) {}
                     bytesRead = _ftp_read_stream.Read(buffer, 0, buffer.Length)
@@ -321,12 +338,12 @@ Class DownloadHelper
             End If
 
         Finally
-            PostDownload(_item, _ftp_client)
+            PostDownload(_item, _ftp_session)
         End Try
 
     End Sub
 
-    Private Sub PostDownload(ByRef _item As DownloadItem, ByVal _ftp_client As ArxOne.Ftp.FtpClient)
+    Private Sub PostDownload(ByRef _item As DownloadItem, ByVal _ftp_session As ArxOne.Ftp.FtpSession)
 
         Dim _hashcommand As String = String.Empty
         Dim _reply As ArxOne.Ftp.FtpReply
@@ -341,22 +358,22 @@ Class DownloadHelper
 
                 If _item.HashType = Container.HashType.None Then
 
-                    If _ftp_client.ServerFeatures.HasFeature("MD5") Then
+                    If _ftp_session.Connection.Client.ServerFeatures.HasFeature("MD5") Then
                         _hashcommand = "MD5"
                         _hashtype = Container.HashType.MD5
                     End If
 
-                    If _ftp_client.ServerFeatures.HasFeature("XMD5") Then
+                    If _ftp_session.Connection.Client.ServerFeatures.HasFeature("XMD5") Then
                         _hashcommand = "XMD5"
                         _hashtype = Container.HashType.MD5
                     End If
 
-                    If _ftp_client.ServerFeatures.HasFeature("XSHA1") Then
+                    If _ftp_session.Connection.Client.ServerFeatures.HasFeature("XSHA1") Then
                         _hashcommand = "XSHA1"
                         _hashtype = Container.HashType.SHA1
                     End If
 
-                    If _ftp_client.ServerFeatures.HasFeature("XCRC") Then
+                    If _ftp_session.Connection.Client.ServerFeatures.HasFeature("XCRC") Then
                         _hashcommand = "XCRC"
                         _hashtype = Container.HashType.CRC
                     End If
@@ -364,7 +381,7 @@ Class DownloadHelper
                     If Not String.IsNullOrWhiteSpace(_hashcommand) Then
                         _log.Info("Server Support Hash Alogrightm {0}", _hashcommand)
 
-                        _reply = _ftp_client.Session.SendCommand(_hashcommand, _item.FullPath)
+                        _reply = _ftp_session.SendCommand(_hashcommand, _item.FullPath)
 
                         If _reply.Code.IsSuccess = True Then
 
@@ -432,7 +449,7 @@ Class DownloadHelper
                 End Select
 
             Else
-                _log.Info("Download wurde gestoppt - Überspringe Hash Check")
+                _log.Info("Download wurde gestoppt oder Item wurde nicht vollständig heruntergeladen - Überspringe Hash Check")
             End If
 
         Catch ex As Exception
