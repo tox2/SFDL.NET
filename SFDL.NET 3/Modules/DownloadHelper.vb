@@ -186,6 +186,7 @@ Class DownloadHelper
         Dim _ctime As TimeSpan
         Dim elapsed As TimeSpan
         Dim bytesPerSec As Integer = 0
+        Dim _skip_download As Boolean = False
 
         _settings = Application.Current.Resources("Settings")
 
@@ -210,13 +211,21 @@ Class DownloadHelper
             End If
 
             If _settings.ExistingFileHandling = ExistingFileHandling.ResumeFile And IO.File.Exists(_item.LocalFile) Then
+
                 _filemode = IO.FileMode.Append
                 _restart = New IO.FileInfo(_item.LocalFile).Length
+
+                If _item.FileSize.Equals(New IO.FileInfo(_item.LocalFile).Length) And Not _item.FileSize = 0 Then
+                    _log.Info("Datei ist bereits vollständig - Überspringe FTP Connect!")
+                    _item.SizeDownloaded = _item.FileSize
+                    _skip_download = True
+                End If
+
             Else
                 _filemode = IO.FileMode.Create
             End If
 
-            If _filemode = (IO.FileMode.Append And _item.FileSize.Equals(New IO.FileInfo(_item.LocalFile).Length)) And Not _item.FileSize = 0 Then
+            If _skip_download = True Then
                 _log.Info("Datei ist bereits vollständig - Überspringe FTP Connect!")
                 _item.SizeDownloaded = _item.FileSize
             Else
@@ -301,13 +310,6 @@ Class DownloadHelper
                 _log.Error(ex, ex.Message)
                 ParseFTPException(ex, _item)
             End If
-
-            'If ex.InnerException.Message.Contains("Maximum login limit has been reached") Then
-            '    _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerFull
-            'Else
-            '    _item.DownloadStatus = NET3.DownloadItem.Status.Failed
-            'End If
-
 
         Catch ex As Exception
             If Application.Current.Resources("DownloadStopped") = True Then

@@ -32,7 +32,7 @@ Public Class MainViewModel
 
     End Sub
 
-    Private Sub OpenSFDLFile(ByVal _sfdl_container_path As String)
+    Private Async Sub OpenSFDLFile(ByVal _sfdl_container_path As String)
 
         Dim _mytask As New AppTask(String.Format("SFDL Datei {0} wird geöffnet...", _sfdl_container_path))
         Dim _mycontainer As New Container.Container
@@ -45,9 +45,9 @@ Public Class MainViewModel
 
         ActiveTasks.Add(_mytask)
 
-        System.Threading.Tasks.Task.Run(Sub()
+        'System.Threading.Tasks.Task.Run(Sub()
 
-                                            Try
+        Try
 
                                                 Dim _bulk_result As Boolean
 
@@ -61,7 +61,7 @@ Public Class MainViewModel
 
                                                     Try
 Decrypt:
-                                                        _decrypt_password = MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowInputAsync(Me, "SFDL entschlüsseln", "Bitte gib ein Passwort ein um den SFDL Container zu entschlüsseln").Result
+                                                        _decrypt_password = Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowInputAsync(Me, "SFDL entschlüsseln", "Bitte gib ein Passwort ein um den SFDL Container zu entschlüsseln")
 
                                                         If String.IsNullOrWhiteSpace(_decrypt_password) Then
                                                             Throw New Exception("SFDL entschlüsseln abgebrochen")
@@ -128,7 +128,7 @@ Decrypt:
                                                 _mytask.SetTaskStatus(TaskStatus.Faulted, ex.Message)
                                             End Try
 
-                                        End Sub)
+        'End Sub)
 
 
 
