@@ -272,6 +272,7 @@ Decrypt:
             For Each _session In ContainerSessions
                 _session.SessionState = ContainerSessionState.Queued
                 _session.ActiveThreads = 0
+                _session.SingleSessionMode = False
             Next
 
             For Each _dlitem In DownloadItems.Where(Function(myitem) myitem.isSelected = True)
@@ -285,8 +286,9 @@ Decrypt:
 
                 Me.ButtonDownloadStartStop = False
 
+                'Register Event Handlers
                 AddHandler _download_helper.ItemDownloadComplete, AddressOf ItemDownloadCompleteEvent
-
+                AddHandler _download_helper.ServerFull, AddressOf ServerFullEvent
                 AddHandler _mytask.TaskDone, AddressOf TaskDoneEvent
 
                 ActiveTasks.Add(_mytask)
@@ -313,16 +315,28 @@ Decrypt:
 
                             _log.Debug("Session Maximal {0} Threads - Davon sind {1} aktiv", _session.ContainerFile.MaxDownloadThreads, _session.ActiveThreads)
 
-                            If Not _session.ContainerFile.MaxDownloadThreads = _session.ActiveThreads Then
+                            If (_session.SingleSessionMode = True And Not _thread_count_pool = 0) Then
+                                _thread_count = 1
+                                _log.Debug("SingleSessionMode Override!")
 
-                                If Not (_session.ContainerFile.MaxDownloadThreads - _session.ActiveThreads) > _thread_count_pool Then
-                                    _thread_count = _session.ContainerFile.MaxDownloadThreads - _session.ActiveThreads
-                                Else
-                                    If Not _thread_count_pool = 0 Then
-                                        _thread_count = _thread_count_pool
+                                If Not _session.ActiveThreads = 0 Then 'Warten bis alle anderen Threads fertig sind somit anschießend auch wirklich nur ein Thread läuft
+                                    _thread_count = 0
+                                End If
+
+                            Else
+
+                                If Not _session.ContainerFile.MaxDownloadThreads = _session.ActiveThreads Then
+
+                                    If Not (_session.ContainerFile.MaxDownloadThreads - _session.ActiveThreads) > _thread_count_pool Then
+                                        _thread_count = _session.ContainerFile.MaxDownloadThreads - _session.ActiveThreads
                                     Else
-                                        _log.Info("Alle verfügbaren Threads sind vergeben!")
+                                        If Not _thread_count_pool = 0 Then
+                                            _thread_count = _thread_count_pool
+                                        Else
+                                            _log.Info("Alle verfügbaren Threads sind vergeben!")
+                                        End If
                                     End If
+
                                 End If
 
                             End If
@@ -341,9 +355,16 @@ Decrypt:
                             _session.SessionState = ContainerSessionState.DownloadRunning
 
                             For Each _dlitem In DownloadItems.Where(Function(myitem) (myitem.ParentContainerID.Equals(_session.ID) And myitem.DownloadStatus = DownloadItem.Status.Queued)).Take(_thread_count)
+
+
+                                'Reset necessary Properties
                                 _dlitem.DownloadStatus = DownloadItem.Status.Running
                                 _dlitem.SizeDownloaded = 0
+                                _dlitem.RetryCount = 0
+                                _dlitem.RetryPossible = False
+
                                 _session_itemlist.Add(_dlitem)
+
                             Next
 
                             _itemdownloadlist.Add(_session, _session_itemlist)
@@ -364,8 +385,12 @@ Decrypt:
 
                             For Each _item As DownloadItem In _object.Value
 
+                                Dim _single_session_mode As Boolean = False
+
+                                _single_session_mode = ContainerSessions.Where(Function(mycontainer) mycontainer.ID.Equals(_item.ParentContainerID))(0).SingleSessionMode
+
                                 _tasklist.Add(System.Threading.Tasks.Task.Run(Sub()
-                                                                                  _download_helper.DownloadContainerItems(New List(Of DownloadItem)() From {_item}, _settings.DownloadDirectory, _object.Key.ContainerFile.Connection, _dl_item_ts.Token)
+                                                                                  _download_helper.DownloadContainerItems(New List(Of DownloadItem)() From {_item}, _settings.DownloadDirectory, _object.Key.ContainerFile.Connection, _dl_item_ts.Token, _single_session_mode)
                                                                               End Sub, _dl_item_ts.Token))
 
                             Next
@@ -443,6 +468,33 @@ Decrypt:
             Me.ButtonDownloadStartStop = True
 
         End Try
+
+    End Sub
+
+    Private Sub ServerFullEvent(_item As DownloadItem)
+
+
+        System.Threading.Tasks.Task.Run(Sub()
+
+                                            Dim _log As NLog.Logger = NLog.LogManager.GetLogger("ItemDownloadCompleteEvent")
+
+                                            _log.Debug("Item {0} war als Download gequed und ist jetzt fertig - Reduziere aktiven Thread Count für diese Session", _item.FileName)
+
+                                            _item.DownloadStatus = DownloadItem.Status.Queued
+
+                                            SyncLock ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).SynLock
+
+                                                If Not ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).ActiveThreads = 0 Then
+                                                    ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).ActiveThreads -= 1
+                                                End If
+
+                                                ContainerSessions.Where(Function(mycontainer) mycontainer.ID.Equals(_item.ParentContainerID))(0).SingleSessionMode = True
+
+                                            End SyncLock
+
+                                            _log.Debug("Session hat nun {0} Aktive Threads", ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).ActiveThreads)
+
+                                        End Sub)
 
     End Sub
 

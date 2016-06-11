@@ -220,6 +220,8 @@ Public Class DownloadItem
     End Property
 
     Public Property SizeDownloaded As Long = 0
+    Public Property RetryPossible As Boolean = False
+    Public Property RetryCount As Integer = 0
 
 
     Public Enum Status

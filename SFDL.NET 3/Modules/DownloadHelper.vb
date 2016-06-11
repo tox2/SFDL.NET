@@ -5,9 +5,11 @@ Class DownloadHelper
 
     Private _log As NLog.Logger = NLog.LogManager.GetLogger("DownloadHelper")
     Private _ftp_client_list As New Dictionary(Of Guid, ArxOne.Ftp.FtpClient)
+    Private _ftp_session_list As New Dictionary(Of Guid, ArxOne.Ftp.FtpSession)
     Private _obj_ftp_client_list_lock As New Object
 
     Public Event ItemDownloadComplete(ByVal _item As DownloadItem)
+    Public Event ServerFull(ByVal _item As DownloadItem)
 
 #Region "Private Subs"
 
@@ -42,18 +44,22 @@ Class DownloadHelper
     Private Sub ParseFTPException(ByVal ex As ArxOne.Ftp.Exceptions.FtpException, ByVal _item As DownloadItem)
 
 
-        If ex.InnerException.Message.Contains("Code=421") Then ' Service not available, closing control connection. This may be a reply to any command if the service knows it must shut down.
+        If IsNothing(ex.InnerException) = False Then
 
-            If ex.InnerException.Message.ToLower.Contains("maximum login limit has been reached.") Then
-                _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerFull
-            Else
-                _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerDown
+            If ex.InnerException.Message.Contains("Code=421") Then ' Service not available, closing control connection. This may be a reply to any command if the service knows it must shut down.
+
+                If ex.InnerException.Message.ToLower.Contains("maximum login limit has been reached.") Then
+                    _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerFull
+                Else
+                    _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerDown
+                End If
+
             End If
 
-        End If
+            If ex.InnerException.Message.Contains("Code=425") Then '  Can't open data connection.
+                _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ConnectionError
+            End If
 
-        If ex.InnerException.Message.Contains("Code=425") Then '  Can't open data connection.
-            _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ConnectionError
         End If
 
 
@@ -142,7 +148,7 @@ Class DownloadHelper
 
     End Sub
 
-    Sub DownloadContainerItems(items As List(Of DownloadItem), ByVal _download_dir As String, ByVal _connection_info As SFDL.Container.Connection, ByVal _ct As System.Threading.CancellationToken)
+    Sub DownloadContainerItems(items As List(Of DownloadItem), ByVal _download_dir As String, ByVal _connection_info As SFDL.Container.Connection, ByVal _ct As System.Threading.CancellationToken, Optional _single_session_mode As Boolean = False)
 
         Dim _tasks = New List(Of System.Threading.Tasks.Task)
 
@@ -164,12 +170,25 @@ Class DownloadHelper
                         _ftp_client = _ftp_client_list(_item.ParentContainerID)
                     End If
 
+                    If _single_session_mode = True Then
+
+                        If _ftp_session_list.ContainsKey(_item.ParentContainerID) Then
+                            _ftp_session = _ftp_session_list(_item.ParentContainerID)
+                        Else
+                            _ftp_session = _ftp_client.Session
+                            _ftp_session_list.Add(_item.ParentContainerID, _ftp_session)
+                        End If
+
+                    Else
+                        _ftp_session = _ftp_client.Session
+                    End If
+
                 End SyncLock
 
                 'ToDo: Prüfen ob Verbindung zum Server hergestellt werden kann ->> Fehlerbehandlung
 
                 _dl_task = System.Threading.Tasks.Task.Run(Sub()
-                                                               DownloadItem(_item, _ftp_client.Session, _ct)
+                                                               DownloadItem(_item, _ftp_session, _ct)
                                                            End Sub)
                 _tasks.Add(_dl_task)
 
@@ -456,9 +475,19 @@ Class DownloadHelper
             _log.Error(ex.Message)
             _item.DownloadStatus = NET3.DownloadItem.Status.Failed
         Finally
-            RaiseEvent ItemDownloadComplete(_item)
-        End Try
 
+            If _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerFull Then 'TODO: And not already SingleSessionMode
+                RaiseEvent ServerFull(_item)
+            Else
+                If _item.RetryPossible And _item.RetryCount < 3 Then
+                    'TODO: Retry?
+                Else
+                    RaiseEvent ItemDownloadComplete(_item)
+                End If
+
+            End If
+
+        End Try
 
     End Sub
 

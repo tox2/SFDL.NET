@@ -84,6 +84,7 @@
             For Each _bulkfolder In _package.BulkFolderList
 
                 _bulkfolder.BulkFolderPath = _decrypt_helper.DecryptString(_bulkfolder.BulkFolderPath, _password)
+                _bulkfolder.PackageName = _decrypt_helper.DecryptString(_bulkfolder.PackageName, _password)
 
             Next
 

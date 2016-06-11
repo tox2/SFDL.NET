@@ -20,5 +20,6 @@
     Public Property Priority As Integer = 0 '0 is Default -> All Container Sessions are equal
     Public Property Fingerprint As String = String.Empty
     Public Property SynLock As New Object
+    Public Property SingleSessionMode As Boolean = False
 
 End Class
