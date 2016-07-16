@@ -1,4 +1,5 @@
 ﻿Imports System.Collections.Specialized
+Imports System.Text.RegularExpressions
 Imports SFDL.NET3
 
 Public Class MainViewModel
@@ -47,84 +48,165 @@ Public Class MainViewModel
 
         Try
 
-                                                Dim _bulk_result As Boolean
+            Dim _bulk_result As Boolean
 
-                                                If GetContainerVersion(_sfdl_container_path) = 0 Or GetContainerVersion(_sfdl_container_path) > 10 Then
-                                                    Throw New Exception("Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!")
-                                                End If
+            If GetContainerVersion(_sfdl_container_path) = 0 Or GetContainerVersion(_sfdl_container_path) > 10 Then
 
-                                                _mycontainer = XMLHelper.XMLDeSerialize(_mycontainer, _sfdl_container_path)
+                Throw New Exception("Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!")
+            End If
 
-                                                If _mycontainer.Encrypted = True Then
+            _mycontainer = XMLHelper.XMLDeSerialize(_mycontainer, _sfdl_container_path)
 
-                                                    Try
+            If _mycontainer.Encrypted = True Then
+
+                Try
 Decrypt:
-                                                        _decrypt_password = Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowInputAsync(Me, "SFDL entschlüsseln", "Bitte gib ein Passwort ein um den SFDL Container zu entschlüsseln")
+                    _decrypt_password = Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowInputAsync(Me, "SFDL entschlüsseln", "Bitte gib ein Passwort ein um den SFDL Container zu entschlüsseln")
 
-                                                        If String.IsNullOrWhiteSpace(_decrypt_password) Then
-                                                            Throw New Exception("SFDL entschlüsseln abgebrochen")
-                                                        End If
+                    If String.IsNullOrWhiteSpace(_decrypt_password) Then
+                        Throw New Exception("SFDL entschlüsseln abgebrochen")
+                    End If
 
-                                                        _decrypt.DecryptString(_mycontainer.Connection.Host, _decrypt_password)
+                    _decrypt.DecryptString(_mycontainer.Connection.Host, _decrypt_password)
 
-                                                    Catch ex As SFDL.Container.FalsePasswordException
-                                                        GoTo Decrypt
-                                                    End Try
+                Catch ex As SFDL.Container.FalsePasswordException
+                    GoTo Decrypt
+                End Try
 
-                                                    DecryptSFDLContainer(_mycontainer, _decrypt_password)
+                DecryptSFDLContainer(_mycontainer, _decrypt_password)
 
-                                                End If
+            End If
 
-                                                _mycontainer_session = New ContainerSession(_mycontainer)
-                                                _mycontainer_session.ContainerFileName = IO.Path.GetFileNameWithoutExtension(_sfdl_container_path)
-                                                _mycontainer_session.ContainerFilePath = _sfdl_container_path
+            _mycontainer_session = New ContainerSession(_mycontainer)
+            _mycontainer_session.ContainerFileName = IO.Path.GetFileNameWithoutExtension(_sfdl_container_path)
+            _mycontainer_session.ContainerFilePath = _sfdl_container_path
 
-                                                If String.IsNullOrWhiteSpace(_mycontainer.Description) Then
-                                                    _mycontainer_session.DisplayName = _mycontainer_session.ContainerFileName
-                                                Else
-                                                    _mycontainer_session.DisplayName = _mycontainer.Description
-                                                End If
+            If String.IsNullOrWhiteSpace(_mycontainer.Description) Then
+                _mycontainer_session.DisplayName = _mycontainer_session.ContainerFileName
+            Else
+                _mycontainer_session.DisplayName = _mycontainer.Description
+            End If
 
-                                                GenerateContainerFingerprint(_mycontainer_session)
+            GenerateContainerFingerprint(_mycontainer_session)
 
-                                                If Not ContainerSessions.Where(Function(mycon) mycon.Fingerprint.Equals(_mycontainer_session.Fingerprint)).Count = 0 Then
-                                                    Throw New Exception("Dieser SFDL Container ist bereits geöffnet!")
-                                                End If
+            If Not ContainerSessions.Where(Function(mycon) mycon.Fingerprint.Equals(_mycontainer_session.Fingerprint)).Count = 0 Then
+                Throw New Exception("Dieser SFDL Container ist bereits geöffnet!")
+            End If
 
-                                                If Not _mycontainer_session.ContainerFile.Packages.Where(Function(mypackage) mypackage.BulkFolderMode = True).Count = 0 Then
-                                                    _bulk_result = GetBulkFileList(_mycontainer_session)
-                                                End If
+            If Not _mycontainer_session.ContainerFile.Packages.Where(Function(mypackage) mypackage.BulkFolderMode = True).Count = 0 Then
+                _bulk_result = GetBulkFileList(_mycontainer_session)
+            End If
 
-                                                GenerateContainerSessionDownloadItems(_mycontainer_session, _settings.NotMarkAllContainerFiles)
+            GenerateContainerSessionDownloadItems(_mycontainer_session, _settings.NotMarkAllContainerFiles)
 
-                                                If _bulk_result = False And _mycontainer_session.DownloadItems.Count = 0 Then
-                                                    Throw New Exception("Öffnen fehlgeschlagen - Bulk Package konnte nicht gelesen werden")
-                                                End If
-
-                                                'ToDo: Parse/Generate UnRAR Chains
-                                                'ToDo: Parse/Generate InstantVideo Chain
+            If _bulk_result = False And _mycontainer_session.DownloadItems.Count = 0 Then
+                Throw New Exception("Öffnen fehlgeschlagen - Bulk Package konnte nicht gelesen werden")
+            End If
 
 
-                                                DispatchService.DispatchService.Invoke(Sub()
-
-                                                                                           For Each _item In _mycontainer_session.DownloadItems
-                                                                                               DownloadItems.Add(_item)
-                                                                                           Next
-
-                                                                                           ContainerSessions.Add(_mycontainer_session)
-
-                                                                                       End Sub)
-
-                                                If _bulk_result = False And Not _mycontainer_session.DownloadItems.Count = 0 Then
-                                                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "SFDL teilweise geöffnet - Ein oder mehrere Packages konnten nicht gelesen werden.")
-                                                Else
-                                                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "SFDL geöffnet")
-                                                End If
+#Region "Parse Unrar/InstatVideo Chain"
 
 
-                                            Catch ex As Exception
-                                                _mytask.SetTaskStatus(TaskStatus.Faulted, ex.Message)
-                                            End Try
+            For Each _item In _mycontainer_session.DownloadItems.Where(Function(_my_item As DownloadItem) IO.Path.GetExtension(_my_item.FileName).Equals(".rar"))
+
+                Dim _unrarchain As New UnRARChain
+                Dim _searchpattern As Regex
+                Dim _count As Integer
+                Dim _log As NLog.Logger = NLog.LogManager.GetLogger("RarChainParser")
+
+                If Not _item.FileName.Contains(".part") Then
+
+                    _count = 0
+
+                    _item.FirstUnRarFile = True
+                    _item.RequiredForInstantVideo = True
+                    _unrarchain.MasterUnRarChainFile = _item
+
+                    _log.Debug("First UnRar File: {0}", _item.FileName)
+
+                    _searchpattern = New Regex("filename\.r[0-9]{1,2}".Replace("filename", IO.Path.GetFileNameWithoutExtension(_item.FileName)))
+
+                    For Each _chainitem As DownloadItem In _mycontainer_session.DownloadItems.Where(Function(_my_item As DownloadItem) _searchpattern.IsMatch(_my_item.FileName))
+
+                        _log.Debug("ChainItem FileName: {0}", _chainitem.FileName)
+
+                        If _count < 1 Then
+                            _chainitem.RequiredForInstantVideo = True
+                        End If
+
+                        _unrarchain.ChainMemberFiles.Add(_chainitem)
+
+                        _count += 1
+
+                    Next
+
+                    _mycontainer_session.UnRarChains.Add(_unrarchain)
+
+                Else
+
+                    _count = 0
+
+                    If _item.FileName.EndsWith(".part1.rar") Then 'MasterFile
+
+                        Dim _tmp_filename_replace As String
+
+                        _log.Debug("First UnRar File: {0}", _item.FileName)
+                        _item.FirstUnRarFile = True
+                        _item.RequiredForInstantVideo = True
+                        _unrarchain.MasterUnRarChainFile = _item
+
+                        _tmp_filename_replace = IO.Path.GetFileNameWithoutExtension(_item.FileName).Replace(".part1", "")
+
+                        _searchpattern = New Regex("filename\.part[0-9]{1,3}.rar".Replace("filename", _tmp_filename_replace))
+
+                        For Each _chainitem As DownloadItem In _mycontainer_session.DownloadItems.Where(Function(_my_item As DownloadItem) _searchpattern.IsMatch(_my_item.FileName) And Not _my_item.FileName.Equals(_unrarchain.MasterUnRarChainFile.FileName))
+
+                            _log.Debug("ChainItem FileName: {0}", _chainitem.FileName)
+
+                            If _count < 1 Then
+                                _chainitem.RequiredForInstantVideo = True
+                            End If
+
+                            _unrarchain.ChainMemberFiles.Add(_chainitem)
+
+                            _count += 1
+
+                        Next
+
+                        _mycontainer_session.UnRarChains.Add(_unrarchain)
+
+                    End If
+
+                End If
+
+            Next
+
+#End Region
+
+            'ToDo: Parse/Generate InstantVideo Chain
+
+
+            DispatchService.DispatchService.Invoke(Sub()
+
+                                                       For Each _item In _mycontainer_session.DownloadItems
+                                                           DownloadItems.Add(_item)
+                                                       Next
+
+                                                       ContainerSessions.Add(_mycontainer_session)
+
+                                                   End Sub)
+
+            If _bulk_result = False And Not _mycontainer_session.DownloadItems.Count = 0 Then
+
+                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "SFDL teilweise geöffnet - Ein oder mehrere Packages konnten nicht gelesen werden.")
+            Else
+                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "SFDL geöffnet")
+            End If
+
+
+        Catch ex As Exception
+            _mytask.SetTaskStatus(TaskStatus.Faulted, ex.Message)
+        End Try
 
 
     End Sub
@@ -293,9 +375,11 @@ Decrypt:
 
                 ActiveTasks.Add(_mytask)
 
+#Disable Warning BC42358 ' Da auf diesen Aufruf nicht gewartet wird, wird die Ausführung der aktuellen Methode vor Abschluss des Aufrufs fortgesetzt.
                 System.Threading.Tasks.Task.Run(Sub()
                                                     CalculateETA(_mytask, _eta_ts.Token)
                                                 End Sub, _eta_ts.Token)
+#Enable Warning BC42358 ' Da auf diesen Aufruf nicht gewartet wird, wird die Ausführung der aktuellen Methode vor Abschluss des Aufrufs fortgesetzt.
 
 
                 While Not ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0
@@ -354,14 +438,16 @@ Decrypt:
 
                             _session.SessionState = ContainerSessionState.DownloadRunning
 
-                            For Each _dlitem In DownloadItems.Where(Function(myitem) (myitem.ParentContainerID.Equals(_session.ID) And myitem.DownloadStatus = DownloadItem.Status.Queued)).Take(_thread_count)
-
+                            For Each _dlitem In DownloadItems.Where(Function(myitem) (myitem.ParentContainerID.Equals(_session.ID) And (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Retry))).Take(_thread_count)
 
                                 'Reset necessary Properties
                                 _dlitem.DownloadStatus = DownloadItem.Status.Running
                                 _dlitem.SizeDownloaded = 0
-                                _dlitem.RetryCount = 0
                                 _dlitem.RetryPossible = False
+
+                                If _dlitem.DownloadStatus = DownloadItem.Status.Queued Then
+                                    _dlitem.RetryCount = 0
+                                End If
 
                                 _session_itemlist.Add(_dlitem)
 
@@ -515,6 +601,40 @@ Decrypt:
                                             End SyncLock
 
                                             _log.Debug("Session hat nun {0} Aktive Threads", ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).ActiveThreads)
+
+                                            _log.Info("Prüfe etwas entpackt werden kann...")
+
+                                            Dim _mysession As ContainerSession
+
+                                            _mysession = ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID))
+
+                                            If Not _mysession.UnRarChains.Count = 0 Then
+
+                                                For Each _chain In _mysession.UnRarChains
+
+                                                    If isUnRarChainComplete(_chain) = True Then
+
+                                                        _log.Debug("Chain {0} ist komplett!", _chain.MasterUnRarChainFile.FileName.ToString)
+
+
+                                                        If _settings.UnRARSettings.UnRARAfterDownload = True And _chain.UnRARDone = False Then
+                                                            'TODO: Block Application Exit while UnRAR is Running
+                                                            ' UnRAR(AddTask(StringMessages.UnRARExtractingFilesTaskStartMessage), _chain, e.OLVItem.SFDLSessionName)
+                                                        Else
+                                                            '_block_app_exit = False
+                                                            '_unrar_active = False
+                                                        End If
+
+                                                    Else
+                                                        _log.Info("UnRARChain ist noch nicht vollständig")
+                                                        'TODO: Check for InstatnVideo
+                                                    End If
+
+                                                Next
+
+                                            Else
+                                                _log.Info("Dieser Container hat keine UnRarChain")
+                                            End If
 
                                         End Sub)
 

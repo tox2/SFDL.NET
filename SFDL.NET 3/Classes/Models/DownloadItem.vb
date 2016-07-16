@@ -257,9 +257,6 @@ Public Class DownloadItem
             Return _status_image
         End Get
     End Property
-
-    Public Property LocalFile As String = String.Empty
-
     Public ReadOnly Property ID As Guid
         Get
             Return _id
@@ -269,6 +266,9 @@ Public Class DownloadItem
     Public Property SizeDownloaded As Long = 0
     Public Property RetryPossible As Boolean = False
     Public Property RetryCount As Integer = 0
+    Public Property LocalFile As String = String.Empty
+    Public Property FirstUnRarFile As Boolean = False
+    Public Property RequiredForInstantVideo As Boolean = False
 
 
     Public Enum Status

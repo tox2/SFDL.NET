@@ -1,9 +1,8 @@
 ﻿Public Class UnRARChain
 
-    'Public MasterUnRarChainFile As OLV_Item
-    'Public ChainMemberFiles As New List(Of OLV_Item)
-    Public ReadyForInstantVideo As Boolean = False
-    Public UnRARDone As Boolean = False
-
+    Public Property MasterUnRarChainFile As DownloadItem
+    Public Property ChainMemberFiles As New List(Of DownloadItem)
+    Public Property ReadyForInstantVideo As Boolean = False
+    Public Property UnRARDone As Boolean = False
 
 End Class

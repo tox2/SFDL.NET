@@ -7,6 +7,12 @@ Class DownloadHelper
     Private _ftp_client_list As New Dictionary(Of Guid, ArxOne.Ftp.FtpClient)
     Private _ftp_session_list As New Dictionary(Of Guid, ArxOne.Ftp.FtpSession)
     Private _obj_ftp_client_list_lock As New Object
+    Private _settings As New Settings
+
+
+    Public Sub New()
+        _settings = Application.Current.Resources("Settings")
+    End Sub
 
     Public Event ItemDownloadComplete(ByVal _item As DownloadItem)
     Public Event ServerFull(ByVal _item As DownloadItem)
@@ -44,59 +50,81 @@ Class DownloadHelper
     Private Sub ParseFTPException(ByVal ex As ArxOne.Ftp.Exceptions.FtpException, ByVal _item As DownloadItem)
 
 
-        If IsNothing(ex.InnerException) = False Then
+        If IsNothing(ex.Message) = False Then
 
             _item.DownloadStatus = NET3.DownloadItem.Status.Failed
 
-            If ex.InnerException.Message.Contains("Code=421") Then ' Service not available, closing control connection. This may be a reply to any command if the service knows it must shut down.
+            If ex.Message.Contains("Code=421") Then ' Service not available, closing control connection. This may be a reply to any command if the service knows it must shut down.
 
-                If ex.InnerException.Message.ToLower.Contains("maximum login limit has been reached.") Then
+                If ex.Message.ToLower.Contains("maximum login limit has been reached.") Then
                     _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerFull
-                Else
+                    _item.RetryPossible = True
+                End If
+
+                If ex.Message.ToLower.Contains("Not logged in, only sessions from same IP allowed concurrently") Then
+                    _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerFull
+                    _item.RetryPossible = True
+                End If
+
+                If _item.DownloadStatus = NET3.DownloadItem.Status.Failed Then
                     _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerDown
                 End If
 
             End If
 
-            If ex.InnerException.Message.Contains("Code=425") Then '  Can't open data connection.
+            If ex.Message.Contains("Code=425") Then '  Can't open data connection.
                 _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ConnectionError
+                _item.RetryPossible = True
             End If
 
-            If ex.InnerException.Message.Contains("Code=426") Then 'Connection closed; transfer aborted.
+            If ex.Message.Contains("Code=426") Then 'Connection closed; transfer aborted.
                 _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ConnectionError
+                _item.RetryPossible = True
             End If
 
-            If ex.InnerException.Message.Contains("Code=430") Then ' Invalid username or password
+            If ex.Message.Contains("Code=430") Then ' Invalid username or password
                 _item.DownloadStatus = NET3.DownloadItem.Status.Failed_AuthError
+                _item.RetryPossible = True
             End If
 
-            If ex.InnerException.Message.Contains("Code=434") Then 'Requested host unavailable.
+            If ex.Message.Contains("Code=434") Then 'Requested host unavailable.
                 _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerDown
+                _item.RetryPossible = True
             End If
 
-            If ex.InnerException.Message.Contains("Code=450") Then 'Requested file action not taken.
+            If ex.Message.Contains("Code=450") Then 'Requested file action not taken.
                 _item.DownloadStatus = NET3.DownloadItem.Status.Failed_FileNotFound
+                _item.RetryPossible = False
             End If
 
-            If ex.InnerException.Message.Contains("Code=451") Then 'Requested action aborted. Local error in processing
+            If ex.Message.Contains("Code=451") Then 'Requested action aborted. Local error in processing
                 _item.DownloadStatus = NET3.DownloadItem.Status.Failed_FileNotFound
+                _item.RetryPossible = False
             End If
 
-            If ex.InnerException.Message.Contains("Code=452") Then 'Requested action aborted. Local error in processing
+            If ex.Message.Contains("Code=452") Then 'Requested action aborted. Local error in processing
                 _item.DownloadStatus = NET3.DownloadItem.Status.Failed_FileNotFound
+                _item.RetryPossible = False
             End If
 
-            If ex.InnerException.Message.Contains("Code=501") Then 'Syntax error in parameters or arguments.
+            If ex.Message.Contains("Code=501") Then 'Syntax error in parameters or arguments.
                 _item.DownloadStatus = NET3.DownloadItem.Status.Failed_DirectoryNotFound
+                _item.RetryPossible = False
             End If
 
-            If ex.InnerException.Message.Contains("Code=550") Then 'Requested action not taken. File unavailable (e.g., file not found, no access).
+            If ex.Message.Contains("Code=550") Then 'Requested action not taken. File unavailable (e.g., file not found, no access).
                 _item.DownloadStatus = NET3.DownloadItem.Status.Failed_FileNotFound
+                _item.RetryPossible = False
             End If
 
-            If ex.InnerException.Message.Contains("Code=530") Then 'Not Logged in
+            If ex.Message.Contains("Code=530") Then 'Not Logged in
                 _item.DownloadStatus = NET3.DownloadItem.Status.Failed_AuthError
+                _item.RetryPossible = True
             End If
+
+        Else
+
+            _item.DownloadStatus = NET3.DownloadItem.Status.Failed
 
         End If
 
@@ -116,14 +144,16 @@ Class DownloadHelper
     Sub DownloadContainerItems(items As List(Of DownloadItem), ByVal _download_dir As String, ByVal _connection_info As SFDL.Container.Connection, ByVal _ct As System.Threading.CancellationToken, Optional _single_session_mode As Boolean = False)
 
         Dim _tasks = New List(Of System.Threading.Tasks.Task)
+        Dim _item As DownloadItem
+        Dim _ftp_session As ArxOne.Ftp.FtpSession = Nothing
 
         Try
 
-            For Each _item As DownloadItem In items
+            For Each _item In items
 
                 Dim _dl_task As System.Threading.Tasks.Task
                 Dim _ftp_client As ArxOne.Ftp.FtpClient = Nothing
-                Dim _ftp_session As ArxOne.Ftp.FtpSession = Nothing
+                _ftp_session = Nothing
 
                 SyncLock _obj_ftp_client_list_lock
 
@@ -163,6 +193,10 @@ Class DownloadHelper
 
         Catch ex As Exception
             _log.Error(ex, ex.Message)
+            _item.DownloadStatus = NET3.DownloadItem.Status.Failed_AuthError
+            ParseFTPException(ex, _item)
+        Finally
+            PostDownload(_item, _ftp_session)
         End Try
 
 
@@ -439,13 +473,16 @@ Class DownloadHelper
         Catch ex As Exception
             _log.Error(ex.Message)
             _item.DownloadStatus = NET3.DownloadItem.Status.Failed
+
         Finally
 
             If _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerFull Then 'TODO: And not already SingleSessionMode
                 RaiseEvent ServerFull(_item)
             Else
                 If _item.RetryPossible And _item.RetryCount < 3 Then
-                    'TODO: Retry?
+                    System.Threading.Thread.Sleep(_settings.RetryWaitTime * 1000)
+                    _log.Info("Setze Item auf die Retry Warteliste")
+                    _item.DownloadStatus = NET3.DownloadItem.Status.Retry
                 Else
                     RaiseEvent ItemDownloadComplete(_item)
                 End If

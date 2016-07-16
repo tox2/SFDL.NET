@@ -254,101 +254,102 @@
                 <Image Source="Resources/Icons/appbar.layer.png" />
             </StackPanel>
         </Button>
-        <ScrollViewer Grid.Row="2" MinHeight="350">
-            <ListView x:Name="ListView_DownloadItems"
-                      VerticalAlignment="Top"
-                      DockPanel.Dock="Top"
-                      ItemsSource="{Binding DownloadItems}"
-                      SelectedItem="{Binding SelectedDownloadItem,
-                                             Mode=TwoWay}">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding isSelected}" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Width="200"
-                                        DisplayMemberBinding="{Binding FileName}"
-                                        Header="{x:Static p:Strings.ListView_DownloadItems_Header_Filename}" />
-                        <GridViewColumn Width="150"
-                                        DisplayMemberBinding="{Binding FileSize}"
-                                        Header="{x:Static p:Strings.ListView_DownloadItems_Header_Filesize}" />
-                        <GridViewColumn Width="100" Header="{x:Static p:Strings.ListView_DownloadItems_Header_Progress}">
+        <ListView x:Name="ListView_DownloadItems"
+                  Grid.Row="2"
+                  MinHeight="350"
+                  MaxHeight="500"
+                  VerticalAlignment="Top"
+                  DockPanel.Dock="Top"
+                  ItemsSource="{Binding DownloadItems}"
+                  SelectedItem="{Binding SelectedDownloadItem,
+                                         Mode=TwoWay}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding isSelected}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="200"
+                                    DisplayMemberBinding="{Binding FileName}"
+                                    Header="{x:Static p:Strings.ListView_DownloadItems_Header_Filename}" />
+                    <GridViewColumn Width="150"
+                                    DisplayMemberBinding="{Binding FileSize}"
+                                    Header="{x:Static p:Strings.ListView_DownloadItems_Header_Filesize}" />
+                    <GridViewColumn Width="100" Header="{x:Static p:Strings.ListView_DownloadItems_Header_Progress}">
 
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <ProgressBar Maximum="100" Value="{Binding DownloadProgress}" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <ProgressBar Maximum="100" Value="{Binding DownloadProgress}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
 
-                        </GridViewColumn>
-                        <GridViewColumn Width="200" Header="{x:Static p:Strings.ListView_DownloadItems_Header_Status}">
+                    </GridViewColumn>
+                    <GridViewColumn Width="200" Header="{x:Static p:Strings.ListView_DownloadItems_Header_Status}">
 
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Image Width="20"
-                                               Height="20"
-                                               Source="{Binding DownloadStatusImage}" />
-                                        <TextBlock Text="{Binding DownloadStatusString}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Width="20"
+                                           Height="20"
+                                           Source="{Binding DownloadStatusImage}" />
+                                    <TextBlock Text="{Binding DownloadStatusString}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
 
-                        </GridViewColumn>
-                        <GridViewColumn Width="200"
-                                        DisplayMemberBinding="{Binding DownloadSpeed}"
-                                        Header="{x:Static p:Strings.ListView_DownloadItems_Header_Speed}" />
-                    </GridView>
-                </ListView.View>
+                    </GridViewColumn>
+                    <GridViewColumn Width="200"
+                                    DisplayMemberBinding="{Binding DownloadSpeed}"
+                                    Header="{x:Static p:Strings.ListView_DownloadItems_Header_Speed}" />
+                </GridView>
+            </ListView.View>
 
-                <ListView.GroupStyle>
-                    <GroupStyle>
-                        <GroupStyle.ContainerStyle>
-                            <Style TargetType="{x:Type GroupItem}">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate>
-                                            <Expander IsExpanded="True">
-                                                <Expander.Header>
-                                                    <DockPanel LastChildFill="False">
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <TextBlock VerticalAlignment="Bottom"
-                                                                       FontSize="12"
-                                                                       FontWeight="Bold"
-                                                                       Foreground="White"
-                                                                       Text="{Binding Name}" />
-                                                        </StackPanel>
-                                                    </DockPanel>
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Expander IsExpanded="True">
+                                            <Expander.Header>
+                                                <DockPanel LastChildFill="False">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock VerticalAlignment="Bottom"
+                                                                   FontSize="12"
+                                                                   FontWeight="Bold"
+                                                                   Foreground="White"
+                                                                   Text="{Binding Name}" />
+                                                    </StackPanel>
+                                                </DockPanel>
 
-                                                </Expander.Header>
-                                                <ItemsPresenter />
-                                            </Expander>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </GroupStyle.ContainerStyle>
-                    </GroupStyle>
-                </ListView.GroupStyle>
+                                            </Expander.Header>
+                                            <ItemsPresenter />
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </ListView.GroupStyle>
 
-                <ListView.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Command="{Binding CloseSFDLContainerCommand}" Header="{x:Static p:Strings.MainMenu_Modify_CloseSFDLFile}">
-                            <MenuItem.Icon>
-                                <Image Width="32"
-                                       Height="32"
-                                       Source="Resources/Icons/appbar.page.delete.png" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </ContextMenu>
-                </ListView.ContextMenu>
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="{Binding CloseSFDLContainerCommand}" Header="{x:Static p:Strings.MainMenu_Modify_CloseSFDLFile}">
+                        <MenuItem.Icon>
+                            <Image Width="32"
+                                   Height="32"
+                                   Source="Resources/Icons/appbar.page.delete.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </ListView.ContextMenu>
 
-            </ListView>
-        </ScrollViewer>
+        </ListView>
         <Expander x:Name="Expander_Tasks"
                   Grid.Row="3"
                   Header="{x:Static p:Strings.Expander_Header_Tasks}"
