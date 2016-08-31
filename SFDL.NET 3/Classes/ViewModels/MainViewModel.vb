@@ -99,7 +99,7 @@ Decrypt:
 
             GenerateContainerSessionDownloadItems(_mycontainer_session, _settings.NotMarkAllContainerFiles)
 
-            If _bulk_result = False And _mycontainer_session.DownloadItems.Count = 0 Then
+            If _bulk_result = False Or _mycontainer_session.DownloadItems.Count = 0 Then
                 Throw New Exception("Öffnen fehlgeschlagen - Bulk Package konnte nicht gelesen werden")
             End If
 
@@ -612,10 +612,11 @@ Decrypt:
 
                                                 For Each _chain In _mysession.UnRarChains
 
-                                                    If isUnRarChainComplete(_chain) = True Then
+                                                    If isUnRarChainComplete(_chain) = True And (_chain.UnRARDone = False Or _chain.UnRARRunning = True) Then
+
+                                                        _chain.UnRARRunning = True
 
                                                         _log.Debug("Chain {0} ist komplett!", _chain.MasterUnRarChainFile.FileName.ToString)
-
 
                                                         If _settings.UnRARSettings.UnRARAfterDownload = True And _chain.UnRARDone = False Then
                                                             'TODO: Block Application Exit while UnRAR is Running
@@ -625,8 +626,10 @@ Decrypt:
                                                             '_unrar_active = False
                                                         End If
 
+                                                        _chain.UnRARRunning = False
+
                                                     Else
-                                                        _log.Info("UnRARChain ist noch nicht vollständig")
+                                                        _log.Info("UnRARChain ist noch nicht vollständig oder diese wird bereits entapckt/bearbeitet")
                                                         'TODO: Check for InstatnVideo
                                                     End If
 

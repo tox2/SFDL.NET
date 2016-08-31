@@ -50,6 +50,9 @@ Module FTPHelper
 
                 End Select
 
+                .ConnectTimeout = TimeSpan.FromSeconds(_connection_info.ConnectTimeout)
+                .SessionTimeout = TimeSpan.FromSeconds(_connection_info.CommandTimeout)
+
             End With
 
             _ftp_client = New ArxOne.Ftp.FtpClient(New Uri(String.Format("ftp://{0}:{1}", .Host, .Port)), _creds, _ftp_client_param)
