@@ -59,6 +59,9 @@ Module FTPHelper
 
             _ftp_client.SendSingleCommand("NOOP")
 
+            If _ftp_client.ServerFeatures.HasFeature("UTF8") And _connection_info.CharacterEncoding = Container.CharacterEncoding.UTF8 Then
+                _ftp_client.SendSingleCommand("OPTS", "UTF8 ON")
+            End If
 
         End With
 

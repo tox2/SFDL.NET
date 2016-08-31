@@ -161,6 +161,8 @@
 
         Try
 
+            Dim _reply As ArxOne.Ftp.FtpReply
+
             For Each _item In ArxOne.Ftp.FtpClientUtility.List(_ftp, _ftp_path)
 
                 Try
