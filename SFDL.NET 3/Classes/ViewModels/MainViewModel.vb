@@ -5,19 +5,26 @@ Imports SFDL.NET3
 Public Class MainViewModel
     Inherits ViewModelBase
 
-
     Private _settings As New Settings
 
     Dim _eta_ts As New System.Threading.CancellationTokenSource()
     Dim _dl_item_ts As New System.Threading.CancellationTokenSource()
 
-
     Public Sub New()
+        _instance = Me
         _settings = Application.Current.Resources("Settings")
         CreateView()
+        LoadSFDLArgs()
     End Sub
 
 #Region "Private Subs"
+
+    Sub LoadSFDLArgs()
+
+
+
+    End Sub
+
 
     Private Sub CreateView()
 
@@ -33,7 +40,7 @@ Public Class MainViewModel
 
     End Sub
 
-    Private Async Sub OpenSFDLFile(ByVal _sfdl_container_path As String)
+    Friend Async Sub OpenSFDLFile(ByVal _sfdl_container_path As String)
 
         Dim _mytask As New AppTask(String.Format("SFDL Datei {0} wird geöffnet...", _sfdl_container_path))
         Dim _mycontainer As New Container.Container
@@ -41,10 +48,11 @@ Public Class MainViewModel
         Dim _decrypt_password As String
         Dim _decrypt As New SFDL.Container.Decrypt
 
-
         AddHandler _mytask.TaskDone, AddressOf TaskDoneEvent
 
-        ActiveTasks.Add(_mytask)
+        DispatchService.DispatchService.Invoke(Sub()
+                                                   ActiveTasks.Add(_mytask)
+                                               End Sub)
 
         Try
 
@@ -198,10 +206,10 @@ Decrypt:
 
             If _bulk_result = False And Not _mycontainer_session.DownloadItems.Count = 0 Then
 
-                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "SFDL teilweise geöffnet - Ein oder mehrere Packages konnten nicht gelesen werden.")
-            Else
-                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "SFDL geöffnet")
-            End If
+                                                          _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "SFDL teilweise geöffnet - Ein oder mehrere Packages konnten nicht gelesen werden.")
+                                                      Else
+                                                          _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "SFDL geöffnet")
+                                                      End If
 
 
         Catch ex As Exception
@@ -860,6 +868,8 @@ Decrypt:
 
 #End Region
 
+#Region "Allgemeine Properties"
+
     Private _window_state As System.Windows.WindowState = WindowState.Normal
     Public Property WindowState As System.Windows.WindowState
         Set(value As System.Windows.WindowState)
@@ -870,6 +880,27 @@ Decrypt:
             Return _window_state
         End Get
     End Property
+
+    Private Shared _instance As MainViewModel
+    Public Shared ReadOnly Property ThisInstance As MainViewModel
+        Get
+            Return _instance
+        End Get
+    End Property
+
+    Private _container_info_shown As Boolean = False
+
+    Public Property ContainerInfoOpen As Boolean
+        Set(value As Boolean)
+            _container_info_shown = value
+            RaisePropertyChanged("ContainerInfoOpen")
+        End Set
+        Get
+            Return _container_info_shown
+        End Get
+    End Property
+
+#End Region
 
 #Region "Tasks"
 
@@ -941,17 +972,7 @@ Decrypt:
 
 #End Region
 
-    Private _container_info_shown As Boolean = False
 
-    Public Property ContainerInfoOpen As Boolean
-        Set(value As Boolean)
-            _container_info_shown = value
-            RaisePropertyChanged("ContainerInfoOpen")
-        End Set
-        Get
-            Return _container_info_shown
-        End Get
-    End Property
 
 
 End Class

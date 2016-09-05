@@ -210,6 +210,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
+            <MenuItem Click="MenuItem_Click" Header="Test" />
 
         </Menu>
         <ToolBar x:Name="MainToolBar"
