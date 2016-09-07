@@ -523,7 +523,6 @@ Decrypt:
                         If DownloadItems.Where(Function(myitem) (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Running) Or myitem.DownloadStatus = DownloadItem.Status.Retry).Count = 0 Then 'Alle Items sind heruntergeladen
                             _session.SessionState = ContainerSessionState.DownloadComplete
                             'ToDo: generate Speedreport
-                            'ToDo: Unrar Items
                         End If
 
                     Next

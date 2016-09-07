@@ -259,11 +259,25 @@ Public Class SettingsViewModel
 
 #Region "Commands"
 
-    Private Sub SaveSettings()
+    Private Async Sub SaveSettings()
 
-        Application.Current.Resources("Settings") = _settings
+        Dim _error As Boolean = False
 
-        XMLHelper.XMLSerialize(_settings, IO.Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3\settings.xml"))
+        Try
+
+            Application.Current.Resources("Settings") = _settings
+
+            XMLHelper.XMLSerialize(_settings, IO.Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3\settings.xml"))
+
+        Catch ex As Exception
+            _error = True
+        End Try
+
+        If _error = True Then
+            Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowMessageAsync(Me, "Einstellungen speichern", My.Resources.Strings.Settings_SaveError)
+        Else
+            Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowMessageAsync(Me, "Einstellungen speichern", My.Resources.Strings.Settings_SaveSuccessful)
+        End If
 
     End Sub
 

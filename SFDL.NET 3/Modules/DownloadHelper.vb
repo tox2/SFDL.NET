@@ -315,7 +315,7 @@ Class DownloadHelper
                             End If
 
 #End Region
-
+                            'ToDO: Limit SPeed
                             'ThrottleByteTransfer(_max_bytes_per_second, bytestotalread, _ctime, bytesPerSec)
 
                         End While

@@ -749,6 +749,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Beim speichern der EInstellungen ist ein Fehler aufgetreten! ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property Settings_SaveError() As String
+            Get
+                Return ResourceManager.GetString("Settings_SaveError", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Einstellungen erfolgreich gespeichert! ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property Settings_SaveSuccessful() As String
+            Get
+                Return ResourceManager.GetString("Settings_SaveSuccessful", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Nach Updates suchen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_SearchUpdates() As String

@@ -33,27 +33,32 @@ Public Class MainWindow
 
             _sel_object = ComB_Container_Info.SelectedItem
 
-            System.Threading.Tasks.Task.Run(Sub()
+            If Not IsNothing(_sel_object) Then
 
-                                                _country_code = WhoisHelper.Resolve(_sel_object.ContainerFile.Connection.Host)
+                System.Threading.Tasks.Task.Run(Sub()
 
-                                            End Sub).ContinueWith(Sub()
+                                                    _country_code = WhoisHelper.Resolve(_sel_object.ContainerFile.Connection.Host)
 
-                                                                      DispatchService.DispatchService.Invoke(Sub()
+                                                End Sub).ContinueWith(Sub()
 
-                                                                                                                 txt_containerinfo_upper.Content = _sel_object.ContainerFile.Uploader
+                                                                          DispatchService.DispatchService.Invoke(Sub()
 
-                                                                                                                 If Not String.IsNullOrWhiteSpace(_country_code) Then
-                                                                                                                     txt_containerinfo_serverlocation.Content = _country_code
-                                                                                                                     img_containerinfo_serverlocation.Source = New BitmapImage(New Uri("http://n1.dlcache.com/flags/" & _country_code.ToLower & ".gif"))
-                                                                                                                 Else
-                                                                                                                     txt_containerinfo_serverlocation.Content = "N/A"
-                                                                                                                     img_containerinfo_serverlocation.Source = Nothing
-                                                                                                                 End If
+                                                                                                                     txt_containerinfo_upper.Content = _sel_object.ContainerFile.Uploader
 
-                                                                                                             End Sub)
+                                                                                                                     If Not String.IsNullOrWhiteSpace(_country_code) Then
+                                                                                                                         txt_containerinfo_serverlocation.Content = _country_code
+                                                                                                                         img_containerinfo_serverlocation.Source = New BitmapImage(New Uri("http://n1.dlcache.com/flags/" & _country_code.ToLower & ".gif"))
+                                                                                                                     Else
+                                                                                                                         txt_containerinfo_serverlocation.Content = "N/A"
+                                                                                                                         img_containerinfo_serverlocation.Source = Nothing
+                                                                                                                     End If
 
-                                                                  End Sub)
+                                                                                                                 End Sub)
+
+                                                                      End Sub)
+
+
+            End If
 
 
         Catch ex As Exception

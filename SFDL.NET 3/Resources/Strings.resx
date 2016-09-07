@@ -408,4 +408,10 @@
   <data name="DownloadStatus_Failed_ServerDown" xml:space="preserve">
     <value>Server nicht erreichbar</value>
   </data>
+  <data name="Settings_SaveError" xml:space="preserve">
+    <value>Beim speichern der EInstellungen ist ein Fehler aufgetreten!</value>
+  </data>
+  <data name="Settings_SaveSuccessful" xml:space="preserve">
+    <value>Einstellungen erfolgreich gespeichert!</value>
+  </data>
 </root>

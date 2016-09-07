@@ -378,4 +378,10 @@
   <data name="DownloadStatus_Failed_ServerDown" xml:space="preserve">
     <value>Server not reachable</value>
   </data>
+  <data name="Settings_SaveError" xml:space="preserve">
+    <value>An error occured while saving your settings</value>
+  </data>
+  <data name="Settings_SaveSuccessful" xml:space="preserve">
+    <value>Settings saved successfully!</value>
+  </data>
 </root>
