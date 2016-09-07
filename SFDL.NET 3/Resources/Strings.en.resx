@@ -177,9 +177,6 @@
   <data name="MainMenu_Modify_CloseAlleDownloads" xml:space="preserve">
     <value>Remove all downloads</value>
   </data>
-  <data name="MainMenu_Modify_CloseSFDLFile" xml:space="preserve">
-    <value>Close SFDL file</value>
-  </data>
   <data name="MainMenu_Modify_RemoveAllCompletedDownloads" xml:space="preserve">
     <value>Remove all completed downloads</value>
   </data>
@@ -392,5 +389,8 @@
   </data>
   <data name="VariousStrings_Warning" xml:space="preserve">
     <value>Warning</value>
+  </data>
+  <data name="DownloadItems_ContextMenu_OpenParentFolder" xml:space="preserve">
+    <value>Open Containing Folder</value>
   </data>
 </root>

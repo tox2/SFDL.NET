@@ -20,6 +20,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <local:InvertBooleanConverter x:Key="boolConvert" />
+            <local:CollectionViewNameConverter x:Key="CollectionViewNameConv" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -323,8 +324,21 @@
                                                                    FontSize="12"
                                                                    FontWeight="Bold"
                                                                    Foreground="White"
-                                                                   Text="{Binding Name}" />
+                                                                   Text="{Binding Name,
+                                                                                  Converter={StaticResource CollectionViewNameConv}}" />
                                                     </StackPanel>
+                                                    <Button Width="25"
+                                                            Height="25"
+                                                            BorderThickness="0"
+                                                            Command="{Binding RelativeSource={RelativeSource FindAncestor,
+                                                                                                             AncestorType={x:Type Window}},
+                                                                              Path=DataContext.CloseSFDLContainerCommand}"
+                                                            CommandParameter="{Binding Name}"
+                                                            DockPanel.Dock="Right">
+                                                        <StackPanel>
+                                                            <Image Source="Resources/Icons/appbar.close.png" />
+                                                        </StackPanel>
+                                                    </Button>
                                                 </DockPanel>
 
                                             </Expander.Header>
@@ -340,11 +354,11 @@
 
             <ListView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Command="{Binding CloseSFDLContainerCommand}" Header="{x:Static p:Strings.MainMenu_Modify_CloseSFDLFile}">
+                    <MenuItem Command="{Binding CloseSFDLContainerCommand}" Header="{x:Static p:Strings.DownloadItems_ContextMenu_OpenParentFolder}">
                         <MenuItem.Icon>
                             <Image Width="32"
                                    Height="32"
-                                   Source="Resources/Icons/appbar.page.delete.png" />
+                                   Source="Resources/Icons/appbar.folder.open.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>

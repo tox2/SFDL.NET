@@ -257,6 +257,14 @@ Public Class DownloadItem
             Return _status_image
         End Get
     End Property
+
+    Public ReadOnly Property GroupDescriptionIdentifier As String
+        Get
+            Return Me.PackageName & ";" & _parent_container_id.ToString
+        End Get
+    End Property
+
+
     Public ReadOnly Property ID As Guid
         Get
             Return _id

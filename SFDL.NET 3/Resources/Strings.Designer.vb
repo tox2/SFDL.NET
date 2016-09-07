@@ -65,6 +65,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Beinhaltenden Ordner öffnen ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadItems_ContextMenu_OpenParentFolder() As String
+            Get
+                Return ResourceManager.GetString("DownloadItems_ContextMenu_OpenParentFolder", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Download abgeschlossen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_Completed() As String
@@ -403,15 +412,6 @@ Namespace My.Resources
         Public Shared ReadOnly Property MainMenu_Modify_CloseAlleDownloads() As String
             Get
                 Return ResourceManager.GetString("MainMenu_Modify_CloseAlleDownloads", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL Datei schließen ähnelt.
-        '''</summary>
-        Public Shared ReadOnly Property MainMenu_Modify_CloseSFDLFile() As String
-            Get
-                Return ResourceManager.GetString("MainMenu_Modify_CloseSFDLFile", resourceCulture)
             End Get
         End Property
         

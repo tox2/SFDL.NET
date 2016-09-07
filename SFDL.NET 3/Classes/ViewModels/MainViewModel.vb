@@ -14,29 +14,21 @@ Public Class MainViewModel
         _instance = Me
         _settings = Application.Current.Resources("Settings")
         CreateView()
-        LoadSFDLArgs()
     End Sub
 
 #Region "Private Subs"
-
-    Sub LoadSFDLArgs()
-
-
-
-    End Sub
-
 
     Private Sub CreateView()
 
         Dim view As CollectionView = DirectCast(CollectionViewSource.GetDefaultView(DownloadItems), CollectionView)
 
-        Dim groupDescription As New PropertyGroupDescription("PackageName")
+        'Dim groupDescription As New PropertyGroupDescription("PackageName")
+
+        'view.GroupDescriptions.Add(groupDescription)
+
+        Dim groupDescription As New PropertyGroupDescription("GroupDescriptionIdentifier")
 
         view.GroupDescriptions.Add(groupDescription)
-
-        'Dim groupDescription2 As New PropertyGroupDescription("ParentContainerID")
-
-        'view.GroupDescriptions.Add(groupDescription2)
 
     End Sub
 
@@ -219,7 +211,7 @@ Decrypt:
 
     End Sub
 
-    Private Function PreDownloadCheck() As Boolean
+    Private Function PreDownloadCheck(ByVal _task As AppTask) As Boolean
 
         Dim _rt As Boolean = True
 
@@ -235,7 +227,7 @@ Decrypt:
 
         Catch ex As Exception
             _rt = False
-            'TodO: SHow Error Message 2 User
+            _task.SetTaskStatus(TaskStatus.Faulted, ex.Message)
         End Try
 
         Return _rt
@@ -325,7 +317,7 @@ Decrypt:
                     End If
 
                 Else
-                    Debug.WriteLine("Keine Berechnung Windows ist runtergeklappt!")
+                    Debug.WriteLine("Keine Berechnung Fenster ist runtergeklappt!")
                 End If
 
             Catch ex As Exception
@@ -345,8 +337,9 @@ Decrypt:
         Dim _download_helper As New DownloadHelper
         Dim _log As NLog.Logger = NLog.LogManager.GetLogger("StartDownload")
         Dim _tasklist As New List(Of System.Threading.Tasks.Task)
-        Dim _mytask As New AppTask("Download läuft")
+        Dim _mytask As New AppTask("Download wird gestartet...")
         Dim _thread_count_pool As Integer = 0
+        Dim _error As Boolean = False
 
         Try
 
@@ -372,7 +365,7 @@ Decrypt:
             Next
 
 #End Region
-            If PreDownloadCheck() = True Then
+            If PreDownloadCheck(_mytask) = True Then
 
                 Me.ButtonDownloadStartStop = False
 
@@ -410,6 +403,7 @@ Decrypt:
                             If (_session.SingleSessionMode = True And Not _thread_count_pool = 0) Then
                                 _thread_count = 1
                                 _log.Debug("SingleSessionMode Override!")
+                                'ToDo: Für Benutzer sichtbar machen das SingleSessionMode aktiv ist
 
                                 If Not _session.ActiveThreads = 0 Then 'Warten bis alle anderen Threads fertig sind somit anschießend auch wirklich nur ein Thread läuft
                                     _thread_count = 0
@@ -544,6 +538,7 @@ Decrypt:
 
         Catch ex As Exception
             _log.Error(ex, ex.Message)
+            _error = True
         Finally
 
             System.Threading.Tasks.Task.Run(Sub()
@@ -557,7 +552,12 @@ Decrypt:
 
                                             End Sub).Wait()
 
-            _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "Download beendet!")
+            If _error = False Then
+                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "Download beendet!")
+            Else
+                _mytask.SetTaskStatus(TaskStatus.Faulted, "Download mit fehlern gestoppt!")
+            End If
+
             Me.ButtonDownloadStartStop = True
 
         End Try
@@ -843,25 +843,46 @@ Decrypt:
         End Get
     End Property
 
-    Private Sub CloseSFDLContainer()
+    Private Sub CloseSFDLContainer(ByVal parameter As Object)
 
-        If Not IsNothing(SelectedDownloadItem) Then
+        If Not IsNothing(parameter) Then
 
-            Dim _container_sessionid As Guid
+            If Not String.IsNullOrWhiteSpace(parameter) And parameter.ToString.Contains(";") Then
 
-            _container_sessionid = SelectedDownloadItem.ParentContainerID
+                Dim _container_sessionid As Guid = Guid.Parse(parameter.ToString.Split(";")(1))
 
-            Dim _tmp_list As New List(Of DownloadItem)
+                Dim _tmp_list As New List(Of DownloadItem)
 
-            _tmp_list = DownloadItems.Where(Function(myitem) SelectedDownloadItem.ParentContainerID.Equals(myitem.ParentContainerID)).ToList
+                _tmp_list = DownloadItems.Where(Function(myitem) _container_sessionid.Equals(myitem.ParentContainerID)).ToList
 
-            For Each _item In _tmp_list
-                DownloadItems.Remove(_item)
-            Next
+                For Each _item In _tmp_list
+                    DownloadItems.Remove(_item)
+                Next
 
-            ContainerSessions.Remove(ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_container_sessionid))(0))
+                ContainerSessions.Remove(ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_container_sessionid))(0))
+
+            End If
 
         End If
+
+        'If Not IsNothing(SelectedDownloadItem) Then
+
+        '    Dim _container_sessionid As Guid
+
+        '    _container_sessionid = SelectedDownloadItem.ParentContainerID
+
+        '    Dim _tmp_list As New List(Of DownloadItem)
+
+        '    _tmp_list = DownloadItems.Where(Function(myitem) SelectedDownloadItem.ParentContainerID.Equals(myitem.ParentContainerID)).ToList
+
+        '    For Each _item In _tmp_list
+        '        DownloadItems.Remove(_item)
+        '    Next
+
+        '    ContainerSessions.Remove(ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_container_sessionid))(0))
+
+        'End If
+
 
     End Sub
 
