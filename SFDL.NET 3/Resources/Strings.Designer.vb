@@ -767,6 +767,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Einstellungen speichern ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property Settings_SaveTitle() As String
+            Get
+                Return ResourceManager.GetString("Settings_SaveTitle", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Nach Updates suchen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_SearchUpdates() As String
@@ -929,6 +938,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Die UnRAR Binary welche zum automatischen entpacken benötigt wird ist nicht vorhanden! ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property VariousStrings_UnRARExecutableMissingException() As String
+            Get
+                Return ResourceManager.GetString("VariousStrings_UnRARExecutableMissingException", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Upper ähnelt.
         '''</summary>
         Public Shared ReadOnly Property VariousStrings_Uploader() As String
@@ -952,6 +970,15 @@ Namespace My.Resources
         Public Shared ReadOnly Property VariousStrings_Variables() As String
             Get
                 Return ResourceManager.GetString("VariousStrings_Variables", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Warnung ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property VariousStrings_Warning() As String
+            Get
+                Return ResourceManager.GetString("VariousStrings_Warning", resourceCulture)
             End Get
         End Property
     End Class

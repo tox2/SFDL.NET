@@ -1,4 +1,6 @@
 ﻿
+Imports MahApps.Metro.Controls.Dialogs
+
 Public Class MainWindow
 
     Public Sub New()
@@ -7,11 +9,11 @@ Public Class MainWindow
         InitializeComponent()
         Me.DataContext = New MainViewModel
 
-        ' Fügen Sie Initialisierungen nach dem InitializeComponent()-Aufruf hinzu.
+
 
     End Sub
 
-    Private Sub MainWindow_ContentRendered(sender As Object, e As EventArgs) Handles Me.ContentRendered
+    Private Async Sub MainWindow_ContentRendered(sender As Object, e As EventArgs) Handles Me.ContentRendered
 
         For Each _arg In Environment.GetCommandLineArgs
 
@@ -20,7 +22,12 @@ Public Class MainWindow
                                                            MainViewModel.ThisInstance.OpenSFDLFile(_arg)
                                                        End Sub)
             End If
+
         Next
+
+        If IO.File.Exists(IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "unrar.exe")) = False Then
+            Await ShowMessageAsync(My.Resources.Strings.VariousStrings_Warning, My.Resources.Strings.VariousStrings_UnRARExecutableMissingException)
+        End If
 
     End Sub
 

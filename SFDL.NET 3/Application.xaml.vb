@@ -34,6 +34,11 @@ Class Application
                 Application.Current.Resources.Add("Settings", _settings)
                 Application.Current.Resources.Add("DownloadStopped", False)
 
+                If _settings.PreventStandby = True Then
+                    StandyHandler.PreventStandby()
+                    _log.Info("System Standby is now blocked")
+                End If
+
                 SingleInstance.ListenForArgumentsFromSuccessiveInstances()
 
             Else

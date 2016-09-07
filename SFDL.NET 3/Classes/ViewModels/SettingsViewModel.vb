@@ -274,9 +274,9 @@ Public Class SettingsViewModel
         End Try
 
         If _error = True Then
-            Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowMessageAsync(Me, "Einstellungen speichern", My.Resources.Strings.Settings_SaveError)
+            Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowMessageAsync(Me, My.Resources.Strings.Settings_SaveTitle, My.Resources.Strings.Settings_SaveError)
         Else
-            Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowMessageAsync(Me, "Einstellungen speichern", My.Resources.Strings.Settings_SaveSuccessful)
+            Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowMessageAsync(Me, My.Resources.Strings.Settings_SaveTitle, My.Resources.Strings.Settings_SaveSuccessful)
         End If
 
     End Sub

@@ -414,4 +414,13 @@
   <data name="Settings_SaveSuccessful" xml:space="preserve">
     <value>Einstellungen erfolgreich gespeichert!</value>
   </data>
+  <data name="Settings_SaveTitle" xml:space="preserve">
+    <value>Einstellungen speichern</value>
+  </data>
+  <data name="VariousStrings_UnRARExecutableMissingException" xml:space="preserve">
+    <value>Die UnRAR Binary welche zum automatischen entpacken benötigt wird ist nicht vorhanden!</value>
+  </data>
+  <data name="VariousStrings_Warning" xml:space="preserve">
+    <value>Warnung</value>
+  </data>
 </root>

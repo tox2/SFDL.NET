@@ -384,4 +384,13 @@
   <data name="Settings_SaveSuccessful" xml:space="preserve">
     <value>Settings saved successfully!</value>
   </data>
+  <data name="Settings_SaveTitle" xml:space="preserve">
+    <value>Save settings</value>
+  </data>
+  <data name="VariousStrings_UnRARExecutableMissingException" xml:space="preserve">
+    <value>The UnRAR Binary which is needed for automatic unrar is missing</value>
+  </data>
+  <data name="VariousStrings_Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
 </root>
