@@ -21,5 +21,7 @@
     Public Property Fingerprint As String = String.Empty
     Public Property SynLock As New Object
     Public Property SingleSessionMode As Boolean = False
+    Public Property CountryCode As String = String.Empty
+    Public Property CountryImageUri As String = String.Empty
 
 End Class

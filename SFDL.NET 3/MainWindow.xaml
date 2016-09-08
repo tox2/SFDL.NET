@@ -326,6 +326,7 @@
                                                                    Foreground="White"
                                                                    Text="{Binding Name,
                                                                                   Converter={StaticResource CollectionViewNameConv}}" />
+
                                                     </StackPanel>
                                                     <Button Width="25"
                                                             Height="25"

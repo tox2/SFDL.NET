@@ -34,17 +34,20 @@ Public Class MainViewModel
 
     Friend Async Sub OpenSFDLFile(ByVal _sfdl_container_path As String)
 
-        Dim _mytask As New AppTask(String.Format("SFDL Datei {0} wird geöffnet...", _sfdl_container_path))
+        Dim _mytask As New AppTask("")
         Dim _mycontainer As New Container.Container
         Dim _mycontainer_session As ContainerSession
         Dim _decrypt_password As String
         Dim _decrypt As New SFDL.Container.Decrypt
+        Dim _country_code As String = String.Empty
 
         AddHandler _mytask.TaskDone, AddressOf TaskDoneEvent
 
         DispatchService.DispatchService.Invoke(Sub()
                                                    ActiveTasks.Add(_mytask)
                                                End Sub)
+
+        _mytask.SetTaskStatus(TaskStatus.Running, String.Format("SFDL Datei {0} wird geöffnet...", _sfdl_container_path))
 
         Try
 
@@ -94,7 +97,7 @@ Decrypt:
             End If
 
             If Not _mycontainer_session.ContainerFile.Packages.Where(Function(mypackage) mypackage.BulkFolderMode = True).Count = 0 Then
-                _bulk_result = GetBulkFileList(_mycontainer_session)
+                _bulk_result = Await Task.Run(Function() GetBulkFileList(_mycontainer_session))
             End If
 
             GenerateContainerSessionDownloadItems(_mycontainer_session, _settings.NotMarkAllContainerFiles)
@@ -102,6 +105,7 @@ Decrypt:
             If _bulk_result = False Or _mycontainer_session.DownloadItems.Count = 0 Then
                 Throw New Exception("Öffnen fehlgeschlagen - Bulk Package konnte nicht gelesen werden")
             End If
+
 
 
 #Region "Parse Unrar/InstatVideo Chain"
@@ -198,10 +202,10 @@ Decrypt:
 
             If _bulk_result = False And Not _mycontainer_session.DownloadItems.Count = 0 Then
 
-                                                          _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "SFDL teilweise geöffnet - Ein oder mehrere Packages konnten nicht gelesen werden.")
-                                                      Else
-                                                          _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "SFDL geöffnet")
-                                                      End If
+                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "SFDL teilweise geöffnet - Ein oder mehrere Packages konnten nicht gelesen werden.")
+            Else
+                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "SFDL geöffnet")
+            End If
 
 
         Catch ex As Exception
@@ -376,11 +380,14 @@ Decrypt:
 
                 ActiveTasks.Add(_mytask)
 
+                _mytask.SetTaskStatus(TaskStatus.Running, "Download läuft...")
+
 #Disable Warning BC42358 ' Da auf diesen Aufruf nicht gewartet wird, wird die Ausführung der aktuellen Methode vor Abschluss des Aufrufs fortgesetzt.
                 System.Threading.Tasks.Task.Run(Sub()
                                                     CalculateETA(_mytask, _eta_ts.Token)
                                                 End Sub, _eta_ts.Token)
 #Enable Warning BC42358 ' Da auf diesen Aufruf nicht gewartet wird, wird die Ausführung der aktuellen Methode vor Abschluss des Aufrufs fortgesetzt.
+
 
 
                 While Not ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0
@@ -949,7 +956,7 @@ Decrypt:
 
     End Sub
 
-    Private _tasks_expanded As Boolean = False
+    Private _tasks_expanded As Boolean = True
 
     Public Property TasksExpanded As Boolean
         Set(value As Boolean)
