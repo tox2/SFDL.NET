@@ -114,6 +114,7 @@
     <Compile Include="Modules\HashHelper.vb" />
     <Compile Include="Modules\LogHelper.vb" />
     <Compile Include="Modules\SFDLFileHelper.vb" />
+    <Compile Include="Modules\SpeedreportHelper.vb" />
     <Compile Include="Modules\UnRARHelper.vb" />
     <Compile Include="Modules\WhoisHelper.vb" />
     <Compile Include="Modules\XMLHelper.vb" />
