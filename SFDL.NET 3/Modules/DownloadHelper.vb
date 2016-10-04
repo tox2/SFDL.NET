@@ -242,7 +242,7 @@ Class DownloadHelper
             _log.Info("Freier Speicherplatz: {0}", _disk_free_space)
 
             If _item.FileSize > _disk_free_space Then
-                Throw New Exception("Zu wenig Speicherplatz!")
+                Throw New NotEnoughFreeDiskSpaceException("Zu wenig Speicherplatz!")
             End If
 
             If _settings.ExistingFileHandling = ExistingFileHandling.ResumeFile And IO.File.Exists(_item.LocalFile) Then
