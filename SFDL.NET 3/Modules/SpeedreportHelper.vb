@@ -1,5 +1,34 @@
 ﻿Module SpeedreportHelper
 
+    Dim _log As NLog.Logger = NLog.LogManager.GetLogger("SpeedreportHelper")
+
+    Private Function SecToHMS(ByVal Sec As Double) As String
+        '
+        Dim ts As TimeSpan
+        Dim totHrs As Integer
+        Dim H, M, S, HMS As String
+        '
+        'Place milliseconds into timespand variable
+        'to expose conversion properties
+        ts = TimeSpan.FromSeconds(Sec)
+        '
+        'Get H M S values and format for leading zero
+        'Add a trailing semi colon on Hours and minutes
+        'Total hours will allow display of more than 24 hrs
+        'while minutes and seconds will be limited to 0-59
+        '
+        totHrs = Math.Truncate(ts.TotalHours) 'strip away decimal points
+        H = Format(totHrs, "0#") & ":"
+        M = Format(ts.Minutes, "0#") & ":"
+        S = Format(ts.Seconds, "0#")
+        '
+        'Combine Hours Minutes and seconds into HH:MM:SS string
+        HMS = H & M & S
+        '
+        Return HMS
+
+    End Function
+
     Private Function CalculateSizeAsMB(ByVal _item_list As List(Of DownloadItem)) As Double
 
         Dim _full_session_size As Double
@@ -38,19 +67,37 @@
         Dim _speed As Double = 0
         Dim _size As Double = 0
 
-        CalculateSizeAsMB(session.DownloadItems.Where(Function(_item) Not _item.SizeDownloaded = 0))
-        CalculateSpeed(session.DownloadStartedTime, session.DownloadStoppedTime, session.DownloadItems.Where(Function(_item) Not _item.SizeDownloaded = 0))
+        Try
 
-        _rt_speedreport = _speedreportSettings.SpeedreportTemplate
 
-        _rt_speedreport = _rt_speedreport.Replace("%%USER%%", _speedreportSettings.SpeedreportUsername)
-        _rt_speedreport = _rt_speedreport.Replace("%%CONNECTION%%", _speedreportSettings.SpeedreportConnection)
-        _rt_speedreport = _rt_speedreport.Replace("%%COMMENT%%", _speedreportSettings.SpeedreportComment)
-        _rt_speedreport = _rt_speedreport.Replace("%%SPEED%%", Math.Round(_speed, 2) & " KB/s")
-        _rt_speedreport = _rt_speedreport.Replace("%%SFDL_DESC%%", session.ContainerFile.Description)
-        _rt_speedreport = _rt_speedreport.Replace("%%SFDL_UPPER%%", session.ContainerFile.Uploader)
-        _rt_speedreport = _rt_speedreport.Replace("%%TIME%%", TimeSpan.FromSeconds(DateDiff(DateInterval.Second, session.DownloadStartedTime, session.DownloadStoppedTime)).ToString("HH:mm:ss"))
-        _rt_speedreport = _rt_speedreport.Replace("%%SFDL_SIZE%%", Math.Round(_size, 2) & " MB")
+            Dim _tmp_list As New List(Of DownloadItem)
+
+            For Each _item In session.DownloadItems
+
+                If Not _item.SizeDownloaded = 0 Then
+                    _tmp_list.Add(_item)
+                End If
+
+            Next
+
+            _size = CalculateSizeAsMB(_tmp_list)
+            _speed = CalculateSpeed(session.DownloadStartedTime, session.DownloadStoppedTime, _tmp_list)
+
+            _rt_speedreport = _speedreportSettings.SpeedreportTemplate
+
+            _rt_speedreport = _rt_speedreport.Replace("%%USER%%", _speedreportSettings.SpeedreportUsername)
+            _rt_speedreport = _rt_speedreport.Replace("%%CONNECTION%%", _speedreportSettings.SpeedreportConnection)
+            _rt_speedreport = _rt_speedreport.Replace("%%COMMENT%%", _speedreportSettings.SpeedreportComment)
+            _rt_speedreport = _rt_speedreport.Replace("%%SPEED%%", Math.Round(_speed, 2) & " KB/s")
+            _rt_speedreport = _rt_speedreport.Replace("%%SFDL_DESC%%", session.ContainerFile.Description)
+            _rt_speedreport = _rt_speedreport.Replace("%%SFDL_UPPER%%", session.ContainerFile.Uploader)
+            _rt_speedreport = _rt_speedreport.Replace("%%TIME%%", SecToHMS(DateDiff(DateInterval.Second, session.DownloadStartedTime, session.DownloadStoppedTime)))
+            _rt_speedreport = _rt_speedreport.Replace("%%SFDL_SIZE%%", Math.Round(_size, 2) & " MB")
+
+
+        Catch ex As Exception
+            _log.Error(ex, ex.Message)
+        End Try
 
         Return _rt_speedreport
 

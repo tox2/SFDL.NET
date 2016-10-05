@@ -231,6 +231,11 @@ Class DownloadHelper
                 Throw New Exception("Dateipfad ist leer!")
             End If
 
+            If IO.Directory.Exists(IO.Path.GetDirectoryName(_item.LocalFile)) = False Then
+                _log.Warn("Ziel Verzeichnis existiert nicht - erstelle")
+                IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(_item.LocalFile))
+            End If
+
             If _item.LocalFile.Length >= 255 Then
                 Throw New FileNameTooLongException("Dateipfad ist zu lang! - Kann Datei nicht schreiben!")
             End If
