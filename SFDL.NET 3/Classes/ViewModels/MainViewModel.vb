@@ -996,6 +996,17 @@ Decrypt:
         End Get
     End Property
 
+    Private _done_tasks As New ObjectModel.ObservableCollection(Of AppTask)
+    Public Property DoneTasks As ObjectModel.ObservableCollection(Of AppTask)
+        Set(value As ObjectModel.ObservableCollection(Of AppTask))
+            _done_tasks = value
+            RaisePropertyChanged("DoneTasks")
+        End Set
+        Get
+            Return _done_tasks
+        End Get
+    End Property
+
     Private Sub TaskDoneEvent(e As AppTask)
 
         System.Threading.Tasks.Task.Run(Sub()
@@ -1004,6 +1015,7 @@ Decrypt:
                                             System.Threading.Thread.Sleep(5000)
                                             DispatchService.DispatchService.Invoke(Sub()
                                                                                        ActiveTasks.Remove(e)
+                                                                                       DoneTasks.Add(e)
                                                                                    End Sub)
 
                                         End Sub)
