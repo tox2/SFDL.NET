@@ -515,6 +515,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Speedreport deaktivieren ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property Settings_DisableSpeedreport() As String
+            Get
+                Return ResourceManager.GetString("Settings_DisableSpeedreport", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Download Verzeichnis ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_DownloadDir() As String
@@ -565,15 +574,6 @@ Namespace My.Resources
         Public Shared ReadOnly Property Settings_GeneralSettings() As String
             Get
                 Return ResourceManager.GetString("Settings_GeneralSettings", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Speedreport nicht anzeigen ähnelt.
-        '''</summary>
-        Public Shared ReadOnly Property Settings_HideSpeedreport() As String
-            Get
-                Return ResourceManager.GetString("Settings_HideSpeedreport", resourceCulture)
             End Get
         End Property
         

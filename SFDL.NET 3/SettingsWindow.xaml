@@ -203,6 +203,7 @@
                                 <Grid>
                                     <StackPanel Orientation="Horizontal">
                                         <StackPanel>
+
                                             <CheckBox x:Name="chk_extract_archives"
                                                       Margin="5,5,0,0"
                                                       Content="{x:Static p:Strings.Settings_AutomaticUnRAR}"
@@ -253,13 +254,13 @@
                             <GroupBox Header="{x:Static p:Strings.Settings_SpeedreportSettings}">
                                 <Grid>
                                     <StackPanel>
-                                        <RadioButton x:Name="radio_show_speedreport"
+                                        <!--<RadioButton x:Name="radio_show_speedreport"
                                                      Margin="5,5,0,0"
                                                      Content="{x:Static p:Strings.Settings_ShowSpeedreportAfterDownload}"
                                                      GroupName="Speedreport"
                                                      IsChecked="{Binding SpeedreportVisibility,
                                                                          Converter={StaticResource SpeedreportVisibilityConverter},
-                                                                         ConverterParameter=ShowSpeedreport}" />
+                                                                         ConverterParameter=ShowSpeedreport}" />-->
                                         <RadioButton x:Name="radio_write_speedreport_file"
                                                      Margin="5,5,0,0"
                                                      Content="{x:Static p:Strings.Settings_WriteSpeedreportToFile}"
@@ -269,7 +270,7 @@
                                                                          ConverterParameter=Speedreport2File}" />
                                         <RadioButton x:Name="radio_hide_speedreport"
                                                      Margin="5,5,0,5"
-                                                     Content="{x:Static p:Strings.Settings_HideSpeedreport}"
+                                                     Content="{x:Static p:Strings.Settings_DisableSpeedreport}"
                                                      GroupName="Speedreport"
                                                      IsChecked="{Binding SpeedreportVisibility,
                                                                          Converter={StaticResource SpeedreportVisibilityConverter},

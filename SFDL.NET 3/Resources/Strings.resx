@@ -255,8 +255,8 @@
   <data name="Settings_ExistingFile_Overwrite" xml:space="preserve">
     <value>Überschreiben</value>
   </data>
-  <data name="Settings_HideSpeedreport" xml:space="preserve">
-    <value>Speedreport nicht anzeigen</value>
+  <data name="Settings_DisableSpeedreport" xml:space="preserve">
+    <value>Speedreport deaktivieren</value>
   </data>
   <data name="Settings_IPAdress" xml:space="preserve">
     <value>IP Adresse:</value>

@@ -231,8 +231,8 @@
   <data name="Settings_GeneralSettings" xml:space="preserve">
     <value>General Settings</value>
   </data>
-  <data name="Settings_HideSpeedreport" xml:space="preserve">
-    <value>Don't show speedreport</value>
+  <data name="Settings_DisableSpeedreport" xml:space="preserve">
+    <value>Disable speedreport</value>
   </data>
   <data name="Settings_InstantVideo" xml:space="preserve">
     <value>Activate Instant Video</value>
