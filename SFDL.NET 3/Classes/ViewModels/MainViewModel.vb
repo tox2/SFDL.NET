@@ -148,9 +148,11 @@ Decrypt:
 
                 Else
 
+                    _searchpattern = New Regex("^((?!\.part(?!0*1\.rar$)\d+\.rar$).)*\.(?:rar|r?0*1)$")
+
                     _count = 0
 
-                    If _item.FileName.EndsWith(".part1.rar") Then 'MasterFile
+                    If _searchpattern.IsMatch(_item.FileName) Then 'MasterFile
 
                         Dim _tmp_filename_replace As String
 
@@ -159,7 +161,7 @@ Decrypt:
                         _item.RequiredForInstantVideo = True
                         _unrarchain.MasterUnRarChainFile = _item
 
-                        _tmp_filename_replace = IO.Path.GetFileNameWithoutExtension(_item.FileName).Replace(".part1", "")
+                        _tmp_filename_replace = _item.FileName.Remove(_item.FileName.IndexOf(".part"))
 
                         _searchpattern = New Regex("filename\.part[0-9]{1,3}.rar".Replace("filename", _tmp_filename_replace))
 

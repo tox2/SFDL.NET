@@ -75,5 +75,14 @@ Public Class MainWindow
 
     End Sub
 
+    Private Sub MenuItem_Click(sender As Object, e As RoutedEventArgs)
 
+        Dim _testname As String = "file.german.yxz.part001.rar"
+        Dim _tmp_filename_replace As String
+
+        _tmp_filename_replace = _testname.Remove(_testname.IndexOf(".part"))
+
+        Debug.WriteLine(_tmp_filename_replace)
+
+    End Sub
 End Class

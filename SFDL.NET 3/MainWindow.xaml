@@ -211,7 +211,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="Test" />
+            <MenuItem Click="MenuItem_Click" Header="Test" />
 
         </Menu>
         <ToolBar x:Name="MainToolBar"
