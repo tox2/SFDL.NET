@@ -21,7 +21,6 @@
         <ResourceDictionary>
             <local:InvertBooleanConverter x:Key="boolConvert" />
             <local:ExistingFileHandlingConverter x:Key="filehandlingconvert" />
-            <local:SpeedreportVisibilityConverter x:Key="SpeedreportVisibilityConverter" />
             <local:LangauageConverter x:Key="langconvert" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Icons.xaml" />
@@ -254,45 +253,37 @@
                             <GroupBox Header="{x:Static p:Strings.Settings_SpeedreportSettings}">
                                 <Grid>
                                     <StackPanel>
-                                        <!--<RadioButton x:Name="radio_show_speedreport"
-                                                     Margin="5,5,0,0"
-                                                     Content="{x:Static p:Strings.Settings_ShowSpeedreportAfterDownload}"
-                                                     GroupName="Speedreport"
-                                                     IsChecked="{Binding SpeedreportVisibility,
-                                                                         Converter={StaticResource SpeedreportVisibilityConverter},
-                                                                         ConverterParameter=ShowSpeedreport}" />-->
-                                        <RadioButton x:Name="radio_write_speedreport_file"
-                                                     Margin="5,5,0,0"
-                                                     Content="{x:Static p:Strings.Settings_WriteSpeedreportToFile}"
-                                                     GroupName="Speedreport"
-                                                     IsChecked="{Binding SpeedreportVisibility,
-                                                                         Converter={StaticResource SpeedreportVisibilityConverter},
-                                                                         ConverterParameter=Speedreport2File}" />
-                                        <RadioButton x:Name="radio_hide_speedreport"
-                                                     Margin="5,5,0,5"
-                                                     Content="{x:Static p:Strings.Settings_DisableSpeedreport}"
-                                                     GroupName="Speedreport"
-                                                     IsChecked="{Binding SpeedreportVisibility,
-                                                                         Converter={StaticResource SpeedreportVisibilityConverter},
-                                                                         ConverterParameter=HideSpeedreport}" />
-                                        <Separator Margin="5" />
+                                        <Controls:ToggleSwitch Margin="0,5,0,10"
+                                                               Controls:ControlsHelper.HeaderFontSize="12"
+                                                               Controls:ControlsHelper.HeaderFontWeight="Light"
+                                                               FontSize="11"
+                                                               IsChecked="{Binding SpeedreportDisabled}"
+                                                               OffLabel="Deaktiviert"
+                                                               OnLabel="Aktiviert"
+                                                               Padding="0"
+                                                               ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                                               Style="{StaticResource MahApps.Metro.Styles.ToggleSwitch.Win10}" />
+
                                         <TextBox x:Name="txt_speedreport_username"
                                                  Margin="5,5,5,0"
                                                  Controls:TextBoxHelper.UseFloatingWatermark="True"
                                                  Controls:TextBoxHelper.Watermark="{x:Static p:Strings.VariousStrings_Username}"
+                                                 IsEnabled="{Binding SpeedreportDisabled}"
                                                  Text="{Binding SpeedreportUsername}" />
                                         <TextBox x:Name="txt_speedreport_connection"
                                                  Margin="5,5,5,0"
                                                  Controls:TextBoxHelper.UseFloatingWatermark="True"
                                                  Controls:TextBoxHelper.Watermark="{x:Static p:Strings.VariousStrings_Connection}"
+                                                 IsEnabled="{Binding SpeedreportDisabled}"
                                                  Text="{Binding SpeedreportConnection}" />
                                         <TextBox x:Name="txt_speedreport_comment"
                                                  Margin="5"
                                                  Controls:TextBoxHelper.UseFloatingWatermark="True"
                                                  Controls:TextBoxHelper.Watermark="{x:Static p:Strings.VariousStrings_Comment}"
+                                                 IsEnabled="{Binding SpeedreportDisabled}"
                                                  Text="{Binding SpeedreportComment}" />
                                         <Separator Margin="5" />
-                                        <ToolBar Margin="5,0">
+                                        <ToolBar Margin="5,0" IsEnabled="{Binding SpeedreportDisabled}">
                                             <Menu>
                                                 <MenuItem Header="{x:Static p:Strings.VariousStrings_Variables}">
                                                     <MenuItem.Icon>
@@ -367,6 +358,7 @@
                                                  Margin="5"
                                                  AcceptsReturn="True"
                                                  BorderThickness="1"
+                                                 IsEnabled="{Binding SpeedreportDisabled}"
                                                  Text="{Binding SpeedreportTemplate}"
                                                  TextWrapping="Wrap" />
                                     </StackPanel>

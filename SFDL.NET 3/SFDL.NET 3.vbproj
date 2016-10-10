@@ -105,7 +105,6 @@
     <Compile Include="Classes\ViewModels\SettingsViewModel.vb" />
     <Compile Include="Classes\ViewModels\ViewModelBase.vb" />
     <Compile Include="Classes\XAML Converter\LangauageConverter.vb" />
-    <Compile Include="Classes\XAML Converter\SpeedreportVisibilityConverter.vb" />
     <Compile Include="MainWindow.xaml.vb">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>

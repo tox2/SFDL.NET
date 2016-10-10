@@ -537,7 +537,7 @@ Decrypt:
 #Region "Speedreport Generation"
 
 
-                            If _settings.SpeedReportSettings.SpeedreportView = SpeedreportVisibility.ShowGUI Or _settings.SpeedReportSettings.SpeedreportView = SpeedreportVisibility.Write2File Then
+                            If _settings.SpeedReportSettings.SpeedreportDisabled = False Then
 
                                 Dim _speedreport As String = String.Empty
                                 Dim _sr_filepath As String = String.Empty
@@ -554,21 +554,11 @@ Decrypt:
                                         Throw New Exception("Speedreport failed")
                                     End If
 
-                                    If _settings.SpeedReportSettings.SpeedreportView = SpeedreportVisibility.Write2File Then
+                                    _sr_filepath = IO.Path.GetDirectoryName(_session.DownloadItems(0).LocalFile)
 
-                                        _sr_filepath = IO.Path.GetDirectoryName(_session.DownloadItems(0).LocalFile)
+                                    _sr_filepath = IO.Path.Combine(_sr_filepath, "speedreport.txt")
 
-                                        _sr_filepath = IO.Path.Combine(_sr_filepath, "speedreport.txt")
-
-                                        My.Computer.FileSystem.WriteAllText(_sr_filepath, _speedreport, False, System.Text.Encoding.Default)
-
-                                    End If
-
-                                    If _settings.SpeedReportSettings.SpeedreportView = SpeedreportVisibility.ShowGUI Then
-
-                                        'ToDo:Show Speedreport Gui
-
-                                    End If
+                                    My.Computer.FileSystem.WriteAllText(_sr_filepath, _speedreport, False, System.Text.Encoding.Default)
 
                                     _sr_task.SetTaskStatus(TaskStatus.RanToCompletion, "Speedreport erstellt")
 
