@@ -54,14 +54,14 @@ Class DownloadHelper
 
             _item.DownloadStatus = NET3.DownloadItem.Status.Failed
 
-            If ex.Message.Contains("Code=421") Then ' Service not available, closing control connection. This may be a reply to any command if the service knows it must shut down.
+            If ex.Message.Contains("Code=421") Or ex.InnerException.Message.Contains("Code=421") Then ' Service not available, closing control connection. This may be a reply to any command if the service knows it must shut down.
 
-                If ex.Message.ToLower.Contains("maximum login limit has been reached.") Then
+                If ex.Message.ToLower.Contains("maximum login limit has been reached.") Or ex.InnerException.Message.ToLower.Contains("maximum login limit has been reached.") Then
                     _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerFull
                     _item.RetryPossible = True
                 End If
 
-                If ex.Message.ToLower.Contains("Not logged in, only sessions from same IP allowed concurrently") Then
+                If ex.Message.ToLower.Contains("Not logged in, only sessions from same IP allowed concurrently") Or ex.InnerException.Message.ToLower.Contains("Not logged in, only sessions from same IP allowed concurrently") Then
                     _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerFull
                     _item.RetryPossible = True
                 End If

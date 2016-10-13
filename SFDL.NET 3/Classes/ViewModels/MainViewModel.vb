@@ -649,6 +649,7 @@ Decrypt:
         System.Threading.Tasks.Task.Run(Sub()
 
                                             Dim _log As NLog.Logger = NLog.LogManager.GetLogger("ItemDownloadCompleteEvent")
+                                            Dim _unrar_task As AppTask
 
                                             _log.Debug("Item {0} war als Download gequed und ist jetzt fertig - Reduziere aktiven Thread Count für diese Session", _item.FileName)
 
@@ -668,7 +669,7 @@ Decrypt:
 
                                             _mysession = ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID))
 
-                                            If Not _mysession.UnRarChains.Count = 0 Then
+                                            If Not _mysession.UnRarChains.Count = 0 And _settings.UnRARSettings.UnRARAfterDownload = True Then
 
                                                 For Each _chain In _mysession.UnRarChains
 
@@ -679,8 +680,17 @@ Decrypt:
                                                         _log.Debug("Chain {0} ist komplett!", _chain.MasterUnRarChainFile.FileName.ToString)
 
                                                         If _settings.UnRARSettings.UnRARAfterDownload = True And _chain.UnRARDone = False Then
+
+                                                            _unrar_task = New AppTask(String.Format("Archiv {0} wird entpackt....", IO.Path.GetFileName(_chain.MasterUnRarChainFile.LocalFile)))
+
+
+                                                            DispatchService.DispatchService.Invoke(Sub()
+                                                                                                       ActiveTasks.Add(_unrar_task)
+                                                                                                   End Sub)
+
+
                                                             'TODO: Block Application Exit while UnRAR is Running
-                                                            ' UnRAR(AddTask(StringMessages.UnRARExtractingFilesTaskStartMessage), _chain, e.OLVItem.SFDLSessionName)
+                                                            UnRAR(_chain, _unrar_task, _settings.UnRARSettings)
                                                         Else
                                                             '_block_app_exit = False
                                                             '_unrar_active = False
