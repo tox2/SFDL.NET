@@ -149,7 +149,7 @@ Module UnRARHelper
 
     End Function
 
-    Private Function IsUnRARPasswordValid(ByVal _filename As String, ByVal _password As String) As Boolean
+    Private Async Function IsUnRARPasswordValid(ByVal _filename As String, ByVal _password As String) As Task(Of Boolean)
 
         Dim _unrar_process As Process
         Dim _unrar_exe As String
@@ -184,7 +184,7 @@ Module UnRARHelper
 
             _unrar_process.Start()
 
-            _unrar_process.WaitForExit(CInt(TimeSpan.FromSeconds(5).TotalMilliseconds))
+            Await Task.Run(Sub() _unrar_process.WaitForExit(CInt(TimeSpan.FromSeconds(5).TotalMilliseconds)))
 
             _unrar_process.Kill()
 
@@ -203,7 +203,7 @@ Module UnRARHelper
 
     End Function
 
-    Private Function DoUnRAR(ByVal _filename As String, ByVal _extract_dir As String, ByVal _password As String, ByVal _app_task As AppTask) As Boolean
+    Private Async Function DoUnRAR(ByVal _filename As String, ByVal _extract_dir As String, ByVal _password As String, ByVal _app_task As AppTask) As Task(Of Boolean)
 
         Dim _result As Boolean = False
         Dim _unrar_process As Process
@@ -258,7 +258,7 @@ Module UnRARHelper
 
             End While
 
-            _unrar_process.WaitForExit()
+            Await Task.Run(Sub() _unrar_process.WaitForExit())
 
             'For Each _line In _out_lines
 
@@ -292,7 +292,7 @@ Module UnRARHelper
 
     End Function
 
-    Public Function UnRAR(ByVal _unrarchain As UnRARChain, ByVal _app_task As AppTask, ByVal _unrar_settings As UnRARSettings) As Boolean
+    Public Async Function UnRAR(ByVal _unrarchain As UnRARChain, ByVal _app_task As AppTask, ByVal _unrar_settings As UnRARSettings) As Task
 
         Dim _unrar_password As String = String.Empty
 
@@ -302,7 +302,7 @@ Module UnRARHelper
 
             _app_task.SetTaskStatus(TaskStatus.Running, String.Format("Cracking Password {0}", IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
 
-            If IsUnRARPasswordValid(_unrarchain.MasterUnRarChainFile.LocalFile, String.Empty) = True Then
+            If Await IsUnRARPasswordValid(_unrarchain.MasterUnRarChainFile.LocalFile, String.Empty) = False Then
 
                 _log.Info("Damn....we need a password to extract this sh**t")
 
@@ -312,7 +312,7 @@ Module UnRARHelper
 
                 For Each _pw In _unrar_settings.UnRARPasswordList
 
-                    If IsUnRARPasswordValid(_unrarchain.MasterUnRarChainFile.LocalFile, _pw) = True Then
+                    If Await IsUnRARPasswordValid(_unrarchain.MasterUnRarChainFile.LocalFile, _pw) = True Then
                         _unrar_password = _pw
                         _log.Info(String.Format("Unrar Password Found -> {0}", _pw))
                         Exit For
@@ -327,33 +327,31 @@ Module UnRARHelper
                 End If
 
             Else
-
                 _log.Info("Cool thing - we don't need a password")
+            End If
 
-                _log.Info("Now passing all needed Arguments to UnRar Binary and wait the extraction to finish")
+            _log.Info("Now passing all needed Arguments to UnRar Binary and wait the extraction to finish")
 
-                If DoUnRAR(_unrarchain.MasterUnRarChainFile.LocalFile, IO.Path.GetDirectoryName(_unrarchain.MasterUnRarChainFile.LocalFile), _unrar_password, _app_task) = True Then
-                    _app_task.SetTaskStatus(TaskStatus.Running, "Archive erfolgreich entapckt!")
+            If Await DoUnRAR(_unrarchain.MasterUnRarChainFile.LocalFile, IO.Path.GetDirectoryName(_unrarchain.MasterUnRarChainFile.LocalFile), _unrar_password, _app_task) = True Then
+                _app_task.SetTaskStatus(TaskStatus.Running, "Archive erfolgreich entapckt!")
 
-                    If _unrar_settings.DeleteAfterUnRAR = True Then
+                If _unrar_settings.DeleteAfterUnRAR = True Then
 
-                        _app_task.SetTaskStatus(TaskStatus.Running, "Lösche Archive....")
+                    _app_task.SetTaskStatus(TaskStatus.Running, "Lösche Archive....")
 
-                        For Each _file In _unrarchain.ChainMemberFiles
-                            IO.File.Delete(_file.LocalFile)
-                        Next
+                    For Each _file In _unrarchain.ChainMemberFiles
+                        IO.File.Delete(_file.LocalFile)
+                    Next
 
-                        IO.File.Delete(_unrarchain.MasterUnRarChainFile.LocalFile)
+                    IO.File.Delete(_unrarchain.MasterUnRarChainFile.LocalFile)
 
-                        _app_task.SetTaskStatus(TaskStatus.RanToCompletion, "Archive erfolgreich entpackt!")
+                    _app_task.SetTaskStatus(TaskStatus.RanToCompletion, "Archive erfolgreich entpackt!")
 
 
-                    End If
-
-                Else
-                    Throw New Exception("Entpacken ist fehlgeschlagen!")
                 End If
 
+            Else
+                Throw New Exception("Entpacken ist fehlgeschlagen!")
             End If
 
         Catch ex As Exception

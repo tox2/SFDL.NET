@@ -545,6 +545,8 @@ Decrypt:
 
                                 Try
 
+                                    AddHandler _sr_task.TaskDone, AddressOf TaskDoneEvent
+
                                     ActiveTasks.Add(_sr_task)
 
                                     _speedreport = SpeedreportHelper.GenerateSpeedreport(_session, _settings.SpeedReportSettings)
@@ -644,72 +646,64 @@ Decrypt:
 
     End Sub
 
-    Private Sub ItemDownloadCompleteEvent(_item As DownloadItem)
+    Private Async Sub ItemDownloadCompleteEvent(_item As DownloadItem)
 
-        System.Threading.Tasks.Task.Run(Sub()
+        Dim _log As NLog.Logger = NLog.LogManager.GetLogger("ItemDownloadCompleteEvent")
+        Dim _unrar_task As AppTask
+        Dim _mysession As ContainerSession
 
-                                            Dim _log As NLog.Logger = NLog.LogManager.GetLogger("ItemDownloadCompleteEvent")
-                                            Dim _unrar_task As AppTask
+        _log.Debug("Item {0} war als Download gequed und ist jetzt fertig - Reduziere aktiven Thread Count für diese Session", _item.FileName)
 
-                                            _log.Debug("Item {0} war als Download gequed und ist jetzt fertig - Reduziere aktiven Thread Count für diese Session", _item.FileName)
+        SyncLock ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).SynLock
+            If Not ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).ActiveThreads = 0 Then
+                ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).ActiveThreads -= 1
+            End If
+        End SyncLock
 
-                                            SyncLock ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).SynLock
+        _log.Debug("Session hat nun {0} Aktive Threads", ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).ActiveThreads)
 
-                                                If Not ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).ActiveThreads = 0 Then
-                                                    ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).ActiveThreads -= 1
-                                                End If
+        _log.Info("Prüfe etwas entpackt werden kann...")
 
-                                            End SyncLock
+        _mysession = ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID))
 
-                                            _log.Debug("Session hat nun {0} Aktive Threads", ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).ActiveThreads)
+        If Not _mysession.UnRarChains.Count = 0 And _settings.UnRARSettings.UnRARAfterDownload = True Then
 
-                                            _log.Info("Prüfe etwas entpackt werden kann...")
+            For Each _chain In _mysession.UnRarChains
 
-                                            Dim _mysession As ContainerSession
+                If (isUnRarChainComplete(_chain) = True And _chain.UnRARDone = False) And _chain.UnRARRunning = False Then
 
-                                            _mysession = ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID))
+                    _chain.UnRARRunning = True
 
-                                            If Not _mysession.UnRarChains.Count = 0 And _settings.UnRARSettings.UnRARAfterDownload = True Then
+                    _log.Debug("Chain {0} ist komplett!", _chain.MasterUnRarChainFile.FileName.ToString)
 
-                                                For Each _chain In _mysession.UnRarChains
+                    If _settings.UnRARSettings.UnRARAfterDownload = True And _chain.UnRARDone = False Then
 
-                                                    If isUnRarChainComplete(_chain) = True And (_chain.UnRARDone = False Or _chain.UnRARRunning = False) Then
+                        _unrar_task = New AppTask(String.Format("Archiv {0} wird entpackt....", IO.Path.GetFileName(_chain.MasterUnRarChainFile.LocalFile)))
 
-                                                        _chain.UnRARRunning = True
+                        AddHandler _unrar_task.TaskDone, AddressOf TaskDoneEvent
 
-                                                        _log.Debug("Chain {0} ist komplett!", _chain.MasterUnRarChainFile.FileName.ToString)
+                        ActiveTasks.Add(_unrar_task)
 
-                                                        If _settings.UnRARSettings.UnRARAfterDownload = True And _chain.UnRARDone = False Then
+                        'TODO: Block Application Exit while UnRAR is Running
+                        Await UnRAR(_chain, _unrar_task, _settings.UnRARSettings)
 
-                                                            _unrar_task = New AppTask(String.Format("Archiv {0} wird entpackt....", IO.Path.GetFileName(_chain.MasterUnRarChainFile.LocalFile)))
+                    Else
+                        '_block_app_exit = False
+                        '_unrar_active = False
+                    End If
 
+                    _chain.UnRARRunning = False
 
-                                                            DispatchService.DispatchService.Invoke(Sub()
-                                                                                                       ActiveTasks.Add(_unrar_task)
-                                                                                                   End Sub)
+                Else
+                    _log.Info("UnRARChain ist noch nicht vollständig oder diese wird bereits entapckt/bearbeitet")
+                    'TODO: Check for InstatnVideo
+                End If
 
+            Next
 
-                                                            'TODO: Block Application Exit while UnRAR is Running
-                                                            UnRAR(_chain, _unrar_task, _settings.UnRARSettings)
-                                                        Else
-                                                            '_block_app_exit = False
-                                                            '_unrar_active = False
-                                                        End If
-
-                                                        _chain.UnRARRunning = False
-
-                                                    Else
-                                                        _log.Info("UnRARChain ist noch nicht vollständig oder diese wird bereits entapckt/bearbeitet")
-                                                        'TODO: Check for InstatnVideo
-                                                    End If
-
-                                                Next
-
-                                            Else
-                                                _log.Info("Dieser Container hat keine UnRarChain")
-                                            End If
-
-                                        End Sub)
+        Else
+            _log.Info("Dieser Container hat keine UnRarChain")
+        End If
 
     End Sub
 
@@ -1015,10 +1009,15 @@ Decrypt:
 
                                             'Wait 5 Seconds
                                             System.Threading.Thread.Sleep(5000)
+
                                             DispatchService.DispatchService.Invoke(Sub()
+
                                                                                        ActiveTasks.Remove(e)
                                                                                        DoneTasks.Add(e)
+
                                                                                    End Sub)
+
+
 
                                         End Sub)
 

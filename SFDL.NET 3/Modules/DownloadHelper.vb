@@ -240,7 +240,10 @@ Class DownloadHelper
                 Throw New FileNameTooLongException("Dateipfad ist zu lang! - Kann Datei nicht schreiben!")
             End If
 
-            GetItemFileSize(_item, _ftp_session)
+            If _item.FileSize = 0 Then
+                _log.Warn("Keine Dateigröße hinterlegt - versuche diese nun zu ermitteln")
+                GetItemFileSize(_item, _ftp_session)
+            End If
 
             _disk_free_space = My.Computer.FileSystem.GetDriveInfo(IO.Path.GetPathRoot(_settings.DownloadDirectory)).AvailableFreeSpace
 
@@ -256,9 +259,10 @@ Class DownloadHelper
                 _restart = New IO.FileInfo(_item.LocalFile).Length
 
                 If _item.FileSize.Equals(New IO.FileInfo(_item.LocalFile).Length) And Not _item.FileSize = 0 Then
-                    _log.Info("Datei ist bereits vollständig - Überspringe FTP Connect!")
                     _item.SizeDownloaded = _item.FileSize
                     _skip_download = True
+                Else
+                    _log.Info("Datei ist zwar bereits lokal vorhanden aber nicht vollständig")
                 End If
 
             Else
@@ -267,7 +271,6 @@ Class DownloadHelper
 
             If _skip_download = True Then
                 _log.Info("Datei ist bereits vollständig - Überspringe FTP Connect!")
-                _item.SizeDownloaded = _item.FileSize
             Else
 
                 Using _ftp_read_stream = ArxOne.Ftp.FtpClientUtility.Retr(_ftp_session.Connection.Client, New ArxOne.Ftp.FtpPath(_item.FullPath), ArxOne.Ftp.FtpTransferMode.Binary, _restart, _ftp_session)
@@ -477,7 +480,7 @@ Class DownloadHelper
 
         Catch ex As Exception
             _log.Error(ex.Message)
-            _item.DownloadStatus = NET3.DownloadItem.Status.Failed
+            _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashInvalid
 
         Finally
 
