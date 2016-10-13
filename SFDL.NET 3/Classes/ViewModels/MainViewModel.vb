@@ -537,7 +537,7 @@ Decrypt:
 #Region "Speedreport Generation"
 
 
-                            If _settings.SpeedReportSettings.SpeedreportDisabled = False Then
+                            If _settings.SpeedReportSettings.SpeedreportEnabled = True Then
 
                                 Dim _speedreport As String = String.Empty
                                 Dim _sr_filepath As String = String.Empty
@@ -672,7 +672,7 @@ Decrypt:
 
                                                 For Each _chain In _mysession.UnRarChains
 
-                                                    If isUnRarChainComplete(_chain) = True And (_chain.UnRARDone = False Or _chain.UnRARRunning = True) Then
+                                                    If isUnRarChainComplete(_chain) = True And (_chain.UnRARDone = False Or _chain.UnRARRunning = False) Then
 
                                                         _chain.UnRARRunning = True
 

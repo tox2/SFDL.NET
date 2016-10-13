@@ -206,13 +206,13 @@ Public Class SettingsViewModel
 
 #Region "Speedreport Settings"
 
-    Public Property SpeedreportDisabled As Boolean
+    Public Property SpeedreportEnabled As Boolean
         Set(value As Boolean)
-            _settings.SpeedReportSettings.SpeedreportDisabled = value
-            RaisePropertyChanged("SpeedreportDisabled")
+            _settings.SpeedReportSettings.SpeedreportEnabled = value
+            RaisePropertyChanged("SpeedreportEnabled")
         End Set
         Get
-            Return _settings.SpeedReportSettings.SpeedreportDisabled
+            Return _settings.SpeedReportSettings.SpeedreportEnabled
         End Get
     End Property
 

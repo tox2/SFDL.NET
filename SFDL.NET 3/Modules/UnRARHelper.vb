@@ -10,28 +10,10 @@ Module UnRARHelper
 
         Try
 
+            If IO.File.Exists(_chain.MasterUnRarChainFile.LocalFile) Then
 
-            Select Case _chain.MasterUnRarChainFile.DownloadStatus
+                Select Case _chain.MasterUnRarChainFile.DownloadStatus
 
-                Case DownloadItem.Status.Completed
-                    'ok
-
-                Case DownloadItem.Status.Completed_HashInvalid
-                    'ok
-
-                Case DownloadItem.Status.Completed_HashValid
-                    'ok
-
-                Case Else
-
-                    _rt = False
-
-            End Select
-
-
-            For Each _chainmember As DownloadItem In _chain.ChainMemberFiles
-
-                Select Case _chainmember.DownloadStatus
 
                     Case DownloadItem.Status.Completed
                     'ok
@@ -41,10 +23,41 @@ Module UnRARHelper
 
                     Case DownloadItem.Status.Completed_HashValid
                         'ok
+
                     Case Else
+
                         _rt = False
 
                 End Select
+
+
+            Else
+                _rt = False
+            End If
+
+
+            For Each _chainmember As DownloadItem In _chain.ChainMemberFiles
+
+                If IO.File.Exists(_chainmember.LocalFile) Then
+
+                    Select Case _chainmember.DownloadStatus
+
+                        Case DownloadItem.Status.Completed
+                    'ok
+
+                        Case DownloadItem.Status.Completed_HashInvalid
+                    'ok
+
+                        Case DownloadItem.Status.Completed_HashValid
+                            'ok
+                        Case Else
+                            _rt = False
+
+                    End Select
+
+                Else
+                    _rt = False
+                End If
 
             Next
 
