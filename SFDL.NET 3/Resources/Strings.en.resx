@@ -393,4 +393,10 @@
   <data name="DownloadItems_ContextMenu_OpenParentFolder" xml:space="preserve">
     <value>Open Containing Folder</value>
   </data>
+  <data name="DownloadStatus_Retry" xml:space="preserve">
+    <value>Retry</value>
+  </data>
+  <data name="DownloadStatus_RetryWait" xml:space="preserve">
+    <value>Retry - waiting</value>
+  </data>
 </root>

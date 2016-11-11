@@ -52,6 +52,7 @@ Module FTPHelper
 
                 .ConnectTimeout = TimeSpan.FromSeconds(_connection_info.ConnectTimeout)
                 .SessionTimeout = TimeSpan.FromSeconds(_connection_info.CommandTimeout)
+                .ReadWriteTimeout = TimeSpan.FromSeconds(_connection_info.CommandTimeout)
 
             End With
 

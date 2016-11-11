@@ -371,6 +371,10 @@ Decrypt:
                 _dlitem.DownloadStatus = DownloadItem.Status.Queued
                 _dlitem.DownloadProgress = 0
                 _dlitem.DownloadSpeed = String.Empty
+                _dlitem.SingleSessionMode = False
+                _dlitem.RetryCount = 0
+                _dlitem.RetryPossible = False
+                _dlitem.SizeDownloaded = 0
             Next
 
 #End Region
@@ -521,6 +525,11 @@ Decrypt:
 
                     _log.Debug("Noch {0} Freie Tasks im ThreadPool", _thread_count_pool)
 
+                    'If _tasklist.Count = 0 And _thread_count_pool = 0 Then
+                    '    _log.Warn("Hier ist was schiefgelaufen...")
+                    '    _thread_count_pool = _settings.MaxDownloadThreads
+                    'End If
+
 #End Region
 
 
@@ -547,7 +556,9 @@ Decrypt:
 
                                     AddHandler _sr_task.TaskDone, AddressOf TaskDoneEvent
 
-                                    ActiveTasks.Add(_sr_task)
+                                    DispatchService.DispatchService.Invoke(Sub()
+                                                                               ActiveTasks.Add(_sr_task)
+                                                                           End Sub)
 
                                     _speedreport = SpeedreportHelper.GenerateSpeedreport(_session, _settings.SpeedReportSettings)
                                     'ToDO: Caution: Post Action!
@@ -638,6 +649,10 @@ Decrypt:
 
                                                 ContainerSessions.Where(Function(mycontainer) mycontainer.ID.Equals(_item.ParentContainerID))(0).SingleSessionMode = True
 
+                                                For Each _item In ContainerSessions.Where(Function(mycontainer) mycontainer.ID.Equals(_item.ParentContainerID))(0).DownloadItems
+                                                    _item.SingleSessionMode = True
+                                                Next
+
                                             End SyncLock
 
                                             _log.Debug("Session hat nun {0} Aktive Threads", ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).ActiveThreads)
@@ -682,7 +697,9 @@ Decrypt:
 
                         AddHandler _unrar_task.TaskDone, AddressOf TaskDoneEvent
 
-                        ActiveTasks.Add(_unrar_task)
+                        DispatchService.DispatchService.Invoke(Sub()
+                                                                   ActiveTasks.Add(_unrar_task)
+                                                               End Sub)
 
                         'TODO: Block Application Exit while UnRAR is Running
                         Await UnRAR(_chain, _unrar_task, _settings.UnRARSettings)

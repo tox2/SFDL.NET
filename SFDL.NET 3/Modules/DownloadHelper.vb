@@ -72,6 +72,28 @@ Class DownloadHelper
 
             End If
 
+            If Not IsNothing(ex.InnerException) Then
+
+                If ex.InnerException.Message.Contains("Code=421") Then
+
+                    If ex.InnerException.Message.ToLower.Contains("maximum login limit has been reached.") Then
+                        _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerFull
+                        _item.RetryPossible = True
+                    End If
+
+                    If ex.InnerException.Message.ToLower.Contains("Not logged in, only sessions from same IP allowed concurrently") Then
+                        _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerFull
+                        _item.RetryPossible = True
+                    End If
+
+                    If _item.DownloadStatus = NET3.DownloadItem.Status.Failed Then
+                        _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerDown
+                    End If
+
+                End If
+
+            End If
+
             If ex.Message.Contains("Code=425") Then '  Can't open data connection.
                 _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ConnectionError
                 _item.RetryPossible = True
@@ -149,6 +171,8 @@ Class DownloadHelper
 
         Try
 
+            _ct.ThrowIfCancellationRequested()
+
             For Each _item In items
 
                 Dim _dl_task As System.Threading.Tasks.Task
@@ -191,12 +215,16 @@ Class DownloadHelper
 
             System.Threading.Tasks.Task.WhenAll(_tasks).Wait()
 
+        Catch ex As AggregateException
+            _log.Error(ex, ex.Message)
+            _item.DownloadStatus = NET3.DownloadItem.Status.Failed_AuthError
+
         Catch ex As Exception
             _log.Error(ex, ex.Message)
             _item.DownloadStatus = NET3.DownloadItem.Status.Failed_AuthError
             ParseFTPException(ex, _item)
         Finally
-            PostDownload(_item, _ftp_session)
+            PostDownload(_item, _ftp_session, _ct)
         End Try
 
 
@@ -226,6 +254,8 @@ Class DownloadHelper
         _settings = Application.Current.Resources("Settings")
 
         Try
+
+            _ct.ThrowIfCancellationRequested()
 
             If String.IsNullOrWhiteSpace(_item.LocalFile) Then
                 Throw New Exception("Dateipfad ist leer!")
@@ -281,6 +311,8 @@ Class DownloadHelper
                     Using _local_write_stream As New IO.FileStream(_item.LocalFile, _filemode, IO.FileAccess.Write, IO.FileShare.None, 8192, False)
 
                         While bytesRead > 0 And _ct.IsCancellationRequested = False
+
+                            _ct.ThrowIfCancellationRequested()
 
                             Dim _tmp_percent_downloaded As Double = 0
                             Dim _new_perc As Integer = 0
@@ -360,16 +392,22 @@ Class DownloadHelper
                 _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
             Else
                 _log.Error(ex, ex.Message)
-                ParseFTPException(ex, _item)
+
+                If ex.GetType Is GetType(ArxOne.Ftp.Exceptions.FtpException) Then
+                    ParseFTPException(ex, _item)
+                Else
+                    _item.DownloadStatus = NET3.DownloadItem.Status.Failed
+                End If
+
             End If
 
         Finally
-            PostDownload(_item, _ftp_session)
+            PostDownload(_item, _ftp_session, _ct)
         End Try
 
     End Sub
 
-    Private Sub PostDownload(ByRef _item As DownloadItem, ByVal _ftp_session As ArxOne.Ftp.FtpSession)
+    Private Sub PostDownload(ByRef _item As DownloadItem, ByVal _ftp_session As ArxOne.Ftp.FtpSession, _ct As System.Threading.CancellationToken)
 
         Dim _hashcommand As String = String.Empty
         Dim _reply As ArxOne.Ftp.FtpReply
@@ -377,6 +415,8 @@ Class DownloadHelper
         Dim _hashtype As Container.HashType
 
         Try
+
+            _ct.ThrowIfCancellationRequested()
 
             _item.DownloadSpeed = String.Empty
 
@@ -484,18 +524,23 @@ Class DownloadHelper
 
         Finally
 
-            If _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerFull Then 'TODO: And not already SingleSessionMode
+            If _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ServerFull And _item.SingleSessionMode = False Then
                 RaiseEvent ServerFull(_item)
             Else
+
                 If _item.RetryPossible And _item.RetryCount < 3 Then
+                    _item.DownloadStatus = NET3.DownloadItem.Status.RetryWait
                     System.Threading.Thread.Sleep(_settings.RetryWaitTime * 1000)
+                    _item.RetryCount += 1
                     _log.Info("Setze Item auf die Retry Warteliste")
                     _item.DownloadStatus = NET3.DownloadItem.Status.Retry
                 Else
-                    RaiseEvent ItemDownloadComplete(_item)
+                    _ftp_session.Invalidate() 'ToDO: Prüfen -> Session irgendwie beenden
                 End If
 
             End If
+
+            RaiseEvent ItemDownloadComplete(_item)
 
         End Try
 

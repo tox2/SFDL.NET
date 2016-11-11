@@ -137,6 +137,14 @@ Public Class DownloadItem
 
                     Return My.Resources.Strings.DownloadStatus_Failed_InternalServerError
 
+                Case Status.RetryWait
+
+                    Return My.Resources.Strings.DownloadStatus_RetryWait
+
+                Case Status.Retry
+
+                    Return My.Resources.Strings.DownloadStatus_Retry
+
                 Case Else
 
                     Return My.Resources.Strings.DownloadStatus_Failed
@@ -223,6 +231,15 @@ Public Class DownloadItem
 
                     Me.DownloadStatusImage = "Resources/Icons/appbar.monitor.delete.png"
 
+                Case Status.Retry
+
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.control.resume.png"
+
+                Case Status.RetryWait
+
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.control.resume.png"
+
+
             End Select
 
         End Set
@@ -277,6 +294,7 @@ Public Class DownloadItem
     Public Property LocalFile As String = String.Empty
     Public Property FirstUnRarFile As Boolean = False
     Public Property RequiredForInstantVideo As Boolean = False
+    Public Property SingleSessionMode As Boolean = False
 
 
     Public Enum Status
@@ -284,6 +302,7 @@ Public Class DownloadItem
         Queued
         Running
         Stopped
+        RetryWait
         Retry
         Failed
         Failed_FileNameTooLong
