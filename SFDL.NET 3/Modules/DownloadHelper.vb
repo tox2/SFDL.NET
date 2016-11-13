@@ -1,5 +1,6 @@
 ﻿
 Imports System.Text
+Imports Amib.Threading
 
 Class DownloadHelper
 
@@ -163,57 +164,46 @@ Class DownloadHelper
 
     End Sub
 
-    Sub DownloadContainerItems(items As List(Of DownloadItem), ByVal _download_dir As String, ByVal _connection_info As SFDL.Container.Connection, ByVal _ct As System.Threading.CancellationToken, Optional _single_session_mode As Boolean = False)
+    Function DownloadContainerItem(_item As DownloadItem, ByVal _download_dir As String, ByVal _connection_info As SFDL.Container.Connection, ByVal _single_session_mode As Boolean) As DownloadItem
 
         Dim _tasks = New List(Of System.Threading.Tasks.Task)
-        Dim _item As DownloadItem
         Dim _ftp_session As ArxOne.Ftp.FtpSession = Nothing
+        Dim _ftp_client As ArxOne.Ftp.FtpClient = Nothing
 
         Try
 
-            _ct.ThrowIfCancellationRequested()
+            If SmartThreadPool.IsWorkItemCanceled = True Then
+                Throw New Exception("Canceld!")
+            End If
 
-            For Each _item In items
+            SyncLock _obj_ftp_client_list_lock
 
-                Dim _dl_task As System.Threading.Tasks.Task
-                Dim _ftp_client As ArxOne.Ftp.FtpClient = Nothing
-                _ftp_session = Nothing
+                'Check if any FTP Client Exits for this Parent Container Session
+                If Not _ftp_client_list.ContainsKey(_item.ParentContainerID) Then
+                    SetupFTPClient(_ftp_client, _connection_info)
+                    _ftp_client_list.Add(_item.ParentContainerID, _ftp_client)
+                Else
+                    _ftp_client = _ftp_client_list(_item.ParentContainerID)
+                End If
 
-                SyncLock _obj_ftp_client_list_lock
+                If _single_session_mode = True Then
 
-                    'Check if any FTP Client Exits for this Parent Container Session
-                    If Not _ftp_client_list.ContainsKey(_item.ParentContainerID) Then
-                        SetupFTPClient(_ftp_client, _connection_info)
-                        _ftp_client_list.Add(_item.ParentContainerID, _ftp_client)
-                    Else
-                        _ftp_client = _ftp_client_list(_item.ParentContainerID)
-                    End If
-
-                    If _single_session_mode = True Then
-
-                        If _ftp_session_list.ContainsKey(_item.ParentContainerID) Then
-                            _ftp_session = _ftp_session_list(_item.ParentContainerID)
-                        Else
-                            _ftp_session = _ftp_client.Session
-                            _ftp_session_list.Add(_item.ParentContainerID, _ftp_session)
-                        End If
-
+                    If _ftp_session_list.ContainsKey(_item.ParentContainerID) Then
+                        _ftp_session = _ftp_session_list(_item.ParentContainerID)
                     Else
                         _ftp_session = _ftp_client.Session
+                        _ftp_session_list.Add(_item.ParentContainerID, _ftp_session)
                     End If
 
-                End SyncLock
+                Else
+                    _ftp_session = _ftp_client.Session
+                End If
 
-                'ToDo: Prüfen ob Verbindung zum Server hergestellt werden kann ->> Fehlerbehandlung
+            End SyncLock
 
-                _dl_task = System.Threading.Tasks.Task.Run(Sub()
-                                                               DownloadItem(_item, _ftp_session, _ct)
-                                                           End Sub)
-                _tasks.Add(_dl_task)
+            'ToDo: Prüfen ob Verbindung zum Server hergestellt werden kann ->> Fehlerbehandlung
 
-            Next
-
-            System.Threading.Tasks.Task.WhenAll(_tasks).Wait()
+            DownloadItem(_item, _ftp_session)
 
         Catch ex As AggregateException
             _log.Error(ex, ex.Message)
@@ -224,13 +214,14 @@ Class DownloadHelper
             _item.DownloadStatus = NET3.DownloadItem.Status.Failed_AuthError
             ParseFTPException(ex, _item)
         Finally
-            PostDownload(_item, _ftp_session, _ct)
+            PostDownload(_item, _ftp_session)
         End Try
 
+        Return _item
 
-    End Sub
+    End Function
 
-    Private Sub DownloadItem(ByVal _item As DownloadItem, ByVal _ftp_session As ArxOne.Ftp.FtpSession, ByVal _ct As System.Threading.CancellationToken)
+    Private Sub DownloadItem(ByVal _item As DownloadItem, ByVal _ftp_session As ArxOne.Ftp.FtpSession)
 
         Dim _settings As New Settings
         Dim _filemode As IO.FileMode
@@ -255,7 +246,9 @@ Class DownloadHelper
 
         Try
 
-            _ct.ThrowIfCancellationRequested()
+            If SmartThreadPool.IsWorkItemCanceled = True Then
+                Throw New Exception("Canceld")
+            End If
 
             If String.IsNullOrWhiteSpace(_item.LocalFile) Then
                 Throw New Exception("Dateipfad ist leer!")
@@ -310,9 +303,7 @@ Class DownloadHelper
 
                     Using _local_write_stream As New IO.FileStream(_item.LocalFile, _filemode, IO.FileAccess.Write, IO.FileShare.None, 8192, False)
 
-                        While bytesRead > 0 And _ct.IsCancellationRequested = False
-
-                            _ct.ThrowIfCancellationRequested()
+                        While bytesRead > 0 And SmartThreadPool.IsWorkItemCanceled = False
 
                             Dim _tmp_percent_downloaded As Double = 0
                             Dim _new_perc As Integer = 0
@@ -402,12 +393,12 @@ Class DownloadHelper
             End If
 
         Finally
-            PostDownload(_item, _ftp_session, _ct)
+            PostDownload(_item, _ftp_session)
         End Try
 
     End Sub
 
-    Private Sub PostDownload(ByRef _item As DownloadItem, ByVal _ftp_session As ArxOne.Ftp.FtpSession, _ct As System.Threading.CancellationToken)
+    Private Sub PostDownload(ByRef _item As DownloadItem, ByVal _ftp_session As ArxOne.Ftp.FtpSession)
 
         Dim _hashcommand As String = String.Empty
         Dim _reply As ArxOne.Ftp.FtpReply
@@ -416,7 +407,9 @@ Class DownloadHelper
 
         Try
 
-            _ct.ThrowIfCancellationRequested()
+            If SmartThreadPool.IsWorkItemCanceled = True Then
+                Throw New Exception("Cancel!")
+            End If
 
             _item.DownloadSpeed = String.Empty
 
@@ -535,12 +528,12 @@ Class DownloadHelper
                     _log.Info("Setze Item auf die Retry Warteliste")
                     _item.DownloadStatus = NET3.DownloadItem.Status.Retry
                 Else
-                    _ftp_session.Invalidate() 'ToDO: Prüfen -> Session irgendwie beenden
+                    If Not IsNothing(_ftp_session) Then
+                        _ftp_session.Invalidate() 'ToDO: Prüfen -> Session irgendwie beenden
+                    End If
                 End If
 
             End If
-
-            RaiseEvent ItemDownloadComplete(_item)
 
         End Try
 

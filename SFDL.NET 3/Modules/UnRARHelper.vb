@@ -184,9 +184,7 @@ Module UnRARHelper
 
             _unrar_process.Start()
 
-            Await Task.Run(Sub() _unrar_process.WaitForExit(CInt(TimeSpan.FromSeconds(5).TotalMilliseconds)))
-
-            _unrar_process.Kill()
+            Await Task.Run(Sub() _unrar_process.WaitForExit(CInt(TimeSpan.FromSeconds(15).TotalMilliseconds)))
 
             _tmp_output = _unrar_process.StandardOutput.ReadToEnd.ToLower
 
