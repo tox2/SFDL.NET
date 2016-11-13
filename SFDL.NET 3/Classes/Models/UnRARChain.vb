@@ -1,4 +1,6 @@
-﻿Public Class UnRARChain
+﻿Imports SFDL.Container
+
+Public Class UnRARChain
 
     Public Property MasterUnRarChainFile As DownloadItem
     Public Property ChainMemberFiles As New List(Of DownloadItem)

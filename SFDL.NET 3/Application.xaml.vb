@@ -1,4 +1,4 @@
-﻿Imports System.Threading
+﻿
 
 Class Application
 
@@ -75,6 +75,12 @@ Class Application
 
             End If
         Next
+
+    End Sub
+
+    Private Async Sub Application_Exit(sender As Object, e As ExitEventArgs) Handles Me.[Exit]
+
+
 
     End Sub
 

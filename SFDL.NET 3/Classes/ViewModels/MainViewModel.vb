@@ -36,6 +36,7 @@ Public Class MainViewModel
 
         Dim _mytask As New AppTask("")
         Dim _mycontainer As New Container.Container
+        Dim _mylegacycontainer As New Container.Legacy.SFDLFile
         Dim _mycontainer_session As ContainerSession
         Dim _decrypt_password As String
         Dim _decrypt As New SFDL.Container.Decrypt
@@ -53,12 +54,27 @@ Public Class MainViewModel
 
             Dim _bulk_result As Boolean
 
-            If GetContainerVersion(_sfdl_container_path) = 0 Or GetContainerVersion(_sfdl_container_path) > 10 Then
+            Select Case GetContainerVersion(_sfdl_container_path)
 
-                Throw New Exception("Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!")
-            End If
+                Case 0 'Invalid
+                    Throw New Exception("Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!")
 
-            _mycontainer = XMLHelper.XMLDeSerialize(_mycontainer, _sfdl_container_path)
+                Case <= 5 'SFDL v1 - not supported anymore
+                    Throw New Exception("Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!")
+
+                Case <= 9 'SFDL v2  - try to convert
+                    _mylegacycontainer = CType(XMLHelper.XMLDeSerialize(_mylegacycontainer, _sfdl_container_path), SFDL.Container.Legacy.SFDLFile)
+                    Converter.ConvertSFDLv2ToSFDLv3(_mylegacycontainer, _mycontainer)
+
+                Case > 10 'Invalid
+                    Throw New Exception("Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!")
+
+                Case Else 'Valid v3 Container
+
+                    _mycontainer = XMLHelper.XMLDeSerialize(_mycontainer, _sfdl_container_path)
+
+            End Select
+
 
             If _mycontainer.Encrypted = True Then
 

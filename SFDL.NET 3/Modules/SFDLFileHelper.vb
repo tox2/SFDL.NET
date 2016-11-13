@@ -19,6 +19,21 @@
             _version = 0
         End Try
 
+        'SFDL v2 COntainer
+        If _version = 0 Then
+
+            Try
+
+                For Each _element As Xml.XmlNode In _xml.GetElementsByTagName("SFDLFileVersion")
+                    _version = Integer.Parse(_element.InnerText.ToString)
+                Next
+
+            Catch ex As Exception
+                _version = 0
+            End Try
+
+        End If
+
         _log.Info("SFDL File Version: {0}", _version)
 
         Return _version
