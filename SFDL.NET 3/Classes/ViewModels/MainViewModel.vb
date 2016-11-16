@@ -8,13 +8,26 @@ Public Class MainViewModel
 
     Private _settings As New Settings
 
-    Dim _eta_ts As New System.Threading.CancellationTokenSource()
-    Dim _dl_item_ts As New System.Threading.CancellationTokenSource()
-    Dim _stp As New SmartThreadPool
+    'Dim _eta_ts As New System.Threading.CancellationTokenSource()
+    'Dim _dl_item_ts As New System.Threading.CancellationTokenSource()
+    Private _stp As New SmartThreadPool
+    Private _lock_active_tasks As New Object
+    Private _lock_done_tasks As New Object
+    Private _lock_download_items As New Object
+    Private _lock_container_sessions As New Object
+
 
     Public Sub New()
         _instance = Me
         _settings = Application.Current.Resources("Settings")
+
+        'Init ThreadSafe Observ Collections
+
+        BindingOperations.EnableCollectionSynchronization(ActiveTasks, _lock_active_tasks)
+        BindingOperations.EnableCollectionSynchronization(DoneTasks, _lock_done_tasks)
+        BindingOperations.EnableCollectionSynchronization(DownloadItems, _lock_download_items)
+        BindingOperations.EnableCollectionSynchronization(ContainerSessions, _lock_container_sessions)
+
         CreateView()
     End Sub
 
@@ -46,9 +59,7 @@ Public Class MainViewModel
 
         AddHandler _mytask.TaskDone, AddressOf TaskDoneEvent
 
-        DispatchService.DispatchService.Invoke(Sub()
-                                                   ActiveTasks.Add(_mytask)
-                                               End Sub)
+        ActiveTasks.Add(_mytask)
 
         _mytask.SetTaskStatus(TaskStatus.Running, String.Format("SFDL Datei {0} wird geöffnet...", _sfdl_container_path))
 
@@ -210,15 +221,15 @@ Decrypt:
             'ToDo: Parse/Generate InstantVideo Chain
 
 
-            DispatchService.DispatchService.Invoke(Sub()
 
-                                                       For Each _item In _mycontainer_session.DownloadItems
-                                                           DownloadItems.Add(_item)
-                                                       Next
 
-                                                       ContainerSessions.Add(_mycontainer_session)
+            For Each _item In _mycontainer_session.DownloadItems
+                DownloadItems.Add(_item)
 
-                                                   End Sub)
+            Next
+
+            ContainerSessions.Add(_mycontainer_session)
+
 
             If _bulk_result = False And Not _mycontainer_session.DownloadItems.Count = 0 Then
 
@@ -393,6 +404,7 @@ Decrypt:
 
                 _log.Debug("InUseTHreads:{0}", _session.WIG.InUseThreads)
                 _log.Debug("Waiting Callbacks:{0}", _session.WIG.WaitingCallbacks)
+                _log.Debug("Threads to pull: {0}", _session.ContainerFile.MaxDownloadThreads - _session.WIG.InUseThreads)
 
                 For Each _dlitem In DownloadItems.Where(Function(myitem) (myitem.ParentContainerID.Equals(_session.ID) And (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Retry))).Take(_session.ContainerFile.MaxDownloadThreads - _session.WIG.InUseThreads)
 
@@ -505,9 +517,7 @@ Decrypt:
 
                                      AddHandler _unrar_task.TaskDone, AddressOf TaskDoneEvent
 
-                                     DispatchService.DispatchService.Invoke(Sub()
-                                                                                ActiveTasks.Add(_unrar_task)
-                                                                            End Sub)
+                                     ActiveTasks.Add(_unrar_task)
 
                                      'TODO: Block Application Exit while UnRAR is Running
                                      UnRAR(_chain, _unrar_task, _settings.UnRARSettings)
@@ -557,9 +567,7 @@ Decrypt:
 
                                                                 AddHandler _sr_task.TaskDone, AddressOf TaskDoneEvent
 
-                                                                DispatchService.DispatchService.Invoke(Sub()
-                                                                                                           ActiveTasks.Add(_sr_task)
-                                                                                                       End Sub)
+                                                                ActiveTasks.Add(_sr_task)
 
                                                                 _speedreport = SpeedreportHelper.GenerateSpeedreport(_mysession, _settings.SpeedReportSettings)
                                                                 'ToDO: Caution: Post Action!
@@ -635,8 +643,8 @@ Decrypt:
 
         Await System.Threading.Tasks.Task.Run(Sub()
                                                   Application.Current.Resources("DownloadStopped") = True
-                                                  _eta_ts.Cancel()
-                                                  _dl_item_ts.Cancel()
+                                                  '_eta_ts.Cancel()
+                                                  '_dl_item_ts.Cancel()
                                               End Sub)
 
         Me.ButtonDownloadStartStop = False
@@ -934,14 +942,8 @@ Decrypt:
                                             'Wait 5 Seconds
                                             System.Threading.Thread.Sleep(5000)
 
-                                            DispatchService.DispatchService.Invoke(Sub()
-
-                                                                                       ActiveTasks.Remove(e)
-                                                                                       DoneTasks.Add(e)
-
-                                                                                   End Sub)
-
-
+                                            ActiveTasks.Remove(e)
+                                            DoneTasks.Add(e)
 
                                         End Sub)
 

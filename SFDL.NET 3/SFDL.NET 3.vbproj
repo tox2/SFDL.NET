@@ -88,6 +88,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\DispatchService.vb" />
     <Compile Include="Classes\SFDL Converter\Converter.vb" />
     <Compile Include="Classes\SingleInstance\ArgumentsReceivedEventArgs.vb" />
     <Compile Include="Classes\Exceptions\NotEnoughFreeDiskSpaceException.vb" />
@@ -103,7 +104,6 @@
     <Compile Include="Classes\XAML Converter\ExistingFileHandlingConverter.vb" />
     <Compile Include="Classes\XAML Converter\InvertBooleanConverter.vb" />
     <Compile Include="Classes\DelegateCommand.vb" />
-    <Compile Include="Classes\DispatchService.vb" />
     <Compile Include="Classes\Models\RemoteControlSettings.vb" />
     <Compile Include="Classes\Models\Settings.vb" />
     <Compile Include="Classes\Models\SpeedreportSettings.vb" />
@@ -116,7 +116,7 @@
     <Compile Include="MainWindow.xaml.vb">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Modules\DownloadHelper.vb" />
+    <Compile Include="Classes\DownloadHelper.vb" />
     <Compile Include="Modules\FTPHelper.vb" />
     <Compile Include="Modules\HashHelper.vb" />
     <Compile Include="Modules\LogHelper.vb" />

@@ -18,9 +18,9 @@ Public Class MainWindow
         For Each _arg In Environment.GetCommandLineArgs
 
             If Not String.IsNullOrWhiteSpace(_arg) And IO.Path.GetExtension(_arg).ToLower = ".sfdl" Then
-                DispatchService.DispatchService.Invoke(Sub()
-                                                           MainViewModel.ThisInstance.OpenSFDLFile(_arg)
-                                                       End Sub)
+                'DispatchService.DispatchService.Invoke(Sub()
+                MainViewModel.ThisInstance.OpenSFDLFile(_arg)
+                'End Sub)
             End If
 
         Next
