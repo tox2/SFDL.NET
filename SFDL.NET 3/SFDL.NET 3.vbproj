@@ -89,6 +89,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\DispatchService.vb" />
+    <Compile Include="Classes\Exceptions\DownloadStoppedException.vb" />
     <Compile Include="Classes\SFDL Converter\Converter.vb" />
     <Compile Include="Classes\SingleInstance\ArgumentsReceivedEventArgs.vb" />
     <Compile Include="Classes\Exceptions\NotEnoughFreeDiskSpaceException.vb" />

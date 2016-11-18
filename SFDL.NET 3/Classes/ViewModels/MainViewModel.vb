@@ -492,125 +492,130 @@ Decrypt:
         Dim _mysession As ContainerSession
         Dim _item As DownloadItem
 
-        _item = wir.Result
-        _mysession = ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID))
+        Try
 
-        '  _log.Debug("Item {0} war als Download gequed und ist jetzt fertig - Reduziere aktiven Thread Count für diese Session", _item.FileName)
+            _item = wir.Result
 
-        Task.Run(Sub()
+            _mysession = ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID))
 
-                     _log.Info("Prüfe etwas entpackt werden kann...")
+            Task.Run(Sub()
 
-                     If Not _mysession.UnRarChains.Count = 0 And _settings.UnRARSettings.UnRARAfterDownload = True Then
+                         _log.Info("Prüfe etwas entpackt werden kann...")
 
-                         For Each _chain In _mysession.UnRarChains
+                         If Not _mysession.UnRarChains.Count = 0 And _settings.UnRARSettings.UnRARAfterDownload = True Then
 
-                             If (isUnRarChainComplete(_chain) = True And _chain.UnRARDone = False) And _chain.UnRARRunning = False Then
+                             For Each _chain In _mysession.UnRarChains
 
-                                 _chain.UnRARRunning = True
+                                 If (isUnRarChainComplete(_chain) = True And _chain.UnRARDone = False) And _chain.UnRARRunning = False Then
 
-                                 _log.Debug("Chain {0} ist komplett!", _chain.MasterUnRarChainFile.FileName.ToString)
+                                     _chain.UnRARRunning = True
 
-                                 If _settings.UnRARSettings.UnRARAfterDownload = True And _chain.UnRARDone = False Then
+                                     _log.Debug("Chain {0} ist komplett!", _chain.MasterUnRarChainFile.FileName.ToString)
 
-                                     _unrar_task = New AppTask(String.Format("Archiv {0} wird entpackt....", IO.Path.GetFileName(_chain.MasterUnRarChainFile.LocalFile)))
+                                     If _settings.UnRARSettings.UnRARAfterDownload = True And _chain.UnRARDone = False Then
 
-                                     AddHandler _unrar_task.TaskDone, AddressOf TaskDoneEvent
+                                         _unrar_task = New AppTask(String.Format("Archiv {0} wird entpackt....", IO.Path.GetFileName(_chain.MasterUnRarChainFile.LocalFile)))
 
-                                     ActiveTasks.Add(_unrar_task)
+                                         AddHandler _unrar_task.TaskDone, AddressOf TaskDoneEvent
 
-                                     'TODO: Block Application Exit while UnRAR is Running
-                                     UnRAR(_chain, _unrar_task, _settings.UnRARSettings)
+                                         ActiveTasks.Add(_unrar_task)
 
-                                     _chain.UnRARDone = True
+                                         'TODO: Block Application Exit while UnRAR is Running
+                                         UnRAR(_chain, _unrar_task, _settings.UnRARSettings)
+
+                                         _chain.UnRARDone = True
+
+                                     Else
+                                         '_block_app_exit = False
+                                         '_unrar_active = False
+                                     End If
+
+                                     _chain.UnRARRunning = False
 
                                  Else
-                                     '_block_app_exit = False
-                                     '_unrar_active = False
+                                     _log.Info("UnRARChain ist noch nicht vollständig oder diese wird bereits entapckt/bearbeitet")
+                                     'TODO: Check for InstatnVideo
                                  End If
 
-                                 _chain.UnRARRunning = False
+                             Next
 
-                             Else
-                                 _log.Info("UnRARChain ist noch nicht vollständig oder diese wird bereits entapckt/bearbeitet")
-                                 'TODO: Check for InstatnVideo
-                             End If
+                         Else
+                             _log.Info("Dieser Container hat keine UnRarChain")
+                         End If
 
-                         Next
+                     End Sub)
 
-                     Else
-                         _log.Info("Dieser Container hat keine UnRarChain")
-                     End If
-
-                 End Sub)
-
-        System.Threading.Tasks.Task.Run(Sub()
+            System.Threading.Tasks.Task.Run(Sub()
 
 #Region "Check if Download or Any Session is Complete"
 
-                                            SyncLock _mysession.SynLock
+                                                SyncLock _mysession.SynLock
 
-                                                If _mysession.SessionState = ContainerSessionState.Queued Or _mysession.SessionState = ContainerSessionState.DownloadRunning Then
+                                                    If _mysession.SessionState = ContainerSessionState.Queued Or _mysession.SessionState = ContainerSessionState.DownloadRunning Then
 
-                                                    If DownloadItems.Where(Function(myitem) (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Running) Or (myitem.DownloadStatus = DownloadItem.Status.Retry Or myitem.DownloadStatus = DownloadItem.Status.RetryWait)).Count = 0 Then 'Alle Items sind heruntergeladen
+                                                        If DownloadItems.Where(Function(myitem) (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Running) Or (myitem.DownloadStatus = DownloadItem.Status.Retry Or myitem.DownloadStatus = DownloadItem.Status.RetryWait)).Count = 0 Then 'Alle Items sind heruntergeladen
 
-                                                        _mysession.SessionState = ContainerSessionState.DownloadComplete
-                                                        _mysession.DownloadStoppedTime = Now
+                                                            _mysession.SessionState = ContainerSessionState.DownloadComplete
+                                                            _mysession.DownloadStoppedTime = Now
 #Region "Speedreport"
-                                                        If _settings.SpeedReportSettings.SpeedreportEnabled = True Then
+                                                            If _settings.SpeedReportSettings.SpeedreportEnabled = True Then
 
-                                                            Dim _speedreport As String = String.Empty
-                                                            Dim _sr_filepath As String = String.Empty
-                                                            Dim _sr_task As New AppTask("Speedreport wird erstellt")
+                                                                Dim _speedreport As String = String.Empty
+                                                                Dim _sr_filepath As String = String.Empty
+                                                                Dim _sr_task As New AppTask("Speedreport wird erstellt")
 
-                                                            Try
+                                                                Try
 
-                                                                AddHandler _sr_task.TaskDone, AddressOf TaskDoneEvent
+                                                                    AddHandler _sr_task.TaskDone, AddressOf TaskDoneEvent
 
-                                                                ActiveTasks.Add(_sr_task)
+                                                                    ActiveTasks.Add(_sr_task)
 
-                                                                _speedreport = SpeedreportHelper.GenerateSpeedreport(_mysession, _settings.SpeedReportSettings)
-                                                                'ToDO: Caution: Post Action!
+                                                                    _speedreport = SpeedreportHelper.GenerateSpeedreport(_mysession, _settings.SpeedReportSettings)
+                                                                    'ToDO: Caution: Post Action!
 
-                                                                If String.IsNullOrWhiteSpace(_speedreport) Then
-                                                                    Throw New Exception("Speedreport failed")
-                                                                End If
+                                                                    If String.IsNullOrWhiteSpace(_speedreport) Then
+                                                                        Throw New Exception("Speedreport failed")
+                                                                    End If
 
-                                                                _sr_filepath = IO.Path.GetDirectoryName(_mysession.DownloadItems(0).LocalFile)
+                                                                    _sr_filepath = IO.Path.GetDirectoryName(_mysession.DownloadItems(0).LocalFile)
 
-                                                                _sr_filepath = IO.Path.Combine(_sr_filepath, "speedreport.txt")
+                                                                    _sr_filepath = IO.Path.Combine(_sr_filepath, "speedreport.txt")
 
-                                                                My.Computer.FileSystem.WriteAllText(_sr_filepath, _speedreport, False, System.Text.Encoding.Default)
+                                                                    My.Computer.FileSystem.WriteAllText(_sr_filepath, _speedreport, False, System.Text.Encoding.Default)
 
-                                                                _sr_task.SetTaskStatus(TaskStatus.RanToCompletion, "Speedreport erstellt")
+                                                                    _sr_task.SetTaskStatus(TaskStatus.RanToCompletion, "Speedreport erstellt")
 
-                                                            Catch ex As Exception
-                                                                _sr_task.SetTaskStatus(TaskStatus.Faulted, "Speedreport Generation failed")
-                                                            End Try
+                                                                Catch ex As Exception
+                                                                    _sr_task.SetTaskStatus(TaskStatus.Faulted, "Speedreport Generation failed")
+                                                                End Try
 
+                                                            End If
+
+#End Region
                                                         End If
 
-#End Region
+
                                                     End If
 
-
-                                                End If
-
-                                            End SyncLock
+                                                End SyncLock
 
 #End Region
-                                        End Sub).ContinueWith(Sub()
+                                            End Sub).ContinueWith(Sub()
 
-                                                                  If ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0 Then
-                                                                      'Alle DL Fertig
-                                                                      _log.Info("Alle Downloads Abgeschlossen!")
-                                                                      Application.Current.Resources("DownloadStopped") = True
-                                                                      Me.ButtonDownloadStartStop = True
-                                                                  Else
-                                                                      QueryDownloadItems()
-                                                                  End If
+                                                                      If ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0 Then
+                                                                          'Alle DL Fertig
+                                                                          _log.Info("Alle Downloads Abgeschlossen/Gestoppt")
+                                                                          Application.Current.Resources("DownloadStopped") = True
+                                                                          Me.ButtonDownloadStartStop = True
+                                                                      Else
+                                                                          QueryDownloadItems()
+                                                                      End If
 
-                                                              End Sub)
+                                                                  End Sub)
+
+        Catch ex As Exception
+            _log.Error(ex, ex.Message)
+        End Try
 
     End Sub
 
@@ -643,8 +648,7 @@ Decrypt:
 
         Await System.Threading.Tasks.Task.Run(Sub()
                                                   Application.Current.Resources("DownloadStopped") = True
-                                                  '_eta_ts.Cancel()
-                                                  '_dl_item_ts.Cancel()
+                                                  _stp.Cancel()
                                               End Sub)
 
         Me.ButtonDownloadStartStop = False
@@ -992,6 +996,29 @@ Decrypt:
 
 #End Region
 
+    Private _max_download_speed As String
+    Public Property MaxDownloadSpeed As String
+        Set(value As String)
+
+            If Not String.IsNullOrWhiteSpace(value) Then
+
+                If IsNumeric(value) And (value >= Integer.MinValue And value <= Integer.MaxValue) Then
+                    _max_download_speed = value
+                Else
+                    _max_download_speed = 0
+                End If
+
+            Else
+                _max_download_speed = 0
+            End If
+
+            RaisePropertyChanged("MaxDownloadSpeed")
+
+        End Set
+        Get
+            Return _max_download_speed
+        End Get
+    End Property
 
 
 

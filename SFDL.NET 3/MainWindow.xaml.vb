@@ -29,6 +29,8 @@ Public Class MainWindow
             Await ShowMessageAsync(My.Resources.Strings.VariousStrings_Warning, My.Resources.Strings.VariousStrings_UnRARExecutableMissingException)
         End If
 
+        ComB_Container_Info.DataContext = MainViewModel.ThisInstance
+
     End Sub
 
     Private Sub ComB_Container_Info_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComB_Container_Info.SelectionChanged

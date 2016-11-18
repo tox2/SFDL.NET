@@ -15,10 +15,32 @@ Class DownloadHelper
         _settings = Application.Current.Resources("Settings")
     End Sub
 
-    Public Event ItemDownloadComplete(ByVal _item As DownloadItem)
     Public Event ServerFull(ByVal _item As DownloadItem)
 
 #Region "Private Subs"
+
+    Private Sub ThrottleByteTransfer(maxBytesPerSecond As Integer, bytesTotal As Long, elapsed As TimeSpan, bytesPerSec As Integer)
+        ' we only throttle if the maxBytesPerSecond is not zero (zero turns off the throttle)
+        If maxBytesPerSecond > 0 Then
+            ' we only throttle if our through-put is higher than what we want
+            If bytesPerSec > maxBytesPerSecond Then
+                Dim elapsedMilliSec As Double = If(elapsed.TotalSeconds = 0, elapsed.TotalMilliseconds, elapsed.TotalSeconds * 1000)
+
+                ' need to calc a delay in milliseconds for the throttle wait based on how fast the 
+                ' transfer is relative to the speed it needs to be
+                Dim millisecDelay As Double = (bytesTotal / (maxBytesPerSecond / 1000) - elapsedMilliSec)
+
+                ' can only sleep to a max of an Int32 so we need to check this since bytesTotal is a long value
+                ' this should never be an issue but never say never
+                If millisecDelay > 10000 Then
+                    millisecDelay = 10000
+                End If
+
+                ' go to sleep
+                System.Threading.Thread.Sleep(CInt(millisecDelay))
+            End If
+        End If
+    End Sub
 
     Private Sub GetItemFileSize(ByRef _item As DownloadItem, ByVal _ftp_session As ArxOne.Ftp.FtpSession)
 
@@ -172,8 +194,8 @@ Class DownloadHelper
 
         Try
 
-            If SmartThreadPool.IsWorkItemCanceled = True Then
-                Throw New Exception("Canceld!")
+            If SmartThreadPool.IsWorkItemCanceled = True Or Application.Current.Resources("DownloadStopped") = True Then
+                Throw New DownloadStoppedException("Canceld!")
             End If
 
             SyncLock _obj_ftp_client_list_lock
@@ -197,6 +219,13 @@ Class DownloadHelper
 
                 Else
                     _ftp_session = _ftp_client.Session
+
+                    If _ftp_session_list.ContainsKey(_item.ParentContainerID) Then
+                        _ftp_session_list.Add(Guid.NewGuid, _ftp_session)
+                    Else
+                        _ftp_session_list.Add(_item.ParentContainerID, _ftp_session)
+                    End If
+
                 End If
 
             End SyncLock
@@ -204,6 +233,10 @@ Class DownloadHelper
             'ToDo: Prüfen ob Verbindung zum Server hergestellt werden kann ->> Fehlerbehandlung
 
             DownloadItem(_item, _ftp_session)
+
+        Catch ex As DownloadStoppedException
+            _log.Info("Download Stopped")
+            _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
 
         Catch ex As AggregateException
             _log.Error(ex, ex.Message)
@@ -246,7 +279,7 @@ Class DownloadHelper
 
         Try
 
-            If SmartThreadPool.IsWorkItemCanceled = True Then
+            If SmartThreadPool.IsWorkItemCanceled = True Or Application.Current.Resources("DownloadStopped") = True Then
                 Throw New Exception("Canceld")
             End If
 
@@ -303,7 +336,7 @@ Class DownloadHelper
 
                     Using _local_write_stream As New IO.FileStream(_item.LocalFile, _filemode, IO.FileAccess.Write, IO.FileShare.None, 8192, False)
 
-                        While bytesRead > 0 And SmartThreadPool.IsWorkItemCanceled = False
+                        While bytesRead > 0 And (SmartThreadPool.IsWorkItemCanceled = False And Application.Current.Resources("DownloadStopped") = False)
 
                             Dim _tmp_percent_downloaded As Double = 0
                             Dim _new_perc As Integer = 0
@@ -346,8 +379,36 @@ Class DownloadHelper
                             End If
 
 #End Region
-                            'ToDO: Limit SPeed
-                            'ThrottleByteTransfer(_max_bytes_per_second, bytestotalread, _ctime, bytesPerSec)
+
+#Region "Limit Speed"
+
+
+                            Dim _max_bytes_per_second As Integer
+                            Dim _session_count As Integer
+
+                            If Not String.IsNullOrWhiteSpace(MainViewModel.ThisInstance.MaxDownloadSpeed) Then
+
+                                _max_bytes_per_second = Integer.Parse(MainViewModel.ThisInstance.MaxDownloadSpeed)
+
+                                If Not _max_bytes_per_second <= 0 Then
+
+                                    _session_count = _ftp_session_list.Where(Function(mysession) IsNothing(mysession.Value.Connection.ProtocolStream) = False).Count
+
+                                    If Not _session_count <= 1 Then
+                                        _max_bytes_per_second = CInt((_max_bytes_per_second * 1024) / _session_count)
+                                    Else
+                                        _max_bytes_per_second = CInt((_max_bytes_per_second * 1024))
+                                    End If
+
+                                    ThrottleByteTransfer(_max_bytes_per_second, bytestotalread, _ctime, bytesPerSec)
+
+                                End If
+
+                            End If
+
+#End Region
+
+
 
                         End While
 
@@ -407,8 +468,8 @@ Class DownloadHelper
 
         Try
 
-            If SmartThreadPool.IsWorkItemCanceled = True Then
-                Throw New Exception("Cancel!")
+            If SmartThreadPool.IsWorkItemCanceled = True Or Application.Current.Resources("DownloadStopped") = True Then
+                Throw New DownloadStoppedException("Cancel!")
             End If
 
             _item.DownloadSpeed = String.Empty
@@ -511,6 +572,10 @@ Class DownloadHelper
                 _log.Info("Download wurde gestoppt oder Item wurde nicht vollständig heruntergeladen - Überspringe Hash Check")
             End If
 
+        Catch ex As DownloadStoppedException
+            _log.Info("Download Stopped")
+            _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
+
         Catch ex As Exception
             _log.Error(ex.Message)
             _item.DownloadStatus = NET3.DownloadItem.Status.Completed_HashInvalid
@@ -521,7 +586,7 @@ Class DownloadHelper
                 RaiseEvent ServerFull(_item)
             Else
 
-                If _item.RetryPossible And _item.RetryCount < 3 Then
+                If (_item.RetryPossible And _item.RetryCount < 3) And Not _item.DownloadStatus = NET3.DownloadItem.Status.Stopped Then
                     _item.DownloadStatus = NET3.DownloadItem.Status.RetryWait
                     System.Threading.Thread.Sleep(_settings.RetryWaitTime * 1000)
                     _item.RetryCount += 1
@@ -529,7 +594,7 @@ Class DownloadHelper
                     _item.DownloadStatus = NET3.DownloadItem.Status.Retry
                 Else
                     If Not IsNothing(_ftp_session) Then
-                        _ftp_session.Invalidate() 'ToDO: Prüfen -> Session irgendwie beenden
+                        _ftp_session.Invalidate()
                     End If
                 End If
 
