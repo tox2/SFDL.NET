@@ -20,7 +20,6 @@ Class Application
 
                 _log = NLog.LogManager.GetLogger("Startup")
 
-                'ToDo: Load Settings From XML File
                 _settings_xml_path = IO.Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3\settings.xml")
 
                 If IO.Directory.Exists(IO.Path.GetDirectoryName(_settings_xml_path)) = False Then

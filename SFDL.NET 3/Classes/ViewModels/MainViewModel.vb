@@ -8,8 +8,6 @@ Public Class MainViewModel
 
     Private _settings As New Settings
 
-    'Dim _eta_ts As New System.Threading.CancellationTokenSource()
-    'Dim _dl_item_ts As New System.Threading.CancellationTokenSource()
     Private _stp As New SmartThreadPool
     Private _lock_active_tasks As New Object
     Private _lock_done_tasks As New Object
