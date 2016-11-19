@@ -1006,10 +1006,15 @@ Decrypt:
 
             If Not String.IsNullOrWhiteSpace(value) Then
 
-                If IsNumeric(value) And (value >= Integer.MinValue And value <= Integer.MaxValue) Then
-                    _max_download_speed = value
-                Else
-                    _max_download_speed = 0
+                If IsNumeric(value) Then
+
+                    If value >= Integer.MinValue And value <= Integer.MaxValue Then
+
+                        _max_download_speed = value
+                    Else
+                        _max_download_speed = 0
+                    End If
+
                 End If
 
             Else
