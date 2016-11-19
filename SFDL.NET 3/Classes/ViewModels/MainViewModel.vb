@@ -59,7 +59,7 @@ Public Class MainViewModel
 
         ActiveTasks.Add(_mytask)
 
-        _mytask.SetTaskStatus(TaskStatus.Running, String.Format("SFDL Datei {0} wird geöffnet...", _sfdl_container_path))
+        _mytask.SetTaskStatus(TaskStatus.Running, String.Format("SFDL Datei '{0}' wird geöffnet...", _sfdl_container_path))
 
         Try
 
@@ -68,17 +68,17 @@ Public Class MainViewModel
             Select Case GetContainerVersion(_sfdl_container_path)
 
                 Case 0 'Invalid
-                    Throw New Exception(String.Format("{0} - Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!", IO.Path.GetFileName(_sfdl_container_path)))
+                    Throw New Exception(String.Format("'{0}' - Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!", IO.Path.GetFileName(_sfdl_container_path)))
 
                 Case <= 5 'SFDL v1 - not supported anymore
-                    Throw New Exception(String.Format("{0} - Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!", IO.Path.GetFileName(_sfdl_container_path)))
+                    Throw New Exception(String.Format("'{0}' - Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!", IO.Path.GetFileName(_sfdl_container_path)))
 
                 Case <= 9 'SFDL v2  - try to convert
                     _mylegacycontainer = CType(XMLHelper.XMLDeSerialize(_mylegacycontainer, _sfdl_container_path), SFDL.Container.Legacy.SFDLFile)
                     Converter.ConvertSFDLv2ToSFDLv3(_mylegacycontainer, _mycontainer)
 
                 Case > 10 'Invalid
-                    Throw New Exception(String.Format("{0} - Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!", IO.Path.GetFileName(_sfdl_container_path)))
+                    Throw New Exception(String.Format("'{0}' - Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!", IO.Path.GetFileName(_sfdl_container_path)))
 
                 Case Else 'Valid v3 Container
 
@@ -94,7 +94,7 @@ Decrypt:
                     _decrypt_password = Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowInputAsync(Me, "SFDL entschlüsseln", String.Format("Bitte gib ein Passwort ein um den SFDL Container {0} zu entschlüsseln", IO.Path.GetFileName(_sfdl_container_path)))
 
                     If String.IsNullOrWhiteSpace(_decrypt_password) Then
-                        Throw New Exception(String.Format("{0} - SFDL entschlüsseln abgebrochen", IO.Path.GetFileName(_sfdl_container_path)))
+                        Throw New Exception(String.Format("'{0}' - SFDL entschlüsseln abgebrochen", IO.Path.GetFileName(_sfdl_container_path)))
                     End If
 
                     _decrypt.DecryptString(_mycontainer.Connection.Host, _decrypt_password)
@@ -120,7 +120,7 @@ Decrypt:
             GenerateContainerFingerprint(_mycontainer_session)
 
             If Not ContainerSessions.Where(Function(mycon) mycon.Fingerprint.Equals(_mycontainer_session.Fingerprint)).Count = 0 Then
-                Throw New Exception(String.Format("SFDL Container {0} ist bereits geöffnet!", IO.Path.GetFileName(_sfdl_container_path)))
+                Throw New Exception(String.Format("SFDL Container '{0}' ist bereits geöffnet!", IO.Path.GetFileName(_sfdl_container_path)))
             End If
 
             If Not _mycontainer_session.ContainerFile.Packages.Where(Function(mypackage) mypackage.BulkFolderMode = True).Count = 0 Then
@@ -130,7 +130,7 @@ Decrypt:
             GenerateContainerSessionDownloadItems(_mycontainer_session, _settings.NotMarkAllContainerFiles)
 
             If _bulk_result = False Or _mycontainer_session.DownloadItems.Count = 0 Then
-                Throw New Exception(String.Format("{0} - Öffnen fehlgeschlagen - Bulk Package konnte nicht gelesen werden", IO.Path.GetFileName(_sfdl_container_path)))
+                Throw New Exception(String.Format("'{0}' - Öffnen fehlgeschlagen - Bulk Package konnte nicht gelesen werden", IO.Path.GetFileName(_sfdl_container_path)))
             End If
 
 
@@ -231,9 +231,9 @@ Decrypt:
 
             If _bulk_result = False And Not _mycontainer_session.DownloadItems.Count = 0 Then
 
-                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL {0} teilweise geöffnet - Ein oder mehrere Packages konnten nicht gelesen werden.", IO.Path.GetFileName(_sfdl_container_path)))
+                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL '{0}' teilweise geöffnet - Ein oder mehrere Packages konnten nicht gelesen werden.", IO.Path.GetFileName(_sfdl_container_path)))
             Else
-                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL {0} geöffnet", IO.Path.GetFileName(_sfdl_container_path)))
+                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL '{0}' geöffnet", IO.Path.GetFileName(_sfdl_container_path)))
             End If
 
 
@@ -848,9 +848,15 @@ Decrypt:
 
     Private Sub CloseSFDLContainer(ByVal parameter As Object)
 
+        Dim _mytask As New AppTask("SFDL Container wird entfernt/geschlossen....")
+
         If Not IsNothing(parameter) Then
 
             If Not String.IsNullOrWhiteSpace(parameter) And parameter.ToString.Contains(";") Then
+
+                AddHandler _mytask.TaskDone, AddressOf TaskDoneEvent
+
+                ActiveTasks.Add(_mytask)
 
                 Dim _container_sessionid As Guid = Guid.Parse(parameter.ToString.Split(";")(1))
 
@@ -862,7 +868,10 @@ Decrypt:
                     DownloadItems.Remove(_item)
                 Next
 
-                ContainerSessions.Remove(ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_container_sessionid))(0))
+                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL Container '{0}' geschlossen", IO.Path.GetFileName(ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_container_sessionid)).FirstOrDefault.ContainerFileName)))
+
+                ContainerSessions.Remove(ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_container_sessionid)).FirstOrDefault)
+
 
             End If
 
