@@ -8,11 +8,13 @@ Public Class AppTask
     Private _taskstatusimage As String = String.Empty
     Private _taskstatus As TaskStatus
     Private _taskid As Guid
-    Public Sub New(ByVal _displaytext As String)
+    Private _taskname As String = String.Empty
+    Public Sub New(ByVal _displaytext As String, Optional taskname As String = "")
 
         _taskid = Guid.NewGuid
         _taskdisplaytext = _displaytext
         _taskstatus = TaskStatus.Running
+        _taskname = taskname
         _taskstatusimage = "Resources/Icons/appbar.control.fastforward.variant.png"
 
     End Sub
@@ -76,6 +78,12 @@ Public Class AppTask
     Public ReadOnly Property TaskStatus As TaskStatus
         Get
             Return _taskstatus
+        End Get
+    End Property
+
+    Public ReadOnly Property TaskName As String
+        Get
+            Return _taskname
         End Get
     End Property
 

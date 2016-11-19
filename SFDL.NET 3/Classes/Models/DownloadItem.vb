@@ -40,13 +40,20 @@ Public Class DownloadItem
 
     Public Property isSelected As Boolean
         Set(value As Boolean)
-            _selected = value
-            RaisePropertyChanged("isSelected")
 
-            If value = True Then
-                Me.DownloadStatus = Status.Queued
+            If (Me.DownloadStatus = Status.Running Or Me.DownloadStatus = Status.Retry) Or Me.DownloadStatus = Status.RetryWait Then
+                'do nothing
             Else
-                Me.DownloadStatus = Status.None
+                _selected = value
+
+                If value = True Then
+                    Me.DownloadStatus = Status.Queued
+                Else
+                    Me.DownloadStatus = Status.None
+                End If
+
+                RaisePropertyChanged("isSelected")
+
             End If
 
         End Set

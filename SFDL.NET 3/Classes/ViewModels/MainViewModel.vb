@@ -436,13 +436,16 @@ Decrypt:
     Private Sub StartDownload()
 
         Dim _log As NLog.Logger = NLog.LogManager.GetLogger("StartDownload")
-        Dim _mytask As New AppTask("Download wird gestartet...")
+        Dim _mytask As New AppTask("Download wird gestartet...", "ETATask")
         Dim _error As Boolean = False
 
         Try
 
             _stp = New SmartThreadPool
             _stp.MaxThreads = _settings.MaxDownloadThreads + 1 '+1 for ETA Thread
+
+            AddHandler _mytask.TaskDone, AddressOf TaskDoneEvent
+
             ActiveTasks.Add(_mytask)
 
 
@@ -477,8 +480,6 @@ Decrypt:
 
             Application.Current.Resources("DownloadStopped") = False
             Me.ButtonDownloadStartStop = False
-
-            ActiveTasks.Add(_mytask)
 
             _mytask.SetTaskStatus(TaskStatus.Running, "Download läuft...")
 
@@ -866,24 +867,6 @@ Decrypt:
             End If
 
         End If
-
-        'If Not IsNothing(SelectedDownloadItem) Then
-
-        '    Dim _container_sessionid As Guid
-
-        '    _container_sessionid = SelectedDownloadItem.ParentContainerID
-
-        '    Dim _tmp_list As New List(Of DownloadItem)
-
-        '    _tmp_list = DownloadItems.Where(Function(myitem) SelectedDownloadItem.ParentContainerID.Equals(myitem.ParentContainerID)).ToList
-
-        '    For Each _item In _tmp_list
-        '        DownloadItems.Remove(_item)
-        '    Next
-
-        '    ContainerSessions.Remove(ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_container_sessionid))(0))
-
-        'End If
 
 
     End Sub
