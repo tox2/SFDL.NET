@@ -295,9 +295,9 @@ Public Class SettingsViewModel
             .ShowNewFolderButton = True
         End With
 
-        _sdf_dialog.ShowDialog()
-
-        Me.DownloadDirectory = _sdf_dialog.SelectedPath
+        If _sdf_dialog.ShowDialog() = Forms.DialogResult.OK Then
+            Me.DownloadDirectory = _sdf_dialog.SelectedPath
+        End If
 
     End Sub
     Public ReadOnly Property SelectDownloadFolderCommand() As ICommand
