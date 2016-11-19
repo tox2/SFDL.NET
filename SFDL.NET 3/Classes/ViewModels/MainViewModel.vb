@@ -303,34 +303,69 @@ Decrypt:
 
                 If (Me.WindowState = WindowState.Maximized Or Me.WindowState = WindowState.Normal) Or Me.TasksExpanded = True Then 'Nur berechnen wenn Window Sichtbar
 
-                    System.Threading.Tasks.Parallel.ForEach(DownloadItems.Where(Function(myitem) Not myitem.DownloadStatus = DownloadItem.Status.None), Sub(_item As DownloadItem)
 
-                                                                                                                                                            If Not _item.DownloadStatus = DownloadItem.Status.Stopped Then 'ToDO: Prüfen ob das sinn macht
+                    _total_speed = DownloadItems.Where(Function(myitem) Not myitem.DownloadStatus = DownloadItem.Status.None).Sum(Function(_item)
 
-                                                                                                                                                                If Not String.IsNullOrWhiteSpace(_item.DownloadSpeed) Then
+                                                                                                                                      Dim _rt As Integer = 0
 
-                                                                                                                                                                    Dim _raw_speed As String = _item.DownloadSpeed.ToString
+                                                                                                                                      If Not _item.DownloadStatus = DownloadItem.Status.Stopped Then 'ToDO: Prüfen ob das sinn macht
 
-                                                                                                                                                                    If _raw_speed.Contains("KB/s") Then
-                                                                                                                                                                        _raw_speed = _raw_speed.Replace("KB/s", "").Trim
-                                                                                                                                                                        _total_speed += Double.Parse(_raw_speed)
-                                                                                                                                                                    Else
+                                                                                                                                          If Not String.IsNullOrWhiteSpace(_item.DownloadSpeed) Then
 
-                                                                                                                                                                        If _raw_speed.Contains("MB/s") Then
-                                                                                                                                                                            _raw_speed = _raw_speed.Replace("MB/s", "").Trim
-                                                                                                                                                                            _total_speed += Double.Parse(_raw_speed) * 1024
-                                                                                                                                                                        End If
+                                                                                                                                              Dim _raw_speed As String = _item.DownloadSpeed.ToString
 
-                                                                                                                                                                    End If
+                                                                                                                                              If _raw_speed.Contains("KB/s") Then
+                                                                                                                                                  _raw_speed = _raw_speed.Replace("KB/s", "").Trim
+                                                                                                                                                  _rt += Double.Parse(_raw_speed)
+                                                                                                                                              Else
 
-                                                                                                                                                                End If
+                                                                                                                                                  If _raw_speed.Contains("MB/s") Then
+                                                                                                                                                      _raw_speed = _raw_speed.Replace("MB/s", "").Trim
+                                                                                                                                                      _rt += Double.Parse(_raw_speed) * 1024
+                                                                                                                                                  End If
 
-                                                                                                                                                                _total_size += _item.FileSize
-                                                                                                                                                                _total_size_downloaded += _item.SizeDownloaded
+                                                                                                                                              End If
 
-                                                                                                                                                            End If
+                                                                                                                                          End If
 
-                                                                                                                                                        End Sub)
+                                                                                                                                      End If
+
+                                                                                                                                      Return _rt
+
+                                                                                                                                  End Function)
+
+                    _total_size = DownloadItems.Where(Function(myitem) Not myitem.DownloadStatus = DownloadItem.Status.None).Select(Function(_item) _item.FileSize).Sum
+
+                    _total_size_downloaded = DownloadItems.Where(Function(myitem) Not myitem.DownloadStatus = DownloadItem.Status.None).Select(Function(_item) _item.SizeDownloaded).Sum
+
+                    'System.Threading.Tasks.Parallel.ForEach(DownloadItems.Where(Function(myitem) Not myitem.DownloadStatus = DownloadItem.Status.None), Sub(_item As DownloadItem)
+
+                    '                                                                                                                                        If Not _item.DownloadStatus = DownloadItem.Status.Stopped Then 'ToDO: Prüfen ob das sinn macht
+
+                    '                                                                                                                                            If Not String.IsNullOrWhiteSpace(_item.DownloadSpeed) Then
+
+                    '                                                                                                                                                Dim _raw_speed As String = _item.DownloadSpeed.ToString
+
+                    '                                                                                                                                                If _raw_speed.Contains("KB/s") Then
+                    '                                                                                                                                                    _raw_speed = _raw_speed.Replace("KB/s", "").Trim
+                    '                                                                                                                                                    _total_speed += Double.Parse(_raw_speed)
+                    '                                                                                                                                                Else
+
+                    '                                                                                                                                                    If _raw_speed.Contains("MB/s") Then
+                    '                                                                                                                                                        _raw_speed = _raw_speed.Replace("MB/s", "").Trim
+                    '                                                                                                                                                        _total_speed += Double.Parse(_raw_speed) * 1024
+                    '                                                                                                                                                    End If
+
+                    '                                                                                                                                                End If
+
+                    '                                                                                                                                            End If
+
+                    '                                                                                                                                            _total_size += _item.FileSize
+                    '                                                                                                                                            _total_size_downloaded += _item.SizeDownloaded
+
+                    '                                                                                                                                        End If
+
+                    '                                                                                                                                    End Sub)
 
                     _percent_done = CInt((_total_size_downloaded / _total_size) * 100)
 
@@ -363,7 +398,7 @@ Decrypt:
             Catch ex As Exception
 
             Finally
-                System.Threading.Thread.Sleep(1000)
+                System.Threading.Thread.Sleep(500)
             End Try
 
         End While
