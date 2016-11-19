@@ -254,6 +254,10 @@ Decrypt:
                 Throw New Exception("You must select minumum 1 Item to Download!")
             End If
 
+            If String.IsNullOrWhiteSpace(_settings.DownloadDirectory) Then
+                Throw New Exception("Du hat keinen Download Pfad in den Einstellungen hinterlegt!")
+            End If
+
             If IO.Directory.Exists(_settings.DownloadDirectory) = False Then
                 Throw New Exception("Download Verzeichnis existiert nicht!")
             End If
@@ -439,6 +443,7 @@ Decrypt:
 
             _stp = New SmartThreadPool
             _stp.MaxThreads = _settings.MaxDownloadThreads + 1 '+1 for ETA Thread
+            ActiveTasks.Add(_mytask)
 
 
 #Region "Cleanup"

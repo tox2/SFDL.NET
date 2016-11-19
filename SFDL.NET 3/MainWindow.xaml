@@ -32,8 +32,9 @@
             <Controls:Flyout Width="400"
                              Header="Container Infos"
                              IsOpen="{Binding ContainerInfoOpen}"
+                             IsOpenChanged="Flyout_IsOpenChanged"
                              Position="Right"
-                             Theme="Light" IsOpenChanged="Flyout_IsOpenChanged">
+                             Theme="Light">
 
                 <Grid>
                     <StackPanel>
