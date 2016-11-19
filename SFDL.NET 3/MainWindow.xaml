@@ -211,7 +211,6 @@
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Click="MenuItem_Click" Header="Test" />
 
         </Menu>
         <ToolBar x:Name="MainToolBar"
@@ -380,16 +379,18 @@
                               ItemsSource="{Binding ActiveTasks}">
                         <ListView.View>
                             <GridView AllowsColumnReorder="False">
-                                <GridViewColumn Width="30">
+                                <GridViewColumn Width="120" Header="Task">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Image Height="20" Source="{Binding TaskStatusImage}" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Height="20"
+                                                       Margin="0,0,5,0"
+                                                       Source="{Binding TaskStatusImage}" />
+                                                <TextBlock Text="{Binding TaskDisplayText}" />
+                                            </StackPanel>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Width="450"
-                                                DisplayMemberBinding="{Binding TaskDisplayText}"
-                                                Header="Task" />
                             </GridView>
                         </ListView.View>
                     </ListView>

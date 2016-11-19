@@ -77,9 +77,9 @@ Class Application
 
     End Sub
 
-    Private Async Sub Application_Exit(sender As Object, e As ExitEventArgs) Handles Me.[Exit]
+    Private Sub Application_Exit(sender As Object, e As ExitEventArgs) Handles Me.[Exit]
 
-
+        Debug.WriteLine("lol")
 
     End Sub
 

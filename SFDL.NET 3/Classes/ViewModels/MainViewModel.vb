@@ -729,6 +729,7 @@ Decrypt:
     End Property
 
     Private Sub ExitApplication()
+        Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown
         Application.Current.Shutdown()
     End Sub
 
