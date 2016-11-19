@@ -365,7 +365,12 @@ Decrypt:
         End While
 
         Debug.WriteLine("ETA While beendet!")
-        _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "Download beendet!")
+
+        If Application.Current.Resources("DownloadStopped") = False Then
+            _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download beendet", Now.ToString("dd.MM.yyyy")))
+        Else
+            _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download gestoppt", Now.ToString("dd.MM.yyyy")))
+        End If
 
         Return True
 
