@@ -376,10 +376,12 @@
                 <TabItem Controls:ControlsHelper.HeaderFontSize="12" Header="Aktive Aufgaben">
                     <ListView x:Name="ListViewActiveTasks"
                               MinHeight="100"
-                              ItemsSource="{Binding ActiveTasks}">
+                              MaxHeight="150"
+                              ItemsSource="{Binding ActiveTasks}"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto">
                         <ListView.View>
                             <GridView AllowsColumnReorder="False">
-                                <GridViewColumn Width="120" Header="Task">
+                                <GridViewColumn Width="877" Header="Task">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
