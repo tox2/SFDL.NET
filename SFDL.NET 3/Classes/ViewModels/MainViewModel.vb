@@ -436,6 +436,7 @@ Decrypt:
 
                     If _session.DownloadStartedTime = Date.MinValue And ContainerSessionState.Queued Then
                         _session.DownloadStartedTime = Now
+                        _session.SessionState = ContainerSessionState.DownloadRunning
                     End If
 
                     _dlitem.SizeDownloaded = 0
@@ -878,18 +879,28 @@ Decrypt:
                 ActiveTasks.Add(_mytask)
 
                 Dim _container_sessionid As Guid = Guid.Parse(parameter.ToString.Split(";")(1))
-
                 Dim _tmp_list As New List(Of DownloadItem)
+                Dim _container_session As ContainerSession
 
-                _tmp_list = DownloadItems.Where(Function(myitem) _container_sessionid.Equals(myitem.ParentContainerID)).ToList
+                _container_session = ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_container_sessionid)).FirstOrDefault
 
-                For Each _item In _tmp_list
-                    DownloadItems.Remove(_item)
-                Next
+                If _container_session.SessionState = ContainerSessionState.DownloadRunning Then
+                    _mytask.SetTaskStatus(TaskStatus.Faulted, "Kann Session nicht schließen da diese aktiv ist (Download)")
+                Else
 
-                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL Container '{0}' geschlossen", IO.Path.GetFileName(ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_container_sessionid)).FirstOrDefault.ContainerFileName)))
+                    _tmp_list = DownloadItems.Where(Function(myitem) _container_sessionid.Equals(myitem.ParentContainerID)).ToList
 
-                ContainerSessions.Remove(ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_container_sessionid)).FirstOrDefault)
+                    For Each _item In _tmp_list
+                        DownloadItems.Remove(_item)
+                    Next
+
+                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL Container '{0}' geschlossen", IO.Path.GetFileName(_container_session.ContainerFileName)))
+
+                    ContainerSessions.Remove(_container_session)
+
+                End If
+
+
 
 
             End If
