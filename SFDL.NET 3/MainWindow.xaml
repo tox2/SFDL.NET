@@ -33,7 +33,7 @@
                              Header="Container Infos"
                              IsOpen="{Binding ContainerInfoOpen}"
                              Position="Right"
-                             Theme="Light">
+                             Theme="Light" IsOpenChanged="Flyout_IsOpenChanged">
 
                 <Grid>
                     <StackPanel>

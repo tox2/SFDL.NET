@@ -77,15 +77,11 @@ Public Class MainWindow
 
     End Sub
 
-    Private Sub MenuItem_Click(sender As Object, e As RoutedEventArgs)
 
-        Dim _testname As String = "file.german.yxz.part001.rar"
-        Dim _tmp_filename_replace As String
+    Private Sub Flyout_IsOpenChanged(sender As Object, e As RoutedEventArgs)
 
-        _tmp_filename_replace = _testname.Remove(_testname.IndexOf(".part"))
-
-        Debug.WriteLine(_tmp_filename_replace)
+        txt_containerinfo_serverlocation.Content = Nothing
+        img_containerinfo_serverlocation.Source = Nothing
 
     End Sub
-
 End Class
