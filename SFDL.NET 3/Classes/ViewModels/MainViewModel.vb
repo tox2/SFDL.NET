@@ -391,6 +391,8 @@ Decrypt:
 
             Dim _wig As IWorkItemsGroup
             Dim _wig_start As New WIGStartInfo
+            Dim _thread_pull_count As Integer
+            Dim _threads_availible As Integer = 0
 
             SyncLock _session.SynLock
 
@@ -409,11 +411,28 @@ Decrypt:
                     _session.WIG.Concurrency = 1
                 End If
 
+                _log.Debug("STP InUseTHreads:{0}", _stp.InUseThreads)
+
+                _threads_availible = _stp.MaxThreads - _stp.InUseThreads
+
+                _log.Debug("Threads availible:{0}", _threads_availible)
+
+                If _threads_availible >= _session.ContainerFile.MaxDownloadThreads Then
+                    _thread_pull_count = _session.ContainerFile.MaxDownloadThreads
+                Else
+                    _thread_pull_count = _threads_availible
+                End If
+
+                _threads_availible -= _thread_pull_count
+
                 _log.Debug("InUseTHreads:{0}", _session.WIG.InUseThreads)
                 _log.Debug("Waiting Callbacks:{0}", _session.WIG.WaitingCallbacks)
-                _log.Debug("Threads to pull: {0}", _session.ContainerFile.MaxDownloadThreads - _session.WIG.InUseThreads)
 
-                For Each _dlitem In DownloadItems.Where(Function(myitem) (myitem.ParentContainerID.Equals(_session.ID) And (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Retry))).Take(_session.ContainerFile.MaxDownloadThreads - _session.WIG.InUseThreads)
+                _thread_pull_count -= _session.WIG.InUseThreads
+
+                _log.Debug("Threads to pull: {0}", _thread_pull_count)
+
+                For Each _dlitem In DownloadItems.Where(Function(myitem) (myitem.ParentContainerID.Equals(_session.ID) And (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Retry))).Take(_thread_pull_count)
 
                     If _session.DownloadStartedTime = Date.MinValue And ContainerSessionState.Queued Then
                         _session.DownloadStartedTime = Now

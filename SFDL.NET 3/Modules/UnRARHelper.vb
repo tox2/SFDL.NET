@@ -258,22 +258,6 @@ Module UnRARHelper
 
             Await Task.Run(Sub() _unrar_process.WaitForExit())
 
-            'For Each _line In _out_lines
-
-            '    Dim _volume As String
-            '    Dim _archive_file As String
-
-            '    _log.Debug(_line)
-
-            '    _archive_file = ParseUnRARArchiveFiles(_line)
-            '    _volume = ParseUnRARVolumeFiles(_line)
-
-            '    If Not String.IsNullOrWhiteSpace(_volume) Then
-            '        _log.Debug("RAR Volume:   {0}", _volume)
-            '    End If
-
-            'Next
-
             _tmp_output = _unrar_process.StandardOutput.ReadToEnd
 
             If _tmp_output.Contains("All OK") Then
@@ -331,7 +315,6 @@ Module UnRARHelper
             _log.Info("Now passing all needed Arguments to UnRar Binary and wait the extraction to finish")
 
             If Await DoUnRAR(_unrarchain.MasterUnRarChainFile.LocalFile, IO.Path.GetDirectoryName(_unrarchain.MasterUnRarChainFile.LocalFile), _unrar_password, _app_task) = True Then
-                _app_task.SetTaskStatus(TaskStatus.Running, "Archive erfolgreich entapckt!")
 
                 If _unrar_settings.DeleteAfterUnRAR = True Then
 
@@ -343,9 +326,10 @@ Module UnRARHelper
 
                     IO.File.Delete(_unrarchain.MasterUnRarChainFile.LocalFile)
 
-                    _app_task.SetTaskStatus(TaskStatus.RanToCompletion, "Archive erfolgreich entpackt!")
+                    _app_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("Archiv {0} erfolgreich entpackt und anschließend entfernt", IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
 
-
+                Else
+                    _app_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("Archiv {0} erfolgreich entpackt!", IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
                 End If
 
             Else
