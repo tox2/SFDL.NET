@@ -216,7 +216,8 @@
         <ToolBar x:Name="MainToolBar"
                  Grid.Row="1"
                  Height="40"
-                 VerticalAlignment="Top">
+                 VerticalAlignment="Top"
+                 ToolBarTray.IsLocked="True">
             <Image Width="32"
                    Height="32"
                    Source="Resources/Icons/appbar.control.play.png" />
