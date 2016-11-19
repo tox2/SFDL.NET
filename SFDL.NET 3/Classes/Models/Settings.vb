@@ -19,7 +19,35 @@
     Public Property SpeedReportSettings As New SpeedreportSettings
     Public Property RemoteControlSettings As New RemoteControlSettings
 
+    Public Shared Function InitNewSettings() As Settings
+
+        Dim _rt As New Settings
+
+        With _rt
+
+            .ClicknLoad = True
+            .CreateContainerSubfolder = True
+            .CreatePackageSubfolder = False
+            .DeleteSFDLAfterOpen = False
+            .DownloadDirectory = IO.Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), "Downloads")
+            .ExistingFileHandling = ExistingFileHandling.ResumeFile
+            .InstantVideo = False
+            .Language = "de"
+            .MaxDownloadThreads = 3
+            .MaxRetry = 3
+            .PreventStandby = True
+            .Send2Tray = False
+            .UnRARSettings = New UnRARSettings
+            .SpeedReportSettings = New SpeedreportSettings
+
+        End With
+
+        Return _rt
+
+    End Function
+
 End Class
+
 
 Public Enum ExistingFileHandling
     ResumeFile

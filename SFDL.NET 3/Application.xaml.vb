@@ -2,7 +2,7 @@
 
 Class Application
 
-    Private Shared ReadOnly SingleInstance As New SingleInstance(New Guid("24D910A1-1F03-44BA-85A0-BE7BC2655FF5"))
+    Private Shared ReadOnly SingleInstance As New SingleInstance(New Guid("fb71faa3-4891-4525-80f4-a2085174df7e"))
 
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
 
@@ -28,6 +28,9 @@ Class Application
 
                 If IO.File.Exists(_settings_xml_path) Then
                     _settings = CType(XMLHelper.XMLDeSerialize(_settings, _settings_xml_path), Settings)
+                Else
+                    _settings = Settings.InitNewSettings
+                    XMLHelper.XMLSerialize(_settings, _settings_xml_path)
                 End If
 
                 Application.Current.Resources.Add("Settings", _settings)
@@ -79,7 +82,6 @@ Class Application
 
     Private Sub Application_Exit(sender As Object, e As ExitEventArgs) Handles Me.[Exit]
 
-        Debug.WriteLine("lol")
 
     End Sub
 
