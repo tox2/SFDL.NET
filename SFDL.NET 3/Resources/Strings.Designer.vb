@@ -524,7 +524,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Unterordner pro Packet erstellen ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Unterordner pro Paket erstellen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_CreateSubfolderEachPackage() As String
             Get

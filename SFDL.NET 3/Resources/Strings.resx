@@ -244,7 +244,7 @@
     <value>Archive nach dem Download Automatisch entpacken</value>
   </data>
   <data name="Settings_CreateSubfolderEachPackage" xml:space="preserve">
-    <value>Unterordner pro Packet erstellen</value>
+    <value>Unterordner pro Paket erstellen</value>
   </data>
   <data name="Settings_ExistingFile" xml:space="preserve">
     <value>Existierende Datei:</value>
