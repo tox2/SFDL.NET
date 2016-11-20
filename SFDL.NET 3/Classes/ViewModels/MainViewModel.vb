@@ -300,7 +300,7 @@ Decrypt:
 
             Try
 
-                If (Me.WindowState = WindowState.Maximized Or Me.WindowState = WindowState.Normal) Or Me.TasksExpanded = True Then 'Nur berechnen wenn Window Sichtbar
+                If Me.WindowState = WindowState.Maximized Or Me.WindowState = WindowState.Normal Then 'Nur berechnen wenn Window Sichtbar
 
 
                     _total_speed = DownloadItems.Where(Function(myitem) Not myitem.DownloadStatus = DownloadItem.Status.None).Sum(Function(_item)
@@ -377,9 +377,9 @@ Decrypt:
         Debug.WriteLine("ETA While beendet!")
 
         If Application.Current.Resources("DownloadStopped") = False Then
-            _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download beendet", Now.ToString("dd.MM.yyyy")))
+            _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download beendet", Now.ToString))
         Else
-            _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download gestoppt", Now.ToString("dd.MM.yyyy")))
+            _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download gestoppt", Now.ToString))
         End If
 
         Return True
@@ -894,11 +894,10 @@ Decrypt:
     End Property
 
     Private Sub MarkAllItems()
-
-        For Each _item In DownloadItems
-            _item.isSelected = True
-        Next
-
+        DownloadItems.Select(Function(myitem)
+                                 myitem.isSelected = True
+                                 Return myitem
+                             End Function).ToList
     End Sub
 
     Public ReadOnly Property UnmarkAllItemsCommand As ICommand
@@ -908,11 +907,21 @@ Decrypt:
     End Property
 
     Private Sub UnmarkAllItems()
+        DownloadItems.Select(Function(myitem)
+                                 myitem.isSelected = False
+                                 Return myitem
+                             End Function).ToList
+    End Sub
+
+    Public ReadOnly Property ExpandAllPackagesCommand As ICommand
+        Get
+            Return New DelegateCommand(AddressOf ExpandAllPackages)
+        End Get
+    End Property
+
+    Private Sub ExpandAllPackages()
 
 
-        For Each _item In DownloadItems
-            _item.isSelected = False
-        Next
 
     End Sub
 
@@ -1082,18 +1091,6 @@ Decrypt:
                                         End Sub)
 
     End Sub
-
-    Private _tasks_expanded As Boolean = True
-
-    Public Property TasksExpanded As Boolean
-        Set(value As Boolean)
-            _tasks_expanded = value
-            RaisePropertyChanged("TasksExpanded")
-        End Set
-        Get
-            Return _tasks_expanded
-        End Get
-    End Property
 
 
 #End Region
