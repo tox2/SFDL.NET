@@ -1,4 +1,5 @@
-﻿Public Class FileNameTooLongException
+﻿<Serializable>
+Public Class FileNameTooLongException
 
     Inherits ApplicationException
     Public Sub New()

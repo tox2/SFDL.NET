@@ -1,4 +1,5 @@
-﻿Public Class DownloadStoppedException
+﻿<Serializable>
+Public Class DownloadStoppedException
 
     Inherits ApplicationException
     Public Sub New()

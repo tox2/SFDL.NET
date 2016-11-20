@@ -1,4 +1,5 @@
-﻿Public Class NotEnoughFreeDiskSpaceException
+﻿<Serializable>
+Public Class NotEnoughFreeDiskSpaceException
 
     Inherits ApplicationException
     Public Sub New()

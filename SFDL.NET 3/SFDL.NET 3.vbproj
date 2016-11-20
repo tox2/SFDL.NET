@@ -364,9 +364,7 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\appbar.stop.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Classes\Interfaces\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\Icons\appbar.clock.png" />
   </ItemGroup>
