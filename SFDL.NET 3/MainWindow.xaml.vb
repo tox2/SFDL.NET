@@ -1,4 +1,5 @@
 ﻿
+Imports System.ComponentModel
 Imports MahApps.Metro.Controls.Dialogs
 
 Public Class MainWindow
@@ -28,6 +29,26 @@ Public Class MainWindow
         End If
 
         ComB_Container_Info.DataContext = MainViewModel.ThisInstance
+
+        MainViewModel.ThisInstance.SizeToContent = SizeToContent.Manual
+
+        If Not My.Settings.UserWindowWitdh = 0 Then
+            Me.Width = My.Settings.UserWindowWitdh
+        End If
+
+        If Not My.Settings.UserWindowHeight = 0 Then
+            Me.Height = My.Settings.UserWindowHeight
+        End If
+
+        If Not My.Settings.UserWindowTop = 0 Then
+            Me.Top = My.Settings.UserWindowTop
+        End If
+
+        If Not My.Settings.UserWindowLeft = 0 Then
+            Me.Left = My.Settings.UserWindowLeft
+        End If
+
+        MainViewModel.ThisInstance.SizeToContent = SizeToContent.WidthAndHeight
 
     End Sub
 
@@ -80,6 +101,29 @@ Public Class MainWindow
 
         txt_containerinfo_serverlocation.Content = Nothing
         img_containerinfo_serverlocation.Source = Nothing
+
+    End Sub
+
+
+    Private Sub MainWindow_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+
+        If MainViewModel.ThisInstance.WindowState = WindowState.Normal Or MainViewModel.ThisInstance.WindowState = WindowState.Maximized Then
+
+            My.Settings.UserWindowHeight = Me.Height
+            My.Settings.UserWindowWitdh = Me.Width
+
+            My.Settings.UserWindowTop = Me.Top
+            My.Settings.UserWindowLeft = Me.Left
+
+            My.Settings.Save()
+
+        End If
+
+    End Sub
+
+    Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
+
+        MainViewModel.ThisInstance.SizeToContent = SizeToContent.WidthAndHeight
 
     End Sub
 End Class

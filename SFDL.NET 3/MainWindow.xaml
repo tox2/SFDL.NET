@@ -15,7 +15,7 @@
                       BorderBrush="Black"
                       BorderThickness="1"
                       Icon="Resources/Icons/appbar.skydrive.download.png"
-                      SizeToContent="WidthAndHeight"
+                      SizeToContent="{Binding SizeToContent}"
                       WindowStartupLocation="CenterScreen"
                       WindowState="{Binding WindowState}">
 
@@ -214,6 +214,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
+            <Button Click="Button_Click" Content="Test" />
 
         </Menu>
         <ToolBar x:Name="MainToolBar"

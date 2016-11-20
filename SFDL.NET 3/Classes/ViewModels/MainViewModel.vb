@@ -974,6 +974,17 @@ Decrypt:
 
 #Region "Allgemeine Properties"
 
+    Private _sizetocontent As SizeToContent
+    Public Property SizeToContent
+        Set(value)
+            _sizetocontent = value
+            RaisePropertyChanged("SizeToContent")
+        End Set
+        Get
+            Return _sizetocontent
+        End Get
+    End Property
+
     Private _window_state As System.Windows.WindowState = WindowState.Normal
     Public Property WindowState As System.Windows.WindowState
         Set(value As System.Windows.WindowState)
