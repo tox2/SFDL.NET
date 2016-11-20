@@ -18,6 +18,7 @@ Public Class MainViewModel
     Public Sub New()
         _instance = Me
         _settings = Application.Current.Resources("Settings")
+        Application.Current.Resources("DownloadStopped") = True
 
         'Init ThreadSafe Observ Collections
 

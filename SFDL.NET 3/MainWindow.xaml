@@ -9,8 +9,8 @@
                       xmlns:p="clr-namespace:SFDL.NET3.My.Resources"
                       x:Name="SFDL_MainWindow"
                       Title="SFDL.NET 3"
-                      MinWidth="888"
-                      MinHeight="480"
+                      MinWidth="838"
+                      MinHeight="580"
                       Dialog:DialogParticipation.Register="{Binding}"
                       dng:DropBehavior.PreviewDropCommand="{Binding PreviewDropCommand}"
                       AllowDrop="True"
@@ -79,359 +79,375 @@
         </Controls:FlyoutsControl>
     </Controls:MetroWindow.Flyouts>
 
-    <Grid VerticalAlignment="Top">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="35" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
+    <Grid>
 
-        <Menu x:Name="MainMenu" Grid.Row="0">
-            <MenuItem Header="{x:Static p:Strings.MainMenu_File}">
-                <MenuItem.Icon>
-                    <Image Width="32"
-                           Height="32"
-                           Source="Resources/Icons/appbar.tiles.four.png" />
-                </MenuItem.Icon>
-                <MenuItem x:Name="cmd_open_file"
-                          Command="{Binding OpenSFDLCommand}"
-                          Header="{x:Static p:Strings.MainMenu_File_OpenFile}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.folder.open.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem x:Name="cmd_Settings"
-                          Command="{Binding ShowSettingsDialogCommand}"
-                          Header="{x:Static p:Strings.MainMenu_File_Settings}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.cog.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem x:Name="cmd_exit_app"
-                          Command="{Binding ExitApplicationCommand}"
-                          Header="{x:Static p:Strings.MainMenu_File_Exit}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.power.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-            </MenuItem>
+        <DockPanel>
 
-            <MenuItem Header="{x:Static p:Strings.MainMenu_Modify}">
-                <MenuItem.Icon>
-                    <Image Width="32"
-                           Height="32"
-                           Source="Resources/Icons/appbar.edit.png" />
-                </MenuItem.Icon>
-                <MenuItem Command="{Binding RemoveAllCompletedDownloadsCommand}" Header="{x:Static p:Strings.MainMenu_Modify_RemoveAllCompletedDownloads}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.close.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Command="{Binding RemoveAllDownloadsCommand}" Header="{x:Static p:Strings.MainMenu_Modify_CloseAlleDownloads}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.delete.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator />
-                <MenuItem Command="{Binding MarkAllItemsCommand}" Header="{x:Static p:Strings.MainMenu_Modifiy_MarkAllFiles}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.checkmark.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Command="{Binding UnmarkAllItemsCommand}" Header="{x:Static p:Strings.MainMenu_Modifiy_UnmarkAllFiles}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.checkmark.uncrossed.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator />
-                <MenuItem Header="{x:Static p:Strings.MainMenu_Modifiy_CollapeseAllPackages}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.arrow.collapsed.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="{x:Static p:Strings.MainMenu_Modifiy_ExpandAllPackages}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.arrow.expand.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-            </MenuItem>
-            <MenuItem Header="{x:Static p:Strings.MainMenu_Extra}">
-                <MenuItem.Icon>
-                    <Image Width="32"
-                           Height="32"
-                           Source="Resources/Icons/appbar.star.png" />
-                </MenuItem.Icon>
-                <MenuItem Header="{x:Static p:Strings.MainMenu_Extra_AfterDownload}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.door.leave.png" />
-                    </MenuItem.Icon>
-                    <MenuItem Header="{x:Static p:Strings.MainMenu_Extra_AfterDownload_ExitLoader}" IsCheckable="True">
+            <Grid DockPanel.Dock="Top">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35" />
+                    <RowDefinition Height="40" />
+                </Grid.RowDefinitions>
+
+                <Menu x:Name="MainMenu" Grid.Row="0">
+                    <MenuItem Header="{x:Static p:Strings.MainMenu_File}">
                         <MenuItem.Icon>
                             <Image Width="32"
                                    Height="32"
-                                   Source="Resources/Icons/appbar.power.png" />
+                                   Source="Resources/Icons/appbar.tiles.four.png" />
                         </MenuItem.Icon>
+                        <MenuItem x:Name="cmd_open_file"
+                                  Command="{Binding OpenSFDLCommand}"
+                                  Header="{x:Static p:Strings.MainMenu_File_OpenFile}">
+                            <MenuItem.Icon>
+                                <Image Width="32"
+                                       Height="32"
+                                       Source="Resources/Icons/appbar.folder.open.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem x:Name="cmd_Settings"
+                                  Command="{Binding ShowSettingsDialogCommand}"
+                                  Header="{x:Static p:Strings.MainMenu_File_Settings}">
+                            <MenuItem.Icon>
+                                <Image Width="32"
+                                       Height="32"
+                                       Source="Resources/Icons/appbar.cog.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem x:Name="cmd_exit_app"
+                                  Command="{Binding ExitApplicationCommand}"
+                                  Header="{x:Static p:Strings.MainMenu_File_Exit}">
+                            <MenuItem.Icon>
+                                <Image Width="32"
+                                       Height="32"
+                                       Source="Resources/Icons/appbar.power.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
-                    <MenuItem Header="{x:Static p:Strings.MainMenu_Extra_AfterDownload_ShutdownComputer}" IsCheckable="True">
+
+                    <MenuItem Header="{x:Static p:Strings.MainMenu_Modify}">
                         <MenuItem.Icon>
                             <Image Width="32"
                                    Height="32"
-                                   Source="Resources/Icons/appbar.monitor.delete.png" />
+                                   Source="Resources/Icons/appbar.edit.png" />
                         </MenuItem.Icon>
+                        <MenuItem Command="{Binding RemoveAllCompletedDownloadsCommand}" Header="{x:Static p:Strings.MainMenu_Modify_RemoveAllCompletedDownloads}">
+                            <MenuItem.Icon>
+                                <Image Width="32"
+                                       Height="32"
+                                       Source="Resources/Icons/appbar.close.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Command="{Binding RemoveAllDownloadsCommand}" Header="{x:Static p:Strings.MainMenu_Modify_CloseAlleDownloads}">
+                            <MenuItem.Icon>
+                                <Image Width="32"
+                                       Height="32"
+                                       Source="Resources/Icons/appbar.delete.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Command="{Binding MarkAllItemsCommand}" Header="{x:Static p:Strings.MainMenu_Modifiy_MarkAllFiles}">
+                            <MenuItem.Icon>
+                                <Image Width="32"
+                                       Height="32"
+                                       Source="Resources/Icons/appbar.checkmark.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Command="{Binding UnmarkAllItemsCommand}" Header="{x:Static p:Strings.MainMenu_Modifiy_UnmarkAllFiles}">
+                            <MenuItem.Icon>
+                                <Image Width="32"
+                                       Height="32"
+                                       Source="Resources/Icons/appbar.checkmark.uncrossed.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Header="{x:Static p:Strings.MainMenu_Modifiy_CollapeseAllPackages}">
+                            <MenuItem.Icon>
+                                <Image Width="32"
+                                       Height="32"
+                                       Source="Resources/Icons/appbar.arrow.collapsed.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="{x:Static p:Strings.MainMenu_Modifiy_ExpandAllPackages}">
+                            <MenuItem.Icon>
+                                <Image Width="32"
+                                       Height="32"
+                                       Source="Resources/Icons/appbar.arrow.expand.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
-                </MenuItem>
-            </MenuItem>
-            <MenuItem Header="{x:Static p:Strings.MainMenu_Help}">
-                <MenuItem.Icon>
+                    <MenuItem Header="{x:Static p:Strings.MainMenu_Extra}">
+                        <MenuItem.Icon>
+                            <Image Width="32"
+                                   Height="32"
+                                   Source="Resources/Icons/appbar.star.png" />
+                        </MenuItem.Icon>
+                        <MenuItem Header="{x:Static p:Strings.MainMenu_Extra_AfterDownload}">
+                            <MenuItem.Icon>
+                                <Image Width="32"
+                                       Height="32"
+                                       Source="Resources/Icons/appbar.door.leave.png" />
+                            </MenuItem.Icon>
+                            <MenuItem Header="{x:Static p:Strings.MainMenu_Extra_AfterDownload_ExitLoader}" IsCheckable="True">
+                                <MenuItem.Icon>
+                                    <Image Width="32"
+                                           Height="32"
+                                           Source="Resources/Icons/appbar.power.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="{x:Static p:Strings.MainMenu_Extra_AfterDownload_ShutdownComputer}" IsCheckable="True">
+                                <MenuItem.Icon>
+                                    <Image Width="32"
+                                           Height="32"
+                                           Source="Resources/Icons/appbar.monitor.delete.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuItem>
+                    </MenuItem>
+                    <MenuItem Header="{x:Static p:Strings.MainMenu_Help}">
+                        <MenuItem.Icon>
+                            <Image Width="32"
+                                   Height="32"
+                                   Source="Resources/Icons/appbar.book.perspective.help.png" />
+                        </MenuItem.Icon>
+                        <MenuItem Header="{x:Static p:Strings.MainMenu_Help}">
+                            <MenuItem.Icon>
+                                <Image Width="32"
+                                       Height="32"
+                                       Source="Resources/Icons/appbar.information.circle.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+
+                </Menu>
+                <ToolBar x:Name="MainToolBar"
+                         Grid.Row="1"
+                         Height="40"
+                         VerticalAlignment="Top"
+                         ToolBarTray.IsLocked="True">
                     <Image Width="32"
                            Height="32"
-                           Source="Resources/Icons/appbar.book.perspective.help.png" />
-                </MenuItem.Icon>
-                <MenuItem Header="{x:Static p:Strings.MainMenu_Help}">
-                    <MenuItem.Icon>
-                        <Image Width="32"
-                               Height="32"
-                               Source="Resources/Icons/appbar.information.circle.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-            </MenuItem>
+                           Source="Resources/Icons/appbar.control.play.png" />
+                    <Button Command="{Binding StartDownloadCommand}"
+                            Content="{x:Static p:Strings.MainToolBar_StartDownload}"
+                            IsEnabled="{Binding ButtonDownloadStartStop}" />
+                    <Image Width="32"
+                           Height="32"
+                           Source="Resources/Icons/appbar.control.stop.png" />
+                    <Button Command="{Binding StopDownloadCommand}"
+                            Content="{x:Static p:Strings.MainToolBar_StopDownload}"
+                            IsEnabled="{Binding ButtonDownloadStartStop,
+                                                Converter={StaticResource boolConvert}}" />
+                    <Separator Margin="5,2" />
+                    <Image Width="32"
+                           Height="32"
+                           Source="Resources/Icons/appbar.movie.clapper.png" />
+                    <Button Content="{x:Static p:Strings.MainToolbar_InstandVideo}" IsEnabled="{Binding ButtonInstantVideoEnabled}" />
+                    <Separator Margin="5,2" />
+                    <Image Width="32"
+                           Height="32"
+                           Margin="0,0,5,0"
+                           Source="Resources/Icons/throttle_icon.png" />
+                    <TextBox Width="120"
+                             Controls:TextBoxHelper.UseFloatingWatermark="True"
+                             Controls:TextBoxHelper.Watermark="Max KB/s"
+                             Text="{Binding MaxDownloadSpeed,
+                                            UpdateSourceTrigger=PropertyChanged}" />
+                </ToolBar>
+                <Button Grid.Row="1"
+                        Width="40"
+                        Height="40"
+                        Margin="0,0,10,0"
+                        HorizontalAlignment="Right"
+                        Background="White"
+                        BorderThickness="0"
+                        Command="{Binding ShowContainerInfoCommand}">
+                    <StackPanel>
+                        <Image Source="Resources/Icons/appbar.layer.png" />
+                    </StackPanel>
+                </Button>
+            </Grid>
 
-        </Menu>
-        <ToolBar x:Name="MainToolBar"
-                 Grid.Row="1"
-                 Height="40"
-                 VerticalAlignment="Top"
-                 ToolBarTray.IsLocked="True">
-            <Image Width="32"
-                   Height="32"
-                   Source="Resources/Icons/appbar.control.play.png" />
-            <Button Command="{Binding StartDownloadCommand}"
-                    Content="{x:Static p:Strings.MainToolBar_StartDownload}"
-                    IsEnabled="{Binding ButtonDownloadStartStop}" />
-            <Image Width="32"
-                   Height="32"
-                   Source="Resources/Icons/appbar.control.stop.png" />
-            <Button Command="{Binding StopDownloadCommand}"
-                    Content="{x:Static p:Strings.MainToolBar_StopDownload}"
-                    IsEnabled="{Binding ButtonDownloadStartStop,
-                                        Converter={StaticResource boolConvert}}" />
-            <Separator Margin="5,2" />
-            <Image Width="32"
-                   Height="32"
-                   Source="Resources/Icons/appbar.movie.clapper.png" />
-            <Button Content="{x:Static p:Strings.MainToolbar_InstandVideo}" IsEnabled="{Binding ButtonInstantVideoEnabled}" />
-            <Separator Margin="5,2" />
-            <Image Width="32"
-                   Height="32"
-                   Margin="0,0,5,0"
-                   Source="Resources/Icons/throttle_icon.png" />
-            <TextBox Width="120"
-                     Controls:TextBoxHelper.UseFloatingWatermark="True"
-                     Controls:TextBoxHelper.Watermark="Max KB/s"
-                     Text="{Binding MaxDownloadSpeed,
-                                    UpdateSourceTrigger=PropertyChanged}" />
-        </ToolBar>
-        <Button Grid.Row="1"
-                Width="40"
-                Height="40"
-                Margin="0,0,10,0"
-                HorizontalAlignment="Right"
-                Background="White"
-                BorderThickness="0"
-                Command="{Binding ShowContainerInfoCommand}">
-            <StackPanel>
-                <Image Source="Resources/Icons/appbar.layer.png" />
-            </StackPanel>
-        </Button>
-        <ListView x:Name="ListView_DownloadItems"
-                  Grid.Row="2"
-                  MinHeight="350"
-                  MaxHeight="500"
-                  VerticalAlignment="Top"
-                  dng:DropBehavior.PreviewDropCommand="{Binding PreviewDropCommand}"
-                  DockPanel.Dock="Top"
-                  ItemsSource="{Binding DownloadItems}"
-                  SelectedItem="{Binding SelectedDownloadItem,
-                                         Mode=TwoWay}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding isSelected}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Width="370"
-                                    DisplayMemberBinding="{Binding FileName}"
-                                    Header="{x:Static p:Strings.ListView_DownloadItems_Header_Filename}" />
-                    <GridViewColumn Width="150"
-                                    DisplayMemberBinding="{Binding FileSize}"
-                                    Header="{x:Static p:Strings.ListView_DownloadItems_Header_Filesize}" />
-                    <GridViewColumn Width="100" Header="{x:Static p:Strings.ListView_DownloadItems_Header_Progress}">
+            <Grid DockPanel.Dock="Bottom">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" MinHeight="250" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="*"
+                                   MinHeight="100"
+                                   MaxHeight="200" />
+                </Grid.RowDefinitions>
 
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <ProgressBar Maximum="100" Value="{Binding DownloadProgress}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
+                <ListView x:Name="ListView_DownloadItems"
+                          MinHeight="250"
+                          dng:DropBehavior.PreviewDropCommand="{Binding PreviewDropCommand}"
+                          ItemsSource="{Binding DownloadItems}"
+                          SelectedItem="{Binding SelectedDownloadItem,
+                                                 Mode=TwoWay}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding isSelected}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="370"
+                                            DisplayMemberBinding="{Binding FileName}"
+                                            Header="{x:Static p:Strings.ListView_DownloadItems_Header_Filename}" />
+                            <GridViewColumn Width="100"
+                                            DisplayMemberBinding="{Binding FileSize}"
+                                            Header="{x:Static p:Strings.ListView_DownloadItems_Header_Filesize}" />
+                            <GridViewColumn Width="100" Header="{x:Static p:Strings.ListView_DownloadItems_Header_Progress}">
 
-                    </GridViewColumn>
-                    <GridViewColumn Width="200" Header="{x:Static p:Strings.ListView_DownloadItems_Header_Status}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ProgressBar Maximum="100" Value="{Binding DownloadProgress}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
 
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Width="24"
-                                           Height="24"
-                                           Source="{Binding DownloadStatusImage}" />
-                                    <TextBlock Text="{Binding DownloadStatusString}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="200" Header="{x:Static p:Strings.ListView_DownloadItems_Header_Status}">
 
-                    </GridViewColumn>
-                    <GridViewColumn Width="200"
-                                    DisplayMemberBinding="{Binding DownloadSpeed}"
-                                    Header="{x:Static p:Strings.ListView_DownloadItems_Header_Speed}" />
-                </GridView>
-            </ListView.View>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Width="24"
+                                                   Height="24"
+                                                   Source="{Binding DownloadStatusImage}" />
+                                            <TextBlock Text="{Binding DownloadStatusString}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
 
-            <ListView.GroupStyle>
-                <GroupStyle>
-                    <GroupStyle.ContainerStyle>
-                        <Style TargetType="{x:Type GroupItem}">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate>
-                                        <Expander IsExpanded="True">
-                                            <Expander.Header>
-                                                <DockPanel LastChildFill="False">
+                            </GridViewColumn>
+                            <GridViewColumn Width="200"
+                                            DisplayMemberBinding="{Binding DownloadSpeed}"
+                                            Header="{x:Static p:Strings.ListView_DownloadItems_Header_Speed}" />
+                        </GridView>
+                    </ListView.View>
+
+                    <ListView.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.ContainerStyle>
+                                <Style TargetType="{x:Type GroupItem}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <Expander IsExpanded="True">
+                                                    <Expander.Header>
+                                                        <DockPanel LastChildFill="False">
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <TextBlock VerticalAlignment="Bottom"
+                                                                           FontSize="12"
+                                                                           FontWeight="Bold"
+                                                                           Foreground="White"
+                                                                           Text="{Binding Name,
+                                                                                          Converter={StaticResource CollectionViewNameConv}}" />
+
+                                                            </StackPanel>
+                                                            <Button Width="25"
+                                                                    Height="25"
+                                                                    BorderThickness="0"
+                                                                    Command="{Binding RelativeSource={RelativeSource FindAncestor,
+                                                                                                                     AncestorType={x:Type Window}},
+                                                                                      Path=DataContext.CloseSFDLContainerCommand}"
+                                                                    CommandParameter="{Binding Name}"
+                                                                    DockPanel.Dock="Right">
+                                                                <StackPanel>
+                                                                    <Image Source="Resources/Icons/appbar.close.png" />
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </DockPanel>
+
+                                                    </Expander.Header>
+                                                    <ItemsPresenter />
+                                                </Expander>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </GroupStyle.ContainerStyle>
+                        </GroupStyle>
+                    </ListView.GroupStyle>
+
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding OpenParentFolderCommand}"
+                                      CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                                                 Path=PlacementTarget.SelectedItem}"
+                                      Header="{x:Static p:Strings.DownloadItems_ContextMenu_OpenParentFolder}">
+                                <MenuItem.Icon>
+                                    <Image Width="32"
+                                           Height="32"
+                                           Source="Resources/Icons/appbar.folder.open.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                </ListView>
+
+                <GridSplitter Grid.Row="1"
+                              Height="5"
+                              HorizontalAlignment="Stretch"
+                              ResizeDirection="Rows" />
+
+                <GroupBox Grid.Row="2"
+                          MinHeight="100"
+                          Header="{x:Static p:Strings.Expander_Header_Tasks}">
+                    <TabControl Controls:TabControlHelper.IsUnderlined="True" TabStripPlacement="Bottom">
+                        <TabItem Controls:ControlsHelper.HeaderFontSize="12" Header="Aktive Aufgaben">
+                            <ListView x:Name="ListViewActiveTasks"
+                                      MinHeight="100"
+                                      ItemsSource="{Binding ActiveTasks}"
+                                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <ListView.View>
+                                    <GridView AllowsColumnReorder="False">
+                                        <GridViewColumn Width="877" Header="Task">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
-                                                        <TextBlock VerticalAlignment="Bottom"
-                                                                   FontSize="12"
-                                                                   FontWeight="Bold"
-                                                                   Foreground="White"
-                                                                   Text="{Binding Name,
-                                                                                  Converter={StaticResource CollectionViewNameConv}}" />
-
+                                                        <Image Height="20"
+                                                               Margin="0,0,5,0"
+                                                               Source="{Binding TaskStatusImage}" />
+                                                        <TextBlock Text="{Binding TaskDisplayText}" />
                                                     </StackPanel>
-                                                    <Button Width="25"
-                                                            Height="25"
-                                                            BorderThickness="0"
-                                                            Command="{Binding RelativeSource={RelativeSource FindAncestor,
-                                                                                                             AncestorType={x:Type Window}},
-                                                                              Path=DataContext.CloseSFDLContainerCommand}"
-                                                            CommandParameter="{Binding Name}"
-                                                            DockPanel.Dock="Right">
-                                                        <StackPanel>
-                                                            <Image Source="Resources/Icons/appbar.close.png" />
-                                                        </StackPanel>
-                                                    </Button>
-                                                </DockPanel>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </TabItem>
+                        <TabItem Controls:ControlsHelper.HeaderFontSize="12" Header="Aufgaben Historie">
+                            <ListView x:Name="ListViewDoneTasks"
+                                      MinHeight="100"
+                                      ItemsSource="{Binding DoneTasks}">
+                                <ListView.View>
+                                    <GridView AllowsColumnReorder="False">
+                                        <GridViewColumn Width="877" Header="Task">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image Height="20"
+                                                               Margin="0,0,5,0"
+                                                               Source="{Binding TaskStatusImage}" />
+                                                        <TextBlock Text="{Binding TaskDisplayText}" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </TabItem>
+                    </TabControl>
+                </GroupBox>
 
-                                            </Expander.Header>
-                                            <ItemsPresenter />
-                                        </Expander>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </GroupStyle.ContainerStyle>
-                </GroupStyle>
-            </ListView.GroupStyle>
+            </Grid>
 
-            <ListView.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Command="{Binding OpenParentFolderCommand}"
-                              CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                                         Path=PlacementTarget.SelectedItem}"
-                              Header="{x:Static p:Strings.DownloadItems_ContextMenu_OpenParentFolder}">
-                        <MenuItem.Icon>
-                            <Image Width="32"
-                                   Height="32"
-                                   Source="Resources/Icons/appbar.folder.open.png" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </ContextMenu>
-            </ListView.ContextMenu>
+        </DockPanel>
 
-        </ListView>
-        <Expander x:Name="Expander_Tasks"
-                  Grid.Row="3"
-                  Header="{x:Static p:Strings.Expander_Header_Tasks}"
-                  IsExpanded="{Binding TasksExpanded}">
-            <TabControl Controls:TabControlHelper.IsUnderlined="True" TabStripPlacement="Bottom">
-                <TabItem Controls:ControlsHelper.HeaderFontSize="12" Header="Aktive Aufgaben">
-                    <ListView x:Name="ListViewActiveTasks"
-                              MinHeight="100"
-                              MaxHeight="150"
-                              ItemsSource="{Binding ActiveTasks}"
-                              ScrollViewer.VerticalScrollBarVisibility="Auto">
-                        <ListView.View>
-                            <GridView AllowsColumnReorder="False">
-                                <GridViewColumn Width="877" Header="Task">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image Height="20"
-                                                       Margin="0,0,5,0"
-                                                       Source="{Binding TaskStatusImage}" />
-                                                <TextBlock Text="{Binding TaskDisplayText}" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                </TabItem>
-                <TabItem Controls:ControlsHelper.HeaderFontSize="12" Header="Aufgaben Historie">
-                    <ListView x:Name="ListViewDoneTasks"
-                              MinHeight="100"
-                              MaxHeight="150"
-                              ItemsSource="{Binding DoneTasks}">
-                        <ListView.View>
-                            <GridView AllowsColumnReorder="False">
-                                <GridViewColumn Width="877" Header="Task">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image Height="20"
-                                                       Margin="0,0,5,0"
-                                                       Source="{Binding TaskStatusImage}" />
-                                                <TextBlock Text="{Binding TaskDisplayText}" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                </TabItem>
-            </TabControl>
-        </Expander>
     </Grid>
 
 </Controls:MetroWindow>
