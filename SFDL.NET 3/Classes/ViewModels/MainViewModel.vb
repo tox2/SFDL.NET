@@ -777,6 +777,31 @@ Decrypt:
 
 #Region "Menu Commands"
 
+    Public ReadOnly Property OpenParentFolderCommand As ICommand
+        Get
+            Return New DelegateCommand(AddressOf OpenParentFolder)
+        End Get
+    End Property
+
+    Private Sub OpenParentFolder(ByVal parameter As Object)
+
+        If Not IsNothing(parameter) Then
+
+            Dim _item As DownloadItem = TryCast(parameter, DownloadItem)
+            Dim _folder_path As String
+
+            _folder_path = IO.Path.GetDirectoryName(_item.LocalFile)
+
+            Debug.WriteLine(_folder_path)
+
+            If Not String.IsNullOrWhiteSpace(_folder_path) And IO.Directory.Exists(_folder_path) Then
+                System.Diagnostics.Process.Start("explorer.exe", String.Format("{0}{1}{2}", Chr(34), _folder_path, Chr(34)))
+            End If
+
+        End If
+
+    End Sub
+
     Public ReadOnly Property ShowSettingsDialogCommand() As ICommand
         Get
             Return New DelegateCommand(AddressOf ShowSettingsDialog)

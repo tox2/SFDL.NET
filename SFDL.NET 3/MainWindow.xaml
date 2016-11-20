@@ -359,7 +359,10 @@
 
             <ListView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Command="{Binding CloseSFDLContainerCommand}" Header="{x:Static p:Strings.DownloadItems_ContextMenu_OpenParentFolder}">
+                    <MenuItem Command="{Binding OpenParentFolderCommand}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                                         Path=PlacementTarget.SelectedItem}"
+                              Header="{x:Static p:Strings.DownloadItems_ContextMenu_OpenParentFolder}">
                         <MenuItem.Icon>
                             <Image Width="32"
                                    Height="32"
