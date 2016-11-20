@@ -241,6 +241,10 @@
       <Project>{2f44f389-b431-45bc-9434-dddacd0ea34a}</Project>
       <Name>SFDL.CRC32</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\SFDL.DragnDrop\SFDL.DragnDrop.csproj">
+      <Project>{22c703f7-4514-4b3e-8668-0ab0c3599392}</Project>
+      <Name>SFDL.DragnDrop</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SFDL.FTP\ArxOne.Ftp\SFDL.FTP.csproj">
       <Project>{2ffe845d-2e4f-440e-8b9f-17afcb9d166b}</Project>
       <Name>SFDL.FTP</Name>

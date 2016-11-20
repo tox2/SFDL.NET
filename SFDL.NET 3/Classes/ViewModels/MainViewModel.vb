@@ -1195,6 +1195,33 @@ Decrypt:
         End Get
     End Property
 
+#Region "DragnDrop"
+
+    Public ReadOnly Property PreviewDropCommand() As ICommand
+        Get
+            Return New DelegateCommand(AddressOf HandlePreviewDrop)
+        End Get
+    End Property
+
+    Private _PreviewDropCommand As ICommand
+    Private Sub HandlePreviewDrop(inObject As Object)
+
+        Dim ido As IDataObject = TryCast(inObject, IDataObject)
+        If ido Is Nothing Then
+            Return
+        End If
+
+        For Each _file In ido.GetData("FileName")
+
+            If IO.Path.GetExtension(_file) = ".sfdl" Then
+                OpenSFDLFile(_file)
+            End If
+
+        Next
+
+
+    End Sub
+#End Region
 
 
 End Class
