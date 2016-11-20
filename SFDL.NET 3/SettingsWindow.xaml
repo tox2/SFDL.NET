@@ -281,7 +281,9 @@
                                                  IsEnabled="{Binding SpeedreportEnabled}"
                                                  Text="{Binding SpeedreportComment}" />
                                         <Separator Margin="5" />
-                                        <ToolBar Margin="5,0" IsEnabled="{Binding SpeedreportEnabled}">
+                                        <ToolBar Margin="5,0"
+                                                 IsEnabled="{Binding SpeedreportEnabled}"
+                                                 ToolBarTray.IsLocked="True">
                                             <Menu>
                                                 <MenuItem Header="{x:Static p:Strings.VariousStrings_Variables}">
                                                     <MenuItem.Icon>
@@ -357,7 +359,8 @@
                                                  AcceptsReturn="True"
                                                  BorderThickness="1"
                                                  IsEnabled="{Binding SpeedreportEnabled}"
-                                                 Text="{Binding SpeedreportTemplate}"
+                                                 Text="{Binding SpeedreportTemplate,
+                                                                UpdateSourceTrigger=PropertyChanged}"
                                                  TextWrapping="Wrap" />
                                     </StackPanel>
                                 </Grid>
@@ -412,7 +415,7 @@
                 -->
             </TabControl>
             <Button x:Name="cmd_save_settings"
-                    Margin="150,5"
+                    Margin="150,10,150,15"
                     Command="{Binding SaveSettingsCommand}">
                 <StackPanel Orientation="Horizontal">
                     <Image Width="24" Source="Resources/Icons/appbar.save.png" />

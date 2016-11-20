@@ -366,17 +366,21 @@ Public Class SettingsViewModel
 
                 Me.SpeedreportTemplate = Me.SpeedreportTemplate & Space(1) & "%%SPEED%%" & Space(1)
 
+            Case "downloadtime"
+
+                Me.SpeedreportTemplate = Me.SpeedreportTemplate & Space(1) & "%%DLTIME%%" & Space(1)
+
             Case "sfdl_description"
 
                 Me.SpeedreportTemplate = Me.SpeedreportTemplate & Space(1) & "%%SFDL_DESC%%" & Space(1)
 
-            Case "sfdl_upper"
+            Case "sfdl_uploader"
 
                 Me.SpeedreportTemplate = Me.SpeedreportTemplate & Space(1) & "%%SFDL_UPPER%%" & Space(1)
 
             Case "sfdl_downloadsize"
 
-                Me.SpeedreportTemplate = Me.SpeedreportTemplate & Space(1) & "%%TIME%%" & Space(1)
+                Me.SpeedreportTemplate = Me.SpeedreportTemplate & Space(1) & "%%SFDL_SIZE%%" & Space(1)
 
         End Select
 

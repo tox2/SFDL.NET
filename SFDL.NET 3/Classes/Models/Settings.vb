@@ -42,6 +42,23 @@
 
         End With
 
+
+        With _rt.SpeedReportSettings
+
+            Dim _template As New Text.StringBuilder
+
+            _template.AppendLine("SFDL: %%SFDL_DESC%%")
+            _template.AppendLine("Upper: %%SFDL_UPPER%%")
+            _template.AppendLine("")
+            _template.AppendLine("%%SFDL_SIZE%% in %%DLTIME%% heruntergeladen @ %%SPEED%% (Im Durchschnitt)")
+            _template.AppendLine("")
+            _template.AppendLine("Kommentar: %%COMMENT%%")
+
+
+            .SpeedreportTemplate = _template.ToString
+
+        End With
+
         Return _rt
 
     End Function

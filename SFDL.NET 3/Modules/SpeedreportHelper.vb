@@ -91,7 +91,7 @@
             _rt_speedreport = _rt_speedreport.Replace("%%SPEED%%", Math.Round(_speed, 2) & " KB/s")
             _rt_speedreport = _rt_speedreport.Replace("%%SFDL_DESC%%", session.ContainerFile.Description)
             _rt_speedreport = _rt_speedreport.Replace("%%SFDL_UPPER%%", session.ContainerFile.Uploader)
-            _rt_speedreport = _rt_speedreport.Replace("%%TIME%%", SecToHMS(DateDiff(DateInterval.Second, session.DownloadStartedTime, session.DownloadStoppedTime)))
+            _rt_speedreport = _rt_speedreport.Replace("%%DLTIME%%", SecToHMS(DateDiff(DateInterval.Second, session.DownloadStartedTime, session.DownloadStoppedTime)))
             _rt_speedreport = _rt_speedreport.Replace("%%SFDL_SIZE%%", Math.Round(_size, 2) & " MB")
 
 
