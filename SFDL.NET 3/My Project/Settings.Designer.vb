@@ -100,6 +100,18 @@ Partial Friend NotInheritable Class MySettings
             Me("UserWindowLeft") = value
         End Set
     End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("Normal")>  _
+    Public Property UserWindowState() As Global.System.Windows.WindowState
+        Get
+            Return CType(Me("UserWindowState"),Global.System.Windows.WindowState)
+        End Get
+        Set
+            Me("UserWindowState") = value
+        End Set
+    End Property
 End Class
 
 Namespace My

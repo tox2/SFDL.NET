@@ -30,25 +30,27 @@ Public Class MainWindow
 
         ComB_Container_Info.DataContext = MainViewModel.ThisInstance
 
-        MainViewModel.ThisInstance.SizeToContent = SizeToContent.Manual
+        If My.Settings.UserWindowState = WindowState.Normal Then
 
-        If Not My.Settings.UserWindowWitdh = 0 Then
-            Me.Width = My.Settings.UserWindowWitdh
+            If Not My.Settings.UserWindowHeight = 0 Then
+                Me.Height = My.Settings.UserWindowHeight
+            End If
+
+            If Not My.Settings.UserWindowWitdh = 0 Then
+                Me.Width = My.Settings.UserWindowWitdh
+            End If
+
+            If Not My.Settings.UserWindowTop = 0 Then
+                Me.Top = My.Settings.UserWindowTop
+            End If
+
+            If Not My.Settings.UserWindowLeft = 0 Then
+                Me.Left = My.Settings.UserWindowLeft
+            End If
+
+        Else
+            Me.WindowState = WindowState.Maximized
         End If
-
-        If Not My.Settings.UserWindowHeight = 0 Then
-            Me.Height = My.Settings.UserWindowHeight
-        End If
-
-        If Not My.Settings.UserWindowTop = 0 Then
-            Me.Top = My.Settings.UserWindowTop
-        End If
-
-        If Not My.Settings.UserWindowLeft = 0 Then
-            Me.Left = My.Settings.UserWindowLeft
-        End If
-
-        MainViewModel.ThisInstance.SizeToContent = SizeToContent.WidthAndHeight
 
     End Sub
 
@@ -109,6 +111,8 @@ Public Class MainWindow
 
         If MainViewModel.ThisInstance.WindowState = WindowState.Normal Or MainViewModel.ThisInstance.WindowState = WindowState.Maximized Then
 
+            My.Settings.UserWindowState = MainViewModel.ThisInstance.WindowState
+
             My.Settings.UserWindowHeight = Me.Height
             My.Settings.UserWindowWitdh = Me.Width
 
@@ -121,9 +125,4 @@ Public Class MainWindow
 
     End Sub
 
-    Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
-
-        MainViewModel.ThisInstance.SizeToContent = SizeToContent.WidthAndHeight
-
-    End Sub
 End Class

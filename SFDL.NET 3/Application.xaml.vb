@@ -18,6 +18,8 @@ Class Application
 
                 LogHelper.GenerateLogConfig()
 
+                My.Settings.Upgrade()
+
                 _log = NLog.LogManager.GetLogger("Startup")
 
                 _settings_xml_path = IO.Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3\settings.xml")

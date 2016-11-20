@@ -16,6 +16,7 @@ Public Class MainViewModel
 
 
     Public Sub New()
+
         _instance = Me
         _settings = Application.Current.Resources("Settings")
         Application.Current.Resources("DownloadStopped") = True
@@ -28,6 +29,7 @@ Public Class MainViewModel
         BindingOperations.EnableCollectionSynchronization(ContainerSessions, _lock_container_sessions)
 
         CreateView()
+
     End Sub
 
 #Region "Private Subs"
@@ -1010,17 +1012,6 @@ Decrypt:
 #End Region
 
 #Region "Allgemeine Properties"
-
-    Private _sizetocontent As SizeToContent = SizeToContent.WidthAndHeight
-    Public Property SizeToContent
-        Set(value)
-            _sizetocontent = value
-            RaisePropertyChanged("SizeToContent")
-        End Set
-        Get
-            Return _sizetocontent
-        End Get
-    End Property
 
     Private _window_state As System.Windows.WindowState = WindowState.Normal
     Public Property WindowState As System.Windows.WindowState

@@ -17,8 +17,6 @@
                       BorderBrush="Black"
                       BorderThickness="1"
                       Icon="Resources/Icons/appbar.skydrive.download.png"
-                      SizeToContent="{Binding SizeToContent}"
-                      WindowStartupLocation="CenterScreen"
                       WindowState="{Binding WindowState}">
 
     <Window.Resources>
