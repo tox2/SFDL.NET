@@ -14,7 +14,9 @@
                       Dialog:DialogParticipation.Register="{Binding}"
                       BorderBrush="Black"
                       BorderThickness="1"
+                      Icon="Resources/Icons/appbar.skydrive.download.png"
                       SizeToContent="WidthAndHeight"
+                      WindowStartupLocation="CenterScreen"
                       WindowState="{Binding WindowState}">
 
     <Window.Resources>
@@ -298,8 +300,8 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Width="20"
-                                           Height="20"
+                                    <Image Width="24"
+                                           Height="24"
                                            Source="{Binding DownloadStatusImage}" />
                                     <TextBlock Text="{Binding DownloadStatusString}" />
                                 </StackPanel>
