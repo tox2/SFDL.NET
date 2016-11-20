@@ -777,26 +777,68 @@ Decrypt:
 
 #Region "Menu Commands"
 
-    Public ReadOnly Property OpenParentFolderCommand As ICommand
+    Public ReadOnly Property RemoveAllCompletedDownloadsCommand As ICommand
         Get
-            Return New DelegateCommand(AddressOf OpenParentFolder)
+            Return New DelegateCommand(AddressOf RemoveAllCompletedDownloads)
         End Get
     End Property
 
-    Private Sub OpenParentFolder(ByVal parameter As Object)
+    Private Sub RemoveAllCompletedDownloads()
 
-        If Not IsNothing(parameter) Then
+        Dim _mytask As New AppTask("Entferne/Schließe fertiggestellte Container...")
+        Dim _tmp_list As New List(Of DownloadItem)
+        Dim _container_session_list As List(Of ContainerSession)
 
-            Dim _item As DownloadItem = TryCast(parameter, DownloadItem)
-            Dim _folder_path As String
+        AddHandler _mytask.TaskDone, AddressOf TaskDoneEvent
 
-            _folder_path = IO.Path.GetDirectoryName(_item.LocalFile)
+        ActiveTasks.Add(_mytask)
 
-            Debug.WriteLine(_folder_path)
+        _container_session_list = ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.DownloadComplete).ToList
 
-            If Not String.IsNullOrWhiteSpace(_folder_path) And IO.Directory.Exists(_folder_path) Then
-                System.Diagnostics.Process.Start("explorer.exe", String.Format("{0}{1}{2}", Chr(34), _folder_path, Chr(34)))
-            End If
+        For Each _session In _container_session_list
+
+            _tmp_list = DownloadItems.Where(Function(myitem) myitem.ParentContainerID.Equals(_session.ID)).ToList
+
+            For Each _item In _tmp_list
+                DownloadItems.Remove(_item)
+            Next
+
+            ContainerSessions.Remove(_session)
+
+        Next
+
+        If Not _container_session_list.Count = 0 Then
+            _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "Fertiggestellte Container entfernt/geschlossen")
+        Else
+            _mytask.SetTaskStatus(TaskStatus.Faulted, "Keine fertiggestellte Container vorhanden")
+        End If
+
+
+
+    End Sub
+
+    Public ReadOnly Property RemoveAllDownloadsCommand As ICommand
+        Get
+            Return New DelegateCommand(AddressOf RemoveAllDownloads)
+        End Get
+    End Property
+
+    Private Sub RemoveAllDownloads()
+
+        Dim _mytask As New AppTask("Entferne/Schließe alle Container...")
+
+        AddHandler _mytask.TaskDone, AddressOf TaskDoneEvent
+
+        ActiveTasks.Add(_mytask)
+
+        If Application.Current.Resources("DownloadStopped") = False Then
+            _mytask.SetTaskStatus(TaskStatus.Canceled, "Diese Funktion kann nicht genutzt werden so lange der Download aktiv ist")
+        Else
+
+            DownloadItems.Clear()
+            ContainerSessions.Clear()
+
+            _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "Alle Container entfernt/geschlossen")
 
         End If
 
@@ -907,6 +949,32 @@ Decrypt:
 #End Region
 
 #Region "ListView ContextMenu Commands and Properites"
+
+    Public ReadOnly Property OpenParentFolderCommand As ICommand
+        Get
+            Return New DelegateCommand(AddressOf OpenParentFolder)
+        End Get
+    End Property
+
+    Private Sub OpenParentFolder(ByVal parameter As Object)
+
+        If Not IsNothing(parameter) Then
+
+            Dim _item As DownloadItem = TryCast(parameter, DownloadItem)
+            Dim _folder_path As String
+
+            _folder_path = IO.Path.GetDirectoryName(_item.LocalFile)
+
+            Debug.WriteLine(_folder_path)
+
+            If Not String.IsNullOrWhiteSpace(_folder_path) And IO.Directory.Exists(_folder_path) Then
+                System.Diagnostics.Process.Start("explorer.exe", String.Format("{0}{1}{2}", Chr(34), _folder_path, Chr(34)))
+            End If
+
+        End If
+
+    End Sub
+
 
     Private _curr_selected_item As DownloadItem = Nothing
 

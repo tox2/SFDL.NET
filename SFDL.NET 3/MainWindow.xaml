@@ -127,14 +127,14 @@
                            Height="32"
                            Source="Resources/Icons/appbar.edit.png" />
                 </MenuItem.Icon>
-                <MenuItem Header="{x:Static p:Strings.MainMenu_Modify_RemoveAllCompletedDownloads}">
+                <MenuItem Command="{Binding RemoveAllCompletedDownloadsCommand}" Header="{x:Static p:Strings.MainMenu_Modify_RemoveAllCompletedDownloads}">
                     <MenuItem.Icon>
                         <Image Width="32"
                                Height="32"
                                Source="Resources/Icons/appbar.close.png" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="{x:Static p:Strings.MainMenu_Modify_CloseAlleDownloads}">
+                <MenuItem Command="{Binding RemoveAllDownloadsCommand}" Header="{x:Static p:Strings.MainMenu_Modify_CloseAlleDownloads}">
                     <MenuItem.Icon>
                         <Image Width="32"
                                Height="32"
@@ -214,7 +214,6 @@
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
-            <Button Click="Button_Click" Content="Test" />
 
         </Menu>
         <ToolBar x:Name="MainToolBar"
