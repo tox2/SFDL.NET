@@ -1010,7 +1010,7 @@ Decrypt:
 
 #Region "Allgemeine Properties"
 
-    Private _sizetocontent As SizeToContent
+    Private _sizetocontent As SizeToContent = SizeToContent.WidthAndHeight
     Public Property SizeToContent
         Set(value)
             _sizetocontent = value

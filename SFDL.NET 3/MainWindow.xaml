@@ -9,7 +9,6 @@
                       xmlns:p="clr-namespace:SFDL.NET3.My.Resources"
                       x:Name="SFDL_MainWindow"
                       Title="SFDL.NET 3"
-                      Width="877"
                       MinWidth="888"
                       MinHeight="480"
                       Dialog:DialogParticipation.Register="{Binding}"
@@ -411,19 +410,22 @@
                 <TabItem Controls:ControlsHelper.HeaderFontSize="12" Header="Aufgaben Historie">
                     <ListView x:Name="ListViewDoneTasks"
                               MinHeight="100"
+                              MaxHeight="150"
                               ItemsSource="{Binding DoneTasks}">
                         <ListView.View>
                             <GridView AllowsColumnReorder="False">
-                                <GridViewColumn Width="30">
+                                <GridViewColumn Width="877" Header="Task">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Image Height="20" Source="{Binding TaskStatusImage}" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Height="20"
+                                                       Margin="0,0,5,0"
+                                                       Source="{Binding TaskStatusImage}" />
+                                                <TextBlock Text="{Binding TaskDisplayText}" />
+                                            </StackPanel>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Width="450"
-                                                DisplayMemberBinding="{Binding TaskDisplayText}"
-                                                Header="Task" />
                             </GridView>
                         </ListView.View>
                     </ListView>
