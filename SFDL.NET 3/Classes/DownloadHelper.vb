@@ -454,6 +454,7 @@ Class DownloadHelper
             End If
 
         Finally
+            _item.DownloadSpeed = String.Empty
             PostDownload(_item, _ftp_session)
         End Try
 

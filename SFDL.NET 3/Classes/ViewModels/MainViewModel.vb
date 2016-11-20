@@ -13,6 +13,7 @@ Public Class MainViewModel
     Private _lock_done_tasks As New Object
     Private _lock_download_items As New Object
     Private _lock_container_sessions As New Object
+    Private _eta_thread As IWorkItemResult(Of Boolean)
 
 
     Public Sub New()
@@ -289,7 +290,7 @@ Decrypt:
 
         Dim _percent_downloaded As Integer = 0
 
-        While Amib.Threading.SmartThreadPool.IsWorkItemCanceled = False And Application.Current.Resources("DownloadStopped") = False
+        While SmartThreadPool.IsWorkItemCanceled = False And Application.Current.Resources("DownloadStopped") = False
 
             Dim _total_speed As Double = 0
             Dim _total_size As Double = 0
@@ -381,6 +382,9 @@ Decrypt:
         Else
             _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download gestoppt", Now.ToString))
         End If
+
+        Application.Current.Resources("DownloadStopped") = True
+        Me.ButtonDownloadStartStop = True
 
         Return True
 
@@ -509,7 +513,7 @@ Decrypt:
 
             _mytask.SetTaskStatus(TaskStatus.Running, "Download läuft...")
 
-            _stp.QueueWorkItem(New Func(Of AppTask, Boolean)(AddressOf CalculateETA), _mytask)
+            _eta_thread = _stp.QueueWorkItem(New Func(Of AppTask, Boolean)(AddressOf CalculateETA), _mytask)
 
             QueryDownloadItems()
 
@@ -640,8 +644,8 @@ Decrypt:
                                                                       If ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0 Then
                                                                           'Alle DL Fertig
                                                                           _log.Info("Alle Downloads Abgeschlossen/Gestoppt")
-                                                                          Application.Current.Resources("DownloadStopped") = True
-                                                                          Me.ButtonDownloadStartStop = True
+                                                                          _eta_thread.Cancel()
+                                                                          '_stp.Cancel()
                                                                       Else
                                                                           QueryDownloadItems()
                                                                       End If
@@ -682,8 +686,18 @@ Decrypt:
     Private Async Sub StopDownload()
 
         Await System.Threading.Tasks.Task.Run(Sub()
+
                                                   Application.Current.Resources("DownloadStopped") = True
-                                                  _stp.Cancel()
+
+                                                  For Each _session In ContainerSessions
+                                                      If Not IsNothing(_session.WIG) Then
+                                                          _session.WIG.Cancel()
+                                                      End If
+                                                  Next
+
+                                                  _eta_thread.Cancel()
+                                                  '_stp.Cancel()
+
                                               End Sub)
 
         Me.ButtonDownloadStartStop = False
