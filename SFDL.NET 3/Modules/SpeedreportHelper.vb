@@ -85,7 +85,7 @@
 
             _rt_speedreport = _speedreportSettings.SpeedreportTemplate
 
-            _rt_speedreport = _rt_speedreport.Replace("%%USER%%", _speedreportSettings.SpeedreportUsername)
+            _rt_speedreport = _rt_speedreport.Replace("%%USERNAME%%", _speedreportSettings.SpeedreportUsername)
             _rt_speedreport = _rt_speedreport.Replace("%%CONNECTION%%", _speedreportSettings.SpeedreportConnection)
             _rt_speedreport = _rt_speedreport.Replace("%%COMMENT%%", _speedreportSettings.SpeedreportComment)
             _rt_speedreport = _rt_speedreport.Replace("%%SPEED%%", Math.Round(_speed, 2) & " KB/s")
