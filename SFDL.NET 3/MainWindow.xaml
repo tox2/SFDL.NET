@@ -208,7 +208,7 @@
                                    Height="32"
                                    Source="Resources/Icons/appbar.book.perspective.help.png" />
                         </MenuItem.Icon>
-                        <MenuItem Header="{x:Static p:Strings.MainMenu_Help}">
+                        <MenuItem Command="{Binding ShowHelpCommand}" Header="{x:Static p:Strings.MainMenu_Help}">
                             <MenuItem.Icon>
                                 <Image Width="32"
                                        Height="32"
@@ -216,7 +216,6 @@
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuItem>
-                    <MenuItem Click="MenuItem_Click" Header="Test" />
 
                 </Menu>
                 <ToolBar x:Name="MainToolBar"

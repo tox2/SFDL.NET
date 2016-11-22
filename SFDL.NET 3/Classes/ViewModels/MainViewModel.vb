@@ -955,6 +955,18 @@ Decrypt:
 
     End Sub
 
+    Public ReadOnly Property ShowHelpCommand As ICommand
+        Get
+            Return New DelegateCommand(AddressOf ShowHelp)
+        End Get
+    End Property
+
+    Private Async Sub ShowHelp()
+
+        Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowMessageAsync(Me, "SFDL.NET 3", "Version: 3.0.0.0 TP3")
+
+    End Sub
+
 
 #End Region
 
