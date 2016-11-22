@@ -112,26 +112,44 @@
         Dim _tmp_list As New List(Of DownloadItem)
 
         For Each _package In _containersession.ContainerFile.Packages
+
             For Each _file In _package.FileList
                 'ToDo: Prüfen ob eintrage plausibel sind
 
-                Using _dl_item As New DownloadItem(_file)
+                Dim _dl_item As New DownloadItem(_file)
 
-                    _dl_item.PackageName = _package.Name
-                    _dl_item.ParentContainerID = _containersession.ID
-                    _dl_item.LocalFile = GetDownloadFilePath(Application.Current.Resources("Settings"), _containersession, _dl_item)
+                With _dl_item
+
+                    .PackageName = _package.Name
+                    .ParentContainerID = _containersession.ID
+                    .LocalFile = GetDownloadFilePath(Application.Current.Resources("Settings"), _containersession, _dl_item)
 
                     If _mark_files = False Then
-                        _dl_item.isSelected = True
+                        .isSelected = True
                     Else
-                        _dl_item.isSelected = False
+                        .isSelected = False
                     End If
 
-                    _tmp_list.Add(_dl_item)
+                End With
 
-                End Using
+                If Not _dl_item.FileSize = 0 And IO.File.Exists(_dl_item.LocalFile) Then
+
+                    'Check if File is already completly downloaded
+                    Dim _fileinfo As New IO.FileInfo(_dl_item.LocalFile)
+
+                    If _fileinfo.Length.Equals(_dl_item.FileSize) Then
+                        _dl_item.isSelected = False
+                        _dl_item.DownloadStatus = DownloadItem.Status.AlreadyDownloaded
+                        _dl_item.SizeDownloaded = _dl_item.FileSize
+                    End If
+
+                End If
+
+                _tmp_list.Add(_dl_item)
+
 
             Next
+
         Next
 
         _containersession.DownloadItems.AddRange(_tmp_list)

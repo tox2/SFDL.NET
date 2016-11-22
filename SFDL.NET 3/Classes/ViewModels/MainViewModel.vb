@@ -219,11 +219,8 @@ Decrypt:
             'ToDo: Parse/Generate InstantVideo Chain
 
 
-
-
             For Each _item In _mycontainer_session.DownloadItems
                 DownloadItems.Add(_item)
-
             Next
 
             ContainerSessions.Add(_mycontainer_session)

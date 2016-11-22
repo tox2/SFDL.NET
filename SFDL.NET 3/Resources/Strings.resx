@@ -429,4 +429,7 @@
   <data name="DownloadStatus_RetryWait" xml:space="preserve">
     <value>Retry - Warte</value>
   </data>
+  <data name="DownloadStatus_AlreadyDownloaded" xml:space="preserve">
+    <value>Datei bereits vollständig</value>
+  </data>
 </root>

@@ -44,6 +44,7 @@ Public Class DownloadItem
             If (Me.DownloadStatus = Status.Running Or Me.DownloadStatus = Status.Retry) Or Me.DownloadStatus = Status.RetryWait Then
                 'do nothing
             Else
+
                 _selected = value
 
                 If value = True Then
@@ -152,6 +153,10 @@ Public Class DownloadItem
 
                     Return My.Resources.Strings.DownloadStatus_Retry
 
+                Case Status.AlreadyDownloaded
+
+                    Return My.Resources.Strings.DownloadStatus_AlreadyDownloaded
+
                 Case Else
 
                     Return My.Resources.Strings.DownloadStatus_Failed
@@ -163,6 +168,7 @@ Public Class DownloadItem
 
     Public Property DownloadStatus As Status
         Set(value As Status)
+
             _status = value
 
             RaisePropertyChanged("DownloadStatus")
@@ -246,6 +252,9 @@ Public Class DownloadItem
 
                     Me.DownloadStatusImage = "Resources/Icons/appbar.control.resume.png"
 
+                Case Status.AlreadyDownloaded
+
+                    Me.DownloadStatusImage = "Resources/Icons/appbar.check.png"
 
             End Select
 
@@ -335,6 +344,14 @@ Public Class DownloadItem
         Completed
         Completed_HashValid
         Completed_HashInvalid
+        AlreadyDownloaded
+    End Enum
+
+    Public Enum SimplifiedStatus
+        OK
+        Running
+        Failed
+        None
     End Enum
 
 #Region "IDisposable Support"

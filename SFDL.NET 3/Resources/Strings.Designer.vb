@@ -74,6 +74,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Datei bereits vollständig ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadStatus_AlreadyDownloaded() As String
+            Get
+                Return ResourceManager.GetString("DownloadStatus_AlreadyDownloaded", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Download abgeschlossen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_Completed() As String

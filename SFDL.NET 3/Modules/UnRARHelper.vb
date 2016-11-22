@@ -14,6 +14,8 @@ Module UnRARHelper
 
                 Select Case _chain.MasterUnRarChainFile.DownloadStatus
 
+                    Case DownloadItem.Status.AlreadyDownloaded
+                        'ok
 
                     Case DownloadItem.Status.Completed
                     'ok
@@ -41,6 +43,9 @@ Module UnRARHelper
                 If IO.File.Exists(_chainmember.LocalFile) Then
 
                     Select Case _chainmember.DownloadStatus
+
+                        Case DownloadItem.Status.AlreadyDownloaded
+                            'ok
 
                         Case DownloadItem.Status.Completed
                     'ok
