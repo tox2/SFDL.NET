@@ -935,7 +935,23 @@ Decrypt:
 
     Private Sub ExpandAllPackages()
 
+        For Each _item In DownloadItems.Select(Function(myitem) myitem.GroupDescriptionIdentifier).Distinct
+            DownloadItems.Where(Function(myitem) myitem.GroupDescriptionIdentifier.Equals(_item)).FirstOrDefault.IsExpanded = True
+        Next
 
+    End Sub
+
+    Public ReadOnly Property CollapseAllPackagesCommand As ICommand
+        Get
+            Return New DelegateCommand(AddressOf CollapseAllPackages)
+        End Get
+    End Property
+
+    Private Sub CollapseAllPackages()
+
+        For Each _item In DownloadItems.Select(Function(myitem) myitem.GroupDescriptionIdentifier).Distinct
+            DownloadItems.Where(Function(myitem) myitem.GroupDescriptionIdentifier.Equals(_item)).FirstOrDefault.IsExpanded = False
+        Next
 
     End Sub
 

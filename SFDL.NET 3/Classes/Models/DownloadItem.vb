@@ -303,6 +303,17 @@ Public Class DownloadItem
     Public Property RequiredForInstantVideo As Boolean = False
     Public Property SingleSessionMode As Boolean = False
 
+    Private _is_expanded As Boolean = True
+    Public Property IsExpanded As Boolean
+        Set(value As Boolean)
+            _is_expanded = value
+            RaisePropertyChanged("IsExpanded")
+        End Set
+        Get
+            Return _is_expanded
+        End Get
+    End Property
+
 
     Public Enum Status
         None

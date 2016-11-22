@@ -125,4 +125,9 @@ Public Class MainWindow
 
     End Sub
 
+    Private Sub MenuItem_Click(sender As Object, e As RoutedEventArgs)
+
+        MessageBox.Show(MainViewModel.ThisInstance.DownloadItems(0).isExpanded)
+
+    End Sub
 End Class
