@@ -336,6 +336,7 @@ Module UnRARHelper
                         _app_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("Archiv {0} | Entpacken: Erfolgreich | Archive löschen: Erfolgreich", IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
 
                     Catch ex As Exception
+                        _log.Error(ex, ex.Message)
                         _app_task.SetTaskStatus(TaskStatus.Faulted, String.Format("Archiv {0} | Entpacken: Erfolgreich | Archive löschen: Fehlgeschlagen", IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
                     End Try
 
@@ -348,6 +349,7 @@ Module UnRARHelper
             End If
 
         Catch ex As Exception
+            _log.Error(ex, ex.Message)
             _app_task.SetTaskStatus(TaskStatus.Faulted, ex.Message)
         End Try
 

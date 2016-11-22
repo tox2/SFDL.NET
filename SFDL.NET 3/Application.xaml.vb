@@ -16,7 +16,13 @@ Class Application
 
                 AddHandler SingleInstance.ArgumentsReceived, AddressOf SingleInstanceParameter
 
-                LogHelper.GenerateLogConfig()
+                If e.Args.Where(Function(myarg) myarg.ToLowerInvariant.ToLower.Equals("/log")).Count = 1 Then
+                    LogHelper.GenerateLogConfig(IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "log.log"))
+                Else
+                    LogHelper.GenerateLogConfig()
+                End If
+
+
 
                 My.Settings.Upgrade()
 
