@@ -227,12 +227,17 @@ Decrypt:
 
 
             If _bulk_result = False And Not _mycontainer_session.DownloadItems.Count = 0 Then
-
                 _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL '{0}' teilweise geöffnet - Ein oder mehrere Packages konnten nicht gelesen werden.", IO.Path.GetFileName(_sfdl_container_path)))
             Else
-                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL '{0}' geöffnet", IO.Path.GetFileName(_sfdl_container_path)))
-            End If
 
+                If _settings.DeleteSFDLAfterOpen = True Then
+                    IO.File.Delete(_sfdl_container_path)
+                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL '{0}' geöffnet und anschließend gelöscht", IO.Path.GetFileName(_sfdl_container_path)))
+                Else
+                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL '{0}' geöffnet", IO.Path.GetFileName(_sfdl_container_path)))
+                End If
+
+            End If
 
         Catch ex As Exception
             _mytask.SetTaskStatus(TaskStatus.Faulted, ex.Message)
