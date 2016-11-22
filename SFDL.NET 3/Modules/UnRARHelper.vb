@@ -323,18 +323,24 @@ Module UnRARHelper
 
                 If _unrar_settings.DeleteAfterUnRAR = True Then
 
-                    _app_task.SetTaskStatus(TaskStatus.Running, "Lösche Archive....")
+                    Try
 
-                    For Each _file In _unrarchain.ChainMemberFiles
-                        IO.File.Delete(_file.LocalFile)
-                    Next
+                        _app_task.SetTaskStatus(TaskStatus.Running, "Lösche Archive....")
 
-                    IO.File.Delete(_unrarchain.MasterUnRarChainFile.LocalFile)
+                        For Each _file In _unrarchain.ChainMemberFiles
+                            IO.File.Delete(_file.LocalFile)
+                        Next
 
-                    _app_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("Archiv {0} erfolgreich entpackt und anschließend entfernt", IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
+                        IO.File.Delete(_unrarchain.MasterUnRarChainFile.LocalFile)
+
+                        _app_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("Archiv {0} | Entpacken: Erfolgreich | Archive löschen: Erfolgreich", IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
+
+                    Catch ex As Exception
+                        _app_task.SetTaskStatus(TaskStatus.Faulted, String.Format("Archiv {0} | Entpacken: Erfolgreich | Archive löschen: Fehlgeschlagen", IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
+                    End Try
 
                 Else
-                    _app_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("Archiv {0} erfolgreich entpackt!", IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
+                    _app_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("Archiv {0} | Entpacken: Erfolgreich", IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
                 End If
 
             Else
