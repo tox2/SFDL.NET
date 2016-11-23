@@ -432,4 +432,7 @@
   <data name="DownloadStatus_AlreadyDownloaded" xml:space="preserve">
     <value>Datei bereits vollständig</value>
   </data>
+  <data name="DownloadItems_ContextMenu_CloseSFDLContainer" xml:space="preserve">
+    <value>SFDL Container schließen</value>
+  </data>
 </root>

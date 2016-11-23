@@ -1028,36 +1028,46 @@ Decrypt:
 
         If Not IsNothing(parameter) Then
 
-            If Not String.IsNullOrWhiteSpace(parameter) And parameter.ToString.Contains(";") Then
+            Dim _container_session As ContainerSession = Nothing
+            Dim _tmp_list As New List(Of DownloadItem)
 
-                AddHandler _mytask.TaskDone, AddressOf TaskDoneEvent
+            AddHandler _mytask.TaskDone, AddressOf TaskDoneEvent
+            ActiveTasks.Add(_mytask)
 
-                ActiveTasks.Add(_mytask)
+            If parameter.GetType.Equals(GetType(String)) Then
 
-                Dim _container_sessionid As Guid = Guid.Parse(parameter.ToString.Split(";")(1))
-                Dim _tmp_list As New List(Of DownloadItem)
-                Dim _container_session As ContainerSession
+                If Not String.IsNullOrWhiteSpace(parameter) And parameter.ToString.Contains(";") Then
 
-                _container_session = ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_container_sessionid)).FirstOrDefault
+                    Dim _container_sessionid As Guid = Guid.Parse(parameter.ToString.Split(";")(1))
 
-                If _container_session.SessionState = ContainerSessionState.DownloadRunning Then
-                    _mytask.SetTaskStatus(TaskStatus.Faulted, "Kann Session nicht schließen da diese aktiv ist (Download)")
-                Else
-
-                    _tmp_list = DownloadItems.Where(Function(myitem) _container_sessionid.Equals(myitem.ParentContainerID)).ToList
-
-                    For Each _item In _tmp_list
-                        DownloadItems.Remove(_item)
-                    Next
-
-                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL Container '{0}' geschlossen", IO.Path.GetFileName(_container_session.ContainerFileName)))
-
-                    ContainerSessions.Remove(_container_session)
+                    _container_session = ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_container_sessionid)).FirstOrDefault
 
                 End If
 
+            End If
+
+            If parameter.GetType.Equals(GetType(DownloadItem)) Then
+
+                Dim _dlitem As DownloadItem = TryCast(parameter, DownloadItem)
+
+                _container_session = ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_dlitem.ParentContainerID)).FirstOrDefault
+
+            End If
 
 
+            If _container_session.SessionState = ContainerSessionState.DownloadRunning Then
+                _mytask.SetTaskStatus(TaskStatus.Faulted, "Kann Session nicht schließen da diese aktiv ist (Download)")
+            Else
+
+                _tmp_list = DownloadItems.Where(Function(myitem) _container_session.ID.Equals(myitem.ParentContainerID)).ToList
+
+                For Each _item In _tmp_list
+                    DownloadItems.Remove(_item)
+                Next
+
+                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL Container '{0}' geschlossen", IO.Path.GetFileName(_container_session.ContainerFileName)))
+
+                ContainerSessions.Remove(_container_session)
 
             End If
 

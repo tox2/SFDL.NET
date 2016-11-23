@@ -65,6 +65,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL Container schließen ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadItems_ContextMenu_CloseSFDLContainer() As String
+            Get
+                Return ResourceManager.GetString("DownloadItems_ContextMenu_CloseSFDLContainer", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Beinhaltenden Ordner öffnen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadItems_ContextMenu_OpenParentFolder() As String

@@ -280,6 +280,7 @@
                           ItemsSource="{Binding DownloadItems}"
                           SelectedItem="{Binding SelectedDownloadItem,
                                                  Mode=TwoWay}">
+
                     <ListView.View>
                         <GridView>
                             <GridViewColumn>
@@ -380,6 +381,18 @@
                                            Source="Resources/Icons/appbar.folder.open.png" />
                                 </MenuItem.Icon>
                             </MenuItem>
+
+                            <MenuItem Command="{Binding CloseSFDLContainerCommand}"
+                                      CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                                                 Path=PlacementTarget.SelectedItem}"
+                                      Header="{x:Static p:Strings.DownloadItems_ContextMenu_CloseSFDLContainer}">
+                                <MenuItem.Icon>
+                                    <Image Width="32"
+                                           Height="32"
+                                           Source="Resources/Icons/appbar.close.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+
                         </ContextMenu>
                     </ListView.ContextMenu>
                 </ListView>

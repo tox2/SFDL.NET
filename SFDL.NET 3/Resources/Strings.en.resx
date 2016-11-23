@@ -402,4 +402,7 @@
   <data name="DownloadStatus_AlreadyDownloaded" xml:space="preserve">
     <value>File already complete</value>
   </data>
+  <data name="DownloadItems_ContextMenu_CloseSFDLContainer" xml:space="preserve">
+    <value>Close SFDL Container</value>
+  </data>
 </root>
