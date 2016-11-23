@@ -16,7 +16,17 @@ Public Class CollectionViewNameConverter
         End If
 
         If _my_string.Contains(";") Then
-            Return _my_string.Split(";")(0).ToString
+
+            Dim _container As ContainerSession = Nothing
+
+            _container = MainViewModel.ThisInstance.ContainerSessions.Where(Function(mysession) mysession.ID.ToString.Equals(_my_string.Split(";")(1).ToString)).FirstOrDefault
+
+            If Not IsNothing(_container) Then
+                Return String.Format("{0} | {1}", _container.DisplayName, _my_string.Split(";")(0).ToString)
+            Else
+                Return _my_string.Split(";")(0).ToString
+            End If
+
         Else
             Return Binding.DoNothing
         End If

@@ -63,14 +63,32 @@
         _fingerprint = _fingerprint & _container_session.ContainerFile.Connection.Port
         _fingerprint = _fingerprint & _container_session.ContainerFile.Connection.Username
         _fingerprint = _fingerprint & _container_session.ContainerFile.Packages.Count
+        _fingerprint = _fingerprint & _container_session.DisplayName
+        _fingerprint = _fingerprint & _container_session.ContainerFile.Uploader
+        _fingerprint = _fingerprint & _container_session.ContainerFileName
 
         If Not _container_session.ContainerFile.Packages.Count = 0 Then
             _fingerprint = _fingerprint & _container_session.ContainerFile.Packages(0).Name
         End If
 
-        If Not _container_session.DownloadItems.Count = 0 Then
-            _fingerprint = _fingerprint & _container_session.DownloadItems(0).FileName
-            _fingerprint = _fingerprint & IO.Path.GetDirectoryName(_container_session.DownloadItems(0).FullPath)
+        If Not _container_session.ContainerFile.Packages.Where(Function(mypackage) mypackage.BulkFolderMode = False).Count = 0 Then
+
+            If Not _fingerprint & _container_session.ContainerFile.Packages(0).FileList.Count = 0 Then
+                _fingerprint = _fingerprint & _container_session.ContainerFile.Packages(0).FileList(0).FileName
+                _fingerprint = _fingerprint & IO.Path.GetDirectoryName(_container_session.ContainerFile.Packages(0).FileList(0).FullPath)
+            End If
+
+        Else
+
+            If Not _container_session.ContainerFile.Packages.Where(Function(mypackage) mypackage.BulkFolderMode = True).Count = 0 Then
+
+                If Not _container_session.ContainerFile.Packages(0).BulkFolderList.Count = 0 Then
+                    _fingerprint = _fingerprint & _container_session.ContainerFile.Packages(0).BulkFolderList(0).BulkFolderPath
+                    _fingerprint = _fingerprint & _container_session.ContainerFile.Packages(0).BulkFolderList(0).PackageName
+                End If
+
+            End If
+
         End If
 
         _container_session.Fingerprint = System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(_fingerprint))

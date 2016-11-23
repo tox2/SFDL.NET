@@ -103,11 +103,6 @@ Public Class MainWindow
     End Sub
 
 
-    Private Sub Flyout_IsOpenChanged(sender As Object, e As RoutedEventArgs)
-
-
-    End Sub
-
 
     Private Sub MainWindow_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
 
