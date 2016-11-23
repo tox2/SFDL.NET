@@ -54,6 +54,11 @@
             _fingerprint = _fingerprint & _container_session.ContainerFile.Packages(0).Name
         End If
 
+        If Not _container_session.DownloadItems.Count = 0 Then
+            _fingerprint = _fingerprint & _container_session.DownloadItems(0).FileName
+            _fingerprint = _fingerprint & IO.Path.GetDirectoryName(_container_session.DownloadItems(0).FullPath)
+        End If
+
         _container_session.Fingerprint = System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(_fingerprint))
 
     End Sub

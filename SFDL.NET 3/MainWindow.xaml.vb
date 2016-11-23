@@ -87,6 +87,10 @@ Public Class MainWindow
 
                                                                       End Sub)
 
+            Else
+
+                txt_containerinfo_serverlocation.Content = Nothing
+                img_containerinfo_serverlocation.Source = Nothing
 
             End If
 
@@ -101,8 +105,6 @@ Public Class MainWindow
 
     Private Sub Flyout_IsOpenChanged(sender As Object, e As RoutedEventArgs)
 
-        txt_containerinfo_serverlocation.Content = Nothing
-        img_containerinfo_serverlocation.Source = Nothing
 
     End Sub
 
