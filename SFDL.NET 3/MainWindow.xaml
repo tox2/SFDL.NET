@@ -185,14 +185,18 @@
                                        Height="32"
                                        Source="Resources/Icons/appbar.door.leave.png" />
                             </MenuItem.Icon>
-                            <MenuItem Header="{x:Static p:Strings.MainMenu_Extra_AfterDownload_ExitLoader}" IsCheckable="True">
+                            <MenuItem Header="{x:Static p:Strings.MainMenu_Extra_AfterDownload_ExitLoader}"
+                                      IsCheckable="True"
+                                      IsChecked="{Binding CheckedPostDownloadExitApp}">
                                 <MenuItem.Icon>
                                     <Image Width="32"
                                            Height="32"
                                            Source="Resources/Icons/appbar.power.png" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Header="{x:Static p:Strings.MainMenu_Extra_AfterDownload_ShutdownComputer}" IsCheckable="True">
+                            <MenuItem Header="{x:Static p:Strings.MainMenu_Extra_AfterDownload_ShutdownComputer}"
+                                      IsCheckable="True"
+                                      IsChecked="{Binding CheckedPostDownloadShutdownComputer}">
                                 <MenuItem.Icon>
                                     <Image Width="32"
                                            Height="32"
