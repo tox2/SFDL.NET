@@ -435,4 +435,10 @@
   <data name="DownloadItems_ContextMenu_CloseSFDLContainer" xml:space="preserve">
     <value>SFDL Container schließen</value>
   </data>
+  <data name="DownloadItems_ContextMenu_MarkAllItemsInPackage" xml:space="preserve">
+    <value>Alle Dateien im diesem Paket makieren</value>
+  </data>
+  <data name="DownloadItems_ContextMenu_UnMarkAllItemsInPackage" xml:space="preserve">
+    <value>Alle Dateien im diesem Paket demakieren</value>
+  </data>
 </root>

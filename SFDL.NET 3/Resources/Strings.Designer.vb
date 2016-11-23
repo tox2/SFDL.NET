@@ -74,11 +74,29 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Alle Dateien im diesem Paket makieren ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadItems_ContextMenu_MarkAllItemsInPackage() As String
+            Get
+                Return ResourceManager.GetString("DownloadItems_ContextMenu_MarkAllItemsInPackage", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Beinhaltenden Ordner öffnen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadItems_ContextMenu_OpenParentFolder() As String
             Get
                 Return ResourceManager.GetString("DownloadItems_ContextMenu_OpenParentFolder", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Alle Dateien im diesem Paket demakieren ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadItems_ContextMenu_UnMarkAllItemsInPackage() As String
+            Get
+                Return ResourceManager.GetString("DownloadItems_ContextMenu_UnMarkAllItemsInPackage", resourceCulture)
             End Get
         End Property
         

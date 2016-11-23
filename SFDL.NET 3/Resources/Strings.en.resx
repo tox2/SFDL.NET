@@ -405,4 +405,10 @@
   <data name="DownloadItems_ContextMenu_CloseSFDLContainer" xml:space="preserve">
     <value>Close SFDL Container</value>
   </data>
+  <data name="DownloadItems_ContextMenu_MarkAllItemsInPackage" xml:space="preserve">
+    <value>Uncheck all files in this package</value>
+  </data>
+  <data name="DownloadItems_ContextMenu_UnMarkAllItemsInPackage" xml:space="preserve">
+    <value>Check all files in this package</value>
+  </data>
 </root>

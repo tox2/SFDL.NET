@@ -399,6 +399,28 @@
                                 </MenuItem.Icon>
                             </MenuItem>
 
+                            <MenuItem Command="{Binding MarkAllItemsInPackageCommand}"
+                                      CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                                                 Path=PlacementTarget.SelectedItem}"
+                                      Header="{x:Static p:Strings.DownloadItems_ContextMenu_MarkAllItemsInPackage}">
+                                <MenuItem.Icon>
+                                    <Image Width="32"
+                                           Height="32"
+                                           Source="Resources/Icons/appbar.checkmark.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+
+                            <MenuItem Command="{Binding UnMarkAllItemsInPackageCommand}"
+                                      CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                                                 Path=PlacementTarget.SelectedItem}"
+                                      Header="{x:Static p:Strings.DownloadItems_ContextMenu_UnMarkAllItemsInPackage}">
+                                <MenuItem.Icon>
+                                    <Image Width="32"
+                                           Height="32"
+                                           Source="Resources/Icons/appbar.checkmark.uncrossed.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+
                         </ContextMenu>
                     </ListView.ContextMenu>
                 </ListView>
