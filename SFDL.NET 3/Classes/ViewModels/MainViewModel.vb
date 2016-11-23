@@ -494,6 +494,8 @@ Decrypt:
                 _session.WIG = Nothing
                 _session.UnRARSynLock = New Object
                 _session.SynLock = New Object
+                _session.DownloadStartedTime = Date.MinValue
+                _session.DownloadStoppedTime = Date.MinValue
             Next
 
             For Each _dlitem In DownloadItems.Where(Function(myitem) myitem.isSelected = True)
