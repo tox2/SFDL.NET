@@ -282,8 +282,10 @@
                           MinHeight="250"
                           dng:DropBehavior.PreviewDropCommand="{Binding PreviewDropCommand}"
                           ItemsSource="{Binding DownloadItems}"
+                          PreviewKeyUp="OnGridKeyUp"
                           SelectedItem="{Binding SelectedDownloadItem,
-                                                 Mode=TwoWay}">
+                                                 Mode=TwoWay}"
+                          SelectionMode="Single">
 
                     <ListView.View>
                         <GridView>

@@ -127,4 +127,25 @@ Public Class MainWindow
         MessageBox.Show(MainViewModel.ThisInstance.DownloadItems(0).isExpanded)
 
     End Sub
+
+    Private Sub OnGridKeyUp(sender As Object, e As KeyEventArgs)
+
+        If Not IsNothing(ListView_DownloadItems.SelectedItems) AndAlso e.Key = Key.Space Then
+
+            For Each _item As DownloadItem In ListView_DownloadItems.SelectedItems
+
+                If _item.isSelected = True Then
+                    _item.isSelected = False
+                Else
+                    _item.isSelected = True
+                End If
+
+            Next
+
+            e.Handled = True
+
+        End If
+
+
+    End Sub
 End Class
