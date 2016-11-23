@@ -2,9 +2,9 @@
 
 Module UnRARHelper
 
-    Dim _log As NLog.Logger = NLog.LogManager.GetLogger("UnRARHelper")
-
     Function isUnRarChainComplete(ByVal _chain As UnRARChain) As Boolean
+
+        Dim _log As NLog.Logger = NLog.LogManager.GetLogger("isUnRarChainComplete")
 
         Dim _rt As Boolean = True
 
@@ -160,6 +160,7 @@ Module UnRARHelper
         Dim _unrar_exe As String
         Dim _result As Boolean = False
         Dim _tmp_output As String = String.Empty
+        Dim _log As NLog.Logger = NLog.LogManager.GetLogger("IsUnRARPasswordValid")
 
         Try
 
@@ -212,7 +213,8 @@ Module UnRARHelper
         Dim _unrar_process As Process
         Dim _unrar_exe As String
         Dim _tmp_output As String
-        Dim _out_lines As New List(Of String)
+        Dim _out_lines As New Text.StringBuilder
+        Dim _log As NLog.Logger = NLog.LogManager.GetLogger("DoUnRAR")
 
         Try
 
@@ -240,6 +242,8 @@ Module UnRARHelper
 
             End With
 
+            _log.Info("UnRAR Parameters: " & _unrar_process.StartInfo.Arguments.ToString)
+
             _unrar_process.Start()
 
             While _unrar_process.HasExited = False
@@ -248,7 +252,7 @@ Module UnRARHelper
                 Dim _percent As Integer
 
                 _line = _unrar_process.StandardOutput.ReadLine
-                _out_lines.Add(_line)
+                _out_lines.AppendLine(_line)
 
                 _log.Debug(_line)
 
@@ -264,9 +268,13 @@ Module UnRARHelper
             Await Task.Run(Sub() _unrar_process.WaitForExit())
 
             _tmp_output = _unrar_process.StandardOutput.ReadToEnd
+            _tmp_output = _out_lines.ToString & _unrar_process.StandardOutput.ReadToEnd.ToString
+            _tmp_output = _tmp_output.Trim
 
-            If _tmp_output.Contains("All OK") Then
+            If _tmp_output.ToString.Contains("OK") Then
                 _result = True
+            Else
+                Throw New Exception("Output missmatch! Output was: " & vbNewLine & _tmp_output)
             End If
 
         Catch ex As Exception
@@ -282,6 +290,7 @@ Module UnRARHelper
     Public Async Function UnRAR(ByVal _unrarchain As UnRARChain, ByVal _app_task As AppTask, ByVal _unrar_settings As UnRARSettings) As Task
 
         Dim _unrar_password As String = String.Empty
+        Dim _log As NLog.Logger = NLog.LogManager.GetLogger("UnRAR")
 
         _log.Info("Checking if a UnRar Password is needed...")
 
