@@ -1307,11 +1307,19 @@ Decrypt:
     Private Sub HandlePreviewDrop(inObject As Object)
 
         Dim ido As IDataObject = TryCast(inObject, IDataObject)
+
         If ido Is Nothing Then
             Return
         End If
 
-        For Each _file In ido.GetData("FileName")
+        For Each _lol In ido.GetFormats()
+
+            Debug.WriteLine(_lol.ToString)
+
+        Next
+
+
+        For Each _file In ido.GetData("FileNameW")
 
             If IO.Path.GetExtension(_file) = ".sfdl" Then
                 OpenSFDLFile(_file)
