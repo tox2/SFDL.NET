@@ -2,6 +2,20 @@
 
     Private _log As NLog.Logger = NLog.LogManager.GetLogger("SFDLFileHelper")
 
+    Sub CheckAndFixPackageName(ByRef _container As ContainerSession)
+
+        Dim _count As Integer = 1
+
+        For Each _package In _container.ContainerFile.Packages
+
+            If String.IsNullOrWhiteSpace(_package.Name) Then
+                _package.Name = String.Format("Package{0}", _count)
+            End If
+
+        Next
+
+    End Sub
+
     Function GetContainerVersion(ByVal _sfdl_file_path As String) As Integer
 
         Dim _version As Integer = 0

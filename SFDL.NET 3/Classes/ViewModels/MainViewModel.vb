@@ -117,6 +117,8 @@ Decrypt:
                 _mycontainer_session.DisplayName = _mycontainer.Description
             End If
 
+            CheckAndFixPackageName(_mycontainer_session)
+
             GenerateContainerFingerprint(_mycontainer_session)
 
             If Not ContainerSessions.Where(Function(mycon) mycon.Fingerprint.Equals(_mycontainer_session.Fingerprint)).Count = 0 Then
