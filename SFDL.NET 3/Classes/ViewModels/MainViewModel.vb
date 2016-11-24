@@ -295,7 +295,7 @@ Decrypt:
 
         Dim _percent_downloaded As Integer = 0
 
-        While SmartThreadPool.IsWorkItemCanceled = False And Application.Current.Resources("DownloadStopped") = False
+        While SmartThreadPool.IsWorkItemCanceled = False Or Application.Current.Resources("DownloadStopped") = False
 
             Dim _total_speed As Double = 0
             Dim _total_size As Double = 0
@@ -658,19 +658,21 @@ Decrypt:
 
                                                                       If ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0 Or Application.Current.Resources("DownloadStopped") = True Then
 
-                                                                          Dim _mytask As AppTask
 
                                                                           'Alle DL Fertig
                                                                           _log.Info("Alle Downloads Abgeschlossen/Gestoppt")
                                                                           _eta_thread.Cancel()
 
-                                                                          _mytask = ActiveTasks.Where(Function(mytask) mytask.TaskName = "ETATask").FirstOrDefault
+                                                                          For Each _mytask As AppTask In ActiveTasks.Where(Function(mytask) mytask.TaskName = "ETATask")
 
-                                                                          If Application.Current.Resources("DownloadStopped") = False Then
-                                                                              _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download beendet", Now.ToString))
-                                                                          Else
-                                                                              _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download gestoppt", Now.ToString))
-                                                                          End If
+                                                                              If Application.Current.Resources("DownloadStopped") = False Then
+                                                                                  _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download beendet", Now.ToString))
+                                                                              Else
+                                                                                  _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download gestoppt", Now.ToString))
+                                                                              End If
+
+                                                                          Next
+
 
                                                                           Application.Current.Resources("DownloadStopped") = True
                                                                           Me.ButtonDownloadStartStop = True
