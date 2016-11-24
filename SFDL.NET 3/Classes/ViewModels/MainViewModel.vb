@@ -1378,20 +1378,27 @@ Decrypt:
             Return
         End If
 
-        For Each _lol In ido.GetFormats()
+        Dim fileDrop = ido.GetData(DataFormats.FileDrop, True)
+        Dim filesOrDirectories = TryCast(fileDrop, [String]())
 
-            Debug.WriteLine(_lol.ToString)
+        If filesOrDirectories IsNot Nothing AndAlso filesOrDirectories.Length > 0 Then
 
-        Next
+            For Each fullPath As String In filesOrDirectories
+                If IO.Directory.Exists(fullPath) Then
+                    Debug.WriteLine("{0} is a directory", fullPath)
 
+                ElseIf IO.File.Exists(fullPath) Then
+                    Debug.WriteLine("{0} is a file", fullPath)
 
-        For Each _file In ido.GetData("FileNameW")
+                    If IO.Path.GetExtension(fullPath) = ".sfdl" Then
+                        OpenSFDLFile(fullPath)
+                    End If
 
-            If IO.Path.GetExtension(_file) = ".sfdl" Then
-                OpenSFDLFile(_file)
-            End If
-
-        Next
+                Else
+                    Debug.WriteLine("{0} is not a file and not a directory", fullPath)
+                End If
+            Next
+        End If
 
 
     End Sub
