@@ -295,7 +295,7 @@ Decrypt:
         Dim _percent_downloaded As Integer = 0
         Dim _log As NLog.Logger = NLog.LogManager.GetLogger("CalculateETA")
 
-        While SmartThreadPool.IsWorkItemCanceled = False Or Application.Current.Resources("DownloadStopped") = False
+        While SmartThreadPool.IsWorkItemCanceled = False
 
             Dim _total_speed As Double = 0
             Dim _total_size As Double = 0
@@ -386,9 +386,36 @@ Decrypt:
 
         _log.Debug("ETA While beendet!")
 
+        System.Threading.Tasks.Task.Run(Sub()
+                                            PostDownload()
+                                        End Sub)
+
         Return True
 
     End Function
+
+    Sub PostDownload()
+
+        Dim _mytasklist As New List(Of AppTask)
+
+        _mytasklist = ActiveTasks.Where(Function(mytask) mytask.TaskName = "ETATask").ToList
+
+        For Each _mytask As AppTask In _mytasklist
+
+            If Application.Current.Resources("DownloadStopped") = False Then
+                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download beendet", Now.ToString))
+            Else
+                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download gestoppt", Now.ToString))
+            End If
+
+        Next
+
+        Application.Current.Resources("DownloadStopped") = True
+        Me.ButtonDownloadStartStop = True
+
+        ExcutePostDownloadActions()
+
+    End Sub
 
     Private Sub QueryDownloadItems()
 
@@ -675,21 +702,6 @@ Decrypt:
                                                                           _log.Info("Alle Downloads Abgeschlossen/Gestoppt")
                                                                           _eta_thread.Cancel()
 
-                                                                          For Each _mytask As AppTask In ActiveTasks.Where(Function(mytask) mytask.TaskName = "ETATask")
-
-                                                                              If Application.Current.Resources("DownloadStopped") = False Then
-                                                                                  _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download beendet", Now.ToString))
-                                                                              Else
-                                                                                  _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download gestoppt", Now.ToString))
-                                                                              End If
-
-                                                                          Next
-
-                                                                          Application.Current.Resources("DownloadStopped") = True
-                                                                          Me.ButtonDownloadStartStop = True
-
-                                                                          PostDownload()
-
                                                                       Else
                                                                           QueryDownloadItems()
                                                                       End If
@@ -704,7 +716,7 @@ Decrypt:
         End Try
     End Sub
 
-    Private Async Sub PostDownload()
+    Private Async Sub ExcutePostDownloadActions()
 
         Dim _wait As Boolean = True
 
