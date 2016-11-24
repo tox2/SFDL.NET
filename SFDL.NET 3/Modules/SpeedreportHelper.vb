@@ -53,8 +53,6 @@
 
         _time_elapsed = DateDiff(DateInterval.Second, _starttime, _stoptime)
 
-        Debug.WriteLine(String.Format("{0} KB in {1} Sekunden heruntergeladen", _full_session_size, _time_elapsed))
-
         _rt = _full_session_size / _time_elapsed
 
         Return _rt

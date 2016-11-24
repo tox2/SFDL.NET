@@ -5,7 +5,6 @@
     Public Property DownloadDirectory As String = String.Empty
     Public Property ExistingFileHandling As ExistingFileHandling = ExistingFileHandling.ResumeFile
     Public Property PreventStandby As Boolean = True
-    Public Property CreateContainerSubfolder As Boolean = True
     Public Property CreatePackageSubfolder As Boolean = False
     Public Property Send2Tray As Boolean = False
     Public Property ClicknLoad As Boolean = True
@@ -26,7 +25,6 @@
         With _rt
 
             .ClicknLoad = True
-            .CreateContainerSubfolder = True
             .CreatePackageSubfolder = False
             .DeleteSFDLAfterOpen = False
             .DownloadDirectory = IO.Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), "Downloads")

@@ -154,7 +154,7 @@ Module UnRARHelper
 
     End Function
 
-    Private Async Function IsUnRARPasswordValid(ByVal _filename As String, ByVal _password As String) As Task(Of Boolean)
+    Private Function IsUnRARPasswordValid(ByVal _filename As String, ByVal _password As String) As Boolean
 
         Dim _unrar_process As Process
         Dim _unrar_exe As String
@@ -190,7 +190,7 @@ Module UnRARHelper
 
             _unrar_process.Start()
 
-            Await Task.Run(Sub() _unrar_process.WaitForExit(CInt(TimeSpan.FromSeconds(15).TotalMilliseconds)))
+            _unrar_process.WaitForExit(CInt(TimeSpan.FromSeconds(15).TotalMilliseconds))
 
             _tmp_output = _unrar_process.StandardOutput.ReadToEnd.ToLower
 
@@ -207,7 +207,7 @@ Module UnRARHelper
 
     End Function
 
-    Private Async Function DoUnRAR(ByVal _filename As String, ByVal _extract_dir As String, ByVal _password As String, ByVal _app_task As AppTask) As Task(Of Boolean)
+    Private Function DoUnRAR(ByVal _filename As String, ByVal _extract_dir As String, ByVal _password As String, ByVal _app_task As AppTask) As Boolean
 
         Dim _result As Boolean = False
         Dim _unrar_process As Process
@@ -272,7 +272,7 @@ Module UnRARHelper
 
             End While
 
-            Await Task.Run(Sub() _unrar_process.WaitForExit())
+            _unrar_process.WaitForExit()
 
             _log.Info("UnRAR Process has exited")
 
@@ -295,7 +295,7 @@ Module UnRARHelper
 
     End Function
 
-    Public Async Function UnRAR(ByVal _unrarchain As UnRARChain, ByVal _app_task As AppTask, ByVal _unrar_settings As UnRARSettings) As Task(Of Boolean)
+    Public Function UnRAR(ByVal _unrarchain As UnRARChain, ByVal _app_task As AppTask, ByVal _unrar_settings As UnRARSettings) As Boolean
 
         Dim _unrar_password As String = String.Empty
         Dim _log As NLog.Logger = NLog.LogManager.GetLogger("UnRAR")
@@ -307,7 +307,7 @@ Module UnRARHelper
 
             _app_task.SetTaskStatus(TaskStatus.Running, String.Format("Cracking Password {0}", IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
 
-            If Await IsUnRARPasswordValid(_unrarchain.MasterUnRarChainFile.LocalFile, String.Empty) = False Then
+            If IsUnRARPasswordValid(_unrarchain.MasterUnRarChainFile.LocalFile, String.Empty) = False Then
 
                 _log.Info("Damn....we need a password to extract this sh**t")
 
@@ -317,7 +317,7 @@ Module UnRARHelper
 
                 For Each _pw In _unrar_settings.UnRARPasswordList
 
-                    If Await IsUnRARPasswordValid(_unrarchain.MasterUnRarChainFile.LocalFile, _pw) = True Then
+                    If IsUnRARPasswordValid(_unrarchain.MasterUnRarChainFile.LocalFile, _pw) = True Then
                         _unrar_password = _pw
                         _log.Info(String.Format("Unrar Password Found -> {0}", _pw))
                         Exit For
@@ -337,7 +337,7 @@ Module UnRARHelper
 
             _log.Info("Now passing all needed Arguments to UnRar Binary and wait the extraction to finish")
 
-            If Await DoUnRAR(_unrarchain.MasterUnRarChainFile.LocalFile, IO.Path.GetDirectoryName(_unrarchain.MasterUnRarChainFile.LocalFile), _unrar_password, _app_task) = True Then
+            If DoUnRAR(_unrarchain.MasterUnRarChainFile.LocalFile, IO.Path.GetDirectoryName(_unrarchain.MasterUnRarChainFile.LocalFile), _unrar_password, _app_task) = True Then
 
                 If _unrar_settings.DeleteAfterUnRAR = True Then
 

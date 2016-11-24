@@ -75,15 +75,6 @@ Public Class SettingsViewModel
             Return _settings.DownloadDirectory
         End Get
     End Property
-    Public Property CreateContainerSubFolder As Boolean
-        Set(value As Boolean)
-            _settings.CreateContainerSubfolder = value
-            RaisePropertyChanged("CreateContainerSubFolder")
-        End Set
-        Get
-            Return _settings.CreateContainerSubfolder
-        End Get
-    End Property
 
     Public Property CreatePackageSubfolder As Boolean
         Set(value As Boolean)

@@ -314,11 +314,7 @@
 
         Try
 
-            If _settings.CreateContainerSubfolder Then
-                _download_dir = IO.Path.Combine(_settings.DownloadDirectory, _container_session.DisplayName)
-            Else
-                _download_dir = _settings.DownloadDirectory
-            End If
+            _download_dir = IO.Path.Combine(_settings.DownloadDirectory, _container_session.DisplayName)
 
             If _settings.CreatePackageSubfolder Then
                 _download_dir = IO.Path.Combine(_download_dir, _item.PackageName)

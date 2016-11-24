@@ -7,5 +7,6 @@ Public Class UnRARChain
     Public Property ReadyForInstantVideo As Boolean = False
     Public Property UnRARDone As Boolean = False
     Public Property UnRARRunning As Boolean = False
+    Public Property Lock As New Object
 
 End Class
