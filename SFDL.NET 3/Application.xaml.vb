@@ -43,7 +43,6 @@ Class Application
 
                 Application.Current.Resources.Add("Settings", _settings)
                 Application.Current.Resources.Add("DownloadStopped", False)
-                Application.Current.Resources.Add("UnRARBlock", False)
 
                 If _settings.PreventStandby = True Then
                     StandyHandler.PreventStandby()

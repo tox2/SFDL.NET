@@ -233,6 +233,7 @@ Module UnRARHelper
                 .WorkingDirectory = System.AppDomain.CurrentDomain.BaseDirectory
                 .RedirectStandardOutput = True
                 .UseShellExecute = False
+                .StandardOutputEncoding = Text.Encoding.UTF8
 
                 If String.IsNullOrWhiteSpace(_password) Then
                     .Arguments = String.Format("x -o+ -p- {0} {1}", Chr(34) & _filename & Chr(34), Chr(34) & _extract_dir & Chr(34))
@@ -251,24 +252,31 @@ Module UnRARHelper
                 Dim _line As String
                 Dim _percent As Integer
 
-                _line = _unrar_process.StandardOutput.ReadLine
-                _out_lines.AppendLine(_line)
+                Try
 
-                _log.Debug(_line)
+                    _line = _unrar_process.StandardOutput.ReadLine
+                    _out_lines.AppendLine(_line)
 
-                _percent = ParseUnRarProgress(_line.Trim)
+                    _log.Debug(_line)
 
-                If Not _percent = -1 Then
-                    _log.Debug("{0} % entpackt", _percent)
-                    _app_task.SetTaskStatus(TaskStatus.Running, String.Format("{0} - {1}% Entpackt", _filename, _percent))
-                End If
+                    _percent = ParseUnRarProgress(_line.Trim)
+
+                    If Not _percent = -1 Then
+                        _log.Debug("{0} % entpackt", _percent)
+                        _app_task.SetTaskStatus(TaskStatus.Running, String.Format("{0} - {1}% Entpackt", _filename, _percent))
+                    End If
+
+                Catch ex As Exception
+                    _log.Warn(ex, ex.Message)
+                End Try
 
             End While
 
             Await Task.Run(Sub() _unrar_process.WaitForExit())
 
-            _tmp_output = _unrar_process.StandardOutput.ReadToEnd
-            _tmp_output = _out_lines.ToString & _unrar_process.StandardOutput.ReadToEnd.ToString
+            _log.Info("UnRAR Process has exited")
+
+            _tmp_output = _out_lines.ToString
             _tmp_output = _tmp_output.Trim
 
             If _tmp_output.ToString.Contains("OK") Then
@@ -287,10 +295,11 @@ Module UnRARHelper
 
     End Function
 
-    Public Async Function UnRAR(ByVal _unrarchain As UnRARChain, ByVal _app_task As AppTask, ByVal _unrar_settings As UnRARSettings) As Task
+    Public Async Function UnRAR(ByVal _unrarchain As UnRARChain, ByVal _app_task As AppTask, ByVal _unrar_settings As UnRARSettings) As Task(Of Boolean)
 
         Dim _unrar_password As String = String.Empty
         Dim _log As NLog.Logger = NLog.LogManager.GetLogger("UnRAR")
+        Dim _rt As Boolean = True
 
         _log.Info("Checking if a UnRar Password is needed...")
 
@@ -360,8 +369,10 @@ Module UnRARHelper
         Catch ex As Exception
             _log.Error(ex, ex.Message)
             _app_task.SetTaskStatus(TaskStatus.Faulted, ex.Message)
+            _rt = False
         End Try
 
+        Return _rt
 
     End Function
 
