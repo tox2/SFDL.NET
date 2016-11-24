@@ -91,6 +91,7 @@ Public Class MainWindow
 
                 txt_containerinfo_serverlocation.Content = Nothing
                 img_containerinfo_serverlocation.Source = Nothing
+                txt_containerinfo_upper.Content = String.Empty
 
             End If
 
