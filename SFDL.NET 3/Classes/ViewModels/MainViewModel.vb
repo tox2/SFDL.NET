@@ -720,11 +720,15 @@ Decrypt:
 
         Dim _wait As Boolean = True
 
+        Dim _container_sessions As New List(Of ContainerSession)
+
+        _container_sessions = ContainerSessions.ToList
+
         Await System.Threading.Tasks.Task.Run(Sub()
 
                                                   While _wait = True
 
-                                                      For Each _session In ContainerSessions
+                                                      For Each _session In _container_sessions
 
                                                           If Not _session.SessionState = ContainerSessionState.DownloadRunning And _session.UnRarChains.Where(Function(mychain) mychain.UnRARRunning = True).Count = 0 Then
                                                               _wait = False
@@ -1254,6 +1258,7 @@ Decrypt:
 #End Region
 
 #Region "Allgemeine Properties"
+
 
     Private _window_state As System.Windows.WindowState = WindowState.Normal
     Public Property WindowState As System.Windows.WindowState

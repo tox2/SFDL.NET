@@ -11,6 +11,18 @@ Public Class SettingsViewModel
 
 #Region "General/Basic Settings Properties"
 
+    Public ReadOnly Property AppAccentList As List(Of MahApps.Metro.Accent)
+        Get
+            Return CType(MahApps.Metro.ThemeManager.Accents, List(Of MahApps.Metro.Accent))
+        End Get
+    End Property
+
+    Public ReadOnly Property AppThemeList As List(Of MahApps.Metro.AppTheme)
+        Get
+            Return CType(MahApps.Metro.ThemeManager.AppThemes, List(Of MahApps.Metro.AppTheme))
+        End Get
+    End Property
+
     Public Property PreventStandby As Boolean
         Set(value As Boolean)
             _settings.PreventStandby = value
@@ -139,6 +151,28 @@ Public Class SettingsViewModel
         End Get
     End Property
 
+    Public Property AppAccent As MahApps.Metro.Accent
+        Set(value As MahApps.Metro.Accent)
+            _settings.AppAccent = value.Name
+            RaisePropertyChanged("AppAccent")
+            MahApps.Metro.ThemeManager.ChangeAppStyle(Application.Current, MahApps.Metro.ThemeManager.GetAccent(value.Name), Me.AppTheme)
+        End Set
+        Get
+            Return MahApps.Metro.ThemeManager.GetAccent(_settings.AppAccent)
+        End Get
+    End Property
+
+    Public Property AppTheme As MahApps.Metro.AppTheme
+        Set(value As MahApps.Metro.AppTheme)
+            _settings.AppTheme = value.Name
+            RaisePropertyChanged("AppTheme")
+            MahApps.Metro.ThemeManager.ChangeAppStyle(Application.Current, Me.AppAccent, MahApps.Metro.ThemeManager.GetAppTheme(value.Name))
+        End Set
+        Get
+            Return MahApps.Metro.ThemeManager.GetAppTheme(_settings.AppTheme)
+        End Get
+    End Property
+
 #End Region
 
 #Region "UnRAR Settings Properties"
@@ -256,6 +290,8 @@ Public Class SettingsViewModel
         Dim _error As Boolean = False
 
         Try
+
+
 
             Application.Current.Resources("Settings") = _settings
 

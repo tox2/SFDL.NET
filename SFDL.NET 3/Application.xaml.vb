@@ -2,7 +2,7 @@
 
 Class Application
 
-    Private Shared ReadOnly SingleInstance As New SingleInstance(New Guid("fb71faa3-4891-4525-80f4-a2085174df7e"))
+    Private Shared ReadOnly SingleInstance As New SingleInstance(New Guid("6da4f80f-3146-4967-b97c-1f4158ab0fb7"))
 
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
 

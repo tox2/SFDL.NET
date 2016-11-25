@@ -1,5 +1,6 @@
 ﻿
 Imports System.ComponentModel
+Imports MahApps.Metro
 Imports MahApps.Metro.Controls.Dialogs
 
 Public Class MainWindow
@@ -11,6 +12,14 @@ Public Class MainWindow
         Me.DataContext = New MainViewModel
 
 
+
+    End Sub
+
+    Private Sub LoadTheme()
+
+        If Not String.IsNullOrWhiteSpace(CType(Application.Current.Resources("Settings"), Settings).AppAccent) And Not String.IsNullOrWhiteSpace(CType(Application.Current.Resources("Settings"), Settings).AppTheme) Then
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(CType(Application.Current.Resources("Settings"), Settings).AppAccent), ThemeManager.GetAppTheme(CType(Application.Current.Resources("Settings"), Settings).AppTheme))
+        End If
 
     End Sub
 
@@ -51,6 +60,8 @@ Public Class MainWindow
         Else
             Me.WindowState = WindowState.Maximized
         End If
+
+        LoadTheme()
 
     End Sub
 
@@ -125,7 +136,7 @@ Public Class MainWindow
 
     Private Sub MenuItem_Click(sender As Object, e As RoutedEventArgs)
 
-        MessageBox.Show(MainViewModel.ThisInstance.DownloadItems(0).isExpanded)
+        MessageBox.Show(MainViewModel.ThisInstance.DownloadItems(0).IsExpanded)
 
     End Sub
 

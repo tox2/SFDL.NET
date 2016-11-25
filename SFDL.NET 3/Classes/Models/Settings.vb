@@ -17,6 +17,8 @@
     Public Property UnRARSettings As New UnRARSettings
     Public Property SpeedReportSettings As New SpeedreportSettings
     Public Property RemoteControlSettings As New RemoteControlSettings
+    Public Property AppAccent As String = "Blue"
+    Public Property AppTheme As String = "BaseLight"
 
     Public Shared Function InitNewSettings() As Settings
 
@@ -30,6 +32,8 @@
             .DownloadDirectory = IO.Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), "Downloads")
             .ExistingFileHandling = ExistingFileHandling.ResumeFile
             .InstantVideo = False
+            .AppAccent = "Blue"
+            .AppTheme = "BaseLight"
             .Language = "de"
             .MaxDownloadThreads = 3
             .MaxRetry = 3

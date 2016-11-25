@@ -226,9 +226,11 @@
                          Height="40"
                          VerticalAlignment="Top"
                          ToolBarTray.IsLocked="True">
+
                     <Image Width="32"
                            Height="32"
                            Source="Resources/Icons/appbar.control.play.png" />
+
                     <Button Command="{Binding StartDownloadCommand}"
                             Content="{x:Static p:Strings.MainToolBar_StartDownload}"
                             IsEnabled="{Binding ButtonDownloadStartStop}" />

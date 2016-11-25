@@ -38,7 +38,7 @@
                             <GroupBox x:Name="groupBox_general_Settings" Header="{x:Static p:Strings.Settings_GeneralSettings}">
                                 <Grid>
                                     <StackPanel Orientation="Horizontal">
-                                        <StackPanel>
+                                        <StackPanel Margin="0,0,10,0">
                                             <CheckBox x:Name="chk_block_standby"
                                                       Margin="5,5,5,0"
                                                       HorizontalAlignment="Left"
@@ -57,7 +57,10 @@
                                                       VerticalAlignment="Top"
                                                       Content="{x:Static p:Strings.Settings_ClicknLoad}"
                                                       IsChecked="{Binding ClicknLoad}" />
+
+
                                         </StackPanel>
+
                                         <StackPanel>
                                             <CheckBox x:Name="chk_instant_video"
                                                       Margin="5,5,5,0"
@@ -86,12 +89,44 @@
                                                              IsChecked="{Binding Language,
                                                                                  Converter={StaticResource langconvert},
                                                                                  ConverterParameter=en}" />
+
                                             </StackPanel>
 
                                         </StackPanel>
+
+
+
                                     </StackPanel>
                                 </Grid>
                             </GroupBox>
+
+                            <GroupBox Header="Aussehen">
+                                <StackPanel>
+
+                                    <ComboBox x:Name="ComB_AppAccent"
+                                              Margin="0,5,0,10"
+                                              Controls:TextBoxHelper.UseFloatingWatermark="True"
+                                              Controls:TextBoxHelper.Watermark="Accent"
+                                              DisplayMemberPath="Name"
+                                              IsReadOnly="True"
+                                              ItemsSource="{Binding AppAccentList}"
+                                              SelectedValue="{Binding AppAccent,
+                                                                      Mode=TwoWay}" />
+
+                                    <ComboBox x:Name="ComB_AppTheme"
+                                              Panel.ZIndex="11"
+                                              Controls:TextBoxHelper.UseFloatingWatermark="True"
+                                              Controls:TextBoxHelper.Watermark="App Theme"
+                                              DisplayMemberPath="Name"
+                                              IsReadOnly="True"
+                                              ItemsSource="{Binding AppThemeList}"
+                                              SelectedValue="{Binding AppTheme,
+                                                                      Mode=TwoWay}" />
+
+                                </StackPanel>
+
+                            </GroupBox>
+
                             <GroupBox x:Name="groupBox_DownloadSettings" Header="{x:Static p:Strings.Settings_DownloadSettings}">
                                 <Grid>
                                     <StackPanel Orientation="Horizontal">
