@@ -251,103 +251,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.card.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.control.play.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.cog.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.page.copy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.power.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.save.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.tiles.four.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.edit.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.arrow.expand.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.arrow.collapsed.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.checkmark.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.checkmark.uncrossed.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.gauge.75.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.page.delete.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.delete.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.close.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.star.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.door.leave.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.monitor.delete.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.book.perspective.help.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.information.circle.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Icons\appbar.control.stop.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.settings.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.folder.open.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.code.xml.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.connection.quality.veryhigh.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.chat.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Icons\appbar.hourglass.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.notification.above.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.people.up.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.user.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.leaderboard.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.interface.textbox.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\WindowsIcons-license.txt" />
@@ -359,23 +266,13 @@
     <Resource Include="Resources\Icons\appbar.check.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.control.fastforward.variant.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Icons\appbar.stop.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Icons\appbar.settings.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\appbar.clock.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.movie.clapper.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\throttle_icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.layer.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\appbar.alert.png" />
@@ -387,16 +284,10 @@
     <Resource Include="Resources\Icons\appbar.sign.parking.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.dimension.line.width.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Icons\appbar.cup.full.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\appbar.network.server.disconnect.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.user.delete.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\appbar.control.resume.png" />

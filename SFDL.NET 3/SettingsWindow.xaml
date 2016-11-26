@@ -151,7 +151,11 @@
                                                     Margin="0,5,0,0"
                                                     Command="{Binding SelectDownloadFolderCommand}">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Width="24" Source="Resources/Icons/appbar.folder.open.png" />
+                                                    <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}" Margin="0,0,5,0">
+                                                        <Rectangle.OpacityMask>
+                                                            <VisualBrush Visual="{StaticResource appbar_folder_open}" />
+                                                        </Rectangle.OpacityMask>
+                                                    </Rectangle>
                                                     <TextBlock Margin="0,4,0,0" Text="{x:Static p:Strings.VariousStrings_SearchFolderFile}" />
                                                 </StackPanel>
                                             </Button>
@@ -318,59 +322,95 @@
                                             <Menu>
                                                 <MenuItem Header="{x:Static p:Strings.VariousStrings_Variables}">
                                                     <MenuItem.Icon>
-                                                        <Image Width="24" Source="Resources/Icons/appbar.code.xml.png" />
+                                                        <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                            <Rectangle.OpacityMask>
+                                                                <VisualBrush Visual="{StaticResource appbar_code_xml}" />
+                                                            </Rectangle.OpacityMask>
+                                                        </Rectangle>
                                                     </MenuItem.Icon>
                                                     <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
                                                               CommandParameter="username"
                                                               Header="{x:Static p:Strings.VariousStrings_Username}">
                                                         <MenuItem.Icon>
-                                                            <Image Width="24" Source="Resources/Icons/appbar.user.png" />
+                                                            <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                                <Rectangle.OpacityMask>
+                                                                    <VisualBrush Visual="{StaticResource appbar_user}" />
+                                                                </Rectangle.OpacityMask>
+                                                            </Rectangle>
                                                         </MenuItem.Icon>
                                                     </MenuItem>
                                                     <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
                                                               CommandParameter="connection"
                                                               Header="{x:Static p:Strings.VariousStrings_Connection}">
                                                         <MenuItem.Icon>
-                                                            <Image Width="24" Source="Resources/Icons/appbar.connection.quality.veryhigh.png" />
+                                                            <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                                <Rectangle.OpacityMask>
+                                                                    <VisualBrush Visual="{StaticResource appbar_connection_quality_veryhigh}" />
+                                                                </Rectangle.OpacityMask>
+                                                            </Rectangle>
                                                         </MenuItem.Icon>
                                                     </MenuItem>
                                                     <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
                                                               CommandParameter="comment"
                                                               Header="{x:Static p:Strings.VariousStrings_Comment}">
                                                         <MenuItem.Icon>
-                                                            <Image Width="24" Source="Resources/Icons/appbar.notification.above.png" />
+                                                            <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                                <Rectangle.OpacityMask>
+                                                                    <VisualBrush Visual="{StaticResource appbar_notification_above}" />
+                                                                </Rectangle.OpacityMask>
+                                                            </Rectangle>
                                                         </MenuItem.Icon>
                                                     </MenuItem>
                                                     <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
                                                               CommandParameter="downloadspeed"
                                                               Header="{x:Static p:Strings.VariousStrings_DownloadSpeed}">
                                                         <MenuItem.Icon>
-                                                            <Image Width="24" Source="Resources/Icons/appbar.gauge.75.png" />
+                                                            <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                                <Rectangle.OpacityMask>
+                                                                    <VisualBrush Visual="{StaticResource appbar_gauge_75}" />
+                                                                </Rectangle.OpacityMask>
+                                                            </Rectangle>
                                                         </MenuItem.Icon>
                                                     </MenuItem>
                                                     <MenuItem Header="{x:Static p:Strings.VariousStrings_SFDLInformation}">
                                                         <MenuItem.Icon>
-                                                            <Image Width="24" Source="Resources/Icons/appbar.information.circle.png" />
+                                                            <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                                <Rectangle.OpacityMask>
+                                                                    <VisualBrush Visual="{StaticResource appbar_information_circle}" />
+                                                                </Rectangle.OpacityMask>
+                                                            </Rectangle>
                                                         </MenuItem.Icon>
                                                         <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
                                                                   CommandParameter="sfdl_description"
                                                                   Header="{x:Static p:Strings.VariousStrings_Description}">
                                                             <MenuItem.Icon>
-                                                                <Image Width="24" Source="Resources/Icons/appbar.interface.textbox.png" />
+                                                                <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                                    <Rectangle.OpacityMask>
+                                                                        <VisualBrush Visual="{StaticResource appbar_interface_textbox}" />
+                                                                    </Rectangle.OpacityMask>
+                                                                </Rectangle>
                                                             </MenuItem.Icon>
                                                         </MenuItem>
                                                         <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
                                                                   CommandParameter="sfdl_uploader"
                                                                   Header="{x:Static p:Strings.VariousStrings_Uploader}">
                                                             <MenuItem.Icon>
-                                                                <Image Width="24" Source="Resources/Icons/appbar.people.up.png" />
+                                                                <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                                    <Rectangle.OpacityMask>
+                                                                        <VisualBrush Visual="{StaticResource appbar_people_up}" />
+                                                                    </Rectangle.OpacityMask>
+                                                                </Rectangle>
                                                             </MenuItem.Icon>
                                                         </MenuItem>
                                                         <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
                                                                   CommandParameter="sfdl_downloadsize"
                                                                   Header="{x:Static p:Strings.VariousStrings_FullDownloadSize}">
                                                             <MenuItem.Icon>
-                                                                <Image Width="24" Source="Resources/Icons/appbar.leaderboard.png" />
+                                                                <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                                    <Rectangle.OpacityMask>
+                                                                        <VisualBrush Visual="{StaticResource appbar_leaderboard}" />
+                                                                    </Rectangle.OpacityMask>
+                                                                </Rectangle>
                                                             </MenuItem.Icon>
                                                         </MenuItem>
                                                     </MenuItem>
@@ -378,7 +418,11 @@
                                                               CommandParameter="downloadtime"
                                                               Header="{x:Static p:Strings.VariousStrings_NeededDownloadTime}">
                                                         <MenuItem.Icon>
-                                                            <Image Width="24" Source="Resources/Icons/appbar.hourglass.png" />
+                                                            <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                                <Rectangle.OpacityMask>
+                                                                    <VisualBrush Visual="{StaticResource appbar_hourglass}" />
+                                                                </Rectangle.OpacityMask>
+                                                            </Rectangle>
                                                         </MenuItem.Icon>
                                                     </MenuItem>
                                                 </MenuItem>
@@ -449,7 +493,13 @@
                     Margin="150,10,150,15"
                     Command="{Binding SaveSettingsCommand}">
                 <StackPanel Orientation="Horizontal">
-                    <Image Width="24" Source="Resources/Icons/appbar.save.png" />
+                    <Rectangle Width="16"
+                               Height="16"
+                               Fill="{DynamicResource AccentColorBrush}" Margin="0,0,5,0">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Visual="{StaticResource appbar_save}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
                     <TextBlock Margin="0,4,0,0" Text="{x:Static p:Strings.VariousStrings_Save}" />
                 </StackPanel>
             </Button>
