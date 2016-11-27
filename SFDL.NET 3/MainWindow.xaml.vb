@@ -149,4 +149,8 @@ Public Class MainWindow
 
 
     End Sub
+
+    Private Sub SFDL_MainWindow_Closing(sender As Object, e As CancelEventArgs) Handles SFDL_MainWindow.Closing
+        MainViewModel.ThisInstance.SaveSessions()
+    End Sub
 End Class

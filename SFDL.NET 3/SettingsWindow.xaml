@@ -13,9 +13,9 @@
                       GlowBrush="Black"
                       Icon="Resources/Icons/appbar.settings.png"
                       IsMaxRestoreButtonEnabled="False"
+                      SaveWindowPosition="True"
                       SizeToContent="WidthAndHeight"
                       WindowStartupLocation="CenterOwner"
-                      SaveWindowPosition="True"
                       mc:Ignorable="d">
 
     <Window.Resources>
@@ -56,22 +56,6 @@
                                                           Content="{x:Static p:Strings.Settings_ClicknLoad}"
                                                           IsChecked="{Binding ClicknLoad}" />
 
-
-                                            </StackPanel>
-
-                                            <StackPanel>
-                                                <CheckBox x:Name="ChkInstantVideo"
-                                                          Margin="5,5,5,0"
-                                                          HorizontalAlignment="Left"
-                                                          VerticalAlignment="Top"
-                                                          Content="{x:Static p:Strings.Settings_InstantVideo}"
-                                                          IsChecked="{Binding InstantVideo}" />
-                                                <CheckBox x:Name="ChkSearchUpdates"
-                                                          Margin="5,5,5,0"
-                                                          HorizontalAlignment="Left"
-                                                          VerticalAlignment="Top"
-                                                          Content="{x:Static p:Strings.Settings_SearchUpdates}"
-                                                          IsChecked="{Binding SearchUpdates}" />
                                                 <StackPanel Orientation="Horizontal">
                                                     <RadioButton x:Name="RdLangGerman"
                                                                  Margin="5,5,5,0"
@@ -89,6 +73,23 @@
                                                                                      ConverterParameter=en}" />
 
                                                 </StackPanel>
+
+
+                                            </StackPanel>
+
+                                            <StackPanel>
+                                                <CheckBox x:Name="ChkInstantVideo"
+                                                          Margin="5,5,5,0"
+                                                          HorizontalAlignment="Left"
+                                                          VerticalAlignment="Top"
+                                                          Content="{x:Static p:Strings.Settings_InstantVideo}"
+                                                          IsChecked="{Binding InstantVideo}" />
+                                                <CheckBox x:Name="ChkSearchUpdates"
+                                                          Margin="5,5,5,0"
+                                                          HorizontalAlignment="Left"
+                                                          VerticalAlignment="Top"
+                                                          Content="{x:Static p:Strings.Settings_SearchUpdates}"
+                                                          IsChecked="{Binding SearchUpdates}" />
 
                                             </StackPanel>
 

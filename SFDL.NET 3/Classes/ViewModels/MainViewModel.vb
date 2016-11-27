@@ -46,7 +46,7 @@ Public Class MainViewModel
 
 #Region "Private Subs"
 
-    Private Sub SaveSessions()
+    Public Sub SaveSessions()
 
         Dim _path As String = Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3", "Sessions")
         Dim _log As Logger = LogManager.GetLogger("SaveSessions")
@@ -1491,10 +1491,6 @@ Decrypt:
 
     End Sub
 
-    Protected Overrides Sub Finalize()
-        SaveSessions()
-        MyBase.Finalize()
-    End Sub
 #End Region
 
 
