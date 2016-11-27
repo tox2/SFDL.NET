@@ -1,5 +1,4 @@
 ﻿
-Imports System.Text
 Imports Amib.Threading
 
 Class DownloadHelper
@@ -188,7 +187,6 @@ Class DownloadHelper
 
     Function DownloadContainerItem(_item As DownloadItem, ByVal _download_dir As String, ByVal _connection_info As SFDL.Container.Connection, ByVal _single_session_mode As Boolean) As DownloadItem
 
-        Dim _tasks = New List(Of System.Threading.Tasks.Task)
         Dim _ftp_session As ArxOne.Ftp.FtpSession = Nothing
         Dim _ftp_client As ArxOne.Ftp.FtpClient = Nothing
 

@@ -1,8 +1,16 @@
-﻿Imports System.Collections.Specialized
-Imports System.ComponentModel
+﻿Imports System.Collections.ObjectModel
+Imports System.IO
+Imports System.Text
 Imports System.Text.RegularExpressions
+Imports System.Threading
+Imports System.Windows.Forms
 Imports Amib.Threading
-Imports SFDL.NET3
+Imports ArxOne.Ftp
+Imports MahApps.Metro.Controls.Dialogs
+Imports NLog
+Imports SFDL.Container
+Imports SFDL.Container.Legacy
+Imports OpenFileDialog = Microsoft.Win32.OpenFileDialog
 
 Public Class MainViewModel
     Inherits ViewModelBase
@@ -40,21 +48,21 @@ Public Class MainViewModel
 
     Private Sub SaveSessions()
 
-        Dim _path As String = IO.Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3", "Sessions")
+        Dim _path As String = Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3", "Sessions")
 
-        If IO.Directory.Exists(_path) = False Then
-            IO.Directory.CreateDirectory(_path)
+        If Directory.Exists(_path) = False Then
+            Directory.CreateDirectory(_path)
         End If
 
-        For Each _file In IO.Directory.GetFiles(_path, "*.session")
-            IO.File.Delete(_file)
+        For Each _file In Directory.GetFiles(_path, "*.session")
+            File.Delete(_file)
         Next
 
         For Each _session In ContainerSessions
 
             Try
 
-                XMLHelper.XMLSerialize(_session, IO.Path.Combine(_path, _session.ID.ToString & ".session"))
+                XMLSerialize(_session, Path.Combine(_path, _session.ID.ToString & ".session"))
 
             Catch ex As Exception
             End Try
@@ -65,38 +73,38 @@ Public Class MainViewModel
 
     Private Sub LoadSavedSessions()
 
-        Dim _path As String = IO.Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3", "Sessions")
+        Dim _path As String = Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3", "Sessions")
 
-        System.Threading.Tasks.Task.Run(Sub()
+        Task.Run(Sub()
 
-                                            If IO.Directory.Exists(_path) Then
+                     If Directory.Exists(_path) Then
 
-                                                For Each _file In IO.Directory.GetFiles(_path, "*.session")
+                         For Each _file In Directory.GetFiles(_path, "*.session")
 
-                                                    Dim _new_session As New ContainerSession
+                             Dim _new_session As New ContainerSession
 
-                                                    Try
+                             Try
 
-                                                        _new_session = XMLHelper.XMLDeSerialize(_new_session, _file)
-                                                        _new_session.WIG = Nothing
+                                 _new_session = XMLDeSerialize(_new_session, _file)
+                                 _new_session.WIG = Nothing
 
-                                                        For Each _item In _new_session.DownloadItems
-                                                            DownloadItems.Add(_item)
-                                                        Next
+                                 For Each _item In _new_session.DownloadItems
+                                     DownloadItems.Add(_item)
+                                 Next
 
-                                                        ContainerSessions.Add(_new_session)
+                                 ContainerSessions.Add(_new_session)
 
-                                                        IO.File.Delete(_file)
+                                 File.Delete(_file)
 
-                                                    Catch ex As Exception
+                             Catch ex As Exception
 
-                                                    End Try
+                             End Try
 
-                                                Next
+                         Next
 
-                                            End If
+                     End If
 
-                                        End Sub)
+                 End Sub)
 
 
     End Sub
@@ -115,11 +123,10 @@ Public Class MainViewModel
 
         Dim _mytask As New AppTask("")
         Dim _mycontainer As New Container.Container
-        Dim _mylegacycontainer As New Container.Legacy.SFDLFile
+        Dim _mylegacycontainer As New SFDLFile
         Dim _mycontainer_session As ContainerSession
         Dim _decrypt_password As String
-        Dim _decrypt As New SFDL.Container.Decrypt
-        Dim _country_code As String = String.Empty
+        Dim _decrypt As New Decrypt
 
         AddHandler _mytask.TaskDone, AddressOf TaskDoneEvent
 
@@ -134,21 +141,21 @@ Public Class MainViewModel
             Select Case GetContainerVersion(_sfdl_container_path)
 
                 Case 0 'Invalid
-                    Throw New Exception(String.Format("'{0}' - Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!", IO.Path.GetFileName(_sfdl_container_path)))
+                    Throw New Exception(String.Format("'{0}' - Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!", Path.GetFileName(_sfdl_container_path)))
 
                 Case <= 5 'SFDL v1 - not supported anymore
-                    Throw New Exception(String.Format("'{0}' - Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!", IO.Path.GetFileName(_sfdl_container_path)))
+                    Throw New Exception(String.Format("'{0}' - Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!", Path.GetFileName(_sfdl_container_path)))
 
                 Case <= 9 'SFDL v2  - try to convert
-                    _mylegacycontainer = CType(XMLHelper.XMLDeSerialize(_mylegacycontainer, _sfdl_container_path), SFDL.Container.Legacy.SFDLFile)
+                    _mylegacycontainer = CType(XMLDeSerialize(_mylegacycontainer, _sfdl_container_path), SFDLFile)
                     Converter.ConvertSFDLv2ToSFDLv3(_mylegacycontainer, _mycontainer)
 
                 Case > 10 'Invalid
-                    Throw New Exception(String.Format("'{0}' - Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!", IO.Path.GetFileName(_sfdl_container_path)))
+                    Throw New Exception(String.Format("'{0}' - Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!", Path.GetFileName(_sfdl_container_path)))
 
                 Case Else 'Valid v3 Container
 
-                    _mycontainer = XMLHelper.XMLDeSerialize(_mycontainer, _sfdl_container_path)
+                    _mycontainer = XMLDeSerialize(_mycontainer, _sfdl_container_path)
 
             End Select
 
@@ -157,15 +164,15 @@ Public Class MainViewModel
 
                 Try
 Decrypt:
-                    _decrypt_password = Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowInputAsync(Me, "SFDL entschlüsseln", String.Format("Bitte gib ein Passwort ein um den SFDL Container {0} zu entschlüsseln", IO.Path.GetFileName(_sfdl_container_path)))
+                    _decrypt_password = Await DialogCoordinator.Instance.ShowInputAsync(Me, "SFDL entschlüsseln", String.Format("Bitte gib ein Passwort ein um den SFDL Container {0} zu entschlüsseln", Path.GetFileName(_sfdl_container_path)))
 
                     If String.IsNullOrWhiteSpace(_decrypt_password) Then
-                        Throw New Exception(String.Format("'{0}' - SFDL entschlüsseln abgebrochen", IO.Path.GetFileName(_sfdl_container_path)))
+                        Throw New Exception(String.Format("'{0}' - SFDL entschlüsseln abgebrochen", Path.GetFileName(_sfdl_container_path)))
                     End If
 
                     _decrypt.DecryptString(_mycontainer.Connection.Host, _decrypt_password)
 
-                Catch ex As SFDL.Container.FalsePasswordException
+                Catch ex As FalsePasswordException
                     GoTo Decrypt
                 End Try
 
@@ -175,7 +182,7 @@ Decrypt:
 
             _mycontainer_session = New ContainerSession()
             _mycontainer_session.Init(_mycontainer)
-            _mycontainer_session.ContainerFileName = IO.Path.GetFileNameWithoutExtension(_sfdl_container_path)
+            _mycontainer_session.ContainerFileName = Path.GetFileNameWithoutExtension(_sfdl_container_path)
             _mycontainer_session.ContainerFilePath = _sfdl_container_path
 
             If String.IsNullOrWhiteSpace(_mycontainer.Description) Then
@@ -189,7 +196,7 @@ Decrypt:
             GenerateContainerFingerprint(_mycontainer_session)
 
             If Not ContainerSessions.Where(Function(mycon) mycon.Fingerprint.Equals(_mycontainer_session.Fingerprint)).Count = 0 Then
-                Throw New Exception(String.Format("SFDL Container '{0}' ist bereits geöffnet!", IO.Path.GetFileName(_sfdl_container_path)))
+                Throw New Exception(String.Format("SFDL Container '{0}' ist bereits geöffnet!", Path.GetFileName(_sfdl_container_path)))
             End If
 
             If Not _mycontainer_session.ContainerFile.Packages.Where(Function(mypackage) mypackage.BulkFolderMode = True).Count = 0 Then
@@ -199,7 +206,7 @@ Decrypt:
             GenerateContainerSessionDownloadItems(_mycontainer_session, _settings.NotMarkAllContainerFiles)
 
             If _bulk_result = False Or _mycontainer_session.DownloadItems.Count = 0 Then
-                Throw New Exception(String.Format("'{0}' - Öffnen fehlgeschlagen - Bulk Package konnte nicht gelesen werden", IO.Path.GetFileName(_sfdl_container_path)))
+                Throw New Exception(String.Format("'{0}' - Öffnen fehlgeschlagen - Bulk Package konnte nicht gelesen werden", Path.GetFileName(_sfdl_container_path)))
             End If
 
 
@@ -207,12 +214,12 @@ Decrypt:
 #Region "Parse Unrar/InstatVideo Chain"
 
 
-            For Each _item In _mycontainer_session.DownloadItems.Where(Function(_my_item As DownloadItem) IO.Path.GetExtension(_my_item.FileName).Equals(".rar"))
+            For Each _item In _mycontainer_session.DownloadItems.Where(Function(_my_item As DownloadItem) Path.GetExtension(_my_item.FileName).Equals(".rar"))
 
                 Dim _unrarchain As New UnRARChain
                 Dim _searchpattern As Regex
                 Dim _count As Integer
-                Dim _log As NLog.Logger = NLog.LogManager.GetLogger("RarChainParser")
+                Dim _log As Logger = LogManager.GetLogger("RarChainParser")
 
                 If Not _item.FileName.Contains(".part") Then
 
@@ -224,7 +231,7 @@ Decrypt:
 
                     _log.Debug("First UnRar File: {0}", _item.FileName)
 
-                    _searchpattern = New Regex("filename\.r[0-9]{1,2}".Replace("filename", IO.Path.GetFileNameWithoutExtension(_item.FileName)))
+                    _searchpattern = New Regex("filename\.r[0-9]{1,2}".Replace("filename", Path.GetFileNameWithoutExtension(_item.FileName)))
 
                     For Each _chainitem As DownloadItem In _mycontainer_session.DownloadItems.Where(Function(_my_item As DownloadItem) _searchpattern.IsMatch(_my_item.FileName))
 
@@ -257,7 +264,7 @@ Decrypt:
                         _item.RequiredForInstantVideo = True
                         _unrarchain.MasterUnRarChainFile = _item
 
-                        _tmp_filename_replace = _item.FileName.Remove(_item.FileName.IndexOf(".part"))
+                        _tmp_filename_replace = _item.FileName.Remove(_item.FileName.IndexOf(".part", StringComparison.Ordinal))
 
                         _searchpattern = New Regex("filename\.part[0-9]{1,3}.rar".Replace("filename", _tmp_filename_replace))
 
@@ -296,14 +303,14 @@ Decrypt:
 
 
             If _bulk_result = False And Not _mycontainer_session.DownloadItems.Count = 0 Then
-                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL '{0}' teilweise geöffnet - Ein oder mehrere Packages konnten nicht gelesen werden.", IO.Path.GetFileName(_sfdl_container_path)))
+                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL '{0}' teilweise geöffnet - Ein oder mehrere Packages konnten nicht gelesen werden.", Path.GetFileName(_sfdl_container_path)))
             Else
 
                 If _settings.DeleteSFDLAfterOpen = True Then
-                    IO.File.Delete(_sfdl_container_path)
-                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL '{0}' geöffnet und anschließend gelöscht", IO.Path.GetFileName(_sfdl_container_path)))
+                    File.Delete(_sfdl_container_path)
+                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL '{0}' geöffnet und anschließend gelöscht", Path.GetFileName(_sfdl_container_path)))
                 Else
-                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL '{0}' geöffnet", IO.Path.GetFileName(_sfdl_container_path)))
+                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL '{0}' geöffnet", Path.GetFileName(_sfdl_container_path)))
                 End If
 
             End If
@@ -329,7 +336,7 @@ Decrypt:
                 Throw New Exception("Du hat keinen Download Pfad in den Einstellungen hinterlegt!")
             End If
 
-            If IO.Directory.Exists(_settings.DownloadDirectory) = False Then
+            If Directory.Exists(_settings.DownloadDirectory) = False Then
                 Throw New Exception("Download Verzeichnis existiert nicht!")
             End If
 
@@ -360,7 +367,7 @@ Decrypt:
     Private Function CalculateETA(ByVal _mytask As AppTask) As Boolean
 
         Dim _percent_downloaded As Integer = 0
-        Dim _log As NLog.Logger = NLog.LogManager.GetLogger("CalculateETA")
+        Dim _log As Logger = LogManager.GetLogger("CalculateETA")
 
         While SmartThreadPool.IsWorkItemCanceled = False
 
@@ -373,7 +380,7 @@ Decrypt:
 
             Try
 
-                If Me.WindowState = WindowState.Maximized Or Me.WindowState = WindowState.Normal Then 'Nur berechnen wenn Window Sichtbar
+                If WindowState = WindowState.Maximized Or WindowState = WindowState.Normal Then 'Nur berechnen wenn Window Sichtbar
 
 
                     _total_speed = DownloadItems.Where(Function(myitem) Not myitem.DownloadStatus = DownloadItem.Status.None).Sum(Function(_item)
@@ -446,16 +453,16 @@ Decrypt:
             Catch ex As Exception
                 _log.Error(ex, ex.Message)
             Finally
-                System.Threading.Thread.Sleep(500)
+                Thread.Sleep(500)
             End Try
 
         End While
 
         _log.Debug("ETA While beendet!")
 
-        System.Threading.Tasks.Task.Run(Sub()
-                                            PostDownload()
-                                        End Sub)
+        Task.Run(Sub()
+                     PostDownload()
+                 End Sub)
 
         Return True
 
@@ -478,7 +485,7 @@ Decrypt:
         Next
 
         Application.Current.Resources("DownloadStopped") = True
-        Me.ButtonDownloadStartStop = True
+        ButtonDownloadStartStop = True
 
         ExcutePostDownloadActions()
 
@@ -487,7 +494,7 @@ Decrypt:
     Private Sub QueryDownloadItems()
 
         Dim _download_helper As New DownloadHelper
-        Dim _log As NLog.Logger = NLog.LogManager.GetLogger("QueryDownloadItems")
+        Dim _log As Logger = LogManager.GetLogger("QueryDownloadItems")
 
         AddHandler _download_helper.ServerFull, AddressOf ServerFullEvent
 
@@ -555,7 +562,7 @@ Decrypt:
                         _dlitem.RetryPossible = False
                         _dlitem.DownloadStatus = DownloadItem.Status.Running
 
-                        _session.WIG.QueueWorkItem(New Func(Of DownloadItem, String, SFDL.Container.Connection, Boolean, DownloadItem)(AddressOf _download_helper.DownloadContainerItem), _dlitem, _settings.DownloadDirectory, _session.ContainerFile.Connection, False, WorkItemPriority.Normal)
+                        _session.WIG.QueueWorkItem(New Func(Of DownloadItem, String, Connection, Boolean, DownloadItem)(AddressOf _download_helper.DownloadContainerItem), _dlitem, _settings.DownloadDirectory, _session.ContainerFile.Connection, False, WorkItemPriority.Normal)
 
                         _items_pulled = True
 
@@ -578,7 +585,7 @@ Decrypt:
 
     Private Sub StartDownload()
 
-        Dim _log As NLog.Logger = NLog.LogManager.GetLogger("StartDownload")
+        Dim _log As Logger = LogManager.GetLogger("StartDownload")
         Dim _mytask As New AppTask("Download wird gestartet...", "ETATask")
         Dim _error As Boolean = False
 
@@ -624,7 +631,7 @@ Decrypt:
             End If
 
             Application.Current.Resources("DownloadStopped") = False
-            Me.ButtonDownloadStartStop = False
+            ButtonDownloadStartStop = False
 
             _mytask.SetTaskStatus(TaskStatus.Running, "Download läuft...")
 
@@ -641,7 +648,7 @@ Decrypt:
 
     Private Sub DownloadCompleteCallback(wir As IWorkItemResult, Optional _overrride_item As DownloadItem = Nothing)
 
-        Dim _log As NLog.Logger = NLog.LogManager.GetLogger("DownloadCompleteCallback")
+        Dim _log As Logger = LogManager.GetLogger("DownloadCompleteCallback")
         Dim _unrar_task As AppTask
         Dim _mysession As ContainerSession
         Dim _item As DownloadItem
@@ -661,118 +668,118 @@ Decrypt:
             _mysession = ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID))
 
 
-            System.Threading.Tasks.Task.Run(Sub()
+            Task.Run(Sub()
 
-                                                If Not _mysession.UnRarChains.Count = 0 And _settings.UnRARSettings.UnRARAfterDownload = True Then
+                         If Not _mysession.UnRarChains.Count = 0 And _settings.UnRARSettings.UnRARAfterDownload = True Then
 
-                                                    For Each _chain In _mysession.UnRarChains
+                             For Each _chain In _mysession.UnRarChains
 
-                                                        If (isUnRarChainComplete(_chain) = True And _chain.UnRARDone = False) And _chain.UnRARRunning = False Then
+                                 If (isUnRarChainComplete(_chain) = True And _chain.UnRARDone = False) And _chain.UnRARRunning = False Then
 
-                                                            _chain.UnRARRunning = True
+                                     _chain.UnRARRunning = True
 
-                                                            _log.Debug("Chain {0} ist komplett!", _chain.MasterUnRarChainFile.FileName.ToString)
+                                     _log.Debug("Chain {0} ist komplett!", _chain.MasterUnRarChainFile.FileName.ToString)
 
-                                                            If _settings.UnRARSettings.UnRARAfterDownload = True And _chain.UnRARDone = False Then
+                                     If _settings.UnRARSettings.UnRARAfterDownload = True And _chain.UnRARDone = False Then
 
-                                                                _unrar_task = New AppTask(String.Format("Archiv {0} wird entpackt....", IO.Path.GetFileName(_chain.MasterUnRarChainFile.LocalFile)))
+                                         _unrar_task = New AppTask(String.Format("Archiv {0} wird entpackt....", Path.GetFileName(_chain.MasterUnRarChainFile.LocalFile)))
 
-                                                                AddHandler _unrar_task.TaskDone, AddressOf TaskDoneEvent
+                                         AddHandler _unrar_task.TaskDone, AddressOf TaskDoneEvent
 
-                                                                ActiveTasks.Add(_unrar_task)
+                                         ActiveTasks.Add(_unrar_task)
 
-                                                                If UnRAR(_chain, _unrar_task, _settings.UnRARSettings) = True Then
-                                                                    _chain.UnRARDone = True
-                                                                Else
-                                                                    _chain.UnRARDone = False
-                                                                End If
+                                         If UnRAR(_chain, _unrar_task, _settings.UnRARSettings) = True Then
+                                             _chain.UnRARDone = True
+                                         Else
+                                             _chain.UnRARDone = False
+                                         End If
 
-                                                                _chain.UnRARRunning = False
+                                         _chain.UnRARRunning = False
 
-                                                            Else
-                                                                _log.Info("UnRARChain ist noch nicht vollständig oder diese wird bereits entpackt/bearbeitet")
-                                                                'TODO: Check for InstatnVideo
-                                                            End If
+                                     Else
+                                         _log.Info("UnRARChain ist noch nicht vollständig oder diese wird bereits entpackt/bearbeitet")
+                                         'TODO: Check for InstatnVideo
+                                     End If
 
-                                                        End If
+                                 End If
 
-                                                    Next
+                             Next
 
-                                                Else
-                                                    _log.Info("Dieser Container hat keine UnRarChain")
-                                                End If
+                         Else
+                             _log.Info("Dieser Container hat keine UnRarChain")
+                         End If
 
-                                            End Sub)
+                     End Sub)
 
 
-            System.Threading.Tasks.Task.Run(Sub()
+            Task.Run(Sub()
 
 #Region "Check if Download or Any Session is Complete"
 
-                                                SyncLock _mysession.SynLock
+                         SyncLock _mysession.SynLock
 
-                                                    If _mysession.SessionState = ContainerSessionState.Queued Or _mysession.SessionState = ContainerSessionState.DownloadRunning Then
+                             If _mysession.SessionState = ContainerSessionState.Queued Or _mysession.SessionState = ContainerSessionState.DownloadRunning Then
 
-                                                        If DownloadItems.Where(Function(myitem) (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Running) Or (myitem.DownloadStatus = DownloadItem.Status.Retry Or myitem.DownloadStatus = DownloadItem.Status.RetryWait)).Count = 0 Or Application.Current.Resources("DownloadStopped") = True Then 'Alle Items sind heruntergeladen oder Download ist gestoppt
+                                 If DownloadItems.Where(Function(myitem) (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Running) Or (myitem.DownloadStatus = DownloadItem.Status.Retry Or myitem.DownloadStatus = DownloadItem.Status.RetryWait)).Count = 0 Or Application.Current.Resources("DownloadStopped") = True Then 'Alle Items sind heruntergeladen oder Download ist gestoppt
 
-                                                            _mysession.SessionState = ContainerSessionState.DownloadComplete
-                                                            _mysession.DownloadStoppedTime = Now
+                                     _mysession.SessionState = ContainerSessionState.DownloadComplete
+                                     _mysession.DownloadStoppedTime = Now
 #Region "Speedreport"
-                                                            If _settings.SpeedReportSettings.SpeedreportEnabled = True Then
+                                     If _settings.SpeedReportSettings.SpeedreportEnabled = True Then
 
-                                                                Dim _speedreport As String = String.Empty
-                                                                Dim _sr_filepath As String = String.Empty
-                                                                Dim _sr_task As New AppTask("Speedreport wird erstellt")
+                                         Dim _speedreport As String = String.Empty
+                                         Dim _sr_filepath As String = String.Empty
+                                         Dim _sr_task As New AppTask("Speedreport wird erstellt")
 
-                                                                Try
+                                         Try
 
-                                                                    AddHandler _sr_task.TaskDone, AddressOf TaskDoneEvent
+                                             AddHandler _sr_task.TaskDone, AddressOf TaskDoneEvent
 
-                                                                    ActiveTasks.Add(_sr_task)
+                                             ActiveTasks.Add(_sr_task)
 
-                                                                    _speedreport = SpeedreportHelper.GenerateSpeedreport(_mysession, _settings.SpeedReportSettings)
-                                                                    'ToDO: Caution: Post Action!
+                                             _speedreport = GenerateSpeedreport(_mysession, _settings.SpeedReportSettings)
+                                             'ToDO: Caution: Post Action!
 
-                                                                    If String.IsNullOrWhiteSpace(_speedreport) Then
-                                                                        Throw New Exception("Speedreport failed")
-                                                                    End If
+                                             If String.IsNullOrWhiteSpace(_speedreport) Then
+                                                 Throw New Exception("Speedreport failed")
+                                             End If
 
-                                                                    _sr_filepath = IO.Path.GetDirectoryName(_mysession.DownloadItems(0).LocalFile)
+                                             _sr_filepath = Path.GetDirectoryName(_mysession.DownloadItems(0).LocalFile)
 
-                                                                    _sr_filepath = IO.Path.Combine(_sr_filepath, "speedreport.txt")
+                                             _sr_filepath = Path.Combine(_sr_filepath, "speedreport.txt")
 
-                                                                    My.Computer.FileSystem.WriteAllText(_sr_filepath, _speedreport, False, System.Text.Encoding.Default)
+                                             My.Computer.FileSystem.WriteAllText(_sr_filepath, _speedreport, False, Encoding.Default)
 
-                                                                    _sr_task.SetTaskStatus(TaskStatus.RanToCompletion, "Speedreport erstellt")
+                                             _sr_task.SetTaskStatus(TaskStatus.RanToCompletion, "Speedreport erstellt")
 
-                                                                Catch ex As Exception
-                                                                    _sr_task.SetTaskStatus(TaskStatus.Faulted, "Speedreport Generation failed")
-                                                                End Try
+                                         Catch ex As Exception
+                                             _sr_task.SetTaskStatus(TaskStatus.Faulted, "Speedreport Generation failed")
+                                         End Try
 
-                                                            End If
+                                     End If
 
 #End Region
-                                                        End If
+                                 End If
 
 
-                                                    End If
+                             End If
 
-                                                End SyncLock
+                         End SyncLock
 #End Region
-                                            End Sub).ContinueWith(Sub()
+                     End Sub).ContinueWith(Sub()
 
 
-                                                                      If ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0 Or Application.Current.Resources("DownloadStopped") = True Then
+                                               If ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0 Or Application.Current.Resources("DownloadStopped") = True Then
 
-                                                                          'Alle DL Fertig
-                                                                          _log.Info("Alle Downloads Abgeschlossen/Gestoppt")
-                                                                          _eta_thread.Cancel()
+                                                   'Alle DL Fertig
+                                                   _log.Info("Alle Downloads Abgeschlossen/Gestoppt")
+                                                   _eta_thread.Cancel()
 
-                                                                      Else
-                                                                          QueryDownloadItems()
-                                                                      End If
+                                               Else
+                                                   QueryDownloadItems()
+                                               End If
 
-                                                                  End Sub)
+                                           End Sub)
 
 
 
@@ -786,41 +793,41 @@ Decrypt:
 
         Dim _wait As Boolean = True
 
-        Dim _container_sessions As New List(Of ContainerSession)
+        Dim _m_container_sessions As New List(Of ContainerSession)
 
-        _container_sessions = ContainerSessions.ToList
+        _m_container_sessions = ContainerSessions.ToList
 
-        Await System.Threading.Tasks.Task.Run(Sub()
+        Await Task.Run(Sub()
 
-                                                  While _wait = True
+                           While _wait = True
 
-                                                      For Each _session In _container_sessions
+                               For Each _session In _m_container_sessions
 
-                                                          If Not _session.SessionState = ContainerSessionState.DownloadRunning And _session.UnRarChains.Where(Function(mychain) mychain.UnRARRunning = True).Count = 0 Then
-                                                              _wait = False
-                                                          Else
-                                                              _wait = True
-                                                          End If
+                                   If Not _session.SessionState = ContainerSessionState.DownloadRunning And _session.UnRarChains.Where(Function(mychain) mychain.UnRARRunning = True).Count = 0 Then
+                                       _wait = False
+                                   Else
+                                       _wait = True
+                                   End If
 
-                                                      Next
+                               Next
 
-                                                  End While
+                           End While
 
-                                              End Sub)
+                       End Sub)
 
 
-        If Me.CheckedPostDownloadShutdownComputer = True Then
+        If CheckedPostDownloadShutdownComputer = True Then
 
             Dim _shutdown_cmd As String = "shutdown -s -t 30"
 
-            System.Diagnostics.Process.Start("cmd", String.Format("/c {0}", _shutdown_cmd))
+            Process.Start("cmd", String.Format("/c {0}", _shutdown_cmd))
 
             DispatchService.DispatchService.Invoke(Sub()
                                                        Application.Current.Shutdown()
                                                    End Sub)
 
         Else
-            If Me.CheckedPostDownloadExitApp = True Then
+            If CheckedPostDownloadExitApp = True Then
 
                 DispatchService.DispatchService.Invoke(Sub()
                                                            Application.Current.Shutdown()
@@ -836,67 +843,67 @@ Decrypt:
     Private Sub ServerFullEvent(_item As DownloadItem)
 
 
-        System.Threading.Tasks.Task.Run(Sub()
+        Task.Run(Sub()
 
-                                            Dim _log As NLog.Logger = NLog.LogManager.GetLogger("ItemDownloadCompleteEvent")
+                     Dim _log As Logger = LogManager.GetLogger("ItemDownloadCompleteEvent")
 
-                                            _log.Debug("Item {0} war als Download gequed und ist jetzt fertig - Reduziere aktiven Thread Count für diese Session", _item.FileName)
+                     _log.Debug("Item {0} war als Download gequed und ist jetzt fertig - Reduziere aktiven Thread Count für diese Session", _item.FileName)
 
-                                            _item.DownloadStatus = DownloadItem.Status.Queued
+                     _item.DownloadStatus = DownloadItem.Status.Queued
 
-                                            SyncLock ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).SynLock
+                     SyncLock ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).SynLock
 
-                                                ContainerSessions.Where(Function(mycontainer) mycontainer.ID.Equals(_item.ParentContainerID))(0).SingleSessionMode = True
+                         ContainerSessions.Where(Function(mycontainer) mycontainer.ID.Equals(_item.ParentContainerID))(0).SingleSessionMode = True
 
-                                                For Each _item In ContainerSessions.Where(Function(mycontainer) mycontainer.ID.Equals(_item.ParentContainerID))(0).DownloadItems
-                                                    _item.SingleSessionMode = True
-                                                Next
+                         For Each _item In ContainerSessions.Where(Function(mycontainer) mycontainer.ID.Equals(_item.ParentContainerID))(0).DownloadItems
+                             _item.SingleSessionMode = True
+                         Next
 
-                                            End SyncLock
+                     End SyncLock
 
-                                        End Sub)
+                 End Sub)
 
     End Sub
 
     Private Async Sub StopDownload()
 
-        Await System.Threading.Tasks.Task.Run(Sub()
+        Await Task.Run(Sub()
 
-                                                  Application.Current.Resources("DownloadStopped") = True
+                           Application.Current.Resources("DownloadStopped") = True
 
-                                                  For Each _session In ContainerSessions
+                           For Each _session In ContainerSessions
 
-                                                      If Not IsNothing(_session.WIG) Then
-                                                          _session.WIG.Cancel()
-                                                      End If
+                               If Not IsNothing(_session.WIG) Then
+                                   _session.WIG.Cancel()
+                               End If
 
-                                                  Next
+                           Next
 
-                                                  _eta_thread.Cancel()
-                                                  '_stp.Cancel()
+                           _eta_thread.Cancel()
+                           '_stp.Cancel()
 
-                                              End Sub)
+                       End Sub)
 
-        Me.ButtonDownloadStartStop = False
+        ButtonDownloadStartStop = False
 
     End Sub
 
     Sub Test()
 
-        Dim _ftp_client As ArxOne.Ftp.FtpClient
-        Dim _session As ArxOne.Ftp.FtpSession
+        Dim _ftp_client As FtpClient
+        Dim _session As FtpSession
 
         SetupFTPClient(_ftp_client, ContainerSessions(0).ContainerFile.Connection)
 
         _session = _ftp_client.Session
 
-        ArxOne.Ftp.FtpClientUtility.List(_session.Connection.Client, "/")
+        FtpClientUtility.List(_session.Connection.Client, "/")
 
         Debug.WriteLine("LIST 1 fertig")
 
         Debug.WriteLine("")
 
-        ArxOne.Ftp.FtpClientUtility.List(_session.Connection.Client, "/")
+        FtpClientUtility.List(_session.Connection.Client, "/")
 
         Debug.WriteLine("LIST 2 fertig")
 
@@ -951,9 +958,9 @@ Decrypt:
             RaisePropertyChanged("CheckedPostDownloadShutdownComputer")
 
             If value = True Then
-                Me.CheckedPostDownloadExitApp = True
+                CheckedPostDownloadExitApp = True
             Else
-                Me.CheckedPostDownloadExitApp = False
+                CheckedPostDownloadExitApp = False
             End If
 
         End Set
@@ -1065,7 +1072,7 @@ Decrypt:
 
     Private Sub OpenSFDL()
 
-        Dim _ofd As New Microsoft.Win32.OpenFileDialog()
+        Dim _ofd As New OpenFileDialog()
 
         With _ofd
 
@@ -1075,13 +1082,11 @@ Decrypt:
 
         End With
 
-        If Not _ofd.ShowDialog = vbCancel Then
+        If _ofd.ShowDialog = DialogResult.Cancel Then Return
 
-            For Each _file In _ofd.FileNames
-                OpenSFDLFile(_file)
-            Next
-
-        End If
+        For Each _file In _ofd.FileNames
+            OpenSFDLFile(_file)
+        Next
 
     End Sub
 
@@ -1104,7 +1109,7 @@ Decrypt:
     End Property
 
     Private Sub ShowContainerInfo()
-        Me.ContainerInfoOpen = True
+        ContainerInfoOpen = True
     End Sub
 
     Public ReadOnly Property MarkAllItemsCommand As ICommand
@@ -1169,7 +1174,7 @@ Decrypt:
 
     Private Async Sub ShowHelp()
 
-        Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowMessageAsync(Me, "SFDL.NET 3", "Version: 3.0.0.0 TP4")
+        Await DialogCoordinator.Instance.ShowMessageAsync(Me, "SFDL.NET 3", "Version: 3.0.0.0 TP4")
 
     End Sub
 
@@ -1236,29 +1241,18 @@ Decrypt:
             Dim _item As DownloadItem = TryCast(parameter, DownloadItem)
             Dim _folder_path As String
 
-            _folder_path = IO.Path.GetDirectoryName(_item.LocalFile)
+            _folder_path = Path.GetDirectoryName(_item.LocalFile)
 
             Debug.WriteLine(_folder_path)
 
-            If Not String.IsNullOrWhiteSpace(_folder_path) And IO.Directory.Exists(_folder_path) Then
-                System.Diagnostics.Process.Start("explorer.exe", String.Format("{0}{1}{2}", Chr(34), _folder_path, Chr(34)))
+            If Not String.IsNullOrWhiteSpace(_folder_path) And Directory.Exists(_folder_path) Then
+                Process.Start("explorer.exe", String.Format("{0}{1}{2}", Chr(34), _folder_path, Chr(34)))
             End If
 
         End If
 
     End Sub
 
-    'Private _curr_selected_item As DownloadItem = Nothing
-
-    'Public Property SelectedDownloadItem As DownloadItem
-    '    Set(value As DownloadItem)
-    '        _curr_selected_item = value
-    '        RaisePropertyChanged("SelectedDownloadItem")
-    '    End Set
-    '    Get
-    '        Return _curr_selected_item
-    '    End Get
-    'End Property
 
     Public ReadOnly Property CloseSFDLContainerCommand() As ICommand
         Get
@@ -1309,7 +1303,7 @@ Decrypt:
                     DownloadItems.Remove(_item)
                 Next
 
-                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL Container '{0}' geschlossen", IO.Path.GetFileName(_container_session.ContainerFileName)))
+                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL Container '{0}' geschlossen", Path.GetFileName(_container_session.ContainerFileName)))
 
                 ContainerSessions.Remove(_container_session)
 
@@ -1325,9 +1319,9 @@ Decrypt:
 #Region "Allgemeine Properties"
 
 
-    Private _window_state As System.Windows.WindowState = WindowState.Normal
-    Public Property WindowState As System.Windows.WindowState
-        Set(value As System.Windows.WindowState)
+    Private _window_state As WindowState = WindowState.Normal
+    Public Property WindowState As WindowState
+        Set(value As WindowState)
             _window_state = value
             RaisePropertyChanged("WindowState")
         End Set
@@ -1359,9 +1353,9 @@ Decrypt:
 
 #Region "Tasks"
 
-    Private _active_tasks As New ObjectModel.ObservableCollection(Of AppTask)
-    Public Property ActiveTasks As ObjectModel.ObservableCollection(Of AppTask)
-        Set(value As ObjectModel.ObservableCollection(Of AppTask))
+    Private _active_tasks As New ObservableCollection(Of AppTask)
+    Public Property ActiveTasks As ObservableCollection(Of AppTask)
+        Set(value As ObservableCollection(Of AppTask))
             _active_tasks = value
             RaisePropertyChanged("ActiveTasks")
         End Set
@@ -1370,9 +1364,9 @@ Decrypt:
         End Get
     End Property
 
-    Private _done_tasks As New ObjectModel.ObservableCollection(Of AppTask)
-    Public Property DoneTasks As ObjectModel.ObservableCollection(Of AppTask)
-        Set(value As ObjectModel.ObservableCollection(Of AppTask))
+    Private _done_tasks As New ObservableCollection(Of AppTask)
+    Public Property DoneTasks As ObservableCollection(Of AppTask)
+        Set(value As ObservableCollection(Of AppTask))
             _done_tasks = value
             RaisePropertyChanged("DoneTasks")
         End Set
@@ -1383,15 +1377,15 @@ Decrypt:
 
     Private Sub TaskDoneEvent(e As AppTask)
 
-        System.Threading.Tasks.Task.Run(Sub()
+        Task.Run(Sub()
 
-                                            'Wait 5 Seconds
-                                            System.Threading.Thread.Sleep(5000)
+                     'Wait 5 Seconds
+                     Thread.Sleep(5000)
 
-                                            ActiveTasks.Remove(e)
-                                            DoneTasks.Add(e)
+                     ActiveTasks.Remove(e)
+                     DoneTasks.Add(e)
 
-                                        End Sub)
+                 End Sub)
 
     End Sub
 
@@ -1400,10 +1394,10 @@ Decrypt:
 
 #Region "Container Sessions"
 
-    Private _container_sessions As New ObjectModel.ObservableCollection(Of ContainerSession)
+    Private _container_sessions As New ObservableCollection(Of ContainerSession)
 
-    Public Property ContainerSessions As ObjectModel.ObservableCollection(Of ContainerSession)
-        Set(value As ObjectModel.ObservableCollection(Of ContainerSession))
+    Public Property ContainerSessions As ObservableCollection(Of ContainerSession)
+        Set(value As ObservableCollection(Of ContainerSession))
             _container_sessions = value
             RaisePropertyChanged("ContainerSessions")
         End Set
@@ -1412,10 +1406,10 @@ Decrypt:
         End Get
     End Property
 
-    Private _download_items As New ObjectModel.ObservableCollection(Of DownloadItem)
+    Private _download_items As New ObservableCollection(Of DownloadItem)
 
-    Public Property DownloadItems As ObjectModel.ObservableCollection(Of DownloadItem)
-        Set(value As ObjectModel.ObservableCollection(Of DownloadItem))
+    Public Property DownloadItems As ObservableCollection(Of DownloadItem)
+        Set(value As ObservableCollection(Of DownloadItem))
             _download_items = value
             RaisePropertyChanged("DownloadItems")
         End Set
@@ -1461,25 +1455,25 @@ Decrypt:
     Private _PreviewDropCommand As ICommand
     Private Sub HandlePreviewDrop(inObject As Object)
 
-        Dim ido As IDataObject = TryCast(inObject, IDataObject)
+        Dim ido As System.Windows.IDataObject = TryCast(inObject, System.Windows.IDataObject)
 
         If ido Is Nothing Then
             Return
         End If
 
-        Dim fileDrop = ido.GetData(DataFormats.FileDrop, True)
+        Dim fileDrop = ido.GetData(System.Windows.DataFormats.FileDrop, True)
         Dim filesOrDirectories = TryCast(fileDrop, [String]())
 
         If filesOrDirectories IsNot Nothing AndAlso filesOrDirectories.Length > 0 Then
 
             For Each fullPath As String In filesOrDirectories
-                If IO.Directory.Exists(fullPath) Then
+                If Directory.Exists(fullPath) Then
                     Debug.WriteLine("{0} is a directory", fullPath)
 
-                ElseIf IO.File.Exists(fullPath) Then
+                ElseIf File.Exists(fullPath) Then
                     Debug.WriteLine("{0} is a file", fullPath)
 
-                    If IO.Path.GetExtension(fullPath) = ".sfdl" Then
+                    If Path.GetExtension(fullPath) = ".sfdl" Then
                         OpenSFDLFile(fullPath)
                     End If
 

@@ -293,9 +293,6 @@
     <Resource Include="Resources\Icons\appbar.control.resume.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="appbar.skydrive.download.png.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Icons\Icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

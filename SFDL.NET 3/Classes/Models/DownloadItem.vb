@@ -1,7 +1,9 @@
 ﻿Imports System.ComponentModel
+Imports SFDL.Container
+Imports SFDL.NET3.My.Resources
 
 Public Class DownloadItem
-    Inherits SFDL.Container.FileItem
+    Inherits FileItem
     Implements IDisposable
     Implements INotifyPropertyChanged
 
@@ -16,24 +18,23 @@ Public Class DownloadItem
     Private _parent_container_id As Guid
     Private _status_image As String = "Resources/Icons/appbar.sign.parking.png"
     Private _status As Status = Status.None
-    Private _status_string As String = String.Empty
     Private _id As Guid
 
 
-    Public Sub Init(ByVal _fileitem As SFDL.Container.FileItem)
+    Public Sub Init(ByVal _fileitem As FileItem)
 
-        Me.DirectoryPath = _fileitem.DirectoryPath
-        Me.DirectoryRoot = _fileitem.DirectoryRoot
-        Me.DownloadProgress = 0
-        Me.DownloadSpeed = String.Empty
-        Me.DownloadStatus = Status.Queued
-        Me.FileName = _fileitem.FileName
-        Me.FileHash = _fileitem.FileHash
-        Me.FileSize = _fileitem.FileSize
-        Me.FullPath = _fileitem.FullPath
-        Me.HashType = _fileitem.HashType
-        Me.PackageName = _fileitem.PackageName
-        Me.isSelected = True
+        DirectoryPath = _fileitem.DirectoryPath
+        DirectoryRoot = _fileitem.DirectoryRoot
+        DownloadProgress = 0
+        DownloadSpeed = String.Empty
+        DownloadStatus = Status.Queued
+        FileName = _fileitem.FileName
+        FileHash = _fileitem.FileHash
+        FileSize = _fileitem.FileSize
+        FullPath = _fileitem.FullPath
+        HashType = _fileitem.HashType
+        PackageName = _fileitem.PackageName
+        isSelected = True
 
         _id = New Guid
 
@@ -43,16 +44,16 @@ Public Class DownloadItem
     Public Property isSelected As Boolean
         Set(value As Boolean)
 
-            If (Me.DownloadStatus = Status.Running Or Me.DownloadStatus = Status.Retry) Or Me.DownloadStatus = Status.RetryWait Then
+            If (DownloadStatus = Status.Running Or DownloadStatus = Status.Retry) Or DownloadStatus = Status.RetryWait Then
                 'do nothing
             Else
 
                 _selected = value
 
                 If value = True Then
-                    Me.DownloadStatus = Status.Queued
+                    DownloadStatus = Status.Queued
                 Else
-                    Me.DownloadStatus = Status.None
+                    DownloadStatus = Status.None
                 End If
 
                 RaisePropertyChanged("isSelected")
@@ -77,7 +78,7 @@ Public Class DownloadItem
     Public ReadOnly Property DownloadStatusString
         Get
 
-            Select Case Me.DownloadStatus
+            Select Case DownloadStatus
 
                 Case Status.None
 
@@ -85,83 +86,83 @@ Public Class DownloadItem
 
                 Case Status.Queued
 
-                    Return My.Resources.Strings.DownloadStatus_Queued
+                    Return Strings.DownloadStatus_Queued
 
                 Case Status.Running
 
-                    Return My.Resources.Strings.DownloadStatus_Running
+                    Return Strings.DownloadStatus_Running
 
                 Case Status.Stopped
 
-                    Return My.Resources.Strings.DownloadStatus_Stopped
+                    Return Strings.DownloadStatus_Stopped
 
                 Case Status.Completed
 
-                    Return My.Resources.Strings.DownloadStatus_Completed
+                    Return Strings.DownloadStatus_Completed
 
                 Case Status.Completed_HashInvalid
 
-                    Return My.Resources.Strings.DownloadStatus_Completed_HashInvalid
+                    Return Strings.DownloadStatus_Completed_HashInvalid
 
                 Case Status.Completed_HashValid
 
-                    Return My.Resources.Strings.DownloadStatus_Completed_HashValid
+                    Return Strings.DownloadStatus_Completed_HashValid
 
                 Case Status.Failed
 
-                    Return My.Resources.Strings.DownloadStatus_Failed
+                    Return Strings.DownloadStatus_Failed
 
                 Case Status.Failed_FileNameTooLong
 
-                    Return My.Resources.Strings.DownloadStatus_Failed_FileNameTooLong
+                    Return Strings.DownloadStatus_Failed_FileNameTooLong
 
                 Case Status.Failed_NotEnoughDiskSpace
 
-                    Return My.Resources.Strings.DownloadStatus_Failed_NotEnoughDiskSpace
+                    Return Strings.DownloadStatus_Failed_NotEnoughDiskSpace
 
                 Case Status.Failed_ServerFull
 
-                    Return My.Resources.Strings.DownloadStatus_Failed_ServerFull
+                    Return Strings.DownloadStatus_Failed_ServerFull
 
                 Case Status.Failed_ServerDown
 
-                    Return My.Resources.Strings.DownloadStatus_Failed_ServerDown
+                    Return Strings.DownloadStatus_Failed_ServerDown
 
                 Case Status.Failed_AuthError
 
-                    Return My.Resources.Strings.DownloadStatus_Failed_AuthError
+                    Return Strings.DownloadStatus_Failed_AuthError
 
                 Case Status.Failed_ConnectionError
 
-                    Return My.Resources.Strings.DownloadStatus_Failed_ConnectionError
+                    Return Strings.DownloadStatus_Failed_ConnectionError
 
                 Case Status.Failed_FileNotFound
 
-                    Return My.Resources.Strings.DownloadStatus_Failed_FileNotFound
+                    Return Strings.DownloadStatus_Failed_FileNotFound
 
                 Case Status.Failed_DirectoryNotFound
 
-                    Return My.Resources.Strings.DownloadStatus_Failed_DirectoryNotFound
+                    Return Strings.DownloadStatus_Failed_DirectoryNotFound
 
                 Case Status.Failed_InternalServerError
 
-                    Return My.Resources.Strings.DownloadStatus_Failed_InternalServerError
+                    Return Strings.DownloadStatus_Failed_InternalServerError
 
                 Case Status.RetryWait
 
-                    Return My.Resources.Strings.DownloadStatus_RetryWait
+                    Return Strings.DownloadStatus_RetryWait
 
                 Case Status.Retry
 
-                    Return My.Resources.Strings.DownloadStatus_Retry
+                    Return Strings.DownloadStatus_Retry
 
                 Case Status.AlreadyDownloaded
 
-                    Return My.Resources.Strings.DownloadStatus_AlreadyDownloaded
+                    Return Strings.DownloadStatus_AlreadyDownloaded
 
                 Case Else
 
-                    Return My.Resources.Strings.DownloadStatus_Failed
+                    Return Strings.DownloadStatus_Failed
 
             End Select
 
@@ -180,83 +181,83 @@ Public Class DownloadItem
 
                 Case Status.None
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.sign.parking.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.sign.parking.png"
 
                 Case Status.Completed
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.check.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.check.png"
 
                 Case Status.Queued
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.clock.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.clock.png"
 
                 Case Status.Running
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.cabinet.in.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.cabinet.in.png"
 
                 Case Status.Stopped
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.control.stop.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.control.stop.png"
 
                 Case Status.Completed_HashValid
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.check.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.check.png"
 
                 Case Status.Completed_HashInvalid
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.alert.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.alert.png"
 
                 Case Status.Failed
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.stop.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.stop.png"
 
                 Case Status.Failed_FileNameTooLong
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.dimension.line.width.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.dimension.line.width.png"
 
                 Case Status.Failed_NotEnoughDiskSpace
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.stop.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.stop.png"
 
                 Case Status.Failed_ServerFull
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.cup.full.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.cup.full.png"
 
                 Case Status.Failed_ServerDown
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.network.server.disconnect.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.network.server.disconnect.png"
 
                 Case Status.Failed_ConnectionError
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.network.server.disconnect.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.network.server.disconnect.png"
 
                 Case Status.Failed_AuthError
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.user.delete.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.user.delete.png"
 
                 Case Status.Failed_FileNotFound
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.page.delete.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.page.delete.png"
 
                 Case Status.Failed_DirectoryNotFound
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.page.delete.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.page.delete.png"
 
                 Case Status.Failed_InternalServerError
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.monitor.delete.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.monitor.delete.png"
 
                 Case Status.Retry
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.control.resume.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.control.resume.png"
 
                 Case Status.RetryWait
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.control.resume.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.control.resume.png"
 
                 Case Status.AlreadyDownloaded
 
-                    Me.DownloadStatusImage = "Resources/Icons/appbar.check.png"
+                    DownloadStatusImage = "Resources/Icons/appbar.check.png"
 
             End Select
 
@@ -295,7 +296,7 @@ Public Class DownloadItem
 
     Public ReadOnly Property GroupDescriptionIdentifier As String
         Get
-            Return Me.PackageName & ";" & _parent_container_id.ToString
+            Return PackageName & ";" & _parent_container_id.ToString
         End Get
     End Property
 
