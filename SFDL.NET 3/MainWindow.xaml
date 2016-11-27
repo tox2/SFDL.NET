@@ -355,7 +355,7 @@
                         Height="40"
                         Margin="0,0,10,0"
                         HorizontalAlignment="Right"
-                        Background="White"
+                        Background="{DynamicResource BaseColorBrush}"
                         BorderThickness="0"
                         Command="{Binding ShowContainerInfoCommand}">
                     <StackPanel>
