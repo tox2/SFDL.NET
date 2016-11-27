@@ -1169,7 +1169,7 @@ Decrypt:
 
     Private Async Sub ShowHelp()
 
-        Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowMessageAsync(Me, "SFDL.NET 3", "Version: 3.0.0.0 TP3")
+        Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowMessageAsync(Me, "SFDL.NET 3", "Version: 3.0.0.0 TP4")
 
     End Sub
 

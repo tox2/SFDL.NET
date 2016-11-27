@@ -45,12 +45,7 @@
                                                       VerticalAlignment="Top"
                                                       Content="{x:Static p:Strings.Settings_PreventStandy}"
                                                       IsChecked="{Binding PreventStandby}" />
-                                            <CheckBox x:Name="chk_minimize_to_tray"
-                                                      Margin="5,5,5,0"
-                                                      HorizontalAlignment="Left"
-                                                      VerticalAlignment="Top"
-                                                      Content="{x:Static p:Strings.Settings_MinimizeToTray}"
-                                                      IsChecked="{Binding Send2Tray}" />
+
                                             <CheckBox x:Name="chk_clicknload"
                                                       Margin="5,5,5,0"
                                                       HorizontalAlignment="Left"

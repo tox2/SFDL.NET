@@ -12,9 +12,9 @@ Imports System.Windows
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("SFDL.NET_3")>
-<Assembly: AssemblyDescription("Tech Preview 3")>
+<Assembly: AssemblyDescription("Tech Preview 4")>
 <Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("SFDL.NET_3")>
+<Assembly: AssemblyProduct("SFDL.NET 3")>
 <Assembly: AssemblyCopyright("Copyright ©  2016")>
 <Assembly: AssemblyTrademark("")>
 <Assembly: ComVisible(false)>

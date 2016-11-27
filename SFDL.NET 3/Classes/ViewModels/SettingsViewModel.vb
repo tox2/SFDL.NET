@@ -33,15 +33,6 @@ Public Class SettingsViewModel
         End Get
     End Property
 
-    Public Property Send2Tray As Boolean
-        Set(value As Boolean)
-            _settings.Send2Tray = value
-            RaisePropertyChanged("Send2Tray")
-        End Set
-        Get
-            Return _settings.Send2Tray
-        End Get
-    End Property
     Public Property ClicknLoad As Boolean
         Set(value As Boolean)
             _settings.ClicknLoad = value

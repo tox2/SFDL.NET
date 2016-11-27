@@ -6,7 +6,6 @@
     Public Property ExistingFileHandling As ExistingFileHandling = ExistingFileHandling.ResumeFile
     Public Property PreventStandby As Boolean = True
     Public Property CreatePackageSubfolder As Boolean = False
-    Public Property Send2Tray As Boolean = False
     Public Property ClicknLoad As Boolean = True
     Public Property MaxDownloadThreads As Integer = 3
     Public Property MaxRetry As Integer = 3
@@ -38,7 +37,6 @@
             .MaxDownloadThreads = 3
             .MaxRetry = 3
             .PreventStandby = True
-            .Send2Tray = False
             .UnRARSettings = New UnRARSettings
             .SpeedReportSettings = New SpeedreportSettings
 
