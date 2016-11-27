@@ -1361,7 +1361,7 @@ Decrypt:
 
 #End Region
 
-    Private _max_download_speed As String
+    Private _max_download_speed As String = String.Empty
     Public Property MaxDownloadSpeed As String
         Set(value As String)
 
@@ -1370,16 +1370,15 @@ Decrypt:
                 If IsNumeric(value) Then
 
                     If value >= Integer.MinValue And value <= Integer.MaxValue Then
-
                         _max_download_speed = value
                     Else
-                        _max_download_speed = 0
+                        _max_download_speed = String.Empty
                     End If
 
                 End If
 
             Else
-                _max_download_speed = 0
+                _max_download_speed = String.Empty
             End If
 
             RaisePropertyChanged("MaxDownloadSpeed")

@@ -151,7 +151,10 @@
                                                     Margin="0,5,0,0"
                                                     Command="{Binding SelectDownloadFolderCommand}">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}" Margin="0,0,5,0">
+                                                    <Rectangle Width="16"
+                                                               Height="16"
+                                                               Margin="0,0,5,0"
+                                                               Fill="{DynamicResource AccentColorBrush}">
                                                         <Rectangle.OpacityMask>
                                                             <VisualBrush Visual="{StaticResource appbar_folder_open}" />
                                                         </Rectangle.OpacityMask>
@@ -322,7 +325,9 @@
                                             <Menu>
                                                 <MenuItem Header="{x:Static p:Strings.VariousStrings_Variables}">
                                                     <MenuItem.Icon>
-                                                        <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                        <Rectangle Width="16"
+                                                                   Height="16"
+                                                                   Fill="{DynamicResource AccentColorBrush}">
                                                             <Rectangle.OpacityMask>
                                                                 <VisualBrush Visual="{StaticResource appbar_code_xml}" />
                                                             </Rectangle.OpacityMask>
@@ -332,7 +337,9 @@
                                                               CommandParameter="username"
                                                               Header="{x:Static p:Strings.VariousStrings_Username}">
                                                         <MenuItem.Icon>
-                                                            <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                            <Rectangle Width="16"
+                                                                       Height="16"
+                                                                       Fill="{DynamicResource AccentColorBrush}">
                                                                 <Rectangle.OpacityMask>
                                                                     <VisualBrush Visual="{StaticResource appbar_user}" />
                                                                 </Rectangle.OpacityMask>
@@ -343,7 +350,9 @@
                                                               CommandParameter="connection"
                                                               Header="{x:Static p:Strings.VariousStrings_Connection}">
                                                         <MenuItem.Icon>
-                                                            <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                            <Rectangle Width="16"
+                                                                       Height="16"
+                                                                       Fill="{DynamicResource AccentColorBrush}">
                                                                 <Rectangle.OpacityMask>
                                                                     <VisualBrush Visual="{StaticResource appbar_connection_quality_veryhigh}" />
                                                                 </Rectangle.OpacityMask>
@@ -354,7 +363,9 @@
                                                               CommandParameter="comment"
                                                               Header="{x:Static p:Strings.VariousStrings_Comment}">
                                                         <MenuItem.Icon>
-                                                            <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                            <Rectangle Width="16"
+                                                                       Height="16"
+                                                                       Fill="{DynamicResource AccentColorBrush}">
                                                                 <Rectangle.OpacityMask>
                                                                     <VisualBrush Visual="{StaticResource appbar_notification_above}" />
                                                                 </Rectangle.OpacityMask>
@@ -365,7 +376,9 @@
                                                               CommandParameter="downloadspeed"
                                                               Header="{x:Static p:Strings.VariousStrings_DownloadSpeed}">
                                                         <MenuItem.Icon>
-                                                            <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                            <Rectangle Width="16"
+                                                                       Height="16"
+                                                                       Fill="{DynamicResource AccentColorBrush}">
                                                                 <Rectangle.OpacityMask>
                                                                     <VisualBrush Visual="{StaticResource appbar_gauge_75}" />
                                                                 </Rectangle.OpacityMask>
@@ -374,7 +387,9 @@
                                                     </MenuItem>
                                                     <MenuItem Header="{x:Static p:Strings.VariousStrings_SFDLInformation}">
                                                         <MenuItem.Icon>
-                                                            <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                            <Rectangle Width="16"
+                                                                       Height="16"
+                                                                       Fill="{DynamicResource AccentColorBrush}">
                                                                 <Rectangle.OpacityMask>
                                                                     <VisualBrush Visual="{StaticResource appbar_information_circle}" />
                                                                 </Rectangle.OpacityMask>
@@ -384,7 +399,9 @@
                                                                   CommandParameter="sfdl_description"
                                                                   Header="{x:Static p:Strings.VariousStrings_Description}">
                                                             <MenuItem.Icon>
-                                                                <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                                <Rectangle Width="16"
+                                                                           Height="16"
+                                                                           Fill="{DynamicResource AccentColorBrush}">
                                                                     <Rectangle.OpacityMask>
                                                                         <VisualBrush Visual="{StaticResource appbar_interface_textbox}" />
                                                                     </Rectangle.OpacityMask>
@@ -395,7 +412,9 @@
                                                                   CommandParameter="sfdl_uploader"
                                                                   Header="{x:Static p:Strings.VariousStrings_Uploader}">
                                                             <MenuItem.Icon>
-                                                                <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                                <Rectangle Width="16"
+                                                                           Height="16"
+                                                                           Fill="{DynamicResource AccentColorBrush}">
                                                                     <Rectangle.OpacityMask>
                                                                         <VisualBrush Visual="{StaticResource appbar_people_up}" />
                                                                     </Rectangle.OpacityMask>
@@ -406,7 +425,9 @@
                                                                   CommandParameter="sfdl_downloadsize"
                                                                   Header="{x:Static p:Strings.VariousStrings_FullDownloadSize}">
                                                             <MenuItem.Icon>
-                                                                <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                                <Rectangle Width="16"
+                                                                           Height="16"
+                                                                           Fill="{DynamicResource AccentColorBrush}">
                                                                     <Rectangle.OpacityMask>
                                                                         <VisualBrush Visual="{StaticResource appbar_leaderboard}" />
                                                                     </Rectangle.OpacityMask>
@@ -418,7 +439,9 @@
                                                               CommandParameter="downloadtime"
                                                               Header="{x:Static p:Strings.VariousStrings_NeededDownloadTime}">
                                                         <MenuItem.Icon>
-                                                            <Rectangle Width="16" Height="16" Fill="{DynamicResource AccentColorBrush}">
+                                                            <Rectangle Width="16"
+                                                                       Height="16"
+                                                                       Fill="{DynamicResource AccentColorBrush}">
                                                                 <Rectangle.OpacityMask>
                                                                     <VisualBrush Visual="{StaticResource appbar_hourglass}" />
                                                                 </Rectangle.OpacityMask>
@@ -495,7 +518,8 @@
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="16"
                                Height="16"
-                               Fill="{DynamicResource AccentColorBrush}" Margin="0,0,5,0">
+                               Margin="0,0,5,0"
+                               Fill="{DynamicResource AccentColorBrush}">
                         <Rectangle.OpacityMask>
                             <VisualBrush Visual="{StaticResource appbar_save}" />
                         </Rectangle.OpacityMask>
