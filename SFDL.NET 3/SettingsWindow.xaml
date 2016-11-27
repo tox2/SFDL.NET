@@ -8,13 +8,12 @@
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:p="clr-namespace:SFDL.NET3.My.Resources"
                       Title="Einstellungen"
-                      Width="393.686"
                       Dialog:DialogParticipation.Register="{Binding}"
-                      BorderBrush="Black"
-                      BorderThickness="1"
+                      BorderThickness="0"
+                      GlowBrush="Black"
                       Icon="Resources/Icons/appbar.settings.png"
                       IsMaxRestoreButtonEnabled="False"
-                      SizeToContent="Height"
+                      SizeToContent="WidthAndHeight"
                       WindowStartupLocation="CenterOwner"
                       mc:Ignorable="d">
 
@@ -30,186 +29,198 @@
     </Window.Resources>
 
     <Grid>
-        <StackPanel Grid.ColumnSpan="3">
+        <StackPanel>
             <TabControl Controls:TabControlHelper.IsUnderlined="True">
                 <TabItem Controls:ControlsHelper.HeaderFontSize="15" Header="{x:Static p:Strings.Settings_GeneralSettings}">
                     <Grid>
                         <StackPanel>
-                            <GroupBox x:Name="GroupBoxGeneralSettings" Header="{x:Static p:Strings.Settings_GeneralSettings}">
-                                <Grid>
-                                    <StackPanel Orientation="Horizontal">
-                                        <StackPanel Margin="0,0,10,0">
-                                            <CheckBox x:Name="ChkBlockStandby"
-                                                      Margin="5,5,5,0"
-                                                      HorizontalAlignment="Left"
-                                                      VerticalAlignment="Top"
-                                                      Content="{x:Static p:Strings.Settings_PreventStandy}"
-                                                      IsChecked="{Binding PreventStandby}" />
 
-                                            <CheckBox x:Name="ChkClicknload"
-                                                      Margin="5,5,5,0"
-                                                      HorizontalAlignment="Left"
-                                                      VerticalAlignment="Top"
-                                                      Content="{x:Static p:Strings.Settings_ClicknLoad}"
-                                                      IsChecked="{Binding ClicknLoad}" />
+                            <StackPanel Orientation="Horizontal">
 
+                                <GroupBox x:Name="GroupBoxGeneralSettings" Header="{x:Static p:Strings.Settings_GeneralSettings}">
+                                    <Grid>
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel Margin="0,0,10,0">
+                                                <CheckBox x:Name="ChkBlockStandby"
+                                                          Margin="5,5,5,0"
+                                                          HorizontalAlignment="Left"
+                                                          VerticalAlignment="Top"
+                                                          Content="{x:Static p:Strings.Settings_PreventStandy}"
+                                                          IsChecked="{Binding PreventStandby}" />
 
-                                        </StackPanel>
+                                                <CheckBox x:Name="ChkClicknload"
+                                                          Margin="5,5,5,0"
+                                                          HorizontalAlignment="Left"
+                                                          VerticalAlignment="Top"
+                                                          Content="{x:Static p:Strings.Settings_ClicknLoad}"
+                                                          IsChecked="{Binding ClicknLoad}" />
 
-                                        <StackPanel>
-                                            <CheckBox x:Name="ChkInstantVideo"
-                                                      Margin="5,5,5,0"
-                                                      HorizontalAlignment="Left"
-                                                      VerticalAlignment="Top"
-                                                      Content="{x:Static p:Strings.Settings_InstantVideo}"
-                                                      IsChecked="{Binding InstantVideo}" />
-                                            <CheckBox x:Name="ChkSearchUpdates"
-                                                      Margin="5,5,5,0"
-                                                      HorizontalAlignment="Left"
-                                                      VerticalAlignment="Top"
-                                                      Content="{x:Static p:Strings.Settings_SearchUpdates}"
-                                                      IsChecked="{Binding SearchUpdates}" />
-                                            <StackPanel Orientation="Horizontal">
-                                                <RadioButton x:Name="RdLangGerman"
-                                                             Margin="5,5,5,0"
-                                                             Content="{x:Static p:Strings.Settings_Language_German}"
-                                                             GroupName="Language"
-                                                             IsChecked="{Binding Language,
-                                                                                 Converter={StaticResource Langconvert},
-                                                                                 ConverterParameter=de}" />
-                                                <RadioButton x:Name="RdLangEnglish"
-                                                             Margin="5,5,5,0"
-                                                             Content="{x:Static p:Strings.Settings_Language_English}"
-                                                             GroupName="Language"
-                                                             IsChecked="{Binding Language,
-                                                                                 Converter={StaticResource Langconvert},
-                                                                                 ConverterParameter=en}" />
 
                                             </StackPanel>
 
-                                        </StackPanel>
-
-
-
-                                    </StackPanel>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox Header="Aussehen">
-                                <StackPanel>
-
-                                    <ComboBox x:Name="ComBAppAccent"
-                                              Margin="0,5,0,10"
-                                              Controls:TextBoxHelper.UseFloatingWatermark="True"
-                                              Controls:TextBoxHelper.Watermark="Accent"
-                                              DisplayMemberPath="Name"
-                                              IsReadOnly="True"
-                                              ItemsSource="{Binding AppAccentList}"
-                                              SelectedValue="{Binding AppAccent,
-                                                                      Mode=TwoWay}" />
-
-                                    <ComboBox x:Name="ComBAppTheme"
-                                              Panel.ZIndex="11"
-                                              Controls:TextBoxHelper.UseFloatingWatermark="True"
-                                              Controls:TextBoxHelper.Watermark="App Theme"
-                                              DisplayMemberPath="Name"
-                                              IsReadOnly="True"
-                                              ItemsSource="{Binding AppThemeList}"
-                                              SelectedValue="{Binding AppTheme,
-                                                                      Mode=TwoWay}" />
-
-                                </StackPanel>
-
-                            </GroupBox>
-
-                            <GroupBox x:Name="GroupBoxDownloadSettings" Header="{x:Static p:Strings.Settings_DownloadSettings}">
-                                <Grid>
-                                    <StackPanel Orientation="Horizontal">
-
-                                        <StackPanel>
-                                            <TextBox x:Name="TxtDownloadPath"
-                                                     Width="208"
-                                                     Height="42"
-                                                     Margin="5,5,0,0"
-                                                     HorizontalAlignment="Left"
-                                                     Controls:TextBoxHelper.UseFloatingWatermark="True"
-                                                     Controls:TextBoxHelper.Watermark="{x:Static p:Strings.Settings_DownloadDir}"
-                                                     IsReadOnly="True"
-                                                     Text="{Binding DownloadDirectory}" />
-                                            <CheckBox x:Name="ChkCreatePackageSubfolder"
-                                                      Margin="5,5,0,5"
-                                                      Content="{x:Static p:Strings.Settings_CreateSubfolderEachPackage}"
-                                                      IsChecked="{Binding CreatePackageSubfolder}" />
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <Button x:Name="CmdSearchDownloadPath"
-                                                    Margin="5,5,0,0"
-                                                    Command="{Binding SelectDownloadFolderCommand}">
+                                            <StackPanel>
+                                                <CheckBox x:Name="ChkInstantVideo"
+                                                          Margin="5,5,5,0"
+                                                          HorizontalAlignment="Left"
+                                                          VerticalAlignment="Top"
+                                                          Content="{x:Static p:Strings.Settings_InstantVideo}"
+                                                          IsChecked="{Binding InstantVideo}" />
+                                                <CheckBox x:Name="ChkSearchUpdates"
+                                                          Margin="5,5,5,0"
+                                                          HorizontalAlignment="Left"
+                                                          VerticalAlignment="Top"
+                                                          Content="{x:Static p:Strings.Settings_SearchUpdates}"
+                                                          IsChecked="{Binding SearchUpdates}" />
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Rectangle Width="16"
-                                                               Height="16"
-                                                               Margin="0,0,5,0"
-                                                               Fill="{DynamicResource AccentColorBrush}">
-                                                        <Rectangle.OpacityMask>
-                                                            <VisualBrush Visual="{StaticResource appbar_folder_open}" />
-                                                        </Rectangle.OpacityMask>
-                                                    </Rectangle>
-                                                    <TextBlock Margin="0,4,0,0" Text="{x:Static p:Strings.VariousStrings_SearchFolderFile}" />
+                                                    <RadioButton x:Name="RdLangGerman"
+                                                                 Margin="5,5,5,0"
+                                                                 Content="{x:Static p:Strings.Settings_Language_German}"
+                                                                 GroupName="Language"
+                                                                 IsChecked="{Binding Language,
+                                                                                     Converter={StaticResource Langconvert},
+                                                                                     ConverterParameter=de}" />
+                                                    <RadioButton x:Name="RdLangEnglish"
+                                                                 Margin="5,5,5,0"
+                                                                 Content="{x:Static p:Strings.Settings_Language_English}"
+                                                                 GroupName="Language"
+                                                                 IsChecked="{Binding Language,
+                                                                                     Converter={StaticResource Langconvert},
+                                                                                     ConverterParameter=en}" />
+
                                                 </StackPanel>
-                                            </Button>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </Grid>
-                            </GroupBox>
-                            <GroupBox x:Name="GroupBoxAdvancedDownloadSettings" Header="{x:Static p:Strings.Settings_AdvancedDownloadSettings}">
-                                <Grid>
-                                    <StackPanel Orientation="Horizontal">
-                                        <StackPanel>
-                                            <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_ExistingFile}" />
-                                            <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_MaximumThreads}" />
-                                            <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_MaximumRetries}" />
-                                            <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_WaitTimeRetries}" />
-                                        </StackPanel>
-                                        <StackPanel>
-                                            <StackPanel Margin="0,8,0,0" Orientation="Horizontal">
-                                                <RadioButton Margin="0,0,5,0"
-                                                             Content="{x:Static p:Strings.Settings_ExistingFile_Append}"
-                                                             GroupName="FileHandling"
-                                                             IsChecked="{Binding ExistingFileHandling,
-                                                                                 Converter={StaticResource Filehandlingconvert},
-                                                                                 ConverterParameter=ResumeFile}" />
-                                                <RadioButton Content="{x:Static p:Strings.Settings_ExistingFile_Overwrite}"
-                                                             GroupName="FileHandling"
-                                                             IsChecked="{Binding ExistingFileHandling,
-                                                                                 Converter={StaticResource Filehandlingconvert},
-                                                                                 ConverterParameter=OverwriteFile}" />
+
                                             </StackPanel>
 
-                                            <Controls:NumericUpDown x:Name="NumMaxThreads"
-                                                                    Width="147"
-                                                                    Margin="5,5,5,0"
-                                                                    Maximum="100"
-                                                                    Minimum="1"
-                                                                    Value="{Binding MaxDownloadThreads}" />
-                                            <Controls:NumericUpDown x:Name="NumMaxRetries"
-                                                                    Width="147"
-                                                                    Margin="5,5,5,0"
-                                                                    Maximum="100"
-                                                                    Minimum="1"
-                                                                    Value="{Binding MaxRetry}" />
-                                            <Controls:NumericUpDown x:Name="NumWaitRetries"
-                                                                    Width="147"
-                                                                    Margin="5,5,5,0"
-                                                                    Maximum="120"
-                                                                    Minimum="1"
-                                                                    Value="{Binding RetryWaitTime}" />
+
+
                                         </StackPanel>
+                                    </Grid>
+                                </GroupBox>
+
+                                <GroupBox MinWidth="400" Header="Aussehen">
+                                    <StackPanel>
+
+                                        <ComboBox x:Name="ComBAppAccent"
+                                                  Margin="0,5,0,10"
+                                                  Controls:TextBoxHelper.UseFloatingWatermark="True"
+                                                  Controls:TextBoxHelper.Watermark="Accent"
+                                                  DisplayMemberPath="Name"
+                                                  IsReadOnly="True"
+                                                  ItemsSource="{Binding AppAccentList}"
+                                                  SelectedValue="{Binding AppAccent,
+                                                                          Mode=TwoWay}" />
+
+                                        <ComboBox x:Name="ComBAppTheme"
+                                                  Panel.ZIndex="11"
+                                                  Controls:TextBoxHelper.UseFloatingWatermark="True"
+                                                  Controls:TextBoxHelper.Watermark="App Theme"
+                                                  DisplayMemberPath="Name"
+                                                  IsReadOnly="True"
+                                                  ItemsSource="{Binding AppThemeList}"
+                                                  SelectedValue="{Binding AppTheme,
+                                                                          Mode=TwoWay}" />
+
                                     </StackPanel>
-                                </Grid>
-                            </GroupBox>
-                            <GroupBox x:Name="GroupBoxAdvancedSettings"
-                                      Margin="5"
-                                      Header="Erweiterte Einstellungen">
+
+                                </GroupBox>
+
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+
+                                <GroupBox x:Name="GroupBoxDownloadSettings"
+                                          MinWidth="332"
+                                          Header="{x:Static p:Strings.Settings_DownloadSettings}">
+                                    <Grid>
+                                        <StackPanel Orientation="Horizontal">
+
+                                            <StackPanel>
+                                                <TextBox x:Name="TxtDownloadPath"
+                                                         Width="208"
+                                                         Height="42"
+                                                         Margin="5,5,0,0"
+                                                         HorizontalAlignment="Left"
+                                                         Controls:TextBoxHelper.UseFloatingWatermark="True"
+                                                         Controls:TextBoxHelper.Watermark="{x:Static p:Strings.Settings_DownloadDir}"
+                                                         IsReadOnly="True"
+                                                         Text="{Binding DownloadDirectory}" />
+                                                <CheckBox x:Name="ChkCreatePackageSubfolder"
+                                                          Margin="5,5,0,5"
+                                                          Content="{x:Static p:Strings.Settings_CreateSubfolderEachPackage}"
+                                                          IsChecked="{Binding CreatePackageSubfolder}" />
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <Button x:Name="CmdSearchDownloadPath"
+                                                        Margin="5,5,0,0"
+                                                        Command="{Binding SelectDownloadFolderCommand}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Rectangle Width="16"
+                                                                   Height="16"
+                                                                   Margin="0,0,5,0"
+                                                                   Fill="{DynamicResource AccentColorBrush}">
+                                                            <Rectangle.OpacityMask>
+                                                                <VisualBrush Visual="{StaticResource appbar_folder_open}" />
+                                                            </Rectangle.OpacityMask>
+                                                        </Rectangle>
+                                                        <TextBlock Margin="0,4,0,0" Text="{x:Static p:Strings.VariousStrings_SearchFolderFile}" />
+                                                    </StackPanel>
+                                                </Button>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </GroupBox>
+                                <GroupBox x:Name="GroupBoxAdvancedDownloadSettings"
+                                          MinWidth="400"
+                                          Header="{x:Static p:Strings.Settings_AdvancedDownloadSettings}">
+                                    <Grid>
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel>
+                                                <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_ExistingFile}" />
+                                                <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_MaximumThreads}" />
+                                                <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_MaximumRetries}" />
+                                                <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_WaitTimeRetries}" />
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <StackPanel Margin="0,8,0,0" Orientation="Horizontal">
+                                                    <RadioButton Margin="0,0,5,0"
+                                                                 Content="{x:Static p:Strings.Settings_ExistingFile_Append}"
+                                                                 GroupName="FileHandling"
+                                                                 IsChecked="{Binding ExistingFileHandling,
+                                                                                     Converter={StaticResource Filehandlingconvert},
+                                                                                     ConverterParameter=ResumeFile}" />
+                                                    <RadioButton Content="{x:Static p:Strings.Settings_ExistingFile_Overwrite}"
+                                                                 GroupName="FileHandling"
+                                                                 IsChecked="{Binding ExistingFileHandling,
+                                                                                     Converter={StaticResource Filehandlingconvert},
+                                                                                     ConverterParameter=OverwriteFile}" />
+                                                </StackPanel>
+
+                                                <Controls:NumericUpDown x:Name="NumMaxThreads"
+                                                                        Width="147"
+                                                                        Margin="5,5,5,0"
+                                                                        Maximum="100"
+                                                                        Minimum="1"
+                                                                        Value="{Binding MaxDownloadThreads}" />
+                                                <Controls:NumericUpDown x:Name="NumMaxRetries"
+                                                                        Width="147"
+                                                                        Margin="5,5,5,0"
+                                                                        Maximum="100"
+                                                                        Minimum="1"
+                                                                        Value="{Binding MaxRetry}" />
+                                                <Controls:NumericUpDown x:Name="NumWaitRetries"
+                                                                        Width="147"
+                                                                        Margin="5,5,5,0"
+                                                                        Maximum="120"
+                                                                        Minimum="1"
+                                                                        Value="{Binding RetryWaitTime}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </GroupBox>
+
+                            </StackPanel>
+
+                            <GroupBox x:Name="GroupBoxAdvancedSettings" Header="Erweiterte Einstellungen">
                                 <Grid>
                                     <StackPanel Orientation="Horizontal">
                                         <StackPanel>
@@ -225,6 +236,7 @@
                                     </StackPanel>
                                 </Grid>
                             </GroupBox>
+
                         </StackPanel>
                     </Grid>
                 </TabItem>
@@ -252,8 +264,8 @@
                                             <Label Content="{x:Static p:Strings.Settings_PasswordList}" />
                                             <StackPanel Orientation="Horizontal">
                                                 <ListBox x:Name="ListBoxUnrarPasswords"
-                                                         Width="298"
-                                                         Height="100"
+                                                         MinWidth="298"
+                                                         MinHeight="100"
                                                          BorderThickness="1"
                                                          ItemsSource="{Binding UnRARPasswordList}"
                                                          SelectedItem="{Binding SelectedUnRARPassword,
@@ -447,8 +459,7 @@
                                             </Menu>
                                         </ToolBar>
                                         <TextBox x:Name="TxtSpeedreportTemplate"
-                                                 Height="123"
-                                                 Margin="5"
+                                                 MinHeight="123"
                                                  AcceptsReturn="True"
                                                  BorderThickness="1"
                                                  IsEnabled="{Binding SpeedreportEnabled}"
@@ -508,7 +519,10 @@
                 -->
             </TabControl>
             <Button x:Name="CmdSaveSettings"
-                    Margin="150,10,150,15"
+                    MaxWidth="100"
+                    MaxHeight="30"
+                    Margin="0,10"
+                    BorderBrush="Black"
                     Command="{Binding SaveSettingsCommand}">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="16"

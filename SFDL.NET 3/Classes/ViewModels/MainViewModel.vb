@@ -49,6 +49,7 @@ Public Class MainViewModel
     Private Sub SaveSessions()
 
         Dim _path As String = Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3", "Sessions")
+        Dim _log As Logger = LogManager.GetLogger("SaveSessions")
 
         If Directory.Exists(_path) = False Then
             Directory.CreateDirectory(_path)
@@ -61,10 +62,11 @@ Public Class MainViewModel
         For Each _session In ContainerSessions
 
             Try
-
+                _log.Info(String.Format("Saving Session {0}", _session.ID.ToString()))
                 XMLSerialize(_session, Path.Combine(_path, _session.ID.ToString & ".session"))
 
             Catch ex As Exception
+                _log.Error(ex, ex.Message)
             End Try
 
         Next
@@ -74,6 +76,7 @@ Public Class MainViewModel
     Private Sub LoadSavedSessions()
 
         Dim _path As String = Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3", "Sessions")
+        Dim _log As Logger = LogManager.GetLogger("LoadSavedSessions")
 
         Task.Run(Sub()
 
@@ -84,6 +87,8 @@ Public Class MainViewModel
                              Dim _new_session As New ContainerSession
 
                              Try
+
+                                 _log.Info(String.Format("Loading Sessions {0}", _file))
 
                                  _new_session = XMLDeSerialize(_new_session, _file)
                                  _new_session.WIG = Nothing
@@ -97,7 +102,7 @@ Public Class MainViewModel
                                  File.Delete(_file)
 
                              Catch ex As Exception
-
+                                 _log.Error(ex, ex.Message)
                              End Try
 
                          Next
