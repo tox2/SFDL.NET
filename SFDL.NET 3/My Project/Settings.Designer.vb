@@ -79,30 +79,6 @@ Partial Friend NotInheritable Class MySettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-    Public Property UserWindowTop() As Double
-        Get
-            Return CType(Me("UserWindowTop"),Double)
-        End Get
-        Set
-            Me("UserWindowTop") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-    Public Property UserWindowLeft() As Double
-        Get
-            Return CType(Me("UserWindowLeft"),Double)
-        End Get
-        Set
-            Me("UserWindowLeft") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Configuration.DefaultSettingValueAttribute("Normal")>  _
     Public Property UserWindowState() As Global.System.Windows.WindowState
         Get

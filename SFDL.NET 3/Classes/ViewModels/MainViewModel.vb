@@ -1,4 +1,5 @@
 ﻿Imports System.Collections.Specialized
+Imports System.ComponentModel
 Imports System.Text.RegularExpressions
 Imports Amib.Threading
 Imports SFDL.NET3
@@ -1247,18 +1248,17 @@ Decrypt:
 
     End Sub
 
+    'Private _curr_selected_item As DownloadItem = Nothing
 
-    Private _curr_selected_item As DownloadItem = Nothing
-
-    Public Property SelectedDownloadItem As DownloadItem
-        Set(value As DownloadItem)
-            _curr_selected_item = value
-            RaisePropertyChanged("SelectedDownloadItem")
-        End Set
-        Get
-            Return _curr_selected_item
-        End Get
-    End Property
+    'Public Property SelectedDownloadItem As DownloadItem
+    '    Set(value As DownloadItem)
+    '        _curr_selected_item = value
+    '        RaisePropertyChanged("SelectedDownloadItem")
+    '    End Set
+    '    Get
+    '        Return _curr_selected_item
+    '    End Get
+    'End Property
 
     Public ReadOnly Property CloseSFDLContainerCommand() As ICommand
         Get
@@ -1426,24 +1426,19 @@ Decrypt:
 
 #End Region
 
-    Private _max_download_speed As String = String.Empty
+    Private _max_download_speed As String
     Public Property MaxDownloadSpeed As String
+
         Set(value As String)
 
-            If Not String.IsNullOrWhiteSpace(value) Then
+            If Equals(value, _max_download_speed) Then
+                Return
+            End If
 
-                If IsNumeric(value) Then
-
-                    If value >= Integer.MinValue And value <= Integer.MaxValue Then
-                        _max_download_speed = value
-                    Else
-                        _max_download_speed = String.Empty
-                    End If
-
-                End If
-
+            If IsNumeric(value) Or String.IsNullOrEmpty(value) Then
+                _max_download_speed = value
             Else
-                _max_download_speed = String.Empty
+                Return
             End If
 
             RaisePropertyChanged("MaxDownloadSpeed")
@@ -1461,6 +1456,7 @@ Decrypt:
             Return New DelegateCommand(AddressOf HandlePreviewDrop)
         End Get
     End Property
+
 
     Private _PreviewDropCommand As ICommand
     Private Sub HandlePreviewDrop(inObject As Object)

@@ -49,14 +49,6 @@ Public Class MainWindow
                 Me.Width = My.Settings.UserWindowWitdh
             End If
 
-            If Not My.Settings.UserWindowTop = 0 Then
-                Me.Top = My.Settings.UserWindowTop
-            End If
-
-            If Not My.Settings.UserWindowLeft = 0 Then
-                Me.Left = My.Settings.UserWindowLeft
-            End If
-
         Else
             Me.WindowState = WindowState.Maximized
         End If
@@ -125,9 +117,6 @@ Public Class MainWindow
             My.Settings.UserWindowHeight = Me.Height
             My.Settings.UserWindowWitdh = Me.Width
 
-            My.Settings.UserWindowTop = Me.Top
-            My.Settings.UserWindowLeft = Me.Left
-
             My.Settings.Save()
 
         End If
@@ -142,7 +131,7 @@ Public Class MainWindow
 
     Private Sub OnGridKeyUp(sender As Object, e As KeyEventArgs)
 
-        If Not IsNothing(ListView_DownloadItems.SelectedItems) AndAlso e.Key = Key.Space Then
+        If Not IsNothing(ListView_DownloadItems.SelectedItems) AndAlso e.Key = Key.Enter Then
 
             For Each _item As DownloadItem In ListView_DownloadItems.SelectedItems
 
