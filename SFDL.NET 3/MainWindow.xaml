@@ -339,9 +339,9 @@
                         </Rectangle.OpacityMask>
                     </Rectangle>
                     <TextBox Width="120"
+                             Controls:TextBoxHelper.ClearTextButton="True"
                              Controls:TextBoxHelper.UseFloatingWatermark="True"
                              Controls:TextBoxHelper.Watermark="Max KB/s"
-                             Controls:TextBoxHelper.ClearTextButton="True"
                              Text="{Binding MaxDownloadSpeed,
                                             UpdateSourceTrigger=PropertyChanged}" />
                 </ToolBar>
@@ -354,7 +354,14 @@
                         BorderThickness="0"
                         Command="{Binding ShowContainerInfoCommand}">
                     <StackPanel>
-                        <Image Source="Resources/Icons/appbar.layer.png" />
+                        <Rectangle Width="16"
+                                   Height="16"
+                                   Margin="5,0"
+                                   Fill="{DynamicResource AccentColorBrush}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Visual="{StaticResource appbar_layer}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
                     </StackPanel>
                 </Button>
             </Grid>

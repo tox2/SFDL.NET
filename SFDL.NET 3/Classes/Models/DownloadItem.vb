@@ -19,7 +19,8 @@ Public Class DownloadItem
     Private _status_string As String = String.Empty
     Private _id As Guid
 
-    Public Sub New(ByVal _fileitem As SFDL.Container.FileItem)
+
+    Public Sub Init(ByVal _fileitem As SFDL.Container.FileItem)
 
         Me.DirectoryPath = _fileitem.DirectoryPath
         Me.DirectoryRoot = _fileitem.DirectoryRoot
@@ -37,6 +38,7 @@ Public Class DownloadItem
         _id = New Guid
 
     End Sub
+
 
     Public Property isSelected As Boolean
         Set(value As Boolean)

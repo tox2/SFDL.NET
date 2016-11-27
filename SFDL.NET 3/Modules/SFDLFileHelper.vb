@@ -153,7 +153,9 @@
             For Each _file In _package.FileList
                 'ToDo: Prüfen ob eintrage plausibel sind
 
-                Dim _dl_item As New DownloadItem(_file)
+                Dim _dl_item As New DownloadItem()
+
+                _dl_item.Init(_file)
 
                 With _dl_item
 

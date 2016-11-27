@@ -31,9 +31,74 @@ Public Class MainViewModel
 
         CreateView()
 
+        LoadSavedSessions()
+
     End Sub
 
 #Region "Private Subs"
+
+    Private Sub SaveSessions()
+
+        Dim _path As String = IO.Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3", "Sessions")
+
+        If IO.Directory.Exists(_path) = False Then
+            IO.Directory.CreateDirectory(_path)
+        End If
+
+        For Each _file In IO.Directory.GetFiles(_path, "*.session")
+            IO.File.Delete(_file)
+        Next
+
+        For Each _session In ContainerSessions
+
+            Try
+
+                XMLHelper.XMLSerialize(_session, IO.Path.Combine(_path, _session.ID.ToString & ".session"))
+
+            Catch ex As Exception
+            End Try
+
+        Next
+
+    End Sub
+
+    Private Sub LoadSavedSessions()
+
+        Dim _path As String = IO.Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3", "Sessions")
+
+        System.Threading.Tasks.Task.Run(Sub()
+
+                                            If IO.Directory.Exists(_path) Then
+
+                                                For Each _file In IO.Directory.GetFiles(_path, "*.session")
+
+                                                    Dim _new_session As New ContainerSession
+
+                                                    Try
+
+                                                        _new_session = XMLHelper.XMLDeSerialize(_new_session, _file)
+                                                        _new_session.WIG = Nothing
+
+                                                        For Each _item In _new_session.DownloadItems
+                                                            DownloadItems.Add(_item)
+                                                        Next
+
+                                                        ContainerSessions.Add(_new_session)
+
+                                                        IO.File.Delete(_file)
+
+                                                    Catch ex As Exception
+
+                                                    End Try
+
+                                                Next
+
+                                            End If
+
+                                        End Sub)
+
+
+    End Sub
 
     Private Sub CreateView()
 
@@ -107,7 +172,8 @@ Decrypt:
 
             End If
 
-            _mycontainer_session = New ContainerSession(_mycontainer)
+            _mycontainer_session = New ContainerSession()
+            _mycontainer_session.Init(_mycontainer)
             _mycontainer_session.ContainerFileName = IO.Path.GetFileNameWithoutExtension(_sfdl_container_path)
             _mycontainer_session.ContainerFilePath = _sfdl_container_path
 
@@ -535,7 +601,6 @@ Decrypt:
                 _session.SessionState = ContainerSessionState.Queued
                 _session.SingleSessionMode = False
                 _session.WIG = Nothing
-                _session.UnRARSynLock = New Object
                 _session.SynLock = New Object
                 _session.DownloadStartedTime = Date.MinValue
                 _session.DownloadStoppedTime = Date.MinValue
@@ -1429,6 +1494,11 @@ Decrypt:
         End If
 
 
+    End Sub
+
+    Protected Overrides Sub Finalize()
+        SaveSessions()
+        MyBase.Finalize()
     End Sub
 #End Region
 
