@@ -15,6 +15,7 @@
                       IsMaxRestoreButtonEnabled="False"
                       SizeToContent="WidthAndHeight"
                       WindowStartupLocation="CenterOwner"
+                      SaveWindowPosition="True"
                       mc:Ignorable="d">
 
     <Window.Resources>
