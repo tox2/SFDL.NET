@@ -336,7 +336,7 @@ Decrypt:
         Try
 
             If DownloadItems.Where(Function(myitem) myitem.DownloadStatus = DownloadItem.Status.Queued).Count = 0 Then
-                Throw New Exception("You must select minumum 1 Item to Download!")
+                Throw New Exception("You must select minimum 1 Item to Download!")
             End If
 
             If String.IsNullOrWhiteSpace(_settings.DownloadDirectory) Then
