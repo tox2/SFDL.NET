@@ -154,7 +154,8 @@
                                             <StackPanel>
                                                 <Button x:Name="CmdSearchDownloadPath"
                                                         Margin="5,5,0,0"
-                                                        Command="{Binding SelectDownloadFolderCommand}">
+                                                        Command="{Binding SelectDownloadFolderCommand}"
+                                                        Background="{DynamicResource BaseColorBrush}">
                                                     <StackPanel Orientation="Horizontal">
                                                         <Rectangle Width="16"
                                                                    Height="16"
@@ -278,13 +279,15 @@
                                                             Height="24"
                                                             Margin="5,5,5,0"
                                                             Command="{Binding AddUnRARPasswordCommand}"
-                                                            Content="+" />
+                                                            Content="+" 
+                                                            Background="{DynamicResource BaseColorBrush}"/>
                                                     <Button x:Name="CmdRemoveUnrarPw"
                                                             Width="24"
                                                             Height="24"
                                                             Margin="5,5,5,0"
                                                             Command="{Binding RemoveUnRARPasswordCommand}"
-                                                            Content="-" />
+                                                            Content="-"
+                                                            Background="{DynamicResource BaseColorBrush}"/>
                                                 </StackPanel>
                                             </StackPanel>
                                         </StackPanel>
@@ -331,8 +334,8 @@
                                         <ToolBar Margin="5,0"
                                                  IsEnabled="{Binding SpeedreportEnabled}"
                                                  ToolBarTray.IsLocked="True">
-                                            <Menu>
-                                                <MenuItem Header="{x:Static p:Strings.VariousStrings_Variables}">
+                                            <Menu Background="{DynamicResource BaseColorBrush}">
+                                                <MenuItem Header="{x:Static p:Strings.VariousStrings_Variables}" Background="{DynamicResource BaseColorBrush}">
                                                     <MenuItem.Icon>
                                                         <Rectangle Width="16"
                                                                    Height="16"
@@ -343,6 +346,7 @@
                                                         </Rectangle>
                                                     </MenuItem.Icon>
                                                     <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                              Background="{DynamicResource BaseColorBrush}"
                                                               CommandParameter="username"
                                                               Header="{x:Static p:Strings.VariousStrings_Username}">
                                                         <MenuItem.Icon>
@@ -356,6 +360,7 @@
                                                         </MenuItem.Icon>
                                                     </MenuItem>
                                                     <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                              Background="{DynamicResource BaseColorBrush}"
                                                               CommandParameter="connection"
                                                               Header="{x:Static p:Strings.VariousStrings_Connection}">
                                                         <MenuItem.Icon>
@@ -369,6 +374,7 @@
                                                         </MenuItem.Icon>
                                                     </MenuItem>
                                                     <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                              Background="{DynamicResource BaseColorBrush}"
                                                               CommandParameter="comment"
                                                               Header="{x:Static p:Strings.VariousStrings_Comment}">
                                                         <MenuItem.Icon>
@@ -382,6 +388,7 @@
                                                         </MenuItem.Icon>
                                                     </MenuItem>
                                                     <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                              Background="{DynamicResource BaseColorBrush}"
                                                               CommandParameter="downloadspeed"
                                                               Header="{x:Static p:Strings.VariousStrings_DownloadSpeed}">
                                                         <MenuItem.Icon>
@@ -394,7 +401,7 @@
                                                             </Rectangle>
                                                         </MenuItem.Icon>
                                                     </MenuItem>
-                                                    <MenuItem Header="{x:Static p:Strings.VariousStrings_SFDLInformation}">
+                                                    <MenuItem Header="{x:Static p:Strings.VariousStrings_SFDLInformation}" Background="{DynamicResource BaseColorBrush}">
                                                         <MenuItem.Icon>
                                                             <Rectangle Width="16"
                                                                        Height="16"
@@ -405,6 +412,7 @@
                                                             </Rectangle>
                                                         </MenuItem.Icon>
                                                         <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                                  Background="{DynamicResource BaseColorBrush}"
                                                                   CommandParameter="sfdl_description"
                                                                   Header="{x:Static p:Strings.VariousStrings_Description}">
                                                             <MenuItem.Icon>
@@ -418,6 +426,7 @@
                                                             </MenuItem.Icon>
                                                         </MenuItem>
                                                         <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                                  Background="{DynamicResource BaseColorBrush}"
                                                                   CommandParameter="sfdl_uploader"
                                                                   Header="{x:Static p:Strings.VariousStrings_Uploader}">
                                                             <MenuItem.Icon>
@@ -431,6 +440,7 @@
                                                             </MenuItem.Icon>
                                                         </MenuItem>
                                                         <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                                  Background="{DynamicResource BaseColorBrush}"
                                                                   CommandParameter="sfdl_downloadsize"
                                                                   Header="{x:Static p:Strings.VariousStrings_FullDownloadSize}">
                                                             <MenuItem.Icon>
@@ -445,6 +455,7 @@
                                                         </MenuItem>
                                                     </MenuItem>
                                                     <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                              Background="{DynamicResource BaseColorBrush}"
                                                               CommandParameter="downloadtime"
                                                               Header="{x:Static p:Strings.VariousStrings_NeededDownloadTime}">
                                                         <MenuItem.Icon>

@@ -73,7 +73,7 @@
 
         If Not _container_session.ContainerFile.Packages.Where(Function(mypackage) mypackage.BulkFolderMode = False).Count = 0 Then
 
-            If Not _fingerprint & _container_session.ContainerFile.Packages(0).FileList.Count = 0 Then
+            If Not _container_session.ContainerFile.Packages(0).FileList.Count = 0 Then
                 _fingerprint = _fingerprint & _container_session.ContainerFile.Packages(0).FileList(0).FileName
                 _fingerprint = _fingerprint & IO.Path.GetDirectoryName(_container_session.ContainerFile.Packages(0).FileList(0).FullPath)
             End If
@@ -322,9 +322,9 @@
                 _download_dir = IO.Path.Combine(_download_dir, _item.PackageName)
             End If
 
-            If Not IO.Directory.Exists(_download_dir) Then
-                IO.Directory.CreateDirectory(_download_dir)
-            End If
+            'If Not IO.Directory.Exists(_download_dir) Then
+            '    IO.Directory.CreateDirectory(_download_dir)
+            'End If
 
             _dowload_local_filename = IO.Path.Combine(_download_dir, _item.FileName)
 

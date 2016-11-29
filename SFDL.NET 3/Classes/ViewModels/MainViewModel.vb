@@ -141,7 +141,7 @@ Public Class MainViewModel
 
         Try
 
-            Dim _bulk_result As Boolean
+            Dim _bulk_result As Boolean = False
 
             Select Case GetContainerVersion(_sfdl_container_path)
 
@@ -206,6 +206,8 @@ Decrypt:
 
             If Not _mycontainer_session.ContainerFile.Packages.Where(Function(mypackage) mypackage.BulkFolderMode = True).Count = 0 Then
                 _bulk_result = Await Task.Run(Function() GetBulkFileList(_mycontainer_session))
+            Else
+                _bulk_result = True
             End If
 
             GenerateContainerSessionDownloadItems(_mycontainer_session, _settings.NotMarkAllContainerFiles)
