@@ -1480,7 +1480,7 @@ Decrypt:
                 ElseIf File.Exists(fullPath) Then
                     Debug.WriteLine("{0} is a file", fullPath)
 
-                    If Path.GetExtension(fullPath) = ".sfdl" Then
+                    If Path.GetExtension(fullPath).ToLower = ".sfdl" Then
                         OpenSFDLFile(fullPath)
                     End If
 
