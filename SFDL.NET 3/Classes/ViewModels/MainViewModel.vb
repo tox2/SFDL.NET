@@ -93,7 +93,10 @@ Public Class MainViewModel
                                  _new_session = XMLDeSerialize(_new_session, _file)
                                  _new_session.WIG = Nothing
 
+
                                  For Each _item In _new_session.DownloadItems
+                                     'Update DownloadPath cause it could have changed
+                                     _item.LocalFile = GetDownloadFilePath(Application.Current.Resources("Settings"), _new_session, _item)
                                      DownloadItems.Add(_item)
                                  Next
 
@@ -213,7 +216,7 @@ Decrypt:
             GenerateContainerSessionDownloadItems(_mycontainer_session, _settings.NotMarkAllContainerFiles)
 
             If _bulk_result = False Or _mycontainer_session.DownloadItems.Count = 0 Then
-                Throw New Exception(String.Format("'{0}' - Öffnen fehlgeschlagen - Bulk Package konnte nicht gelesen werden", Path.GetFileName(_sfdl_container_path)))
+                Throw New Exception(String.Format("'{0}' - Try FTP Link, Server is propaply down", Path.GetFileName(_sfdl_container_path)))
             End If
 
 
@@ -1243,20 +1246,28 @@ Decrypt:
 
     Private Sub OpenParentFolder(ByVal parameter As Object)
 
-        If Not IsNothing(parameter) Then
+        Dim _log As Logger = LogManager.GetLogger("OpenParentFolder")
 
-            Dim _item As DownloadItem = TryCast(parameter, DownloadItem)
-            Dim _folder_path As String
+        Try
 
-            _folder_path = Path.GetDirectoryName(_item.LocalFile)
+            If Not IsNothing(parameter) Then
 
-            Debug.WriteLine(_folder_path)
+                Dim _item As DownloadItem = TryCast(parameter, DownloadItem)
+                Dim _folder_path As String
 
-            If Not String.IsNullOrWhiteSpace(_folder_path) And Directory.Exists(_folder_path) Then
-                Process.Start("explorer.exe", String.Format("{0}{1}{2}", Chr(34), _folder_path, Chr(34)))
+                _folder_path = Path.GetDirectoryName(_item.LocalFile)
+
+                Debug.WriteLine(_folder_path)
+
+                If Not String.IsNullOrWhiteSpace(_folder_path) And Directory.Exists(_folder_path) Then
+                    Process.Start("explorer.exe", String.Format("{0}{1}{2}", Chr(34), _folder_path, Chr(34)))
+                End If
+
             End If
 
-        End If
+        Catch ex As Exception
+            _log.Error(ex, ex.Message)
+        End Try
 
     End Sub
 
