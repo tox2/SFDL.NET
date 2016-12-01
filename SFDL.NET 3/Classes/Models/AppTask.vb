@@ -31,19 +31,19 @@ Public Class AppTask
 
             Case TaskStatus.Faulted
 
-                _taskstatusimage = "Resources/Icons/appbar.stop.png"
+                _taskstatusimage = "Faulted"
 
             Case TaskStatus.Canceled
 
-                _taskstatusimage = "Resources/Icons/appbar.stop.png"
+                _taskstatusimage = "Canceled"
 
             Case TaskStatus.Running
 
-                _taskstatusimage = "Resources/Icons/appbar.control.fastforward.variant.png"
+                _taskstatusimage = "Running"
 
             Case TaskStatus.RanToCompletion
 
-                _taskstatusimage = "Resources/Icons/appbar.check.png"
+                _taskstatusimage = "RanToCompletion"
 
         End Select
 

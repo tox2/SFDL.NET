@@ -26,6 +26,33 @@
         <ResourceDictionary>
             <local:InvertBooleanConverter x:Key="boolConvert" />
             <local:CollectionViewNameConverter x:Key="CollectionViewNameConv" />
+
+            <VisualBrush x:Key="DownloadStatusNone" Visual="{StaticResource appbar_sign_parking}" />
+            <VisualBrush x:Key="DownloadStatusQueued" Visual="{StaticResource appbar_clock}" />
+            <VisualBrush x:Key="DownloadStatusCompleted" Visual="{StaticResource appbar_check}" />
+            <VisualBrush x:Key="DownloadStatusCompleted_HashValid" Visual="{StaticResource appbar_check}" />
+            <VisualBrush x:Key="DownloadStatusCompleted_HashInvalid" Visual="{StaticResource appbar_alert}" />
+            <VisualBrush x:Key="DownloadStatusRunning" Visual="{StaticResource appbar_cabinet_in}" />
+            <VisualBrush x:Key="DownloadStatusStopped" Visual="{StaticResource appbar_control_stop}" />
+            <VisualBrush x:Key="DownloadStatusFailed" Visual="{StaticResource appbar_stop}" />
+            <VisualBrush x:Key="DownloadStatusFailed_FileNameTooLong" Visual="{StaticResource appbar_dimension_arrow_line_width}" />
+            <VisualBrush x:Key="DownloadStatusFailed_NotEnoughDiskSpace" Visual="{StaticResource appbar_stop}" />
+            <VisualBrush x:Key="DownloadStatusFailed_ServerFull" Visual="{StaticResource appbar_cup_full}" />
+            <VisualBrush x:Key="DownloadStatusFailed_ServerDown" Visual="{StaticResource appbar_network_server_disconnect}" />
+            <VisualBrush x:Key="DownloadStatusFailed_ConnectionError" Visual="{StaticResource appbar_network_server_disconnect}" />
+            <VisualBrush x:Key="DownloadStatusFailed_AuthError" Visual="{StaticResource appbar_user_delete}" />
+            <VisualBrush x:Key="DownloadStatusFailed_FileNotFound" Visual="{StaticResource appbar_page_delete}" />
+            <VisualBrush x:Key="DownloadStatusFailed_DirectoryNotFound" Visual="{StaticResource appbar_page_delete}" />
+            <VisualBrush x:Key="DownloadStatusFailed_InternalServerError" Visual="{StaticResource appbar_monitor_delete}" />
+            <VisualBrush x:Key="DownloadStatusRetry" Visual="{StaticResource appbar_control_resume}" />
+            <VisualBrush x:Key="DownloadStatusRetryWait" Visual="{StaticResource appbar_control_resume}" />
+            <VisualBrush x:Key="DownloadStatusAlreadyDownloaded" Visual="{StaticResource appbar_check}" />
+
+            <VisualBrush x:Key="TaskStatusFaulted" Visual="{StaticResource appbar_stop}" />
+            <VisualBrush x:Key="TaskStatusCanceled" Visual="{StaticResource appbar_stop}" />
+            <VisualBrush x:Key="TaskStatusRunning" Visual="{StaticResource appbar_control_fastforward_variant}" />
+            <VisualBrush x:Key="TaskStatusRanToCompletion" Visual="{StaticResource appbar_check}" />
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -414,10 +441,78 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Image Width="24"
-                                                   Height="24"
-                                                   Source="{Binding DownloadStatusImage}" />
-                                            <TextBlock Text="{Binding DownloadStatusString}" />
+                                            <Rectangle Width="16"
+                                                       Height="16"
+                                                       Fill="{DynamicResource AccentColorBrush}">
+                                                <Rectangle.Style>
+                                                    <Style TargetType="{x:Type Rectangle}">
+                                                        <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusNone}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="Queued">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusQueued}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="None">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusNone}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="Running">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusRunning}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="Stopped">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusStopped}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="Completed">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusCompleted}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="Completed_HashValid">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusCompleted_HashValid}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="Completed_HashInvalid">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusCompleted_HashInvalid}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="Failed">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusFailed}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="Failed_FileNameTooLong">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusFailed_FileNameTooLong}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="Failed_NotEnoughDiskSpace">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusFailed_NotEnoughDiskSpace}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="Failed_ServerFull">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusFailed_ServerFull}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="Failed_ServerDown">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusFailed_ServerDown}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="Failed_ConnectionError">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusFailed_ConnectionError}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="Failed_AuthError">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusFailed_AuthError}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="Failed_FileNotFound">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusFailed_FileNotFound}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="Failed_DirectoryNotFound">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusFailed_DirectoryNotFound}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="Failed_InternalServerError">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusFailed_InternalServerError}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="Retry">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusRetry}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="RetryWait">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusRetryWait}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="AlreadyDownloaded">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusAlreadyDownloaded}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Rectangle.Style>
+                                            </Rectangle>
+                                            <TextBlock Margin="5,0,0,0" Text="{Binding DownloadStatusString}" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -565,10 +660,30 @@
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
-                                                        <Image Height="20"
-                                                               Margin="0,0,5,0"
-                                                               Source="{Binding TaskStatusImage}" />
-                                                        <TextBlock Text="{Binding TaskDisplayText}" />
+                                                        <Rectangle Width="16"
+                                                                   Height="16"
+                                                                   Fill="{DynamicResource AccentColorBrush}">
+                                                            <Rectangle.Style>
+                                                                <Style TargetType="{x:Type Rectangle}">
+                                                                    <Setter Property="OpacityMask" Value="{StaticResource TaskStatusRunning}" />
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding TaskStatusImage}" Value="Faulted">
+                                                                            <Setter Property="OpacityMask" Value="{StaticResource TaskStatusFaulted}" />
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding TaskStatusImage}" Value="Canceled">
+                                                                            <Setter Property="OpacityMask" Value="{StaticResource TaskStatusCanceled}" />
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding TaskStatusImage}" Value="Running">
+                                                                            <Setter Property="OpacityMask" Value="{StaticResource TaskStatusRunning}" />
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding TaskStatusImage}" Value="RanToCompletion">
+                                                                            <Setter Property="OpacityMask" Value="{StaticResource TaskStatusRanToCompletion}" />
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Rectangle.Style>
+                                                        </Rectangle>
+                                                        <TextBlock Margin="5,0,0,0" Text="{Binding TaskDisplayText}" />
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>

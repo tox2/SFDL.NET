@@ -104,6 +104,7 @@
     <Compile Include="Classes\Models\UnRARChain.vb" />
     <Compile Include="Classes\SingleInstance\SingleInstance.vb" />
     <Compile Include="Classes\ViewModels\MainViewModel.vb" />
+    <Compile Include="Classes\IDownloadStatusImage.vb" />
     <Compile Include="Classes\XAML Converter\CollectionViewNameConverter.vb" />
     <Compile Include="Classes\XAML Converter\ExistingFileHandlingConverter.vb" />
     <Compile Include="Classes\XAML Converter\InvertBooleanConverter.vb" />
@@ -251,46 +252,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.control.stop.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.hourglass.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\WindowsIcons-license.txt" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Entypo-license.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.check.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.stop.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.settings.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.clock.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.alert.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.cabinet.in.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.sign.parking.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.cup.full.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.network.server.disconnect.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Icons\appbar.control.resume.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\Icon.ico" />

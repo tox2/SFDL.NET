@@ -181,83 +181,83 @@ Public Class DownloadItem
 
                 Case Status.None
 
-                    DownloadStatusImage = "Resources/Icons/appbar.sign.parking.png"
+                    DownloadStatusImage = "None"
 
                 Case Status.Completed
 
-                    DownloadStatusImage = "Resources/Icons/appbar.check.png"
+                    DownloadStatusImage = "Completed"
 
                 Case Status.Queued
 
-                    DownloadStatusImage = "Resources/Icons/appbar.clock.png"
+                    DownloadStatusImage = "Queued"
 
                 Case Status.Running
 
-                    DownloadStatusImage = "Resources/Icons/appbar.cabinet.in.png"
+                    DownloadStatusImage = "Running"
 
                 Case Status.Stopped
 
-                    DownloadStatusImage = "Resources/Icons/appbar.control.stop.png"
+                    DownloadStatusImage = "Stopped"
 
                 Case Status.Completed_HashValid
 
-                    DownloadStatusImage = "Resources/Icons/appbar.check.png"
+                    DownloadStatusImage = "Completed_HashValid"
 
                 Case Status.Completed_HashInvalid
 
-                    DownloadStatusImage = "Resources/Icons/appbar.alert.png"
+                    DownloadStatusImage = "Completed_HashInvalid"
 
                 Case Status.Failed
 
-                    DownloadStatusImage = "Resources/Icons/appbar.stop.png"
+                    DownloadStatusImage = "Failed"
 
                 Case Status.Failed_FileNameTooLong
 
-                    DownloadStatusImage = "Resources/Icons/appbar.dimension.line.width.png"
+                    DownloadStatusImage = "Failed_FileNameTooLong"
 
                 Case Status.Failed_NotEnoughDiskSpace
 
-                    DownloadStatusImage = "Resources/Icons/appbar.stop.png"
+                    DownloadStatusImage = "Failed_NotEnoughDiskSpace"
 
                 Case Status.Failed_ServerFull
 
-                    DownloadStatusImage = "Resources/Icons/appbar.cup.full.png"
+                    DownloadStatusImage = "Failed_ServerFull"
 
                 Case Status.Failed_ServerDown
 
-                    DownloadStatusImage = "Resources/Icons/appbar.network.server.disconnect.png"
+                    DownloadStatusImage = "Failed_ServerDown"
 
                 Case Status.Failed_ConnectionError
 
-                    DownloadStatusImage = "Resources/Icons/appbar.network.server.disconnect.png"
+                    DownloadStatusImage = "Failed_ConnectionError"
 
                 Case Status.Failed_AuthError
 
-                    DownloadStatusImage = "Resources/Icons/appbar.user.delete.png"
+                    DownloadStatusImage = "Failed_AuthError"
 
                 Case Status.Failed_FileNotFound
 
-                    DownloadStatusImage = "Resources/Icons/appbar.page.delete.png"
+                    DownloadStatusImage = "Failed_FileNotFound"
 
                 Case Status.Failed_DirectoryNotFound
 
-                    DownloadStatusImage = "Resources/Icons/appbar.page.delete.png"
+                    DownloadStatusImage = "Failed_DirectoryNotFound"
 
                 Case Status.Failed_InternalServerError
 
-                    DownloadStatusImage = "Resources/Icons/appbar.monitor.delete.png"
+                    DownloadStatusImage = "Failed_InternalServerError"
 
                 Case Status.Retry
 
-                    DownloadStatusImage = "Resources/Icons/appbar.control.resume.png"
+                    DownloadStatusImage = "Retry"
 
                 Case Status.RetryWait
 
-                    DownloadStatusImage = "Resources/Icons/appbar.control.resume.png"
+                    DownloadStatusImage = "RetryWait"
 
                 Case Status.AlreadyDownloaded
 
-                    DownloadStatusImage = "Resources/Icons/appbar.check.png"
+                    DownloadStatusImage = "AlreadyDownloaded"
 
             End Select
 

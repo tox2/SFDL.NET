@@ -92,11 +92,26 @@ Public Class MainViewModel
 
                                  _new_session = XMLDeSerialize(_new_session, _file)
                                  _new_session.WIG = Nothing
+                                 _new_session.DownloadStartedTime = Date.MinValue
+                                 _new_session.DownloadStoppedTime = Date.MinValue
+                                 _new_session.SessionState = ContainerSessionState.Queued
+                                 _new_session.SingleSessionMode = False
+                                 _new_session.SynLock = New Object
 
+                                 For Each _chain In _new_session.UnRarChains
+                                     _chain.UnRARRunning = False
+                                 Next
 
                                  For Each _item In _new_session.DownloadItems
                                      'Update DownloadPath cause it could have changed
                                      _item.LocalFile = GetDownloadFilePath(Application.Current.Resources("Settings"), _new_session, _item)
+                                     '_item.DownloadStatus = DownloadItem.Status.None
+                                     _item.DownloadProgress = 0
+                                     _item.DownloadSpeed = String.Empty
+                                     _item.SingleSessionMode = False
+                                     _item.RetryCount = 0
+                                     _item.RetryPossible = False
+                                     _item.SizeDownloaded = 0
                                      DownloadItems.Add(_item)
                                  Next
 
@@ -616,12 +631,18 @@ Decrypt:
             Application.Current.Resources("DownloadStopped") = False
 
             For Each _session In ContainerSessions
+
                 _session.SessionState = ContainerSessionState.Queued
                 _session.SingleSessionMode = False
                 _session.WIG = Nothing
                 _session.SynLock = New Object
                 _session.DownloadStartedTime = Date.MinValue
                 _session.DownloadStoppedTime = Date.MinValue
+
+                For Each _chain In _session.UnRarChains
+                    _chain.UnRARRunning = False
+                Next
+
             Next
 
             For Each _dlitem In DownloadItems.Where(Function(myitem) myitem.isSelected = True)
