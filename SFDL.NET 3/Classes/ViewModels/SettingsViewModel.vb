@@ -1,7 +1,8 @@
-﻿Imports System.Windows.Forms
+﻿Imports System.ComponentModel
 Imports MahApps.Metro.Controls.Dialogs
 Public Class SettingsViewModel
     Inherits ViewModelBase
+    Implements IDataErrorInfo
 
     Private _settings As New Settings
     Private _selected_unrar_password As String = String.Empty
@@ -351,10 +352,12 @@ Public Class SettingsViewModel
 
         If Not String.IsNullOrWhiteSpace(_selected_unrar_password) Then
 
-            Dim _style As MessageDialogStyle = MessageDialogStyle.AffirmativeAndNegative
+            Dim _result As MessageDialogResult
 
-            If Await DialogCoordinator.Instance.ShowMessageAsync(Me, My.Resources.Strings.Settings_Question_RemoveUnRARPassword_Title, My.Resources.Strings.Settings_Question_RemoveUnRARPassword_Message, _style) = MessageDialogResult.Affirmative Then
-                Me.UnRARPasswordList.Remove(_selected_unrar_password)
+            _result = Await DialogCoordinator.Instance.ShowMessageAsync(Me, My.Resources.Strings.Settings_Question_RemoveUnRARPassword_Title, My.Resources.Strings.Settings_Question_RemoveUnRARPassword_Message, MessageDialogStyle.AffirmativeAndNegative)
+
+            If _result = MessageDialogResult.Affirmative Then
+                UnRARPasswordList.Remove(_selected_unrar_password)
             End If
 
         End If
@@ -409,13 +412,34 @@ Public Class SettingsViewModel
 
     End Sub
 
-
     Public ReadOnly Property InsertSpeedReportVariableCommand As ICommand
         Get
             Return New DelegateCommand(AddressOf InsertSpeedReportVariable)
         End Get
     End Property
 
+    Default Public ReadOnly Property Item(columnName As String) As String Implements IDataErrorInfo.Item
+        Get
+            If columnName = "DownloadDirectory" Then
+                If String.IsNullOrEmpty(Me.DownloadDirectory) Then
+                    Return "Du musst einen Ordner wählen"
+                End If
+                If Not IO.Directory.Exists(Me.DownloadDirectory) Then
+                    Return "Das gewählte Verzeichnis existiert nicht!"
+                End If
+            End If
+            Return String.Empty
+        End Get
+    End Property
+
+    Public ReadOnly Property [Error] As String Implements IDataErrorInfo.Error
+        Get
+            Return String.Empty
+        End Get
+    End Property
+
 #End Region
+
+
 
 End Class

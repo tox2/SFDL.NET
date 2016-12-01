@@ -171,25 +171,22 @@
                                           MinWidth="332"
                                           Header="{x:Static p:Strings.Settings_DownloadSettings}">
                                     <Grid>
-                                        <StackPanel Orientation="Horizontal">
-
-                                            <StackPanel>
+                                        <StackPanel>
                                                 <TextBox x:Name="TxtDownloadPath"
-                                                         MinWidth="310"
+                                                         MinWidth="250"
                                                          Margin="5,5,0,0"
                                                          HorizontalAlignment="Left"
                                                          Controls:TextBoxHelper.ButtonCommand="{Binding BrowseFolderCommand}"
                                                          Controls:TextBoxHelper.UseFloatingWatermark="True"
                                                          Controls:TextBoxHelper.Watermark="{x:Static p:Strings.Settings_DownloadDir}"
                                                          Style="{StaticResource OpenFileMetroTextBox}"
-                                                         Text="{Binding DownloadDirectory}" />
+                                                         Text="{Binding DownloadDirectory, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}" />
                                                 <CheckBox x:Name="ChkCreatePackageSubfolder"
                                                           Margin="5,5,0,5"
                                                           Content="{x:Static p:Strings.Settings_CreateSubfolderEachPackage}"
                                                           IsChecked="{Binding CreatePackageSubfolder}" />
                                             </StackPanel>
-                                            <StackPanel />
-                                        </StackPanel>
+                                        <StackPanel />
                                     </Grid>
                                 </GroupBox>
                                 <GroupBox x:Name="GroupBoxAdvancedDownloadSettings"
