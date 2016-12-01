@@ -1,4 +1,5 @@
-﻿Imports MahApps.Metro.Controls.Dialogs
+﻿Imports System.Windows.Forms
+Imports MahApps.Metro.Controls.Dialogs
 Public Class SettingsViewModel
     Inherits ViewModelBase
 
@@ -276,13 +277,17 @@ Public Class SettingsViewModel
 
 #Region "Commands"
 
+    Public ReadOnly Property BrowseFolderCommand() As ICommand
+        Get
+            Return New DelegateCommand(AddressOf SelectDownloadFolder)
+        End Get
+    End Property
+
     Private Async Sub SaveSettings()
 
         Dim _error As Boolean = False
 
         Try
-
-
 
             Application.Current.Resources("Settings") = _settings
 
