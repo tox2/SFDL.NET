@@ -5,6 +5,8 @@ Imports MahApps.Metro.Controls.Dialogs
 
 Public Class MainWindow
 
+    Dim _force_exit As Boolean = False
+
     Public Sub New()
 
         ' Dieser Aufruf ist für den Designer erforderlich.
@@ -150,7 +152,43 @@ Public Class MainWindow
 
     End Sub
 
-    Private Sub SFDL_MainWindow_Closing(sender As Object, e As CancelEventArgs) Handles SFDL_MainWindow.Closing
-        MainViewModel.ThisInstance.SaveSessions()
+    Private Async Sub SFDL_MainWindow_Closing(sender As Object, e As CancelEventArgs) Handles SFDL_MainWindow.Closing
+
+        Dim _somthing_running As Boolean = False
+
+        If _force_exit = False Then
+
+            For Each _container_session In MainViewModel.ThisInstance.ContainerSessions
+
+                If _container_session.SessionState = ContainerSessionState.DownloadRunning Or _container_session.UnRarChains.Where(Function(mychain) mychain.UnRARRunning = True).Count >= 1 Then
+                    _somthing_running = True
+                End If
+
+            Next
+
+            If _somthing_running = True Then
+
+                Dim _result As MessageDialogResult
+                Dim _dialog_settings As New MetroDialogSettings
+
+                _dialog_settings.AffirmativeButtonText = "Ja"
+                _dialog_settings.NegativeButtonText = "Nein"
+
+                e.Cancel = True
+
+                _result = Await ShowMessageAsync("SFDL.NET beenden", "Es läuft aktuell noch ein Download oder UnRAR - Möchtest du die Anwendung trotzdem beenden?", MessageDialogStyle.AffirmativeAndNegative, _dialog_settings)
+
+                If _result = MessageDialogResult.Affirmative Then
+                    _force_exit = True
+                    Application.Current.Shutdown()
+                End If
+
+            Else
+                MainViewModel.ThisInstance.SaveSessions()
+            End If
+        Else
+            MainViewModel.ThisInstance.SaveSessions()
+        End If
+
     End Sub
 End Class

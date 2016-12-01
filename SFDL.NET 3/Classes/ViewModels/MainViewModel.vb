@@ -1290,7 +1290,7 @@ Decrypt:
             AddHandler _mytask.TaskDone, AddressOf TaskDoneEvent
             ActiveTasks.Add(_mytask)
 
-            If parameter.GetType.Equals(GetType(String)) Then
+            If parameter.GetType Is GetType(String) Then
 
                 If Not String.IsNullOrWhiteSpace(parameter) And parameter.ToString.Contains(";") Then
 
@@ -1302,7 +1302,7 @@ Decrypt:
 
             End If
 
-            If parameter.GetType.Equals(GetType(DownloadItem)) Then
+            If parameter.GetType Is GetType(DownloadItem) Then
 
                 Dim _dlitem As DownloadItem = TryCast(parameter, DownloadItem)
 
@@ -1311,8 +1311,8 @@ Decrypt:
             End If
 
 
-            If _container_session.SessionState = ContainerSessionState.DownloadRunning Then
-                _mytask.SetTaskStatus(TaskStatus.Faulted, "Kann Session nicht schließen da diese aktiv ist (Download)")
+            If _container_session.SessionState = ContainerSessionState.DownloadRunning Or _container_session.UnRarChains.Where(Function(mychain) mychain.UnRARRunning = True).Count >= 1 Then
+                _mytask.SetTaskStatus(TaskStatus.Faulted, "Kann Session nicht schließen da diese aktiv ist (Download oder UnRAR)")
             Else
 
                 _tmp_list = DownloadItems.Where(Function(myitem) _container_session.ID.Equals(myitem.ParentContainerID)).ToList
