@@ -35,7 +35,7 @@ Public Class MainWindow
 
         Next
 
-        If IO.File.Exists(IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "unrar.exe")) = False Then
+        If IO.File.Exists(IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "unrar.exe")) = False Or IO.File.Exists(IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "TOX_archiv_Checker.exe")) = False Then
             Await ShowMessageAsync(My.Resources.Strings.VariousStrings_Warning, My.Resources.Strings.VariousStrings_UnRARExecutableMissingException)
         End If
 

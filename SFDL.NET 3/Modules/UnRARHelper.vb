@@ -156,47 +156,56 @@ Module UnRARHelper
 
     Private Function IsUnRARPasswordValid(ByVal _filename As String, ByVal _password As String) As Boolean
 
-        Dim _unrar_process As Process
-        Dim _unrar_exe As String
+        Dim _tox_check_process As Process
+        Dim _tox_archive_check_bin As String
         Dim _result As Boolean = False
-        Dim _tmp_output As String = String.Empty
         Dim _log As NLog.Logger = NLog.LogManager.GetLogger("IsUnRARPasswordValid")
 
         Try
 
-            _unrar_exe = IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "unrar.exe")
+            _tox_archive_check_bin = IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "TOX_archiv_Checker.exe")
 
-            If IO.File.Exists(_unrar_exe) = False Then
-                Throw New Exception("UnRAR Executable is missing!")
+            If IO.File.Exists(_tox_archive_check_bin) = False Then
+                Throw New Exception("Tox ArchiveChecker Executable is missing!")
             End If
 
-            _unrar_process = New Process
+            _tox_check_process = New Process
 
-            With _unrar_process.StartInfo
+            With _tox_check_process.StartInfo
 
                 .CreateNoWindow = True
-                .FileName = _unrar_exe
+                .FileName = _tox_archive_check_bin
                 .WorkingDirectory = System.AppDomain.CurrentDomain.BaseDirectory
                 .RedirectStandardOutput = True
                 .UseShellExecute = False
 
                 If String.IsNullOrWhiteSpace(_password) Then
-                    .Arguments = String.Format("t -p- {0}", Chr(34) & _filename & Chr(34))
+                    .Arguments = String.Format("{0}", Chr(34) & _filename & Chr(34))
                 Else
-                    .Arguments = String.Format("t -p{0} {1}", _password, Chr(34) & _filename & Chr(34))
+                    .Arguments = String.Format("-p {0} {1}", _password, Chr(34) & _filename & Chr(34))
                 End If
 
             End With
 
-            _unrar_process.Start()
+            _tox_check_process.Start()
 
-            _unrar_process.WaitForExit(CInt(TimeSpan.FromSeconds(15).TotalMilliseconds))
+            _tox_check_process.WaitForExit()
 
-            _tmp_output = _unrar_process.StandardOutput.ReadToEnd.ToLower
+            Select Case _tox_check_process.ExitCode
 
-            If (_tmp_output.Contains("testing archive") And Not _tmp_output.Contains("no files to extract")) And Not String.IsNullOrWhiteSpace(_tmp_output) Then
-                _result = True
-            End If
+                Case 0 'No Password needed
+                    _result = True
+
+                Case 1 'Password is needed
+                    _result = False
+
+                Case 3 'Password was false
+                    _result = False
+
+                Case 4 'Password was correct
+                    _result = True
+
+            End Select
 
 
         Catch ex As Exception
