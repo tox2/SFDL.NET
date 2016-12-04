@@ -44,16 +44,17 @@ Class Application
                 Application.Current.Resources.Add("Settings", _settings)
                 Application.Current.Resources.Add("DownloadStopped", False)
 
+
                 If _settings.PreventStandby = True Then
-                    StandyHandler.PreventStandby()
-                    _log.Info("System Standby is now blocked")
-                End If
+                        StandyHandler.PreventStandby()
+                        _log.Info("System Standby is now blocked")
+                    End If
 
-                SingleInstance.ListenForArgumentsFromSuccessiveInstances()
+                    SingleInstance.ListenForArgumentsFromSuccessiveInstances()
 
-            Else
-                ' if there is an argument available, fire it
-                If e.Args.Length > 0 Then
+                Else
+                    ' if there is an argument available, fire it
+                    If e.Args.Length > 0 Then
                     SingleInstance.PassArgumentsToFirstInstance(e.Args)
                 End If
 
@@ -79,9 +80,17 @@ Class Application
 
             If Not String.IsNullOrWhiteSpace(_item) Then
 
-                DispatchService.DispatchService.Invoke(Sub()
-                                                           MainViewModel.ThisInstance.OpenSFDLFile(_item)
-                                                       End Sub)
+
+                If IO.Path.GetExtension(_item).ToLower = ".sfdl" Then
+
+                    DispatchService.DispatchService.Invoke(Sub()
+                                                               MainViewModel.ThisInstance.OpenSFDLFile(_item)
+                                                           End Sub)
+                End If
+
+                If _item.ToLower.StartsWith("sfdl://") Then
+                    Debug.WriteLine("öpö")
+                End If
 
             End If
         Next

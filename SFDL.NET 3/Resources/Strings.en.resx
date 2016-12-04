@@ -411,4 +411,11 @@
   <data name="DownloadItems_ContextMenu_UnMarkAllItemsInPackage" xml:space="preserve">
     <value>Check all files in this package</value>
   </data>
+  <data name="InstallPathChangedPrompt" xml:space="preserve">
+    <value>SFDL.NET 3 is started for the first time or the installation path has changed.
+
+Therefore SFDL.NET 3 must now be started once as administrator so that the file extension SFDL and ClicknLoad is properly installed.
+
+Do you want SFDL.NET 3 now start as an administrator?</value>
+  </data>
 </root>

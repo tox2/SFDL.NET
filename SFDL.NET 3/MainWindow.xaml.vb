@@ -2,6 +2,7 @@
 Imports System.ComponentModel
 Imports MahApps.Metro
 Imports MahApps.Metro.Controls.Dialogs
+Imports NLog
 
 Public Class MainWindow
 
@@ -27,10 +28,23 @@ Public Class MainWindow
 
     Private Async Sub MainWindow_ContentRendered(sender As Object, e As EventArgs) Handles Me.ContentRendered
 
+        Dim _settings As Settings = Application.Current.Resources("Settings")
+        Dim _log As Logger = LogManager.GetLogger("ContentRendered")
+
         For Each _arg In Environment.GetCommandLineArgs
 
-            If Not String.IsNullOrWhiteSpace(_arg) And IO.Path.GetExtension(_arg).ToLower = ".sfdl" Then
-                MainViewModel.ThisInstance.OpenSFDLFile(_arg)
+            If Not String.IsNullOrWhiteSpace(_arg) Then
+
+                If IO.Path.GetExtension(_arg).ToLower = ".sfdl" Then
+                    MainViewModel.ThisInstance.OpenSFDLFile(_arg)
+                End If
+
+                If _arg.ToLower.StartsWith("sfdl://") Then
+
+                    _log.Warn(_arg)
+
+                End If
+
             End If
 
         Next
@@ -56,6 +70,65 @@ Public Class MainWindow
         End If
 
         LoadTheme()
+
+
+#Region "Check and Update InstallState and File Registration"
+
+
+        If isAdministrator() = True And CheckInstallState() = False Then
+
+            Try 'Versuchen die Dateiendung .sfdl und den URI Handler zu registrieren
+
+                Dim _file_assoiciation As New FileAssociation
+
+                _file_assoiciation.Extension = "sfdl"
+                _file_assoiciation.ContentType = "application/sfdl.net"
+                _file_assoiciation.FullName = "SFDL.NET Files"
+                _file_assoiciation.IconIndex = 0
+                _file_assoiciation.IconPath = IO.Path.Combine(IO.Path.GetDirectoryName(System.AppDomain.CurrentDomain.BaseDirectory), "Icon.ico")
+                _file_assoiciation.ProperName = "SFDL.NET File"
+                _file_assoiciation.AddCommand("open", System.Reflection.Assembly.GetExecutingAssembly().Location & " " & Chr(34) & "%1" & Chr(34))
+
+                _file_assoiciation.Create()
+
+                _log.Info("SFDL Extension registriert!")
+
+                If _settings.ClicknLoad Then
+
+                    Dim _uri_handler_association As New URIHandlerAssociation
+
+                    _uri_handler_association.RegisterSFDLURIHandler(System.Reflection.Assembly.GetExecutingAssembly().Location)
+
+                    _log.Info("SFDL URI Handler registriert!")
+
+                End If
+
+                UpdateInstallState()
+
+            Catch ex As Exception
+                _log.Error(ex, ex.Message)
+            End Try
+
+        End If
+
+
+        If CheckInstallState() = False Then
+
+            Dim _result As MessageDialogResult
+            Dim _dialog_settings As New MetroDialogSettings
+
+            _dialog_settings.AffirmativeButtonText = "Ja, bitte"
+            _dialog_settings.NegativeButtonText = "Nein, danke"
+
+            _result = Await ShowMessageAsync(My.Resources.Strings.VariousStrings_Warning, My.Resources.Strings.InstallPathChangedPrompt, MessageDialogStyle.AffirmativeAndNegative, _dialog_settings)
+
+            If _result = MessageDialogResult.Affirmative Then
+                RunAsAdmin()
+            End If
+
+        End If
+
+#End Region
 
     End Sub
 
