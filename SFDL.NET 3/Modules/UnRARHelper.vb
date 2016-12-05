@@ -163,10 +163,10 @@ Module UnRARHelper
 
         Try
 
-            _tox_archive_check_bin = IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "TOX_archiv_Checker.exe")
+            _tox_archive_check_bin = IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "bin", "TOAC.exe")
 
             If IO.File.Exists(_tox_archive_check_bin) = False Then
-                Throw New Exception("Tox ArchiveChecker Executable is missing!")
+                Throw New Exception("Tox ArchiveChecker Executable Is missing!")
             End If
 
             _tox_check_process = New Process
@@ -175,14 +175,14 @@ Module UnRARHelper
 
                 .CreateNoWindow = True
                 .FileName = _tox_archive_check_bin
-                .WorkingDirectory = System.AppDomain.CurrentDomain.BaseDirectory
+                .WorkingDirectory = IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "bin")
                 .RedirectStandardOutput = True
                 .UseShellExecute = False
 
                 If String.IsNullOrWhiteSpace(_password) Then
                     .Arguments = String.Format("{0}", Chr(34) & _filename & Chr(34))
                 Else
-                    .Arguments = String.Format("-p {0} {1}", _password, Chr(34) & _filename & Chr(34))
+                    .Arguments = String.Format("{0} -p {1}", Chr(34) & _filename & Chr(34), Chr(34) & _password & Chr(34))
                 End If
 
             End With
@@ -197,6 +197,9 @@ Module UnRARHelper
                     _result = True
 
                 Case 1 'Password is needed
+                    _result = False
+
+                Case 2 'Password is needed
                     _result = False
 
                 Case 3 'Password was false
@@ -227,10 +230,10 @@ Module UnRARHelper
 
         Try
 
-            _unrar_exe = IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "unrar.exe")
+            _unrar_exe = IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "bin", "unrar.exe")
 
             If IO.File.Exists(_unrar_exe) = False Then
-                Throw New Exception("UnRAR Executable is missing!")
+                Throw New Exception("UnRAR Executable Is missing!")
             End If
 
             _unrar_process = New Process
@@ -252,7 +255,7 @@ Module UnRARHelper
 
             End With
 
-            _log.Info("UnRAR Parameters: " & _unrar_process.StartInfo.Arguments.ToString)
+            _log.Info("UnRAR Parameters:   " & _unrar_process.StartInfo.Arguments.ToString)
 
             _unrar_process.Start()
 
