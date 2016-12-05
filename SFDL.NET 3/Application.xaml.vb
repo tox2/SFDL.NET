@@ -76,6 +76,11 @@ Class Application
 
     Private Shared Sub SingleInstanceParameter(sender As Object, e As ArgumentsReceivedEventArgs)
 
+        Dim _cnl_helper As New ClicknLoad
+        Dim _settings As New Settings
+
+        _settings = Application.Current.Resources("Settings")
+
         For Each _item In e.Args
 
             If Not String.IsNullOrWhiteSpace(_item) Then
@@ -88,8 +93,20 @@ Class Application
                                                            End Sub)
                 End If
 
-                If _item.ToLower.StartsWith("sfdl://") Then
-                    Debug.WriteLine("öpö")
+                If _item.ToLower.StartsWith("sfdl://") And _settings.ClicknLoad = True Then
+
+                    Dim _local_tmp_file As String = String.Empty
+
+                    _local_tmp_file = _cnl_helper.ProcessClicknLoad(_item.Replace("sfdl://", "")).Result
+
+                    If Not String.IsNullOrWhiteSpace(_local_tmp_file) AndAlso IO.File.Exists(_local_tmp_file) Then
+
+                        DispatchService.DispatchService.Invoke(Sub()
+                                                                   MainViewModel.ThisInstance.OpenSFDLFile(_local_tmp_file)
+                                                               End Sub)
+
+                    End If
+
                 End If
 
             End If

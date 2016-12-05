@@ -30,6 +30,7 @@ Public Class MainWindow
 
         Dim _settings As Settings = Application.Current.Resources("Settings")
         Dim _log As Logger = LogManager.GetLogger("ContentRendered")
+        Dim _cnl_helper As New ClicknLoad
 
         For Each _arg In Environment.GetCommandLineArgs
 
@@ -39,19 +40,23 @@ Public Class MainWindow
                     MainViewModel.ThisInstance.OpenSFDLFile(_arg)
                 End If
 
-                If _arg.ToLower.StartsWith("sfdl://") Then
+                If _arg.ToLower.StartsWith("sfdl://") And _settings.ClicknLoad = True Then
 
-                    _log.Warn(_arg)
+                    Dim _local_tmp_file As String = String.Empty
+
+                    _local_tmp_file = Await _cnl_helper.ProcessClicknLoad(_arg.Replace("sfdl://", ""))
+
+                    If Not String.IsNullOrWhiteSpace(_local_tmp_file) AndAlso IO.File.Exists(_local_tmp_file) Then
+
+                        MainViewModel.ThisInstance.OpenSFDLFile(_local_tmp_file)
+
+                    End If
 
                 End If
 
             End If
 
         Next
-
-        If IO.File.Exists(IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "unrar.exe")) = False Or IO.File.Exists(IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "TOX_archiv_Checker.exe")) = False Then
-            Await ShowMessageAsync(My.Resources.Strings.VariousStrings_Warning, My.Resources.Strings.VariousStrings_UnRARExecutableMissingException)
-        End If
 
         ComB_Container_Info.DataContext = MainViewModel.ThisInstance
 
@@ -70,6 +75,10 @@ Public Class MainWindow
         End If
 
         LoadTheme()
+
+        If IO.File.Exists(IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "unrar.exe")) = False Or IO.File.Exists(IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "TOX_archiv_Checker.exe")) = False Then
+            Await ShowMessageAsync(My.Resources.Strings.VariousStrings_Warning, My.Resources.Strings.VariousStrings_UnRARExecutableMissingException)
+        End If
 
 
 #Region "Check and Update InstallState and File Registration"
