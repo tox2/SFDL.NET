@@ -281,19 +281,6 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL.NET 3 wird zum ersten mal gestartet oder der Installationspfad hat sich geändert.
-        '''
-        '''Deswegen muss SFDL.NET 3 nun einmal als Administrator gestartet werden damit die Dateiendung SFDL sowie ClicknLoad richtig installiert wird
-        '''
-        '''Möchtest du SFDL.NET 3 nun als Administrator starten? ähnelt.
-        '''</summary>
-        Public Shared ReadOnly Property InstallPathChangedPrompt() As String
-            Get
-                Return ResourceManager.GetString("InstallPathChangedPrompt", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Dateiname ähnelt.
         '''</summary>
         Public Shared ReadOnly Property ListView_DownloadItems_Header_Filename() As String

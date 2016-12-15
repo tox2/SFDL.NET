@@ -270,9 +270,5 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\appbar.settings.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="External Binaries\TOX_archiv_Checker.exe" />
-    <Content Include="External Binaries\UnRAR.exe" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
