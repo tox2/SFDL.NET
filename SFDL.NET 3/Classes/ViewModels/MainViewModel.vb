@@ -1,4 +1,5 @@
 ﻿Imports System.Collections.ObjectModel
+Imports System.ComponentModel
 Imports System.IO
 Imports System.Text
 Imports System.Text.RegularExpressions
@@ -139,6 +140,9 @@ Public Class MainViewModel
         Dim groupDescription As New PropertyGroupDescription("GroupDescriptionIdentifier")
 
         view.GroupDescriptions.Add(groupDescription)
+
+        'view.SortDescriptions.Add(New SortDescription("FileName", ListSortDirection.Descending))
+        view.SortDescriptions.Add(New SortDescription("RequiredForInstantVideo", ListSortDirection.Descending))
 
     End Sub
 
@@ -523,7 +527,10 @@ Decrypt:
 
         AddHandler _download_helper.ServerFull, AddressOf ServerFullEvent
 
+        'ToDo:QUery For Instant Video with Prio
+
         For Each _session In ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning)
+
 
             Dim _wig As IWorkItemsGroup
             Dim _wig_start As New WIGStartInfo
@@ -576,7 +583,10 @@ Decrypt:
                     _log.Info(String.Format("Hole keine neuen Threads für Session {0}", _session.DisplayName))
                 Else
 
-                    For Each _dlitem In DownloadItems.Where(Function(myitem) (myitem.ParentContainerID.Equals(_session.ID) And (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Retry))).Take(_thread_pull_count)
+                    Dim DLItemQuery As IEnumerable(Of DownloadItem) = (From myitem In DownloadItems Where myitem.ParentContainerID.Equals(_session.ID) And (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Retry) Order By myitem.RequiredForInstantVideo Descending).Take(_thread_pull_count)
+
+                    For Each _dlitem In DLItemQuery
+                        'For Each _dlitem In DownloadItems.Where(Function(myitem) (myitem.ParentContainerID.Equals(_session.ID) And (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Retry))).Take(_thread_pull_count)
 
                         If _session.DownloadStartedTime = Date.MinValue And ContainerSessionState.Queued Then
                             _session.DownloadStartedTime = Now
@@ -629,6 +639,7 @@ Decrypt:
 #Region "Cleanup"
 
             Application.Current.Resources("DownloadStopped") = False
+            ButtonInstantVideoEnabled = False
 
             For Each _session In ContainerSessions
 
@@ -729,10 +740,14 @@ Decrypt:
 
                                      Else
                                          _log.Info("UnRARChain ist noch nicht vollständig oder diese wird bereits entpackt/bearbeitet")
-                                         'TODO: Check for InstatnVideo
                                      End If
 
+                                 Else
+                                     If _settings.InstantVideo = True And IsReadyForInstantVideo(_chain) = True Then
+                                         ButtonInstantVideoEnabled = True
+                                     End If
                                  End If
+
 
                              Next
 
@@ -957,17 +972,6 @@ Decrypt:
         End Set
         Get
             Return _button_downloadstartstop_enabled
-        End Get
-    End Property
-
-    Private _button_instantvideo_enabled As Boolean = False
-    Public Property ButtonInstantVideoEnabled As Boolean
-        Set(value As Boolean)
-            _button_instantvideo_enabled = value
-            RaisePropertyChanged("ButtonInstantVideoEnabled")
-        End Set
-        Get
-            Return _button_instantvideo_enabled
         End Get
     End Property
 
@@ -1210,9 +1214,27 @@ Decrypt:
     End Sub
 
 
+    Public ReadOnly Property InstantVideoCommand As ICommand
+        Get
+            Return New DelegateCommand(AddressOf InstantVideo)
+        End Get
+    End Property
+
+    Private Async Sub InstantVideo()
+
+        If CheckIfVLCInstalled() = False Then
+            Await DialogCoordinator.Instance.ShowMessageAsync(Me, "InstantVideo", "Der VLC PLayer ist auf deinem System nicht installiert. Bitte installiere den VLC Player um Instant Video zu nutzen!")
+        Else
+
+            InstantVideoOpen = True
+
+        End If
+
+    End Sub
+
 #End Region
 
-#Region "ListView ContextMenu Commands and Properites"
+#Region "ListView ContextMenu Commands And Properites"
 
     Public ReadOnly Property MarkAllItemsInPackageCommand As ICommand
         Get
@@ -1388,6 +1410,7 @@ Decrypt:
         End Get
     End Property
 
+
 #End Region
 
 #Region "Tasks"
@@ -1427,6 +1450,61 @@ Decrypt:
                  End Sub)
 
     End Sub
+
+
+#End Region
+
+#Region "InstantVideo"
+
+    Private _instantvideo_container_sessions As New ObservableCollection(Of ContainerSession)
+
+    Public Property InstantVideoContainerSessions As ObservableCollection(Of ContainerSession)
+        Set(value As ObservableCollection(Of ContainerSession))
+            _instantvideo_container_sessions = value
+            RaisePropertyChanged("InstantVideoContainerSessions")
+        End Set
+        Get
+
+            _instantvideo_container_sessions.Clear()
+
+            For Each _session In _container_sessions
+
+                If _session.UnRarChains.Where(Function(mychain) mychain.ReadyForInstantVideo = True).Count >= 1 Then
+                    _instantvideo_container_sessions.Add(_session)
+                End If
+
+            Next
+
+            Return _instantvideo_container_sessions
+
+        End Get
+    End Property
+
+    Private _instant_video_shown As Boolean = False
+
+    Public Property InstantVideoOpen As Boolean
+        Set(value As Boolean)
+            _instant_video_shown = value
+            RaisePropertyChanged("InstantVideoOpen")
+            RaisePropertyChanged("InstantVideoContainerSessions")
+        End Set
+        Get
+            Return _instant_video_shown
+        End Get
+    End Property
+
+    Private _button_instantvideo_enabled As Boolean = True
+    Public Property ButtonInstantVideoEnabled As Boolean
+        Set(value As Boolean)
+            _button_instantvideo_enabled = value
+            RaisePropertyChanged("ButtonInstantVideoEnabled")
+        End Set
+        Get
+            Return _button_instantvideo_enabled
+        End Get
+    End Property
+
+
 
 
 #End Region

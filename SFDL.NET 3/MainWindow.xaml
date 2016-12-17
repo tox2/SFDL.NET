@@ -103,8 +103,32 @@
 
                 </Grid>
             </Controls:Flyout>
+            
+            <Controls:Flyout Width="400"
+                             Header="Instant Video"
+                             IsOpen="{Binding InstantVideoOpen}"
+                             Position="Right"
+                             Theme="Adapt">
+
+                <Grid>
+                    <StackPanel >
+                        <Label Content="Verfügbare InstantVideo Streams:" Margin="0,0,0,3" ></Label>
+                        <ListView x:Name="InstantVideoContainerList" ItemsSource="{Binding InstantVideoContainerSessions}" MinHeight="200">
+                            <ListView.View>
+                                <GridView >
+                                    <GridViewColumn DisplayMemberBinding="{Binding DisplayName}" Header="Name"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                        <Button x:Name="cmd_play_instant_video" Content="PLay"></Button>
+                    </StackPanel>
+
+
+                </Grid>
+            </Controls:Flyout>
         </Controls:FlyoutsControl>
     </Controls:MetroWindow.Flyouts>
+
 
     <Grid>
 
@@ -358,7 +382,7 @@
                             <VisualBrush Visual="{StaticResource appbar_movie_clapper}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
-                    <Button Content="{x:Static p:Strings.MainToolbar_InstandVideo}" IsEnabled="{Binding ButtonInstantVideoEnabled}" />
+                    <Button Content="{x:Static p:Strings.MainToolbar_InstandVideo}" IsEnabled="{Binding ButtonInstantVideoEnabled}" Command="{Binding InstantVideoCommand}" />
                     <Separator Margin="5,2" />
                     <Rectangle Width="25"
                                Height="16"

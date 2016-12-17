@@ -59,6 +59,7 @@ Public Class MainWindow
         Next
 
         ComB_Container_Info.DataContext = MainViewModel.ThisInstance
+        InstantVideoContainerList.DataContext = MainViewModel.ThisInstance
 
         If My.Settings.UserWindowState = WindowState.Normal Then
 
@@ -271,6 +272,33 @@ Public Class MainWindow
         Else
             MainViewModel.ThisInstance.SaveSessions()
         End If
+
+    End Sub
+
+    Private Sub cmd_play_instant_video_Click(sender As Object, e As RoutedEventArgs) Handles cmd_play_instant_video.Click
+
+        Dim _sel_object As ContainerSession
+        Dim _vlc_args As String = String.Empty
+
+        Try
+
+            _sel_object = InstantVideoContainerList.SelectedItem
+
+            If Not IsNothing(_sel_object) Then
+
+                For Each _chain In _sel_object.UnRarChains
+
+                    _vlc_args = String.Format("{0} --no-qt-error-dialogs", Chr(34) & _chain.MasterUnRarChainFile.LocalFile & Chr(34))
+                Next
+
+                System.Diagnostics.Process.Start(Chr(34) & GetVLCExecutable() & Chr(34), _vlc_args)
+
+            End If
+
+
+        Catch ex As Exception
+
+        End Try
 
     End Sub
 End Class
