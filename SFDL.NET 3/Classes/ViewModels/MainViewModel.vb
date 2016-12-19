@@ -137,15 +137,17 @@ Public Class MainViewModel
 
         Dim view As CollectionView = DirectCast(CollectionViewSource.GetDefaultView(DownloadItems), CollectionView)
 
-        Dim groupDescription As New PropertyGroupDescription("GroupDescriptionIdentifier")
+        Dim groupDescription As PropertyGroupDescription
 
+        groupDescription = New PropertyGroupDescription("GroupDescriptionIdentifier")
+        view.GroupDescriptions.Add(groupDescription)
+
+        groupDescription = New PropertyGroupDescription("PackageName")
         view.GroupDescriptions.Add(groupDescription)
 
         If _settings.InstantVideo = True Then
             view.SortDescriptions.Add(New SortDescription("RequiredForInstantVideo", ListSortDirection.Descending))
         End If
-
-        'view.SortDescriptions.Add(New SortDescription("FileName", ListSortDirection.Descending))
 
     End Sub
 

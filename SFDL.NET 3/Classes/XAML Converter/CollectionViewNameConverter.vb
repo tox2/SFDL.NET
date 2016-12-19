@@ -22,7 +22,7 @@ Public Class CollectionViewNameConverter
             _container = MainViewModel.ThisInstance.ContainerSessions.Where(Function(mysession) mysession.ID.ToString.Equals(_my_string.Split(";")(1).ToString)).FirstOrDefault
 
             If Not IsNothing(_container) Then
-                Return String.Format("{0} | {1}", _container.DisplayName, _my_string.Split(";")(0).ToString)
+                Return String.Format("{0}", _container.DisplayName)
             Else
                 Return _my_string.Split(";")(0).ToString
             End If
