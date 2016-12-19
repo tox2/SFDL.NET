@@ -278,7 +278,6 @@ Public Class MainWindow
     Private Sub cmd_play_instant_video_Click(sender As Object, e As RoutedEventArgs) Handles cmd_play_instant_video.Click
 
         Dim _sel_object As ContainerSession
-        Dim _vlc_args As String = String.Empty
 
         Try
 
@@ -288,13 +287,15 @@ Public Class MainWindow
 
                 For Each _chain In _sel_object.UnRarChains
 
+                    Dim _vlc_args As String = String.Empty
+
                     _vlc_args = String.Format("{0} --no-qt-error-dialogs", Chr(34) & _chain.MasterUnRarChainFile.LocalFile & Chr(34))
+
+                    System.Diagnostics.Process.Start(Chr(34) & GetVLCExecutable() & Chr(34), _vlc_args)
+
                 Next
 
-                System.Diagnostics.Process.Start(Chr(34) & GetVLCExecutable() & Chr(34), _vlc_args)
-
             End If
-
 
         Catch ex As Exception
 

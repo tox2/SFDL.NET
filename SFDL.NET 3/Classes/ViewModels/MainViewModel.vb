@@ -141,8 +141,11 @@ Public Class MainViewModel
 
         view.GroupDescriptions.Add(groupDescription)
 
+        If _settings.InstantVideo = True Then
+            view.SortDescriptions.Add(New SortDescription("RequiredForInstantVideo", ListSortDirection.Descending))
+        End If
+
         'view.SortDescriptions.Add(New SortDescription("FileName", ListSortDirection.Descending))
-        view.SortDescriptions.Add(New SortDescription("RequiredForInstantVideo", ListSortDirection.Descending))
 
     End Sub
 
@@ -583,7 +586,13 @@ Decrypt:
                     _log.Info(String.Format("Hole keine neuen Threads für Session {0}", _session.DisplayName))
                 Else
 
-                    Dim DLItemQuery As IEnumerable(Of DownloadItem) = (From myitem In DownloadItems Where myitem.ParentContainerID.Equals(_session.ID) And (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Retry) Order By myitem.RequiredForInstantVideo Descending).Take(_thread_pull_count)
+                    Dim DLItemQuery As IEnumerable(Of DownloadItem)
+
+                    If _settings.InstantVideo = True Then
+                        DLItemQuery = (From myitem In DownloadItems Where myitem.ParentContainerID.Equals(_session.ID) And (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Retry) Order By myitem.RequiredForInstantVideo Descending).Take(_thread_pull_count)
+                    Else
+                        DLItemQuery = (From myitem In DownloadItems Where myitem.ParentContainerID.Equals(_session.ID) And (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Retry)).Take(_thread_pull_count)
+                    End If
 
                     For Each _dlitem In DLItemQuery
                         'For Each _dlitem In DownloadItems.Where(Function(myitem) (myitem.ParentContainerID.Equals(_session.ID) And (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Retry))).Take(_thread_pull_count)
