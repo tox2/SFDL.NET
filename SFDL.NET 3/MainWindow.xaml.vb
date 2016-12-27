@@ -31,6 +31,7 @@ Public Class MainWindow
         Dim _settings As Settings = Application.Current.Resources("Settings")
         Dim _log As Logger = LogManager.GetLogger("ContentRendered")
         Dim _cnl_helper As New ClicknLoad
+        Dim _new_update As Boolean = False
 
         For Each _arg In Environment.GetCommandLineArgs
 
@@ -139,6 +140,17 @@ Public Class MainWindow
         End If
 
 #End Region
+
+        If _settings.SearchUpdates = True Then
+
+            _new_update = Await IsNewUpdateAvailible()
+
+        If _new_update = True Then
+                Await ShowMessageAsync("Update Check", "Es ist ein neues Update verfügbar!" & vbNewLine & "Die neuste Version kannst du auf http://www.sfdl.net herunterladen.")
+            End If
+
+        End If
+
 
     End Sub
 

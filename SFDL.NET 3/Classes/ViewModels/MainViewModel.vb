@@ -43,6 +43,10 @@ Public Class MainViewModel
 
         LoadSavedSessions()
 
+#Disable Warning BC42358 ' Da auf diesen Aufruf nicht gewartet wird, wird die Ausführung der aktuellen Methode vor Abschluss des Aufrufs fortgesetzt.
+        IsNewUpdateAvailible()
+#Enable Warning BC42358 ' Da auf diesen Aufruf nicht gewartet wird, wird die Ausführung der aktuellen Methode vor Abschluss des Aufrufs fortgesetzt.
+
     End Sub
 
 #Region "Private Subs"
