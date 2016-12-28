@@ -424,7 +424,10 @@
                                                             </Rectangle>
                                                         </MenuItem.Icon>
                                                     </MenuItem>
-                                                    <MenuItem Header="{x:Static p:Strings.VariousStrings_SFDLInformation}">
+
+                                                    <MenuItem Header="{x:Static p:Strings.VariousStrings_SFDLInformation}"
+                                                              ItemContainerStyle="{StaticResource ThemeMenuItemStyle}"
+                                                              Background="{DynamicResource BaseColorBrush}">
                                                         <MenuItem.Icon>
                                                             <Rectangle Width="16"
                                                                        Height="16"
@@ -434,7 +437,9 @@
                                                                 </Rectangle.OpacityMask>
                                                             </Rectangle>
                                                         </MenuItem.Icon>
+
                                                         <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                                  Background="{DynamicResource BaseColorBrush}"
                                                                   CommandParameter="sfdl_description"
                                                                   Header="{x:Static p:Strings.VariousStrings_Description}">
                                                             <MenuItem.Icon>
@@ -473,6 +478,7 @@
                                                                 </Rectangle>
                                                             </MenuItem.Icon>
                                                         </MenuItem>
+
                                                     </MenuItem>
                                                     <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
                                                               CommandParameter="downloadtime"

@@ -25,6 +25,11 @@ Public Class MainViewModel
     Private _lock_container_sessions As New Object
     Private _eta_thread As IWorkItemResult(Of Boolean)
 
+    Public Sub UpdateSettings()
+
+        _settings = Application.Current.Resources("Settings")
+
+    End Sub
 
     Public Sub New()
 
@@ -656,30 +661,34 @@ Decrypt:
             Application.Current.Resources("DownloadStopped") = False
             ButtonInstantVideoEnabled = False
 
-            For Each _session In ContainerSessions
+            System.Threading.Tasks.Parallel.ForEach(ContainerSessions, Sub(_session)
 
-                _session.SessionState = ContainerSessionState.Queued
-                _session.SingleSessionMode = False
-                _session.WIG = Nothing
-                _session.SynLock = New Object
-                _session.DownloadStartedTime = Date.MinValue
-                _session.DownloadStoppedTime = Date.MinValue
+                                                                           _session.SessionState = ContainerSessionState.Queued
+                                                                           _session.SingleSessionMode = False
+                                                                           _session.WIG = Nothing
+                                                                           _session.SynLock = New Object
+                                                                           _session.DownloadStartedTime = Date.MinValue
+                                                                           _session.DownloadStoppedTime = Date.MinValue
 
-                For Each _chain In _session.UnRarChains
-                    _chain.UnRARRunning = False
-                Next
+                                                                           For Each _chain In _session.UnRarChains
+                                                                               _chain.UnRARRunning = False
+                                                                           Next
 
-            Next
+                                                                       End Sub)
 
-            For Each _dlitem In DownloadItems.Where(Function(myitem) myitem.isSelected = True)
-                _dlitem.DownloadStatus = DownloadItem.Status.Queued
-                _dlitem.DownloadProgress = 0
-                _dlitem.DownloadSpeed = String.Empty
-                _dlitem.SingleSessionMode = False
-                _dlitem.RetryCount = 0
-                _dlitem.RetryPossible = False
-                _dlitem.SizeDownloaded = 0
-            Next
+            System.Threading.Tasks.Parallel.ForEach(DownloadItems.Where(Function(myitem) myitem.isSelected = True), Sub(_dlitem)
+
+                                                                                                                        _dlitem.DownloadStatus = DownloadItem.Status.Queued
+                                                                                                                        _dlitem.DownloadProgress = 0
+                                                                                                                        _dlitem.DownloadSpeed = String.Empty
+                                                                                                                        _dlitem.SingleSessionMode = False
+                                                                                                                        _dlitem.RetryCount = 0
+                                                                                                                        _dlitem.RetryPossible = False
+                                                                                                                        _dlitem.SizeDownloaded = 0
+                                                                                                                        _dlitem.LocalFile = GetDownloadFilePath(Application.Current.Resources("Settings"), ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_dlitem.ParentContainerID)).First, _dlitem)
+
+                                                                                                                    End Sub)
+
 
 #End Region
 
@@ -688,6 +697,7 @@ Decrypt:
             End If
 
             Application.Current.Resources("DownloadStopped") = False
+
             ButtonDownloadStartStop = False
 
             _mytask.SetTaskStatus(TaskStatus.Running, "Download läuft...")

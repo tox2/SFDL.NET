@@ -292,7 +292,13 @@ Public Class SettingsViewModel
 
             Application.Current.Resources("Settings") = _settings
 
+            MainViewModel.ThisInstance.UpdateSettings()
+
             XMLHelper.XMLSerialize(_settings, IO.Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3\settings.xml"))
+
+            If Application.Current.Resources("DownloadStopped") = False Then
+                Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowMessageAsync(Me, "Achtung", "Alle Einstellung wurden nicht übernommen da aktuell ein Download aktiv ist." & vbNewLine & "Starte den Download neu damit alle Einstellungen übernommen werden")
+            End If
 
         Catch ex As Exception
             _error = True
