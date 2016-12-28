@@ -425,61 +425,6 @@
                                                         </MenuItem.Icon>
                                                     </MenuItem>
 
-                                                    <MenuItem Header="{x:Static p:Strings.VariousStrings_SFDLInformation}"
-                                                              ItemContainerStyle="{StaticResource ThemeMenuItemStyle}"
-                                                              Background="{DynamicResource BaseColorBrush}">
-                                                        <MenuItem.Icon>
-                                                            <Rectangle Width="16"
-                                                                       Height="16"
-                                                                       Fill="{DynamicResource AccentColorBrush}">
-                                                                <Rectangle.OpacityMask>
-                                                                    <VisualBrush Visual="{StaticResource appbar_information_circle}" />
-                                                                </Rectangle.OpacityMask>
-                                                            </Rectangle>
-                                                        </MenuItem.Icon>
-
-                                                        <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
-                                                                  Background="{DynamicResource BaseColorBrush}"
-                                                                  CommandParameter="sfdl_description"
-                                                                  Header="{x:Static p:Strings.VariousStrings_Description}">
-                                                            <MenuItem.Icon>
-                                                                <Rectangle Width="16"
-                                                                           Height="16"
-                                                                           Fill="{DynamicResource AccentColorBrush}">
-                                                                    <Rectangle.OpacityMask>
-                                                                        <VisualBrush Visual="{StaticResource appbar_interface_textbox}" />
-                                                                    </Rectangle.OpacityMask>
-                                                                </Rectangle>
-                                                            </MenuItem.Icon>
-                                                        </MenuItem>
-                                                        <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
-                                                                  CommandParameter="sfdl_uploader"
-                                                                  Header="{x:Static p:Strings.VariousStrings_Uploader}">
-                                                            <MenuItem.Icon>
-                                                                <Rectangle Width="16"
-                                                                           Height="16"
-                                                                           Fill="{DynamicResource AccentColorBrush}">
-                                                                    <Rectangle.OpacityMask>
-                                                                        <VisualBrush Visual="{StaticResource appbar_people_up}" />
-                                                                    </Rectangle.OpacityMask>
-                                                                </Rectangle>
-                                                            </MenuItem.Icon>
-                                                        </MenuItem>
-                                                        <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
-                                                                  CommandParameter="sfdl_downloadsize"
-                                                                  Header="{x:Static p:Strings.VariousStrings_FullDownloadSize}">
-                                                            <MenuItem.Icon>
-                                                                <Rectangle Width="16"
-                                                                           Height="16"
-                                                                           Fill="{DynamicResource AccentColorBrush}">
-                                                                    <Rectangle.OpacityMask>
-                                                                        <VisualBrush Visual="{StaticResource appbar_leaderboard}" />
-                                                                    </Rectangle.OpacityMask>
-                                                                </Rectangle>
-                                                            </MenuItem.Icon>
-                                                        </MenuItem>
-
-                                                    </MenuItem>
                                                     <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
                                                               CommandParameter="downloadtime"
                                                               Header="{x:Static p:Strings.VariousStrings_NeededDownloadTime}">
@@ -493,6 +438,62 @@
                                                             </Rectangle>
                                                         </MenuItem.Icon>
                                                     </MenuItem>
+                                                </MenuItem>
+                                                <MenuItem Height="19"
+                                                          HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center" Margin="13,0,0,0"
+                                                          Header="{x:Static p:Strings.VariousStrings_SFDLInformation}">
+
+                                                    <MenuItem.Icon>
+                                                        <Rectangle Width="16"
+                                                                       Height="16"
+                                                                       Fill="{DynamicResource AccentColorBrush}">
+                                                            <Rectangle.OpacityMask>
+                                                                <VisualBrush Visual="{StaticResource appbar_information_circle}" />
+                                                            </Rectangle.OpacityMask>
+                                                        </Rectangle>
+                                                    </MenuItem.Icon>
+
+                                                    <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                                  CommandParameter="sfdl_description"
+                                                                  Header="{x:Static p:Strings.VariousStrings_Description}">
+                                                        <MenuItem.Icon>
+                                                            <Rectangle Width="16"
+                                                                           Height="16"
+                                                                           Fill="{DynamicResource AccentColorBrush}">
+                                                                <Rectangle.OpacityMask>
+                                                                    <VisualBrush Visual="{StaticResource appbar_interface_textbox}" />
+                                                                </Rectangle.OpacityMask>
+                                                            </Rectangle>
+                                                        </MenuItem.Icon>
+                                                    </MenuItem>
+                                                    <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                                  CommandParameter="sfdl_uploader"
+                                                                  Header="{x:Static p:Strings.VariousStrings_Uploader}">
+                                                        <MenuItem.Icon>
+                                                            <Rectangle Width="16"
+                                                                           Height="16"
+                                                                           Fill="{DynamicResource AccentColorBrush}">
+                                                                <Rectangle.OpacityMask>
+                                                                    <VisualBrush Visual="{StaticResource appbar_people_up}" />
+                                                                </Rectangle.OpacityMask>
+                                                            </Rectangle>
+                                                        </MenuItem.Icon>
+                                                    </MenuItem>
+                                                    <MenuItem Command="{Binding InsertSpeedReportVariableCommand}"
+                                                                  CommandParameter="sfdl_downloadsize"
+                                                                  Header="{x:Static p:Strings.VariousStrings_FullDownloadSize}">
+                                                        <MenuItem.Icon>
+                                                            <Rectangle Width="16"
+                                                                           Height="16"
+                                                                           Fill="{DynamicResource AccentColorBrush}">
+                                                                <Rectangle.OpacityMask>
+                                                                    <VisualBrush Visual="{StaticResource appbar_leaderboard}" />
+                                                                </Rectangle.OpacityMask>
+                                                            </Rectangle>
+                                                        </MenuItem.Icon>
+                                                    </MenuItem>
+
                                                 </MenuItem>
                                             </Menu>
                                         </ToolBar>
