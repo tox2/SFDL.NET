@@ -6,7 +6,6 @@
     Public Property ExistingFileHandling As ExistingFileHandling = ExistingFileHandling.ResumeFile
     Public Property PreventStandby As Boolean = True
     Public Property CreatePackageSubfolder As Boolean = False
-    Public Property ClicknLoad As Boolean = True
     Public Property MaxDownloadThreads As Integer = 3
     Public Property MaxRetry As Integer = 3
     Public Property RetryWaitTime As Integer = 3
@@ -25,7 +24,6 @@
 
         With _rt
 
-            .ClicknLoad = True
             .CreatePackageSubfolder = False
             .DeleteSFDLAfterOpen = False
             .DownloadDirectory = IO.Path.Combine(Environment.GetEnvironmentVariable("USERPROFILE"), "Downloads")

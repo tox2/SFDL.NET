@@ -92,10 +92,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Classes\ClicknLoad\ClicknLoad.vb" />
-    <Compile Include="Classes\ClicknLoad\ClicknLoad_generic.vb" />
-    <Compile Include="Classes\ClicknLoad\ClicknLoad_xup.in.vb" />
-    <Compile Include="Classes\FileAssociation\URIHandlerAssociation.vb" />
     <Compile Include="Classes\FileAssociation\FileAssociation.vb" />
     <Compile Include="Classes\DispatchService.vb" />
     <Compile Include="Classes\Exceptions\DownloadStoppedException.vb" />

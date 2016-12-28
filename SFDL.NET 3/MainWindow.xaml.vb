@@ -30,7 +30,6 @@ Public Class MainWindow
 
         Dim _settings As Settings = Application.Current.Resources("Settings")
         Dim _log As Logger = LogManager.GetLogger("ContentRendered")
-        Dim _cnl_helper As New ClicknLoad
         Dim _new_update As Boolean = False
 
         For Each _arg In Environment.GetCommandLineArgs
@@ -39,20 +38,6 @@ Public Class MainWindow
 
                 If IO.Path.GetExtension(_arg).ToLower = ".sfdl" Then
                     MainViewModel.ThisInstance.OpenSFDLFile(_arg)
-                End If
-
-                If _arg.ToLower.StartsWith("sfdl://") And _settings.ClicknLoad = True Then
-
-                    Dim _local_tmp_file As String = String.Empty
-
-                    _local_tmp_file = Await _cnl_helper.ProcessClicknLoad(_arg.Replace("sfdl://", ""))
-
-                    If Not String.IsNullOrWhiteSpace(_local_tmp_file) AndAlso IO.File.Exists(_local_tmp_file) Then
-
-                        MainViewModel.ThisInstance.OpenSFDLFile(_local_tmp_file)
-
-                    End If
-
                 End If
 
             End If
@@ -103,16 +88,6 @@ Public Class MainWindow
                 _file_assoiciation.Create()
 
                 _log.Info("SFDL Extension registriert!")
-
-                If _settings.ClicknLoad Then
-
-                    Dim _uri_handler_association As New URIHandlerAssociation
-
-                    _uri_handler_association.RegisterSFDLURIHandler(System.Reflection.Assembly.GetExecutingAssembly().Location)
-
-                    _log.Info("SFDL URI Handler registriert!")
-
-                End If
 
                 UpdateInstallState()
 

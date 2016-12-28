@@ -35,15 +35,6 @@ Public Class SettingsViewModel
         End Get
     End Property
 
-    Public Property ClicknLoad As Boolean
-        Set(value As Boolean)
-            _settings.ClicknLoad = value
-            RaisePropertyChanged("ClicknLoad")
-        End Set
-        Get
-            Return _settings.ClicknLoad
-        End Get
-    End Property
     Public Property SearchUpdates As Boolean
         Set(value As Boolean)
             _settings.SearchUpdates = value
