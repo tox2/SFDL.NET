@@ -223,7 +223,6 @@
 
     End Function
 
-
     Function GetRecursiveListing(ByVal _bulk_folder As String, ByVal _ftp As ArxOne.Ftp.FtpClient, ByVal _packagename As String) As List(Of SFDL.Container.FileItem)
 
         Dim _ftp_path As New ArxOne.Ftp.FtpPath(_bulk_folder)
@@ -233,7 +232,6 @@
 
         Try
 
-            Dim _reply As ArxOne.Ftp.FtpReply
 
             For Each _item In ArxOne.Ftp.FtpClientUtility.List(_ftp, _ftp_path)
 

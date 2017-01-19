@@ -489,7 +489,7 @@ Class DownloadHelper
                     If Not String.IsNullOrWhiteSpace(_hashcommand) Then
                         _log.Info("Server Support Hash Alogrightm {0}", _hashcommand)
 
-                        _reply = _ftp_session.SendCommand(_hashcommand, _item.FullPath)
+                        _reply = _ftp_session.Expect(_ftp_session.SendCommand(_hashcommand, _item.FullPath), 250)
 
                         If _reply.Code.IsSuccess = True Then
 
