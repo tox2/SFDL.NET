@@ -296,7 +296,8 @@ Public Class DownloadItem
 
     Public ReadOnly Property GroupDescriptionIdentifier As String
         Get
-            Return PackageName & ";" & _parent_container_id.ToString
+            'Return PackageName & ";" & _parent_container_id.ToString
+            Return _parent_container_id.ToString
         End Get
     End Property
 

@@ -1360,9 +1360,9 @@ Decrypt:
 
             If parameter.GetType Is GetType(String) Then
 
-                If Not String.IsNullOrWhiteSpace(parameter) And parameter.ToString.Contains(";") Then
+                If Not String.IsNullOrWhiteSpace(parameter) Then
 
-                    Dim _container_sessionid As Guid = Guid.Parse(parameter.ToString.Split(";")(1))
+                    Dim _container_sessionid As Guid = Guid.Parse(parameter)
 
                     _container_session = ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_container_sessionid)).FirstOrDefault
 

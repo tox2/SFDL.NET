@@ -75,7 +75,14 @@
 
             If Not _container_session.ContainerFile.Packages(0).FileList.Count = 0 Then
                 _fingerprint = _fingerprint & _container_session.ContainerFile.Packages(0).FileList(0).FileName
-                _fingerprint = _fingerprint & IO.Path.GetDirectoryName(_container_session.ContainerFile.Packages(0).FileList(0).FullPath)
+
+                If Not _container_session.ContainerFile.Packages(0).FileList(0).FullPath.Length > 248 Then
+                    _fingerprint = _fingerprint & IO.Path.GetDirectoryName(_container_session.ContainerFile.Packages(0).FileList(0).FullPath)
+                Else
+                    _fingerprint = _fingerprint & System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(_container_session.ContainerFile.Packages(0).FileList(0).FullPath))
+                End If
+
+
             End If
 
         Else

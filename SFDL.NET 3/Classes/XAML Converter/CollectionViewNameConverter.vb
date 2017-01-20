@@ -6,6 +6,7 @@ Public Class CollectionViewNameConverter
     Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
 
         Dim _my_string As String = CType(value, String)
+        Dim _container As ContainerSession = Nothing
 
         If IsNothing(_my_string) Then
             Return Binding.DoNothing
@@ -15,18 +16,10 @@ Public Class CollectionViewNameConverter
             Return Binding.DoNothing
         End If
 
-        If _my_string.Contains(";") Then
+        _container = MainViewModel.ThisInstance.ContainerSessions.Where(Function(mysession) mysession.ID.ToString.Equals(_my_string.ToString)).FirstOrDefault
 
-            Dim _container As ContainerSession = Nothing
-
-            _container = MainViewModel.ThisInstance.ContainerSessions.Where(Function(mysession) mysession.ID.ToString.Equals(_my_string.Split(";")(1).ToString)).FirstOrDefault
-
-            If Not IsNothing(_container) Then
-                Return String.Format("{0}", _container.DisplayName)
-            Else
-                Return _my_string.Split(";")(0).ToString
-            End If
-
+        If Not IsNothing(_container) Then
+            Return String.Format("{0}", _container.DisplayName)
         Else
             Return Binding.DoNothing
         End If
