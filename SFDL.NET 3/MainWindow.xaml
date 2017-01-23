@@ -765,6 +765,28 @@
                                         </GridViewColumn>
                                     </GridView>
                                 </ListView.View>
+                                <ListView.ContextMenu>
+                                    <ContextMenu>
+                                        
+                                        <MenuItem 
+                                            Header="Kopieren" 
+                                            Command="{Binding CopyDoneTaskTextCommand}"
+                                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                            Path=PlacementTarget.SelectedItem}">
+
+                                            <MenuItem.Icon>
+                                                <Rectangle Width="16"
+                                               Height="16"
+                                               Fill="{DynamicResource AccentColorBrush}">
+                                                    <Rectangle.OpacityMask>
+                                                        <VisualBrush Visual="{StaticResource appbar_page_copy}" />
+                                                    </Rectangle.OpacityMask>
+                                                </Rectangle>
+                                            </MenuItem.Icon>
+
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </ListView.ContextMenu>
                             </ListView>
                         </TabItem>
                     </TabControl>

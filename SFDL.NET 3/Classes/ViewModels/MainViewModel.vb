@@ -1440,6 +1440,29 @@ Decrypt:
 
 #Region "Tasks"
 
+    Public ReadOnly Property CopyDoneTaskTextCommand() As ICommand
+        Get
+            Return New DelegateCommand(AddressOf CopyDoneTaskText)
+        End Get
+    End Property
+
+    Private Sub CopyDoneTaskText(ByVal parameter As Object)
+
+        If Not IsNothing(parameter) Then
+
+            Dim _item As AppTask = TryCast(parameter, AppTask)
+
+            If Not IsNothing(_item) Then
+
+                My.Computer.Clipboard.Clear()
+                My.Computer.Clipboard.SetText(_item.TaskDisplayText)
+
+            End If
+
+        End If
+
+    End Sub
+
     Private _active_tasks As New ObservableCollection(Of AppTask)
     Public Property ActiveTasks As ObservableCollection(Of AppTask)
         Set(value As ObservableCollection(Of AppTask))
