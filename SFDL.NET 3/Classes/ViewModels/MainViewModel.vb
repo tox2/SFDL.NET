@@ -1524,29 +1524,6 @@ Decrypt:
 
 #Region "InstantVideo"
 
-    'Private _instantvideo_streams As New ObservableCollection(Of ContainerSession)
-
-    'Public Property InstantVideoStreams As ObservableCollection(Of ContainerSession)
-    '    Set(value As ObservableCollection(Of ContainerSession))
-    '        _instantvideo_streams = value
-    '        RaisePropertyChanged("InstantVideoContainerSessions")
-    '    End Set
-    '    Get
-
-    '        _instantvideo_streams.Clear()
-
-    '        For Each _session In _container_sessions
-
-    '            If _session.UnRarChains.Where(Function(mychain) mychain.ReadyForInstantVideo = True).Count >= 1 Then
-    '                _instantvideo_streams.Add(_session)
-    '            End If
-
-    '        Next
-
-    '        Return _instantvideo_streams
-
-    '    End Get
-    'End Property
 
     Private _instant_video_shown As Boolean = False
 
@@ -1561,7 +1538,7 @@ Decrypt:
         End Get
     End Property
 
-    Private _button_instantvideo_enabled As Boolean = True
+    Private _button_instantvideo_enabled As Boolean = False
     Public Property ButtonInstantVideoEnabled As Boolean
         Set(value As Boolean)
             _button_instantvideo_enabled = value
