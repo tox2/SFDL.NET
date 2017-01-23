@@ -1,11 +1,25 @@
 ﻿<Serializable>
 Public Class ContainerSession
+
+    Private _lock_instant_video_streams As New Object
+
+    Public Sub InitCollectionSync()
+
+        _lock_instant_video_streams = New Object
+
+        BindingOperations.EnableCollectionSynchronization(InstantVideoStreams, _lock_instant_video_streams)
+
+    End Sub
+
     Public Sub Init(ByVal _container As Container.Container)
 
         Me.ID = Guid.NewGuid
         Me.ContainerFile = _container
         Me.SessionState = ContainerSessionState.Queued
         Me.Priority = 0
+        Me.InstantVideoStreams = New ObjectModel.ObservableCollection(Of InstantVideoStream)
+
+        BindingOperations.EnableCollectionSynchronization(InstantVideoStreams, _lock_instant_video_streams)
 
     End Sub
 
@@ -27,5 +41,6 @@ Public Class ContainerSession
     Public Property SingleSessionMode As Boolean = False
     Public Property CountryCode As String = String.Empty
     Public Property CountryImageUri As String = String.Empty
+    Public Property InstantVideoStreams As ObjectModel.ObservableCollection(Of InstantVideoStream)
 
 End Class

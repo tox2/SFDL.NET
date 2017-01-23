@@ -45,7 +45,7 @@ Public Class MainWindow
         Next
 
         ComB_Container_Info.DataContext = MainViewModel.ThisInstance
-        InstantVideoContainerList.DataContext = MainViewModel.ThisInstance
+        InstantVideoStreamList.DataContext = MainViewModel.ThisInstance
 
         If My.Settings.UserWindowState = WindowState.Normal Then
 
@@ -262,31 +262,37 @@ Public Class MainWindow
 
     End Sub
 
-    Private Sub cmd_play_instant_video_Click(sender As Object, e As RoutedEventArgs) Handles cmd_play_instant_video.Click
+    Private Async Sub cmd_play_instant_video_Click(sender As Object, e As RoutedEventArgs) Handles cmd_play_instant_video.Click
 
-        Dim _sel_object As ContainerSession
+        Dim _sel_object As Object
+        Dim _error As Boolean = False
 
         Try
 
-            _sel_object = InstantVideoContainerList.SelectedItem
+            _sel_object = InstantVideoStreamList.SelectedItem
 
-            If Not IsNothing(_sel_object) Then
+            If Not IsNothing(_sel_object) AndAlso _sel_object.GetType.Equals(GetType(InstantVideoStream)) Then
 
-                For Each _chain In _sel_object.UnRarChains
+                Dim _inst_stream As InstantVideoStream = TryCast(_sel_object, InstantVideoStream)
 
-                    Dim _vlc_args As String = String.Empty
+                Dim _vlc_args As String = String.Empty
 
-                    _vlc_args = String.Format("{0} --no-qt-error-dialogs", Chr(34) & _chain.MasterUnRarChainFile.LocalFile & Chr(34))
+                Dim _app_task As New AppTask(String.Format("Starte InstantVideo für Archiv {0}", _inst_stream.File))
 
-                    System.Diagnostics.Process.Start(Chr(34) & GetVLCExecutable() & Chr(34), _vlc_args)
+                _vlc_args = String.Format("{0} --no-qt-error-dialogs", Chr(34) & _inst_stream.File & Chr(34))
 
-                Next
+                System.Diagnostics.Process.Start(Chr(34) & GetVLCExecutable() & Chr(34), _vlc_args)
 
             End If
 
         Catch ex As Exception
-
+            _error = True
         End Try
+
+        If _error = True Then
+            Await ShowMessageAsync("InstantVideo Fehler", "Das ausgewählte InstatVideo konnte nicht gestartet werden!")
+        End If
+
 
     End Sub
 End Class

@@ -123,7 +123,10 @@ Public Class MainViewModel
                                      _item.RetryPossible = False
                                      _item.SizeDownloaded = 0
                                      DownloadItems.Add(_item)
+
                                  Next
+
+                                 _new_session.InitCollectionSync()
 
                                  ContainerSessions.Add(_new_session)
 
@@ -669,6 +672,7 @@ Decrypt:
                                                                            _session.SynLock = New Object
                                                                            _session.DownloadStartedTime = Date.MinValue
                                                                            _session.DownloadStoppedTime = Date.MinValue
+                                                                           _session.InstantVideoStreams.Clear()
 
                                                                            For Each _chain In _session.UnRarChains
                                                                                _chain.UnRARRunning = False
@@ -697,6 +701,8 @@ Decrypt:
             End If
 
             Application.Current.Resources("DownloadStopped") = False
+
+            ButtonInstantVideoEnabled = False
 
             ButtonDownloadStartStop = False
 
@@ -768,8 +774,22 @@ Decrypt:
                                      End If
 
                                  Else
-                                     If _settings.InstantVideo = True And IsReadyForInstantVideo(_chain) = True Then
+                                     If _settings.InstantVideo = True AndAlso IsReadyForInstantVideo(_chain) = True Then
+
+                                         If _mysession.InstantVideoStreams.Where(Function(mystream) mystream.File.Equals(_chain.MasterUnRarChainFile.LocalFile)).Count = 0 Then
+
+                                             Dim _instantvideo_stream As New InstantVideoStream
+
+                                             _instantvideo_stream.DisplayName = _chain.MasterUnRarChainFile.FileName
+                                             _instantvideo_stream.ParentSessionID = _mysession.ID
+                                             _instantvideo_stream.File = _chain.MasterUnRarChainFile.LocalFile
+
+                                             _mysession.InstantVideoStreams.Add(_instantvideo_stream)
+
+                                         End If
+
                                          ButtonInstantVideoEnabled = True
+
                                      End If
                                  End If
 
@@ -1504,29 +1524,29 @@ Decrypt:
 
 #Region "InstantVideo"
 
-    Private _instantvideo_container_sessions As New ObservableCollection(Of ContainerSession)
+    'Private _instantvideo_streams As New ObservableCollection(Of ContainerSession)
 
-    Public Property InstantVideoContainerSessions As ObservableCollection(Of ContainerSession)
-        Set(value As ObservableCollection(Of ContainerSession))
-            _instantvideo_container_sessions = value
-            RaisePropertyChanged("InstantVideoContainerSessions")
-        End Set
-        Get
+    'Public Property InstantVideoStreams As ObservableCollection(Of ContainerSession)
+    '    Set(value As ObservableCollection(Of ContainerSession))
+    '        _instantvideo_streams = value
+    '        RaisePropertyChanged("InstantVideoContainerSessions")
+    '    End Set
+    '    Get
 
-            _instantvideo_container_sessions.Clear()
+    '        _instantvideo_streams.Clear()
 
-            For Each _session In _container_sessions
+    '        For Each _session In _container_sessions
 
-                If _session.UnRarChains.Where(Function(mychain) mychain.ReadyForInstantVideo = True).Count >= 1 Then
-                    _instantvideo_container_sessions.Add(_session)
-                End If
+    '            If _session.UnRarChains.Where(Function(mychain) mychain.ReadyForInstantVideo = True).Count >= 1 Then
+    '                _instantvideo_streams.Add(_session)
+    '            End If
 
-            Next
+    '        Next
 
-            Return _instantvideo_container_sessions
+    '        Return _instantvideo_streams
 
-        End Get
-    End Property
+    '    End Get
+    'End Property
 
     Private _instant_video_shown As Boolean = False
 
