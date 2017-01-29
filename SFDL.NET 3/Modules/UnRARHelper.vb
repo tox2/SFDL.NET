@@ -217,7 +217,7 @@ Module UnRARHelper
                 .RedirectStandardOutput = True
                 .UseShellExecute = False
 
-                .Arguments = String.Format("-p{0}{1}{2} {3}{4}{5}", Chr(34), IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "sfdl_passwords.def"), Chr(34), _filename, Chr(34))
+                .Arguments = String.Format("-p{0}{1}{2} {3}{4}{5}", Chr(34), IO.Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3", "sfdl_passwords.def"), Chr(34), Chr(34), _filename, Chr(34))
 
             End With
 

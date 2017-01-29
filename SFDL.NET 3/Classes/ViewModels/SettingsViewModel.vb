@@ -278,6 +278,8 @@ Public Class SettingsViewModel
     Private Async Sub SaveSettings()
 
         Dim _error As Boolean = False
+        Dim _password_def As New Text.StringBuilder
+        Dim _password_def_file As String = IO.Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3", "sfdl_passwords.def")
 
         Try
 
@@ -286,6 +288,18 @@ Public Class SettingsViewModel
             MainViewModel.ThisInstance.UpdateSettings()
 
             XMLHelper.XMLSerialize(_settings, IO.Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3\settings.xml"))
+
+            If IO.File.Exists(_password_def_file) Then
+                IO.File.Delete(_password_def_file)
+            End If
+
+            _password_def.AppendLine("##")
+
+            For Each _item In _settings.UnRARSettings.UnRARPasswordList
+                _password_def.AppendLine(_item)
+            Next
+
+            My.Computer.FileSystem.WriteAllText(_password_def_file, _password_def.ToString, False)
 
             If Application.Current.Resources("DownloadStopped") = False Then
                 Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowMessageAsync(Me, "Achtung", "Alle Einstellung wurden nicht übernommen da aktuell ein Download aktiv ist." & vbNewLine & "Starte den Download neu damit alle Einstellungen übernommen werden")

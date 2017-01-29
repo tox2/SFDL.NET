@@ -506,9 +506,7 @@ Decrypt:
 
         _log.Debug("ETA While beendet!")
 
-        Task.Run(Sub()
-                     PostDownload()
-                 End Sub)
+        PostDownload()
 
         Return True
 
@@ -518,22 +516,30 @@ Decrypt:
 
         Dim _mytasklist As New List(Of AppTask)
 
-        _mytasklist = ActiveTasks.Where(Function(mytask) mytask.TaskName = "ETATask").ToList
+        Try
 
-        For Each _mytask As AppTask In _mytasklist
+            _mytasklist = ActiveTasks.Where(Function(mytask) mytask.TaskName = "ETATask").ToList
 
-            If Application.Current.Resources("DownloadStopped") = False Then
-                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download beendet", Now.ToString))
-            Else
-                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download gestoppt", Now.ToString))
-            End If
+            For Each _mytask As AppTask In _mytasklist
 
-        Next
+                If Application.Current.Resources("DownloadStopped") = False Then
+                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download beendet", Now.ToString))
+                Else
+                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download gestoppt", Now.ToString))
+                End If
+
+            Next
+
+        Catch ex As Exception
+
+        End Try
 
         Application.Current.Resources("DownloadStopped") = True
         ButtonDownloadStartStop = True
 
-        ExcutePostDownloadActions()
+        Tasks.Task.Run(Sub()
+                           ExcutePostDownloadActions()
+                       End Sub)
 
     End Sub
 
