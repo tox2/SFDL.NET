@@ -1,6 +1,15 @@
 ﻿Imports System.Text.RegularExpressions
 
 Module UnRARHelper
+    Function isx64() As Boolean
+
+        If IntPtr.Size = 8 Then
+            Return True
+        Else
+            Return False
+        End If
+
+    End Function
 
     Function isUnRarChainComplete(ByVal _chain As UnRARChain) As Boolean
 
@@ -154,64 +163,101 @@ Module UnRARHelper
 
     End Function
 
-    Private Function IsUnRARPasswordValid(ByVal _filename As String, ByVal _password As String) As Boolean
+    Friend Function ParsecRARkPassword(ByVal _raw_output As String) As String
 
-        Dim _tox_check_process As Process
-        Dim _tox_archive_check_bin As String
-        Dim _result As Boolean = False
-        Dim _log As NLog.Logger = NLog.LogManager.GetLogger("IsUnRARPasswordValid")
+        Dim _password As String = String.Empty
+
+        Dim sourcestring As String = _raw_output
+        Dim re As Regex = New Regex(".+- CRC OK")
+        Dim mc As MatchCollection = re.Matches(sourcestring)
+        Dim mIdx As Integer = 0
+
+        For Each m As Match In mc
+            For groupIdx As Integer = 0 To m.Groups.Count - 1
+                If Not String.IsNullOrEmpty(m.Value.ToString) Then
+                    _password = m.Value.ToString
+                End If
+            Next
+            mIdx = mIdx + 1
+        Next
+
+        _password = _password.Replace(" - CRC OK", "")
+
+        Return _password.Trim
+
+    End Function
+
+    Private Function CrackUnRARPassword(ByVal _filename As String) As CrackUnRARPasswordResult
+
+        Dim _crark_process As Process
+        Dim _crark_bin As String = String.Empty
+        Dim _result As New CrackUnRARPasswordResult
+        Dim _log As NLog.Logger = NLog.LogManager.GetLogger("CrackUnRARPassword")
+        Dim _crark_raw_output As String = String.Empty
 
         Try
 
-            _tox_archive_check_bin = IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "bin", "TOAC.exe")
-
-            If IO.File.Exists(_tox_archive_check_bin) = False Then
-                Throw New Exception("Tox ArchiveChecker Executable Is missing!")
+            If isx64() = True Then
+                _crark_bin = IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "bin", "cRARk_x64.exe")
+            Else
+                _crark_bin = IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "bin", "cRARk_x86.exe")
             End If
 
-            _tox_check_process = New Process
+            If IO.File.Exists(_crark_bin) = False Then
+                Throw New Exception("cRARk Executable Is missing!")
+            End If
 
-            With _tox_check_process.StartInfo
+            _crark_process = New Process
+
+            With _crark_process.StartInfo
 
                 .CreateNoWindow = True
-                .FileName = _tox_archive_check_bin
+                .FileName = _crark_bin
                 .WorkingDirectory = IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "bin")
                 .RedirectStandardOutput = True
                 .UseShellExecute = False
 
-                If String.IsNullOrWhiteSpace(_password) Then
-                    .Arguments = String.Format("{0}", Chr(34) & _filename & Chr(34))
-                Else
-                    .Arguments = String.Format("{0} -p {1}", Chr(34) & _filename & Chr(34), Chr(34) & _password & Chr(34))
-                End If
+                .Arguments = String.Format("-p{0}{1}{2} {3}{4}{5}", Chr(34), IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "sfdl_passwords.def"), Chr(34), _filename, Chr(34))
 
             End With
 
-            _tox_check_process.Start()
+            _log.Info(String.Format("Starting cRARk.exe with the following parameters: {0}", _crark_process.StartInfo.Arguments))
 
-            _tox_check_process.WaitForExit()
+            _crark_process.Start()
 
-            Select Case _tox_check_process.ExitCode
+            _crark_process.WaitForExit()
 
-                Case 0 'No Password needed
-                    _result = True
+            _crark_raw_output = _crark_process.StandardOutput.ReadToEnd
 
-                Case 1 'Password is needed
-                    _result = False
+            If _crark_raw_output.Contains("is not RAR") Then
+                Throw New Exception("Not a vaid RAR File!")
+            End If
 
-                Case 2 'Password is needed
-                    _result = False
+            If _crark_raw_output.ToLower.Contains("not encrypted") Then
 
-                Case 3 'Password was false
-                    _result = False
+                _result.PasswordNeeded = False
+                _result.PasswordFound = True
+                _result.Password = String.Empty
 
-                Case 4 'Password was correct
-                    _result = True
+            Else
 
-            End Select
+                If _crark_raw_output.Contains("CRC OK") Then
+                    _result.PasswordFound = True
+                    _result.PasswordNeeded = True
+                    _result.Password = ParsecRARkPassword(_crark_raw_output)
+                End If
 
+                If _crark_raw_output.Contains("Password Not found") Then
+                    _result.PasswordFound = False
+                    _result.PasswordNeeded = True
+                    _result.Password = String.Empty
+                End If
+
+            End If
 
         Catch ex As Exception
+            _result.ErrorOccured = True
+            _result.ErrorMessage = ex.Message
             _log.Error(ex, ex.Message)
         End Try
 
@@ -318,47 +364,34 @@ Module UnRARHelper
 
     Public Function UnRAR(ByVal _unrarchain As UnRARChain, ByVal _app_task As AppTask, ByVal _unrar_settings As UnRARSettings) As Boolean
 
+        Dim _crark_result As New CrackUnRARPasswordResult
         Dim _unrar_password As String = String.Empty
         Dim _log As NLog.Logger = NLog.LogManager.GetLogger("UnRAR")
         Dim _rt As Boolean = True
 
-        _log.Info("Checking if a UnRar Password is needed...")
+        _log.Info("Cracking UnRar Password...")
 
         Try
 
             _app_task.SetTaskStatus(TaskStatus.Running, String.Format("Cracking Password {0}", IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
 
-            If IsUnRARPasswordValid(_unrarchain.MasterUnRarChainFile.LocalFile, String.Empty) = False Then
+            _crark_result = CrackUnRARPassword(_unrarchain.MasterUnRarChainFile.LocalFile)
 
-                _log.Info("Damn....we need a password to extract this sh**t")
+            If (_unrar_settings.UseUnRARPasswordList = False Or _unrar_settings.UnRARPasswordList.Count = 0) And _crark_result.PasswordNeeded = True Then
+                Throw New Exception("We need a password to extract but i am not allowed to do any password test or there no passwords in the list")
+            End If
 
-                If _unrar_settings.UseUnRARPasswordList = False Or _unrar_settings.UnRARPasswordList.Count = 0 Then
-                    Throw New Exception("We need a password to extract but i am not allowed to do any password test or there no passwords in the list")
-                End If
+            If _crark_result.ErrorOccured = True Then
+                Throw New Exception("Failed to Crack UnRAR Password!" & vbNewLine & _crark_result.ErrorMessage)
+            End If
 
-                For Each _pw In _unrar_settings.UnRARPasswordList
-
-                    If IsUnRARPasswordValid(_unrarchain.MasterUnRarChainFile.LocalFile, _pw) = True Then
-                        _unrar_password = _pw
-                        _log.Info(String.Format("Unrar Password Found -> {0}", _pw))
-                        Exit For
-                    Else
-                        _log.Info(String.Format("Not luck {0} was the wrong password", _pw))
-                    End If
-
-                Next
-
-                If String.IsNullOrWhiteSpace(_unrar_password) Then
-                    Throw New Exception("No matching UnRar Password found! - Automatic UnRar Canceled")
-                End If
-
-            Else
-                _log.Info("Cool thing - we don't need a password")
+            If _crark_result.PasswordNeeded = True And _crark_result.PasswordFound = False Then
+                Throw New Exception("No valid UnrRAR Password found!")
             End If
 
             _log.Info("Now passing all needed Arguments to UnRar Binary and wait the extraction to finish")
 
-            If DoUnRAR(_unrarchain.MasterUnRarChainFile.LocalFile, IO.Path.GetDirectoryName(_unrarchain.MasterUnRarChainFile.LocalFile), _unrar_password, _app_task) = True Then
+            If DoUnRAR(_unrarchain.MasterUnRarChainFile.LocalFile, IO.Path.GetDirectoryName(_unrarchain.MasterUnRarChainFile.LocalFile), _crark_result.Password, _app_task) = True Then
 
                 If _unrar_settings.DeleteAfterUnRAR = True Then
 
