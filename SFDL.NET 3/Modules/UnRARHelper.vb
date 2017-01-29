@@ -248,9 +248,9 @@ Module UnRARHelper
                 .StandardOutputEncoding = Text.Encoding.UTF8
 
                 If String.IsNullOrWhiteSpace(_password) Then
-                    .Arguments = String.Format("x -o+ -p- {0} {1}", Chr(34) & _filename & Chr(34), Chr(34) & _extract_dir & Chr(34))
+                    .Arguments = String.Format("x -o- -p- {0} {1}", Chr(34) & _filename & Chr(34), Chr(34) & _extract_dir & Chr(34))
                 Else
-                    .Arguments = String.Format("x -o+ -p{0} {1} {2}", _password, Chr(34) & _filename & Chr(34), Chr(34) & _extract_dir & Chr(34))
+                    .Arguments = String.Format("x -o- -p{0} {1} {2}", _password, Chr(34) & _filename & Chr(34), Chr(34) & _extract_dir & Chr(34))
                 End If
 
             End With
@@ -288,11 +288,20 @@ Module UnRARHelper
 
             _log.Info("UnRAR Process has exited")
 
+
             _tmp_output = _out_lines.ToString
+            _tmp_output = _tmp_output & _unrar_process.StandardOutput.ReadToEnd
+
             _tmp_output = _tmp_output.Trim
 
             If _tmp_output.ToString.Contains("OK") Then
-                _result = True
+
+                If _tmp_output.ToString.Contains("Total errors:") Then
+                    _result = False
+                Else
+                    _result = True
+                End If
+
             Else
                 Throw New Exception("Output missmatch! Output was: " & vbNewLine & _tmp_output)
             End If
