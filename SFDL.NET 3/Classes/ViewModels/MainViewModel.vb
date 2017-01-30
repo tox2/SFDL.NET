@@ -88,7 +88,6 @@ Public Class MainViewModel
         Dim _path As String = Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3", "Sessions")
         Dim _log As Logger = LogManager.GetLogger("LoadSavedSessions")
 
-        ' Task.Run(Sub()
 
         If Directory.Exists(_path) Then
 
@@ -144,7 +143,6 @@ Public Class MainViewModel
 
         End If
 
-        '  End Sub)
 
 
     End Sub

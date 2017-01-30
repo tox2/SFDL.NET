@@ -183,6 +183,8 @@ Module UnRARHelper
 
         _password = _password.Replace(" - CRC OK", "")
 
+        _password = _password.Trim(ChrW(7))
+
         Return _password.Trim
 
     End Function
@@ -215,6 +217,7 @@ Module UnRARHelper
                 .FileName = _crark_bin
                 .WorkingDirectory = IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "bin")
                 .RedirectStandardOutput = True
+                .RedirectStandardInput = True
                 .UseShellExecute = False
 
                 .Arguments = String.Format("-p{0}{1}{2} {3}{4}{5}", Chr(34), IO.Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3", "sfdl_passwords.def"), Chr(34), Chr(34), _filename, Chr(34))
@@ -229,7 +232,7 @@ Module UnRARHelper
 
             _crark_raw_output = _crark_process.StandardOutput.ReadToEnd
 
-            If _crark_raw_output.Contains("is not RAR") Then
+            If _crark_raw_output.ToLower.Contains("is not rar") Then
                 Throw New Exception("Not a vaid RAR File!")
             End If
 
@@ -241,13 +244,13 @@ Module UnRARHelper
 
             Else
 
-                If _crark_raw_output.Contains("CRC OK") Then
+                If _crark_raw_output.ToLower.Contains("crc ok") Then
                     _result.PasswordFound = True
                     _result.PasswordNeeded = True
                     _result.Password = ParsecRARkPassword(_crark_raw_output)
                 End If
 
-                If _crark_raw_output.Contains("Password Not found") Then
+                If _crark_raw_output.ToLower.Contains("poassword not found") Then
                     _result.PasswordFound = False
                     _result.PasswordNeeded = True
                     _result.Password = String.Empty
