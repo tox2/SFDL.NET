@@ -188,29 +188,6 @@ Public Class MainWindow
 
     End Sub
 
-
-
-    Private Sub MainWindow_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
-
-        If MainViewModel.ThisInstance.WindowState = WindowState.Normal Or MainViewModel.ThisInstance.WindowState = WindowState.Maximized Then
-
-            My.Settings.UserWindowState = MainViewModel.ThisInstance.WindowState
-
-            My.Settings.UserWindowHeight = Me.Height
-            My.Settings.UserWindowWitdh = Me.Width
-
-            My.Settings.Save()
-
-        End If
-
-    End Sub
-
-    Private Sub MenuItem_Click(sender As Object, e As RoutedEventArgs)
-
-        MessageBox.Show(MainViewModel.ThisInstance.DownloadItems(0).IsExpanded)
-
-    End Sub
-
     Private Sub OnGridKeyUp(sender As Object, e As KeyEventArgs)
 
         If Not IsNothing(ListView_DownloadItems.SelectedItems) AndAlso e.Key = Key.Enter Then
@@ -264,10 +241,35 @@ Public Class MainWindow
                 End If
 
             Else
+
+                If MainViewModel.ThisInstance.WindowState = WindowState.Normal Or MainViewModel.ThisInstance.WindowState = WindowState.Maximized Then
+
+                    My.Settings.UserWindowState = MainViewModel.ThisInstance.WindowState
+
+                    My.Settings.UserWindowHeight = Me.Height
+                    My.Settings.UserWindowWitdh = Me.Width
+
+                    My.Settings.Save()
+
+                End If
+
                 MainViewModel.ThisInstance.SaveSessions()
             End If
         Else
+
+            If MainViewModel.ThisInstance.WindowState = WindowState.Normal Or MainViewModel.ThisInstance.WindowState = WindowState.Maximized Then
+
+                My.Settings.UserWindowState = MainViewModel.ThisInstance.WindowState
+
+                My.Settings.UserWindowHeight = Me.Height
+                My.Settings.UserWindowWitdh = Me.Width
+
+                My.Settings.Save()
+
+            End If
+
             MainViewModel.ThisInstance.SaveSessions()
+
         End If
 
     End Sub

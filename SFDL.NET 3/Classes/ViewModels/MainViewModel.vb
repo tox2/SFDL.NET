@@ -1064,7 +1064,7 @@ Decrypt:
     End Property
 
     Private Sub ExitApplication()
-        Application.Current.Shutdown()
+        Application.Current.MainWindow.Close()
     End Sub
 
     Public ReadOnly Property OpenSFDLCommand() As ICommand
