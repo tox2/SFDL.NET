@@ -12,7 +12,7 @@ Imports System.Windows
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("SFDL.NET_3")>
-<Assembly: AssemblyDescription("Tech Preview 4")>
+<Assembly: AssemblyDescription("RC2")>
 <Assembly: AssemblyCompany("")>
 <Assembly: AssemblyProduct("SFDL.NET 3")>
 <Assembly: AssemblyCopyright("Copyright ©  2016")>
@@ -55,5 +55,5 @@ Imports System.Windows
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("3.0.0.1")>
-<Assembly: AssemblyFileVersion("3.0.0.1")>
+<Assembly: AssemblyVersion("3.0.0.2")>
+<Assembly: AssemblyFileVersion("3.0.0.2")>

@@ -230,7 +230,7 @@
 
     End Function
 
-    Function GetRecursiveListing(ByVal _bulk_folder As String, ByVal _ftp As ArxOne.Ftp.FtpClient, ByVal _packagename As String) As List(Of SFDL.Container.FileItem)
+    Function GetRecursiveListing(ByVal _bulk_folder As String, ByVal _ftp As ArxOne.Ftp.FtpClient, ByVal _packagename As String, Optional ByVal _subdirmode As Boolean = False) As List(Of SFDL.Container.FileItem)
 
         Dim _ftp_path As New ArxOne.Ftp.FtpPath(_bulk_folder)
         Dim _rt_list As New List(Of SFDL.Container.FileItem)
@@ -245,13 +245,18 @@
                 Try
 
                     Dim _entry As ArxOne.Ftp.FtpEntry
+                    Dim _path_seperator As String = "/" 'Assume Unix Path Seperator
 
                     _entry = FTPHelper.TryParseLine(_item, _bulk_folder)
+
+                    If _entry.Path.ToString.Contains("\") Then
+                        _path_seperator = "\"
+                    End If
 
                     If Not IsNothing(_entry) Then
 
                         If _entry.Type = ArxOne.Ftp.FtpEntryType.Directory And Not (_entry.Name.ToString.Equals(".") Or _entry.Name.ToString.Equals("..")) Then
-                            _rt_list.AddRange(GetRecursiveListing(_entry.Path.ToString, _ftp, _packagename))
+                            _rt_list.AddRange(GetRecursiveListing(_entry.Path.ToString, _ftp, _packagename, True))
                         Else
 
                             If _entry.Type = ArxOne.Ftp.FtpEntryType.File Then
@@ -263,6 +268,13 @@
                                 _file_item.FileSize = _entry.Size
                                 _file_item.PackageName = _packagename
                                 _file_item.DirectoryPath = _bulk_folder
+
+                                If _subdirmode = True Then
+                                    _file_item.DirectoryRoot = _bulk_folder.Substring(0, _bulk_folder.LastIndexOf(_path_seperator))
+                                Else
+                                    _file_item.DirectoryRoot = _bulk_folder
+                                End If
+
                                 _file_item.HashType = Container.HashType.None
 
                                 _rt_list.Add(_file_item)
@@ -327,11 +339,18 @@
                 _download_dir = IO.Path.Combine(_download_dir, _item.PackageName)
             End If
 
-            'If Not IO.Directory.Exists(_download_dir) Then
-            '    IO.Directory.CreateDirectory(_download_dir)
-            'End If
+            _tmp_last_sub_dir = _item.DirectoryPath.Replace(_item.DirectoryRoot, "")
 
-            _dowload_local_filename = IO.Path.Combine(_download_dir, _item.FileName)
+            If _tmp_last_sub_dir.StartsWith("\") Or _tmp_last_sub_dir.StartsWith("/") Then
+                _tmp_last_sub_dir = _tmp_last_sub_dir.Remove(0, 1)
+            End If
+
+            If _tmp_last_sub_dir.EndsWith("\") Or _tmp_last_sub_dir.EndsWith("/") Then
+                _tmp_last_sub_dir = _tmp_last_sub_dir.Remove(_tmp_last_sub_dir.Length - 1, 1)
+            End If
+
+            _dowload_local_filename = IO.Path.Combine(_download_dir, _tmp_last_sub_dir, _item.FileName)
+
 
         Catch ex As Exception
             _log.Error(ex, ex.Message)
