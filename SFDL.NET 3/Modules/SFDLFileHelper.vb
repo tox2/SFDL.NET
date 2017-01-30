@@ -1,4 +1,7 @@
-﻿Module SFDLFileHelper
+﻿Imports System.Text.RegularExpressions
+Imports NLog
+
+Module SFDLFileHelper
 
     Private _log As NLog.Logger = NLog.LogManager.GetLogger("SFDLFileHelper")
 
@@ -361,5 +364,90 @@
         Return _dowload_local_filename
 
     End Function
+
+    Sub GenerateContainerSessionChains(ByVal _mycontainer_session As ContainerSession)
+
+#Region "Parse Unrar/InstatVideo Chain"
+
+
+        For Each _item In _mycontainer_session.DownloadItems.Where(Function(_my_item As DownloadItem) IO.Path.GetExtension(_my_item.FileName).Equals(".rar"))
+
+            Dim _unrarchain As New UnRARChain
+            Dim _searchpattern As Regex
+            Dim _count As Integer
+            Dim _log As Logger = LogManager.GetLogger("RarChainParser")
+
+            If Not _item.FileName.Contains(".part") Then
+
+                _count = 0
+
+                _item.FirstUnRarFile = True
+                _item.RequiredForInstantVideo = True
+                _unrarchain.MasterUnRarChainFile = _item
+
+                _log.Debug("First UnRar File: {0}", _item.FileName)
+
+                _searchpattern = New Regex("filename\.r[0-9]{1,2}".Replace("filename", IO.Path.GetFileNameWithoutExtension(_item.FileName)))
+
+                For Each _chainitem As DownloadItem In _mycontainer_session.DownloadItems.Where(Function(_my_item As DownloadItem) _searchpattern.IsMatch(_my_item.FileName))
+
+                    _log.Debug("ChainItem FileName: {0}", _chainitem.FileName)
+
+                    If _count < 1 Then
+                        _chainitem.RequiredForInstantVideo = True
+                    End If
+
+                    _unrarchain.ChainMemberFiles.Add(_chainitem)
+
+                    _count += 1
+
+                Next
+
+                _mycontainer_session.UnRarChains.Add(_unrarchain)
+
+            Else
+
+                _searchpattern = New Regex("^((?!\.part(?!0*1\.rar$)\d+\.rar$).)*\.(?:rar|r?0*1)$") 'THX @ http://stackoverflow.com/a/2537935
+
+                _count = 0
+
+                If _searchpattern.IsMatch(_item.FileName) Then 'MasterFile
+
+                    Dim _tmp_filename_replace As String
+
+                    _log.Debug("First UnRar File: {0}", _item.FileName)
+                    _item.FirstUnRarFile = True
+                    _item.RequiredForInstantVideo = True
+                    _unrarchain.MasterUnRarChainFile = _item
+
+                    _tmp_filename_replace = _item.FileName.Remove(_item.FileName.IndexOf(".part", StringComparison.Ordinal))
+
+                    _searchpattern = New Regex("filename\.part[0-9]{1,3}.rar".Replace("filename", _tmp_filename_replace))
+
+                    For Each _chainitem As DownloadItem In _mycontainer_session.DownloadItems.Where(Function(_my_item As DownloadItem) _searchpattern.IsMatch(_my_item.FileName) And Not _my_item.FileName.Equals(_unrarchain.MasterUnRarChainFile.FileName))
+
+                        _log.Debug("ChainItem FileName: {0}", _chainitem.FileName)
+
+                        If _count < 1 Then
+                            _chainitem.RequiredForInstantVideo = True
+                        End If
+
+                        _unrarchain.ChainMemberFiles.Add(_chainitem)
+
+                        _count += 1
+
+                    Next
+
+                    _mycontainer_session.UnRarChains.Add(_unrarchain)
+
+                End If
+
+            End If
+
+        Next
+
+#End Region
+
+    End Sub
 
 End Module

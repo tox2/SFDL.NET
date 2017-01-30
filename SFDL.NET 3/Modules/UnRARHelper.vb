@@ -349,7 +349,13 @@ Module UnRARHelper
                 End If
 
             Else
-                Throw New Exception("Output missmatch! Output was: " & vbNewLine & _tmp_output)
+
+                If _tmp_output.ToString.Contains("No files to extract") Then
+                    _result = True
+                Else
+                    Throw New Exception("Output missmatch! Output was: " & vbNewLine & _tmp_output)
+                End If
+
             End If
 
         Catch ex As Exception

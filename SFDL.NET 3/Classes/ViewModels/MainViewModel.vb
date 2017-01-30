@@ -88,59 +88,63 @@ Public Class MainViewModel
         Dim _path As String = Path.Combine(Environment.GetEnvironmentVariable("appdata"), "SFDL.NET 3", "Sessions")
         Dim _log As Logger = LogManager.GetLogger("LoadSavedSessions")
 
-        Task.Run(Sub()
+        ' Task.Run(Sub()
 
-                     If Directory.Exists(_path) Then
+        If Directory.Exists(_path) Then
 
-                         For Each _file In Directory.GetFiles(_path, "*.session")
+            For Each _file In Directory.GetFiles(_path, "*.session")
 
-                             Dim _new_session As New ContainerSession
+                Dim _new_session As New ContainerSession
 
-                             Try
+                Try
 
-                                 _log.Info(String.Format("Loading Sessions {0}", _file))
+                    _log.Info(String.Format("Loading Sessions {0}", _file))
 
-                                 _new_session = XMLDeSerialize(_new_session, _file)
-                                 _new_session.WIG = Nothing
-                                 _new_session.DownloadStartedTime = Date.MinValue
-                                 _new_session.DownloadStoppedTime = Date.MinValue
-                                 _new_session.SessionState = ContainerSessionState.Queued
-                                 _new_session.SingleSessionMode = False
-                                 _new_session.SynLock = New Object
+                    _new_session = XMLDeSerialize(_new_session, _file)
+                    _new_session.WIG = Nothing
+                    _new_session.DownloadStartedTime = Date.MinValue
+                    _new_session.DownloadStoppedTime = Date.MinValue
+                    _new_session.SessionState = ContainerSessionState.Queued
+                    _new_session.SingleSessionMode = False
+                    _new_session.SynLock = New Object
 
-                                 For Each _chain In _new_session.UnRarChains
-                                     _chain.UnRARRunning = False
-                                 Next
+                    For Each _chain In _new_session.UnRarChains
+                        _chain.UnRARRunning = False
+                    Next
 
-                                 For Each _item In _new_session.DownloadItems
-                                     'Update DownloadPath cause it could have changed
-                                     _item.LocalFile = GetDownloadFilePath(Application.Current.Resources("Settings"), _new_session, _item)
-                                     '_item.DownloadStatus = DownloadItem.Status.None
-                                     _item.DownloadProgress = 0
-                                     _item.DownloadSpeed = String.Empty
-                                     _item.SingleSessionMode = False
-                                     _item.RetryCount = 0
-                                     _item.RetryPossible = False
-                                     _item.SizeDownloaded = 0
-                                     DownloadItems.Add(_item)
+                    _new_session.InitCollectionSync()
 
-                                 Next
+                    GenerateContainerSessionChains(_new_session)
 
-                                 _new_session.InitCollectionSync()
+                    For Each _item In _new_session.DownloadItems
 
-                                 ContainerSessions.Add(_new_session)
+                        'Update DownloadPath cause it could have changed
+                        _item.LocalFile = GetDownloadFilePath(Application.Current.Resources("Settings"), _new_session, _item)
+                        '_item.DownloadStatus = DownloadItem.Status.None
+                        _item.DownloadProgress = 0
+                        _item.DownloadSpeed = String.Empty
+                        _item.SingleSessionMode = False
+                        _item.RetryCount = 0
+                        _item.RetryPossible = False
+                        _item.SizeDownloaded = 0
 
-                                 File.Delete(_file)
+                        DownloadItems.Add(_item)
 
-                             Catch ex As Exception
-                                 _log.Error(ex, ex.Message)
-                             End Try
+                    Next
 
-                         Next
+                    ContainerSessions.Add(_new_session)
 
-                     End If
+                    File.Delete(_file)
 
-                 End Sub)
+                Catch ex As Exception
+                    _log.Error(ex, ex.Message)
+                End Try
+
+            Next
+
+        End If
+
+        '  End Sub)
 
 
     End Sub
@@ -255,91 +259,7 @@ Decrypt:
                 Throw New Exception(String.Format("'{0}' - Try FTP Link, Server is propaply down", Path.GetFileName(_sfdl_container_path)))
             End If
 
-
-
-#Region "Parse Unrar/InstatVideo Chain"
-
-
-            For Each _item In _mycontainer_session.DownloadItems.Where(Function(_my_item As DownloadItem) Path.GetExtension(_my_item.FileName).Equals(".rar"))
-
-                Dim _unrarchain As New UnRARChain
-                Dim _searchpattern As Regex
-                Dim _count As Integer
-                Dim _log As Logger = LogManager.GetLogger("RarChainParser")
-
-                If Not _item.FileName.Contains(".part") Then
-
-                    _count = 0
-
-                    _item.FirstUnRarFile = True
-                    _item.RequiredForInstantVideo = True
-                    _unrarchain.MasterUnRarChainFile = _item
-
-                    _log.Debug("First UnRar File: {0}", _item.FileName)
-
-                    _searchpattern = New Regex("filename\.r[0-9]{1,2}".Replace("filename", Path.GetFileNameWithoutExtension(_item.FileName)))
-
-                    For Each _chainitem As DownloadItem In _mycontainer_session.DownloadItems.Where(Function(_my_item As DownloadItem) _searchpattern.IsMatch(_my_item.FileName))
-
-                        _log.Debug("ChainItem FileName: {0}", _chainitem.FileName)
-
-                        If _count < 1 Then
-                            _chainitem.RequiredForInstantVideo = True
-                        End If
-
-                        _unrarchain.ChainMemberFiles.Add(_chainitem)
-
-                        _count += 1
-
-                    Next
-
-                    _mycontainer_session.UnRarChains.Add(_unrarchain)
-
-                Else
-
-                    _searchpattern = New Regex("^((?!\.part(?!0*1\.rar$)\d+\.rar$).)*\.(?:rar|r?0*1)$") 'THX @ http://stackoverflow.com/a/2537935
-
-                    _count = 0
-
-                    If _searchpattern.IsMatch(_item.FileName) Then 'MasterFile
-
-                        Dim _tmp_filename_replace As String
-
-                        _log.Debug("First UnRar File: {0}", _item.FileName)
-                        _item.FirstUnRarFile = True
-                        _item.RequiredForInstantVideo = True
-                        _unrarchain.MasterUnRarChainFile = _item
-
-                        _tmp_filename_replace = _item.FileName.Remove(_item.FileName.IndexOf(".part", StringComparison.Ordinal))
-
-                        _searchpattern = New Regex("filename\.part[0-9]{1,3}.rar".Replace("filename", _tmp_filename_replace))
-
-                        For Each _chainitem As DownloadItem In _mycontainer_session.DownloadItems.Where(Function(_my_item As DownloadItem) _searchpattern.IsMatch(_my_item.FileName) And Not _my_item.FileName.Equals(_unrarchain.MasterUnRarChainFile.FileName))
-
-                            _log.Debug("ChainItem FileName: {0}", _chainitem.FileName)
-
-                            If _count < 1 Then
-                                _chainitem.RequiredForInstantVideo = True
-                            End If
-
-                            _unrarchain.ChainMemberFiles.Add(_chainitem)
-
-                            _count += 1
-
-                        Next
-
-                        _mycontainer_session.UnRarChains.Add(_unrarchain)
-
-                    End If
-
-                End If
-
-            Next
-
-#End Region
-
-            'ToDo: Parse/Generate InstantVideo Chain
-
+            GenerateContainerSessionChains(_mycontainer_session)
 
             For Each _item In _mycontainer_session.DownloadItems
                 DownloadItems.Add(_item)
@@ -981,7 +901,6 @@ Decrypt:
 
                        End Sub)
 
-        ButtonDownloadStartStop = False
 
     End Sub
 

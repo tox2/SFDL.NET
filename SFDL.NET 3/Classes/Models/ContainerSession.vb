@@ -7,6 +7,8 @@ Public Class ContainerSession
 
         _lock_instant_video_streams = New Object
 
+        Me.InstantVideoStreams = New ObjectModel.ObservableCollection(Of InstantVideoStream)
+
         BindingOperations.EnableCollectionSynchronization(InstantVideoStreams, _lock_instant_video_streams)
 
     End Sub
