@@ -303,7 +303,7 @@ Class DownloadHelper
                 _restart = New IO.FileInfo(_item.LocalFile).Length
 
                 If _item.FileSize.Equals(New IO.FileInfo(_item.LocalFile).Length) And Not _item.FileSize = 0 Then
-                    _item.SizeDownloaded = _item.FileSize
+                    '_item.SizeDownloaded = _item.FileSize
                     _skip_download = True
                 Else
                     _log.Info("Datei ist zwar bereits lokal vorhanden aber nicht vollständig")

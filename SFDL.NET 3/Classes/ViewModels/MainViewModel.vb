@@ -753,7 +753,6 @@ Decrypt:
                                              ActiveTasks.Add(_sr_task)
 
                                              _speedreport = GenerateSpeedreport(_mysession, _settings.SpeedReportSettings)
-                                             'ToDO: Caution: Post Action!
 
                                              If String.IsNullOrWhiteSpace(_speedreport) Then
                                                  Throw New Exception("Speedreport failed")
