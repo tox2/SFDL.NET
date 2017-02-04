@@ -490,13 +490,13 @@
 
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn>
+                            <local:FixedWidthColumn FixedWidth="30">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding isSelected}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
+                            </local:FixedWidthColumn>
                             <GridViewColumn Width="370"
                                             DisplayMemberBinding="{Binding FileName}"
                                             Header="{x:Static p:Strings.ListView_DownloadItems_Header_Filename}" />
