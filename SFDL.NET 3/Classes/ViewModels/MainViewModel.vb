@@ -330,7 +330,6 @@ Decrypt:
 
     Private Function CalculateETA(ByVal _mytask As AppTask) As Boolean
 
-        Dim _percent_downloaded As Integer = 0
         Dim _log As Logger = LogManager.GetLogger("CalculateETA")
 
         While SmartThreadPool.IsWorkItemCanceled = False
@@ -377,37 +376,33 @@ Decrypt:
 
                                                                                                                                   End Function)
 
+
+
                     _total_size = DownloadItems.Where(Function(myitem) Not myitem.DownloadStatus = DownloadItem.Status.None).Select(Function(_item) _item.FileSize).Sum
 
-                    _total_size_downloaded = DownloadItems.Where(Function(myitem) Not myitem.DownloadStatus = DownloadItem.Status.None).Select(Function(_item) _item.SizeDownloaded).Sum
+                    _total_size_downloaded = DownloadItems.Where(Function(myitem) Not myitem.DownloadStatus = DownloadItem.Status.None).Select(Function(_item) _item.LocalFileSize).Sum
 
                     _percent_done = CInt((_total_size_downloaded / _total_size) * 100)
 
-                    If Not _percent_done = _percent_downloaded Then
+                    _size_remaining = _total_size - _total_size_downloaded
 
-                        _percent_downloaded = _percent_done
+                    If _size_remaining > 0 And _total_speed > 0 Then
 
-                        _size_remaining = _total_size - _total_size_downloaded
+                        _time_remaining = Math.Round(Double.Parse(CStr(((_size_remaining / 1024) / _total_speed) / 60)), 2)
 
-                        If _size_remaining > 0 And _total_speed > 0 Then
+                        If _mytask.TaskStatus = TaskStatus.Running Then
 
-                            _time_remaining = Math.Round(Double.Parse(CStr(((_size_remaining / 1024) / _total_speed) / 60)), 2)
-
-                            If _mytask.TaskStatus = TaskStatus.Running Then
-
-                                If _total_speed >= 1024 Then
-                                    _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - Speed: {0} MB/s | ETA: {1} | {2} %", Math.Round(_total_speed / 1024, 2), ConvertDecimal2Time(_time_remaining), CInt((_total_size_downloaded / _total_size) * 100)))
-                                Else
-                                    _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - Speed: {0} KB/s | ETA: {1} | {2} %", Math.Round(_total_speed, 2), ConvertDecimal2Time(_time_remaining), CInt((_total_size_downloaded / _total_size) * 100)))
-                                End If
-
+                            If _total_speed >= 1024 Then
+                                _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - Speed: {0} MB/s | ETA: {1} | {2} %", Math.Round(_total_speed / 1024, 2), ConvertDecimal2Time(_time_remaining), _percent_done))
                             Else
-                                _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - {0} %", CInt((_total_size_downloaded / _total_size) * 100)))
+                                _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - Speed: {0} KB/s | ETA: {1} | {2} %", Math.Round(_total_speed, 2), ConvertDecimal2Time(_time_remaining), _percent_done))
                             End If
-                        Else
-                            _log.Info("Task ist bereit abgeschlossen - mache kein Update des Statuses")
-                        End If
 
+                        Else
+                            _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - {0} %", CInt((_total_size_downloaded / _total_size) * 100)))
+                        End If
+                    Else
+                        _log.Debug("Nothing to Calculate")
                     End If
 
                 Else
@@ -613,6 +608,7 @@ Decrypt:
                                                                                                                         _dlitem.RetryCount = 0
                                                                                                                         _dlitem.RetryPossible = False
                                                                                                                         _dlitem.SizeDownloaded = 0
+                                                                                                                        _dlitem.LocalFileSize = 0
                                                                                                                         _dlitem.LocalFile = GetDownloadFilePath(Application.Current.Resources("Settings"), ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_dlitem.ParentContainerID)).First, _dlitem)
 
                                                                                                                     End Sub)

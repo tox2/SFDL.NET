@@ -307,6 +307,7 @@ Public Class DownloadItem
         End Get
     End Property
 
+    Public Property LocalFileSize As Long = 0
     Public Property SizeDownloaded As Long = 0
     Public Property RetryPossible As Boolean = False
     Public Property RetryCount As Integer = 0

@@ -303,9 +303,10 @@ Class DownloadHelper
                 _restart = New IO.FileInfo(_item.LocalFile).Length
 
                 If _item.FileSize.Equals(New IO.FileInfo(_item.LocalFile).Length) And Not _item.FileSize = 0 Then
-                    '_item.SizeDownloaded = _item.FileSize
+                    _item.LocalFileSize = _item.FileSize
                     _skip_download = True
                 Else
+                    _item.LocalFileSize = _restart
                     _log.Info("Datei ist zwar bereits lokal vorhanden aber nicht vollständig")
                 End If
 
@@ -337,6 +338,8 @@ Class DownloadHelper
 
                             elapsed = DateTime.Now.Subtract(_starttime)
                             bytesPerSec = CInt(If(elapsed.TotalSeconds < 1, bytestotalread, bytestotalread / elapsed.TotalSeconds))
+
+                            _item.LocalFileSize += bytesRead
 
 #Region "Berechnung Download Speed / Fortschritt"
 
