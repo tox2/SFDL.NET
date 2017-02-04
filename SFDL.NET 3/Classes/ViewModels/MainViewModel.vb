@@ -178,6 +178,10 @@ Public Class MainViewModel
 
         ActiveTasks.Add(_mytask)
 
+        If Me.WindowState = WindowState.Minimized Then
+            Me.WindowState = WindowState.Normal
+        End If
+
         _mytask.SetTaskStatus(TaskStatus.Running, String.Format("SFDL Datei '{0}' wird geöffnet...", _sfdl_container_path))
 
         Try

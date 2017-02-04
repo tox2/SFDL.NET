@@ -315,6 +315,7 @@ Public Class SettingsViewModel
             Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowMessageAsync(Me, My.Resources.Strings.Settings_SaveTitle, My.Resources.Strings.Settings_SaveError)
         Else
             Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowMessageAsync(Me, My.Resources.Strings.Settings_SaveTitle, My.Resources.Strings.Settings_SaveSuccessful)
+            Application.Current.Windows.OfType(Of Window).SingleOrDefault(Function(mywin) mywin.Name.Equals("SDFL_SettingsWindow")).Close()
         End If
 
     End Sub
