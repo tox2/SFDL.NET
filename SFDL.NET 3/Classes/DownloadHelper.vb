@@ -155,7 +155,7 @@ Class DownloadHelper
                 _item.RetryPossible = True
             End If
 
-            If _err_message.ToLower.Contains("io error") Then 'Not Logged in
+            If _err_message.ToLower.Contains("io exception") Then 'General IO Exception
                 _item.DownloadStatus = NET3.DownloadItem.Status.IOError
                 _item.RetryPossible = True
             End If

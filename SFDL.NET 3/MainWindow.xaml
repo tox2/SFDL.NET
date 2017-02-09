@@ -47,6 +47,8 @@
             <VisualBrush x:Key="DownloadStatusRetry" Visual="{StaticResource appbar_control_resume}" />
             <VisualBrush x:Key="DownloadStatusRetryWait" Visual="{StaticResource appbar_control_resume}" />
             <VisualBrush x:Key="DownloadStatusAlreadyDownloaded" Visual="{StaticResource appbar_check}" />
+            <VisualBrush x:Key="DownloadStatusIOError" Visual="{StaticResource appbar_type_bit}" />
+
 
             <VisualBrush x:Key="TaskStatusFaulted" Visual="{StaticResource appbar_stop}" />
             <VisualBrush x:Key="TaskStatusCanceled" Visual="{StaticResource appbar_stop}" />
@@ -584,6 +586,10 @@
                                                             <DataTrigger Binding="{Binding DownloadStatusImage}" Value="AlreadyDownloaded">
                                                                 <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusAlreadyDownloaded}" />
                                                             </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DownloadStatusImage}" Value="IOError">
+                                                                <Setter Property="OpacityMask" Value="{StaticResource DownloadStatusIOError}" />
+                                                            </DataTrigger>
+                                                         
                                                         </Style.Triggers>
                                                     </Style>
                                                 </Rectangle.Style>
