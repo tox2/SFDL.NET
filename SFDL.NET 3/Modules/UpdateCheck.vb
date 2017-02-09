@@ -64,7 +64,9 @@ Module UpdateCheck
         Catch ex As Exception
             _log.Error(ex, ex.Message)
         Finally
-            IO.File.Delete(_tmp_file)
+            If IO.File.Exists(_tmp_file) Then
+                IO.File.Delete(_tmp_file)
+            End If
         End Try
 
         Return _rt

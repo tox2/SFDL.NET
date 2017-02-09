@@ -349,6 +349,7 @@ Public Class DownloadItem
         Completed_HashValid
         Completed_HashInvalid
         AlreadyDownloaded
+        IOError
     End Enum
 
 #Region "IDisposable Support"
