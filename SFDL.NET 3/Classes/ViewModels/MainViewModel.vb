@@ -350,41 +350,39 @@ Decrypt:
                 If WindowState = WindowState.Maximized Or WindowState = WindowState.Normal Then 'Nur berechnen wenn Window Sichtbar
 
 
-                    _total_speed = DownloadItems.Where(Function(myitem) Not myitem.DownloadStatus = DownloadItem.Status.None).Sum(Function(_item)
+                    System.Threading.Tasks.Parallel.ForEach(Of DownloadItem)(DownloadItems, Sub(_item As DownloadItem)
 
-                                                                                                                                      Dim _rt As Integer = 0
+                                                                                                If _item.DownloadStatus = DownloadItem.Status.Running Then
 
-                                                                                                                                      If Not _item.DownloadStatus = DownloadItem.Status.Stopped Then 'ToDO: Prüfen ob das sinn macht
+                                                                                                    If Not String.IsNullOrWhiteSpace(_item.DownloadSpeed) Then
 
-                                                                                                                                          If Not String.IsNullOrWhiteSpace(_item.DownloadSpeed) Then
+                                                                                                        Dim _raw_speed As String = _item.DownloadSpeed.ToString
 
-                                                                                                                                              Dim _raw_speed As String = _item.DownloadSpeed.ToString
+                                                                                                        If _raw_speed.Contains("KB/s") Then
+                                                                                                            _raw_speed = _raw_speed.Replace("KB/s", "").Trim
+                                                                                                            _total_speed += Double.Parse(_raw_speed)
+                                                                                                        Else
 
-                                                                                                                                              If _raw_speed.Contains("KB/s") Then
-                                                                                                                                                  _raw_speed = _raw_speed.Replace("KB/s", "").Trim
-                                                                                                                                                  _rt += Double.Parse(_raw_speed)
-                                                                                                                                              Else
+                                                                                                            If _raw_speed.Contains("MB/s") Then
+                                                                                                                _raw_speed = _raw_speed.Replace("MB/s", "").Trim
+                                                                                                                _total_speed += Double.Parse(_raw_speed) * 1024
+                                                                                                            End If
 
-                                                                                                                                                  If _raw_speed.Contains("MB/s") Then
-                                                                                                                                                      _raw_speed = _raw_speed.Replace("MB/s", "").Trim
-                                                                                                                                                      _rt += Double.Parse(_raw_speed) * 1024
-                                                                                                                                                  End If
+                                                                                                        End If
 
-                                                                                                                                              End If
+                                                                                                    End If
 
-                                                                                                                                          End If
+                                                                                                End If
 
-                                                                                                                                      End If
-
-                                                                                                                                      Return _rt
-
-                                                                                                                                  End Function)
+                                                                                            End Sub)
 
 
-
-                    _total_size = DownloadItems.Where(Function(myitem) Not myitem.DownloadStatus = DownloadItem.Status.None).Select(Function(_item) _item.FileSize).Sum
-
-                    _total_size_downloaded = DownloadItems.Where(Function(myitem) Not myitem.DownloadStatus = DownloadItem.Status.None).Select(Function(_item) _item.LocalFileSize).Sum
+                    System.Threading.Tasks.Parallel.ForEach(Of DownloadItem)(DownloadItems, Sub(_item As DownloadItem)
+                                                                                                If Not _item.DownloadStatus = DownloadItem.Status.None Then
+                                                                                                    _total_size += _item.FileSize
+                                                                                                    _total_size_downloaded += _item.LocalFileSize
+                                                                                                End If
+                                                                                            End Sub)
 
                     _percent_done = CInt((_total_size_downloaded / _total_size) * 100)
 
@@ -603,19 +601,28 @@ Decrypt:
 
                                                                        End Sub)
 
-            System.Threading.Tasks.Parallel.ForEach(DownloadItems.Where(Function(myitem) myitem.isSelected = True), Sub(_dlitem)
+            System.Threading.Tasks.Parallel.ForEach(DownloadItems, Sub(_dlitem)
 
-                                                                                                                        _dlitem.DownloadStatus = DownloadItem.Status.Queued
-                                                                                                                        _dlitem.DownloadProgress = 0
-                                                                                                                        _dlitem.DownloadSpeed = String.Empty
-                                                                                                                        _dlitem.SingleSessionMode = False
-                                                                                                                        _dlitem.RetryCount = 0
-                                                                                                                        _dlitem.RetryPossible = False
-                                                                                                                        _dlitem.SizeDownloaded = 0
-                                                                                                                        _dlitem.LocalFileSize = 0
-                                                                                                                        _dlitem.LocalFile = GetDownloadFilePath(Application.Current.Resources("Settings"), ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_dlitem.ParentContainerID)).First, _dlitem)
+                                                                       If _dlitem.isSelected Then
 
-                                                                                                                    End Sub)
+                                                                           _dlitem.DownloadStatus = DownloadItem.Status.Queued
+                                                                           _dlitem.DownloadProgress = 0
+                                                                           _dlitem.DownloadSpeed = String.Empty
+                                                                           _dlitem.SingleSessionMode = False
+                                                                           _dlitem.RetryCount = 0
+                                                                           _dlitem.RetryPossible = False
+                                                                           _dlitem.SizeDownloaded = 0
+                                                                           _dlitem.LocalFileSize = 0
+                                                                           _dlitem.LocalFile = GetDownloadFilePath(Application.Current.Resources("Settings"), ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_dlitem.ParentContainerID)).First, _dlitem)
+
+                                                                       Else
+                                                                           _dlitem.DownloadStatus = DownloadItem.Status.None
+                                                                           _dlitem.SizeDownloaded = 0
+                                                                           _dlitem.LocalFileSize = 0
+                                                                           _dlitem.DownloadSpeed = String.Empty
+                                                                       End If
+
+                                                                   End Sub)
 
 
 #End Region

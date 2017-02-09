@@ -351,13 +351,6 @@ Public Class DownloadItem
         AlreadyDownloaded
     End Enum
 
-    Public Enum SimplifiedStatus
-        OK
-        Running
-        Failed
-        None
-    End Enum
-
 #Region "IDisposable Support"
     Private disposedValue As Boolean ' Dient zur Erkennung redundanter Aufrufe.
 
