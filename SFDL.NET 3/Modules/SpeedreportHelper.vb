@@ -59,6 +59,38 @@
 
     End Function
 
+    Function GenerateSimpleSpeedreport(ByVal session As ContainerSession) As String
+
+        Dim _rt_speedreport As String
+        Dim _speed As Double = 0
+        Dim _size As Double = 0
+
+        Try
+
+
+            Dim _tmp_list As New List(Of DownloadItem)
+
+            For Each _item In session.DownloadItems
+
+                If Not _item.SizeDownloaded = 0 Then
+                    _tmp_list.Add(_item)
+                End If
+
+            Next
+
+            _size = CalculateSizeAsMB(_tmp_list)
+            _speed = CalculateSpeed(session.DownloadStartedTime, session.DownloadStoppedTime, _tmp_list)
+
+            _rt_speedreport = String.Format("{0} in {1} heruntergeladen @ ~ {2}", Math.Round(_size, 2) & " MB", SecToHMS(DateDiff(DateInterval.Second, session.DownloadStartedTime, session.DownloadStoppedTime)), Math.Round(_speed, 2) & " KB/s")
+
+        Catch ex As Exception
+            _log.Error(ex, ex.Message)
+        End Try
+
+        Return _rt_speedreport
+
+    End Function
+
     Function GenerateSpeedreport(ByVal session As ContainerSession, ByVal _speedreportSettings As SpeedreportSettings) As String
 
         Dim _rt_speedreport As String = String.Empty

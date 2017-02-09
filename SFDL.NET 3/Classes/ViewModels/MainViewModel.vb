@@ -764,7 +764,7 @@ Decrypt:
 
                                              My.Computer.FileSystem.WriteAllText(_sr_filepath, _speedreport, False, Encoding.Default)
 
-                                             _sr_task.SetTaskStatus(TaskStatus.RanToCompletion, "Speedreport erstellt")
+                                             _sr_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("Speedreport erstellt | {0}", GenerateSimpleSpeedreport(_mysession)))
 
                                          Catch ex As Exception
                                              _sr_task.SetTaskStatus(TaskStatus.Faulted, "Speedreport Generation failed")
@@ -898,31 +898,6 @@ Decrypt:
 
                        End Sub)
 
-
-    End Sub
-
-    Sub Test()
-
-        Dim _ftp_client As FtpClient
-        Dim _session As FtpSession
-
-        SetupFTPClient(_ftp_client, ContainerSessions(0).ContainerFile.Connection)
-
-        _session = _ftp_client.Session
-
-        FtpClientUtility.List(_session.Connection.Client, "/")
-
-        Debug.WriteLine("LIST 1 fertig")
-
-        Debug.WriteLine("")
-
-        FtpClientUtility.List(_session.Connection.Client, "/")
-
-        Debug.WriteLine("LIST 2 fertig")
-
-        Debug.WriteLine("")
-
-        _ftp_client.Dispose()
 
     End Sub
 
