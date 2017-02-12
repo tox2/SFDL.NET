@@ -447,7 +447,6 @@ Decrypt:
             Next
 
             _download_helper.Dispose()
-
             RemoveHandler _download_helper.ServerFull, AddressOf ServerFullEvent
 
         Catch ex As Exception
@@ -768,7 +767,7 @@ Decrypt:
                                                  Throw New Exception("Speedreport failed")
                                              End If
 
-                                             _sr_filepath = Path.GetDirectoryName(_mysession.DownloadItems(0).LocalFile)
+                                             _sr_filepath = Path.GetDirectoryName(_mysession.DownloadItems(_mysession.DownloadItems.Count - 1).LocalFile)
 
                                              _sr_filepath = Path.Combine(_sr_filepath, "speedreport.txt")
 
