@@ -61,7 +61,7 @@
 
     Function GenerateSimpleSpeedreport(ByVal session As ContainerSession) As String
 
-        Dim _rt_speedreport As String
+        Dim _rt_speedreport As String = String.Empty
         Dim _speed As Double = 0
         Dim _size As Double = 0
 
