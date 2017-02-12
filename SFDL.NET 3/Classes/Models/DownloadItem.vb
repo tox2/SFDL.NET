@@ -345,11 +345,12 @@ Public Class DownloadItem
         Failed_FileNotFound
         Failed_DirectoryNotFound
         Failed_InternalServerError
+        Failed_IOError
         Completed
         Completed_HashValid
         Completed_HashInvalid
         AlreadyDownloaded
-        IOError
+
     End Enum
 
 #Region "IDisposable Support"
