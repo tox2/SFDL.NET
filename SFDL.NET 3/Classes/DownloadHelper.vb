@@ -3,12 +3,15 @@ Imports Amib.Threading
 Imports ArxOne.Ftp.Exceptions
 
 Class DownloadHelper
+    Implements IDisposable
 
     Private _log As NLog.Logger = NLog.LogManager.GetLogger("DownloadHelper")
-    Private _ftp_client_list As New Dictionary(Of Guid, ArxOne.Ftp.FtpClient)
-    Private _ftp_session_list As New Dictionary(Of Guid, ArxOne.Ftp.FtpSession)
-    Private _obj_ftp_client_list_lock As New Object
+    Private _ftp_client As ArxOne.Ftp.FtpClient = Nothing
+    Private _ftp_session As ArxOne.Ftp.FtpSession
     Private _settings As New Settings
+    Private _obj_ftp_client_lock As New Object
+    Private _obj_dl_count_lok As New Object
+    Private _dl_count As Integer = 0
 
 
     Public Sub New()
@@ -289,14 +292,6 @@ Class DownloadHelper
 
 #End Region
 
-    Sub DisposeFTPClients()
-
-        For Each _client In _ftp_client_list
-            _client.Value.Dispose()
-        Next
-
-    End Sub
-
     Function DownloadContainerItem(_item As DownloadItem, ByVal _download_dir As String, ByVal _connection_info As SFDL.Container.Connection, ByVal _single_session_mode As Boolean) As DownloadItem
 
         Dim _ftp_session As ArxOne.Ftp.FtpSession = Nothing
@@ -308,34 +303,11 @@ Class DownloadHelper
                 Throw New DownloadStoppedException("Canceld!")
             End If
 
-            SyncLock _obj_ftp_client_list_lock
+            SyncLock _obj_ftp_client_lock
 
-                'Check if any FTP Client Exits for this Parent Container Session
-                If Not _ftp_client_list.ContainsKey(_item.ParentContainerID) Then
+                If IsNothing(_ftp_client) Then
                     SetupFTPClient(_ftp_client, _connection_info)
-                    _ftp_client_list.Add(_item.ParentContainerID, _ftp_client)
-                Else
-                    _ftp_client = _ftp_client_list(_item.ParentContainerID)
-                End If
-
-                If _single_session_mode = True Then
-
-                    If _ftp_session_list.ContainsKey(_item.ParentContainerID) Then
-                        _ftp_session = _ftp_session_list(_item.ParentContainerID)
-                    Else
-                        _ftp_session = _ftp_client.Session
-                        _ftp_session_list.Add(_item.ParentContainerID, _ftp_session)
-                    End If
-
-                Else
                     _ftp_session = _ftp_client.Session
-
-                    If _ftp_session_list.ContainsKey(_item.ParentContainerID) Then
-                        _ftp_session_list.Add(Guid.NewGuid, _ftp_session)
-                    Else
-                        _ftp_session_list.Add(_item.ParentContainerID, _ftp_session)
-                    End If
-
                 End If
 
             End SyncLock
@@ -385,6 +357,10 @@ Class DownloadHelper
 
 
         Try
+
+            SyncLock _obj_dl_count_lok
+                _dl_count += 1
+            End SyncLock
 
             If SmartThreadPool.IsWorkItemCanceled = True Or Application.Current.Resources("DownloadStopped") = True Then
                 Throw New Exception("Canceld")
@@ -493,7 +469,6 @@ Class DownloadHelper
 
 
                             Dim _max_bytes_per_second As Integer
-                            Dim _session_count As Integer
 
                             If Not String.IsNullOrWhiteSpace(MainViewModel.ThisInstance.MaxDownloadSpeed) Then
 
@@ -501,10 +476,8 @@ Class DownloadHelper
 
                                 If Not _max_bytes_per_second <= 0 Then
 
-                                    _session_count = _ftp_session_list.Where(Function(mysession) IsNothing(mysession.Value.Connection.ProtocolStream) = False).Count
-
-                                    If Not _session_count <= 1 Then
-                                        _max_bytes_per_second = CInt((_max_bytes_per_second * 1024) / _session_count)
+                                    If Not _dl_count <= 1 Then
+                                        _max_bytes_per_second = CInt((_max_bytes_per_second * 1024) / _dl_count)
                                     Else
                                         _max_bytes_per_second = CInt((_max_bytes_per_second * 1024))
                                     End If
@@ -597,6 +570,11 @@ Class DownloadHelper
             End If
 
         Finally
+
+            SyncLock _obj_dl_count_lok
+                _dl_count += 1
+            End SyncLock
+
             _item.DownloadSpeed = String.Empty
             PostDownload(_item, _ftp_session)
         End Try
@@ -619,6 +597,9 @@ Class DownloadHelper
             _item.DownloadSpeed = String.Empty
 
             If Application.Current.Resources("DownloadStopped") = False And _item.DownloadStatus = NET3.DownloadItem.Status.Completed Then
+
+                _item.isSelected = False
+                _item.DownloadStatus = NET3.DownloadItem.Status.Completed
 
                 If _item.HashType = Container.HashType.None Then
 
@@ -736,10 +717,6 @@ Class DownloadHelper
                     _item.RetryCount += 1
                     _log.Info("Setze Item auf die Retry Warteliste")
                     _item.DownloadStatus = NET3.DownloadItem.Status.Retry
-                Else
-                    If Not IsNothing(_ftp_session) Then
-                        _ftp_session.Invalidate()
-                    End If
                 End If
 
             End If
@@ -747,5 +724,41 @@ Class DownloadHelper
         End Try
 
     End Sub
+
+#Region "IDisposable Support"
+    Private disposedValue As Boolean ' Dient zur Erkennung redundanter Aufrufe.
+
+    ' IDisposable
+    Protected Overridable Sub Dispose(disposing As Boolean)
+        If Not disposedValue Then
+            If disposing Then
+                Try
+
+                    _ftp_client.Dispose()
+                Catch ex As Exception
+                End Try
+            End If
+
+            ' TODO: nicht verwaltete Ressourcen (nicht verwaltete Objekte) freigeben und Finalize() weiter unten überschreiben.
+            ' TODO: große Felder auf Null setzen.
+        End If
+        disposedValue = True
+    End Sub
+
+    ' TODO: Finalize() nur überschreiben, wenn Dispose(disposing As Boolean) weiter oben Code zur Bereinigung nicht verwalteter Ressourcen enthält.
+    'Protected Overrides Sub Finalize()
+    '    ' Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in Dispose(disposing As Boolean) weiter oben ein.
+    '    Dispose(False)
+    '    MyBase.Finalize()
+    'End Sub
+
+    ' Dieser Code wird von Visual Basic hinzugefügt, um das Dispose-Muster richtig zu implementieren.
+    Public Sub Dispose() Implements IDisposable.Dispose
+        ' Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in Dispose(disposing As Boolean) weiter oben ein.
+        Dispose(True)
+        ' TODO: Auskommentierung der folgenden Zeile aufheben, wenn Finalize() oben überschrieben wird.
+        ' GC.SuppressFinalize(Me)
+    End Sub
+#End Region
 
 End Class

@@ -24,6 +24,7 @@ Public Class MainViewModel
     Private _lock_download_items As New Object
     Private _lock_container_sessions As New Object
     Private _eta_thread As IWorkItemResult(Of Boolean)
+    Private _download_helper As New DownloadHelper
 
     Public Sub UpdateSettings()
 
@@ -445,6 +446,10 @@ Decrypt:
 
             Next
 
+            _download_helper.Dispose()
+
+            RemoveHandler _download_helper.ServerFull, AddressOf ServerFullEvent
+
         Catch ex As Exception
 
         End Try
@@ -460,15 +465,9 @@ Decrypt:
 
     Private Sub QueryDownloadItems()
 
-        Dim _download_helper As New DownloadHelper
         Dim _log As Logger = LogManager.GetLogger("QueryDownloadItems")
 
-        AddHandler _download_helper.ServerFull, AddressOf ServerFullEvent
-
-        'ToDo:QUery For Instant Video with Prio
-
         For Each _session In ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning)
-
 
             Dim _wig As IWorkItemsGroup
             Dim _wig_start As New WIGStartInfo
@@ -581,6 +580,10 @@ Decrypt:
 
 
 #Region "Cleanup"
+
+
+            _download_helper = New DownloadHelper
+            AddHandler _download_helper.ServerFull, AddressOf ServerFullEvent
 
             Application.Current.Resources("DownloadStopped") = False
             ButtonInstantVideoEnabled = False
@@ -901,7 +904,6 @@ Decrypt:
                            Next
 
                            _eta_thread.Cancel()
-                           '_stp.Cancel()
 
                        End Sub)
 
