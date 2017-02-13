@@ -1198,7 +1198,7 @@ Decrypt:
 
             Dim _item As DownloadItem = TryCast(parameter, DownloadItem)
 
-            For Each _item In DownloadItems.Where(Function(myitem) myitem.GroupDescriptionIdentifier.Equals(_item.GroupDescriptionIdentifier))
+            For Each _item In DownloadItems.Where(Function(myitem) myitem.PackageName.Equals(_item.PackageName))
 
                 _item.isSelected = True
 
@@ -1220,7 +1220,7 @@ Decrypt:
 
             Dim _item As DownloadItem = TryCast(parameter, DownloadItem)
 
-            For Each _item In DownloadItems.Where(Function(myitem) myitem.GroupDescriptionIdentifier.Equals(_item.GroupDescriptionIdentifier))
+            For Each _item In DownloadItems.Where(Function(myitem) myitem.PackageName.Equals(_item.PackageName))
 
                 _item.isSelected = False
 
