@@ -190,7 +190,7 @@ Public Class MainWindow
 
     Private Sub OnGridKeyUp(sender As Object, e As KeyEventArgs)
 
-        If Not IsNothing(ListView_DownloadItems.SelectedItems) AndAlso (e.Key = Key.Enter Or e.Key = Key.Space) Then
+        If Not IsNothing(ListView_DownloadItems.SelectedItems) AndAlso (e.Key = Key.Enter) Then
 
             For Each _item As DownloadItem In ListView_DownloadItems.SelectedItems
 

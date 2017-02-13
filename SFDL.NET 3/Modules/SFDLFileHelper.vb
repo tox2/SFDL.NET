@@ -426,15 +426,19 @@ Module SFDLFileHelper
 
                     For Each _chainitem As DownloadItem In _mycontainer_session.DownloadItems.Where(Function(_my_item As DownloadItem) _searchpattern.IsMatch(_my_item.FileName) And Not _my_item.FileName.Equals(_unrarchain.MasterUnRarChainFile.FileName))
 
-                        _log.Debug("ChainItem FileName: {0}", _chainitem.FileName)
+                        If _chainitem.FileName.StartsWith(_tmp_filename_replace) Then
 
-                        If _count < 1 Then
-                            _chainitem.RequiredForInstantVideo = True
+                            _log.Debug("ChainItem FileName: {0}", _chainitem.FileName)
+
+                            If _count < 1 Then
+                                _chainitem.RequiredForInstantVideo = True
+                            End If
+
+                            _unrarchain.ChainMemberFiles.Add(_chainitem)
+
+                            _count += 1
+
                         End If
-
-                        _unrarchain.ChainMemberFiles.Add(_chainitem)
-
-                        _count += 1
 
                     Next
 

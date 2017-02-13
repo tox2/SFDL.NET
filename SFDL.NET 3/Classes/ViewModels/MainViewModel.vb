@@ -589,7 +589,11 @@ Decrypt:
 
             System.Threading.Tasks.Parallel.ForEach(ContainerSessions, Sub(_session)
 
-                                                                           _session.SessionState = ContainerSessionState.Queued
+                                                                           If _session.DownloadItems.Where(Function(myitem) myitem.isSelected = True).Count > 0 Then
+                                                                               _session.SessionState = ContainerSessionState.Queued
+                                                                           Else
+                                                                               _session.SessionState = ContainerSessionState.None
+                                                                           End If
                                                                            _session.SingleSessionMode = False
                                                                            _session.WIG = Nothing
                                                                            _session.SynLock = New Object
@@ -744,7 +748,7 @@ Decrypt:
 
                              If _mysession.SessionState = ContainerSessionState.Queued Or _mysession.SessionState = ContainerSessionState.DownloadRunning Then
 
-                                 If DownloadItems.Where(Function(myitem) (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Running) Or (myitem.DownloadStatus = DownloadItem.Status.Retry Or myitem.DownloadStatus = DownloadItem.Status.RetryWait)).Count = 0 Or Application.Current.Resources("DownloadStopped") = True Then 'Alle Items sind heruntergeladen oder Download ist gestoppt
+                                 If _mysession.DownloadItems.Where(Function(myitem) (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Running) Or (myitem.DownloadStatus = DownloadItem.Status.Retry Or myitem.DownloadStatus = DownloadItem.Status.RetryWait)).Count = 0 Or Application.Current.Resources("DownloadStopped") = True Then 'Alle Items sind heruntergeladen oder Download ist gestoppt
 
                                      _mysession.SessionState = ContainerSessionState.DownloadComplete
                                      _mysession.DownloadStoppedTime = Now
@@ -1105,7 +1109,9 @@ Decrypt:
 
     Private Sub MarkAllItems()
         DownloadItems.Select(Function(myitem)
-                                 myitem.isSelected = True
+                                 If myitem.isSelected = False Then
+                                     myitem.isSelected = True
+                                 End If
                                  Return myitem
                              End Function).ToList
     End Sub
@@ -1118,7 +1124,9 @@ Decrypt:
 
     Private Sub UnmarkAllItems()
         DownloadItems.Select(Function(myitem)
-                                 myitem.isSelected = False
+                                 If myitem.isSelected = True Then
+                                     myitem.isSelected = False
+                                 End If
                                  Return myitem
                              End Function).ToList
     End Sub
@@ -1159,7 +1167,7 @@ Decrypt:
 
     Private Async Sub ShowHelp()
 
-        Await DialogCoordinator.Instance.ShowMessageAsync(Me, "SFDL.NET 3", "Version: 3.0.0.0 TP4")
+        Await DialogCoordinator.Instance.ShowMessageAsync(Me, "SFDL.NET 3", "Version: 3.0.0.3 RC3")
 
     End Sub
 
@@ -1198,7 +1206,7 @@ Decrypt:
 
             Dim _item As DownloadItem = TryCast(parameter, DownloadItem)
 
-            For Each _item In DownloadItems.Where(Function(myitem) myitem.PackageName.Equals(_item.PackageName))
+            For Each _item In DownloadItems.Where(Function(myitem) myitem.PackageName.Equals(_item.PackageName) AndAlso myitem.isSelected = False)
 
                 _item.isSelected = True
 
@@ -1220,7 +1228,7 @@ Decrypt:
 
             Dim _item As DownloadItem = TryCast(parameter, DownloadItem)
 
-            For Each _item In DownloadItems.Where(Function(myitem) myitem.PackageName.Equals(_item.PackageName))
+            For Each _item In DownloadItems.Where(Function(myitem) myitem.PackageName.Equals(_item.PackageName) AndAlso myitem.isSelected = True)
 
                 _item.isSelected = False
 

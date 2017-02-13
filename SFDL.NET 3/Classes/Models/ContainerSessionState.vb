@@ -3,4 +3,5 @@
     DonwloadStopped
     DownloadComplete
     Queued
+    None
 End Enum
