@@ -343,7 +343,7 @@ Class DownloadHelper
         Dim _disk_free_space As Long
 
         'IO Stream Variablen
-        Const Length As Integer = 256
+        'Const Length As Integer = 256
         Dim buffer As [Byte]()
         Dim bytesRead As Integer = 0
         Dim bytestotalread As Integer = 0
@@ -428,13 +428,11 @@ Class DownloadHelper
 
                             _local_write_stream.Write(buffer, 0, bytesRead)
 
-                            bytesRead = _ftp_read_stream.Read(buffer, 0, Length)
+                            bytesRead = _ftp_read_stream.Read(buffer, 0, buffer.Length)
                             bytestotalread += bytesRead
 
                             elapsed = DateTime.Now.Subtract(_starttime)
                             bytesPerSec = CInt(If(elapsed.TotalSeconds < 1, bytestotalread, bytestotalread / elapsed.TotalSeconds))
-
-                            _item.LocalFileSize += bytesRead
 
 #Region "Berechnung Download Speed / Fortschritt"
 
@@ -460,6 +458,8 @@ Class DownloadHelper
                                 _item.DownloadSpeed = _download_speed
                                 _item.DownloadProgress = _percent_downloaded
                                 _item.SizeDownloaded = bytestotalread
+                                _item.LocalFileSize = _local_write_stream.Length
+
 
                             End If
 

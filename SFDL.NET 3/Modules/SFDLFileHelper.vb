@@ -189,7 +189,7 @@ Module SFDLFileHelper
                     If _fileinfo.Length.Equals(_dl_item.FileSize) Then
                         _dl_item.isSelected = False
                         _dl_item.DownloadStatus = DownloadItem.Status.AlreadyDownloaded
-                        _dl_item.SizeDownloaded = _dl_item.FileSize
+                        _dl_item.LocalFileSize = _dl_item.FileSize
                     End If
 
                 End If
