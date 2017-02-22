@@ -6,8 +6,7 @@ Class DownloadHelper
     Implements IDisposable
 
     Private _log As NLog.Logger = NLog.LogManager.GetLogger("DownloadHelper")
-    Private _ftp_client As ArxOne.Ftp.FtpClient = Nothing
-    Private _ftp_session As ArxOne.Ftp.FtpSession
+    Private _glb_ftp_client As ArxOne.Ftp.FtpClient = Nothing
     Private _settings As New Settings
     Private _obj_ftp_client_lock As New Object
     Private _obj_dl_count_lok As New Object
@@ -295,7 +294,6 @@ Class DownloadHelper
     Function DownloadContainerItem(_item As DownloadItem, ByVal _download_dir As String, ByVal _connection_info As SFDL.Container.Connection, ByVal _single_session_mode As Boolean) As DownloadItem
 
         Dim _ftp_session As ArxOne.Ftp.FtpSession = Nothing
-        Dim _ftp_client As ArxOne.Ftp.FtpClient = Nothing
 
         Try
 
@@ -305,14 +303,15 @@ Class DownloadHelper
 
             SyncLock _obj_ftp_client_lock
 
-                If IsNothing(_ftp_client) Then
-                    SetupFTPClient(_ftp_client, _connection_info)
-                    _ftp_session = _ftp_client.Session
+                If IsNothing(_glb_ftp_client) Then
+                    SetupFTPClient(_glb_ftp_client, _connection_info)
                 End If
 
             End SyncLock
 
             'ToDo: Prüfen ob Verbindung zum Server hergestellt werden kann ->> Fehlerbehandlung
+
+            _ftp_session = _glb_ftp_client.Session
 
             DownloadItem(_item, _ftp_session)
 
@@ -335,6 +334,7 @@ Class DownloadHelper
         Return _item
 
     End Function
+
 
     Private Sub DownloadItem(ByVal _item As DownloadItem, ByVal _ftp_session As ArxOne.Ftp.FtpSession)
 
@@ -577,6 +577,7 @@ Class DownloadHelper
 
             _item.DownloadSpeed = String.Empty
             PostDownload(_item, _ftp_session)
+
         End Try
 
     End Sub
@@ -734,7 +735,7 @@ Class DownloadHelper
             If disposing Then
                 Try
 
-                    _ftp_client.Dispose()
+                    _glb_ftp_client.Dispose()
                 Catch ex As Exception
                 End Try
             End If

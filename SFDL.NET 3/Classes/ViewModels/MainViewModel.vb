@@ -388,7 +388,7 @@ Decrypt:
                     '                                                                            End If
                     '                                                                        End Sub)
 
-                    _log.Debug(String.Format("Total Size: {0}", _total_size))
+                    ' _log.Debug(String.Format("Total Size: {0}", _total_size))
 
                     _percent_done = CInt((_total_size_downloaded / _total_size) * 100)
 
@@ -410,8 +410,8 @@ Decrypt:
                                 _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - {0} %", CInt((_total_size_downloaded / _total_size) * 100)))
                             End If
                         Else
-                            _log.Debug("Nothing to Calculate")
-                        End If
+                        '_log.Debug("Nothing to Calculate")
+                    End If
 
                 Else
                     Debug.WriteLine("Keine Berechnung Fenster ist runtergeklappt!")
