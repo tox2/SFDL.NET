@@ -44,5 +44,6 @@ Public Class ContainerSession
     Public Property CountryCode As String = String.Empty
     Public Property CountryImageUri As String = String.Empty
     Public Property InstantVideoStreams As ObjectModel.ObservableCollection(Of InstantVideoStream)
+    Public Property LocalDownloadRoot As String = String.Empty
 
 End Class

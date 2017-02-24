@@ -133,6 +133,8 @@ Public Class MainViewModel
 
                     Next
 
+                    _new_session.LocalDownloadRoot = GetSessionLocalDownloadRoot(_new_session, _settings)
+
                     ContainerSessions.Add(_new_session)
 
                     File.Delete(_file)
@@ -259,6 +261,7 @@ Decrypt:
 
             GenerateContainerSessionDownloadItems(_mycontainer_session, _settings.NotMarkAllContainerFiles)
 
+
             If _bulk_result = False Or _mycontainer_session.DownloadItems.Count = 0 Then
                 Throw New Exception(String.Format("'{0}' - Try FTP Link, Server is propaply down", Path.GetFileName(_sfdl_container_path)))
             End If
@@ -268,6 +271,8 @@ Decrypt:
             For Each _item In _mycontainer_session.DownloadItems
                 DownloadItems.Add(_item)
             Next
+
+            _mycontainer_session.LocalDownloadRoot = GetSessionLocalDownloadRoot(_mycontainer_session, _settings)
 
             ContainerSessions.Add(_mycontainer_session)
 
@@ -767,7 +772,7 @@ Decrypt:
                                                  Throw New Exception("Speedreport failed")
                                              End If
 
-                                             _sr_filepath = Path.GetDirectoryName(_mysession.DownloadItems(_mysession.DownloadItems.Count - 1).LocalFile)
+                                             _sr_filepath = _mysession.LocalDownloadRoot
 
                                              _sr_filepath = Path.Combine(_sr_filepath, "speedreport.txt")
 

@@ -328,6 +328,40 @@ Module SFDLFileHelper
 
     End Function
 
+    Function GetSessionLocalDownloadRoot(ByVal _container_session As ContainerSession, ByVal _settings As Settings) As String
+
+        Dim _download_item As DownloadItem = _container_session.DownloadItems(0)
+        Dim _test_path As String = String.Empty
+        Dim _flag As Boolean = False
+        Dim _app_download_path As String = _settings.DownloadDirectory
+
+        If _app_download_path.EndsWith("\") Then
+            _app_download_path = _app_download_path.Remove(_app_download_path.Length - 1)
+        End If
+
+        For Each _item In IO.Path.GetDirectoryName(_download_item.LocalFile).Split("\")
+
+            If IO.Path.IsPathRooted(_item) AndAlso _item.EndsWith("\") = False Then
+                _item = _item & "\"
+            End If
+
+            _test_path = IO.Path.Combine(_test_path, _item)
+
+            If _flag = True Then
+                'Pfad ermittelt
+                Return _test_path
+            End If
+
+            If IO.Path.Equals(_test_path, _settings.DownloadDirectory) Then
+                _flag = True
+            End If
+
+        Next
+
+        Return _test_path
+
+    End Function
+
     Function GetDownloadFilePath(ByVal _settings As Settings, ByVal _container_session As ContainerSession, ByVal _item As DownloadItem) As String
 
         Dim _download_dir As String = String.Empty
