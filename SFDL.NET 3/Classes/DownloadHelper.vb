@@ -14,7 +14,7 @@ Class DownloadHelper
 
 
     Public Sub New()
-        _settings = Application.Current.Resources("Settings")
+        _settings = CType(Application.Current.Resources("Settings"), Settings)
     End Sub
 
     Public Event ServerFull(ByVal _item As DownloadItem)
@@ -54,10 +54,10 @@ Class DownloadHelper
 
                     Dim _entry As ArxOne.Ftp.FtpEntry
 
-                    _entry = FTPHelper.TryParseLine(_ftpitem, _item.DirectoryPath)
+                    _entry = CType(FTPHelper.TryParseLine(_ftpitem, _item.DirectoryPath), ArxOne.Ftp.FtpEntry)
 
                     If _entry.Name.Equals(_item.FileName) Then
-                        _item.FileSize = _entry.Size
+                        _item.FileSize = CLng(_entry.Size)
                     End If
 
                 Catch ex As Exception
@@ -297,7 +297,7 @@ Class DownloadHelper
 
         Try
 
-            If SmartThreadPool.IsWorkItemCanceled = True Or Application.Current.Resources("DownloadStopped") = True Then
+            If SmartThreadPool.IsWorkItemCanceled = True Or CBool(Application.Current.Resources("DownloadStopped")) = True Then
                 Throw New DownloadStoppedException("Canceld!")
             End If
 
@@ -362,7 +362,7 @@ Class DownloadHelper
                 _dl_count += 1
             End SyncLock
 
-            If SmartThreadPool.IsWorkItemCanceled = True Or Application.Current.Resources("DownloadStopped") = True Then
+            If SmartThreadPool.IsWorkItemCanceled = True Or CBool(Application.Current.Resources("DownloadStopped")) = True Then
                 Throw New Exception("Canceld")
             End If
 
@@ -420,7 +420,7 @@ Class DownloadHelper
 
                     Using _local_write_stream As New IO.FileStream(_item.LocalFile, _filemode, IO.FileAccess.Write, IO.FileShare.None, 8192, False)
 
-                        While bytesRead > 0 And (SmartThreadPool.IsWorkItemCanceled = False And Application.Current.Resources("DownloadStopped") = False)
+                        While bytesRead > 0 And (SmartThreadPool.IsWorkItemCanceled = False And CBool(Application.Current.Resources("DownloadStopped")) = False)
 
                             Dim _tmp_percent_downloaded As Double = 0
                             Dim _new_perc As Integer = 0
@@ -512,7 +512,7 @@ Class DownloadHelper
 
         Catch ex As ArxOne.Ftp.Exceptions.FtpAuthenticationException
 
-            If Application.Current.Resources("DownloadStopped") = True Then
+            If CBool(Application.Current.Resources("DownloadStopped")) = True Then
                 _log.Info("Download wurde gestoppt!")
                 _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
             Else
@@ -522,7 +522,7 @@ Class DownloadHelper
 
         Catch ex As ArxOne.Ftp.Exceptions.FtpFileException
 
-            If Application.Current.Resources("DownloadStopped") = True Then
+            If CBool(Application.Current.Resources("DownloadStopped")) = True Then
                 _log.Info("Download wurde gestoppt!")
                 _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
             Else
@@ -532,7 +532,7 @@ Class DownloadHelper
 
         Catch ex As ArxOne.Ftp.Exceptions.FtpProtocolException
 
-            If Application.Current.Resources("DownloadStopped") = True Then
+            If CBool(Application.Current.Resources("DownloadStopped")) = True Then
                 _log.Info("Download wurde gestoppt!")
                 _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
             Else
@@ -542,7 +542,7 @@ Class DownloadHelper
 
         Catch ex As ArxOne.Ftp.Exceptions.FtpTransportException
 
-            If Application.Current.Resources("DownloadStopped") = True Then
+            If CBool(Application.Current.Resources("DownloadStopped")) = True Then
                 _log.Info("Download wurde gestoppt!")
                 _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
             Else
@@ -552,7 +552,7 @@ Class DownloadHelper
 
         Catch ex As ArxOne.Ftp.Exceptions.FtpException
 
-            If Application.Current.Resources("DownloadStopped") = True Then
+            If CBool(Application.Current.Resources("DownloadStopped")) = True Then
                 _log.Info("Download wurde gestoppt!")
                 _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
             Else
@@ -561,7 +561,7 @@ Class DownloadHelper
             End If
 
         Catch ex As Exception
-            If Application.Current.Resources("DownloadStopped") = True Then
+            If CBool(Application.Current.Resources("DownloadStopped")) = True Then
                 _log.Info("Download wurde gestoppt!")
                 _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
             Else
@@ -591,13 +591,13 @@ Class DownloadHelper
 
         Try
 
-            If SmartThreadPool.IsWorkItemCanceled = True Or Application.Current.Resources("DownloadStopped") = True Then
+            If SmartThreadPool.IsWorkItemCanceled = True Or CBool(Application.Current.Resources("DownloadStopped")) = True Then
                 Throw New DownloadStoppedException("Cancel!")
             End If
 
             _item.DownloadSpeed = String.Empty
 
-            If Application.Current.Resources("DownloadStopped") = False And _item.DownloadStatus = NET3.DownloadItem.Status.Completed Then
+            If CBool(Application.Current.Resources("DownloadStopped")) = False And _item.DownloadStatus = NET3.DownloadItem.Status.Completed Then
 
                 _item.isSelected = False
                 _item.DownloadStatus = NET3.DownloadItem.Status.Completed

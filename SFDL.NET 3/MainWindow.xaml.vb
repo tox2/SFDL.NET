@@ -28,7 +28,7 @@ Public Class MainWindow
 
     Private Async Sub MainWindow_ContentRendered(sender As Object, e As EventArgs) Handles Me.ContentRendered
 
-        Dim _settings As Settings = Application.Current.Resources("Settings")
+        Dim _settings As Settings = CType(Application.Current.Resources("Settings"), Settings)
         Dim _log As Logger = LogManager.GetLogger("ContentRendered")
         Dim _new_update As Boolean = False
 
@@ -146,7 +146,7 @@ Public Class MainWindow
 
         Try
 
-            _sel_object = ComB_Container_Info.SelectedItem
+            _sel_object = CType(ComB_Container_Info.SelectedItem, ContainerSession)
 
             If Not IsNothing(_sel_object) Then
 

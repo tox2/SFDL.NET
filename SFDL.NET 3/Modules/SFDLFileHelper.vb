@@ -171,7 +171,7 @@ Module SFDLFileHelper
 
                     .PackageName = _package.Name
                     .ParentContainerID = _containersession.ID
-                    .LocalFile = GetDownloadFilePath(Application.Current.Resources("Settings"), _containersession, _dl_item)
+                    .LocalFile = GetDownloadFilePath(CType(Application.Current.Resources("Settings"), Settings), _containersession, _dl_item)
 
                     If _mark_files = False Then
                         .isSelected = True
@@ -268,7 +268,7 @@ Module SFDLFileHelper
 
                                 _file_item.FullPath = _entry.Path.ToString
                                 _file_item.FileName = _entry.Path.GetFileName
-                                _file_item.FileSize = _entry.Size
+                                _file_item.FileSize = CLng(_entry.Size)
                                 _file_item.PackageName = _packagename
                                 _file_item.DirectoryPath = _bulk_folder
 

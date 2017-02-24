@@ -17,7 +17,7 @@
         'Total hours will allow display of more than 24 hrs
         'while minutes and seconds will be limited to 0-59
         '
-        totHrs = Math.Truncate(ts.TotalHours) 'strip away decimal points
+        totHrs = CInt(Math.Truncate(ts.TotalHours)) 'strip away decimal points
         H = Format(totHrs, "0#") & ":"
         M = Format(ts.Minutes, "0#") & ":"
         S = Format(ts.Seconds, "0#")

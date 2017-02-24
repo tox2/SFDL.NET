@@ -5,7 +5,7 @@
         With _mycontainer.Connection
 
             .AuthRequired = _mylegacycontainer.ConnectionInfo.AuthRequired
-            .CharacterEncoding = _mylegacycontainer.ConnectionInfo.CharacterEncoding
+            .CharacterEncoding = CType(_mylegacycontainer.ConnectionInfo.CharacterEncoding, Container.CharacterEncoding)
 
             Select Case _mylegacycontainer.ConnectionInfo.DataConnectionType
 
@@ -32,7 +32,7 @@
 
             End Select
 
-            .DataType = _mylegacycontainer.ConnectionInfo.DataType
+            .DataType = CType(_mylegacycontainer.ConnectionInfo.DataType, Container.FTPDataType)
             .Host = _mylegacycontainer.ConnectionInfo.Host
             .Password = _mylegacycontainer.ConnectionInfo.Password
             .Port = _mylegacycontainer.ConnectionInfo.Port
@@ -77,7 +77,7 @@
                     _new_file.FileName = _file.FileName
                     _new_file.FileSize = _file.FileSize
                     _new_file.FullPath = _file.FileFullPath
-                    _new_file.HashType = _file.FileHashType
+                    _new_file.HashType = CType(_file.FileHashType, Container.HashType)
                     _new_file.PackageName = _file.PackageName
 
                     _new_package.FileList.Add(_new_file)

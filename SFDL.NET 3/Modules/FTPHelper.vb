@@ -89,7 +89,7 @@ Module FTPHelper
 
         If Not IsNothing(e.Reply) Then
 
-            _log_line.AppendLine(e.Reply.Code)
+            _log_line.AppendLine(e.Reply.Code.ToString)
 
             For Each _line In e.Reply.Lines
                 _log_line.AppendLine(_line)
@@ -101,7 +101,7 @@ Module FTPHelper
 
     End Sub
 
-    Function TryParseLine(ByVal _item As String, _parent_folder As String)
+    Function TryParseLine(ByVal _item As String, _parent_folder As String) As ArxOne.Ftp.FtpEntry
 
         Dim _ftp_unix_platform As New ArxOne.Ftp.Platform.UnixFtpPlatform
         Dim _ftp_windows_platform As New ArxOne.Ftp.Platform.WindowsFtpPlatform

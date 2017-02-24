@@ -75,7 +75,7 @@ Public Class DownloadItem
         End Get
     End Property
 
-    Public ReadOnly Property DownloadStatusString
+    Public ReadOnly Property DownloadStatusString As String
         Get
 
             Select Case DownloadStatus
@@ -150,13 +150,13 @@ Public Class DownloadItem
 
                 Case Status.RetryWait
 
-                    Dim _settings As Settings = Application.Current.Resources("Settings")
+                    Dim _settings As Settings = CType(Application.Current.Resources("Settings"), Settings)
 
                     Return String.Format(Strings.DownloadStatus_RetryWait, Me.RetryCount, _settings.MaxRetry)
 
                 Case Status.Retry
 
-                    Dim _settings As Settings = Application.Current.Resources("Settings")
+                    Dim _settings As Settings = CType(Application.Current.Resources("Settings"), Settings)
 
                     Return String.Format(Strings.DownloadStatus_Retry, Me.RetryCount, _settings.MaxRetry)
 

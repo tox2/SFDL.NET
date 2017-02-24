@@ -8,7 +8,7 @@ Public Class SettingsViewModel
     Private _selected_unrar_password As String = String.Empty
 
     Public Sub New()
-        _settings = Application.Current.Resources("Settings")
+        _settings = CType(Application.Current.Resources("Settings"), Settings)
     End Sub
 
 #Region "General/Basic Settings Properties"
@@ -303,7 +303,7 @@ Public Class SettingsViewModel
 
             My.Computer.FileSystem.WriteAllText(_password_def_file, _password_def.ToString, False, System.Text.Encoding.Default)
 
-            If Application.Current.Resources("DownloadStopped") = False Then
+            If CBool(Application.Current.Resources("DownloadStopped")) = False Then
                 Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowMessageAsync(Me, "Achtung", "Alle Einstellung wurden nicht übernommen da aktuell ein Download aktiv ist." & vbNewLine & "Starte den Download neu damit alle Einstellungen übernommen werden")
             End If
 

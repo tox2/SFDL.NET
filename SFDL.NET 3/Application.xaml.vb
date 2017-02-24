@@ -78,7 +78,7 @@ Class Application
 
         Dim _settings As New Settings
 
-        _settings = Application.Current.Resources("Settings")
+        _settings = CType(Application.Current.Resources("Settings"), Settings)
 
         For Each _item In e.Args
 

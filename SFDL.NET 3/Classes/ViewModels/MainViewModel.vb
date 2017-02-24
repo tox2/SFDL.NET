@@ -28,14 +28,14 @@ Public Class MainViewModel
 
     Public Sub UpdateSettings()
 
-        _settings = Application.Current.Resources("Settings")
+        _settings = CType(Application.Current.Resources("Settings"), Settings)
 
     End Sub
 
     Public Sub New()
 
         _instance = Me
-        _settings = Application.Current.Resources("Settings")
+        _settings = CType(Application.Current.Resources("Settings"), Settings)
         Application.Current.Resources("DownloadStopped") = True
 
         'Init ThreadSafe Observ Collections
@@ -100,7 +100,7 @@ Public Class MainViewModel
 
                     _log.Info(String.Format("Loading Sessions {0}", _file))
 
-                    _new_session = XMLDeSerialize(_new_session, _file)
+                    _new_session = CType(XMLDeSerialize(_new_session, _file), ContainerSession)
                     _new_session.WIG = Nothing
                     _new_session.DownloadStartedTime = Date.MinValue
                     _new_session.DownloadStoppedTime = Date.MinValue
@@ -119,7 +119,7 @@ Public Class MainViewModel
                     For Each _item In _new_session.DownloadItems
 
                         'Update DownloadPath cause it could have changed
-                        _item.LocalFile = GetDownloadFilePath(Application.Current.Resources("Settings"), _new_session, _item)
+                        _item.LocalFile = GetDownloadFilePath(CType(Application.Current.Resources("Settings"), Settings), _new_session, _item)
                         '_item.DownloadStatus = DownloadItem.Status.None
                         _item.DownloadProgress = 0
                         _item.DownloadSpeed = String.Empty
@@ -207,7 +207,7 @@ Public Class MainViewModel
 
                 Case Else 'Valid v3 Container
 
-                    _mycontainer = XMLDeSerialize(_mycontainer, _sfdl_container_path)
+                    _mycontainer = CType(XMLDeSerialize(_mycontainer, _sfdl_container_path), Container.Container)
 
             End Select
 
@@ -381,15 +381,6 @@ Decrypt:
                     _total_size = DownloadItems.Where(Function(myitem) Not myitem.DownloadStatus = DownloadItem.Status.None).Select(Function(_item) _item.FileSize).Sum
                     _total_size_downloaded = DownloadItems.Where(Function(myitem) Not myitem.DownloadStatus = DownloadItem.Status.None).Select(Function(_item) _item.SizeDownloaded).Sum
 
-                    'System.Threading.Tasks.Parallel.ForEach(Of DownloadItem)(DownloadItems, Sub(_item As DownloadItem)
-                    '                                                                            If Not _item.DownloadStatus = DownloadItem.Status.None Then
-                    '                                                                                '_total_size += _item.FileSize
-                    '                                                                                _total_size_downloaded += _item.LocalFileSize
-                    '                                                                            End If
-                    '                                                                        End Sub)
-
-                    ' _log.Debug(String.Format("Total Size: {0}", _total_size))
-
                     _percent_done = CInt((_total_size_downloaded / _total_size) * 100)
 
                         _size_remaining = _total_size - _total_size_downloaded
@@ -443,7 +434,7 @@ Decrypt:
 
             For Each _mytask As AppTask In _mytasklist
 
-                If Application.Current.Resources("DownloadStopped") = False Then
+                If CBool(Application.Current.Resources("DownloadStopped")) = False Then
                     _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download beendet", Now.ToString))
                 Else
                     _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download gestoppt", Now.ToString))
@@ -533,9 +524,8 @@ Decrypt:
                     End If
 
                     For Each _dlitem In DLItemQuery
-                        'For Each _dlitem In DownloadItems.Where(Function(myitem) (myitem.ParentContainerID.Equals(_session.ID) And (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Retry))).Take(_thread_pull_count)
 
-                        If _session.DownloadStartedTime = Date.MinValue And ContainerSessionState.Queued Then
+                        If _session.DownloadStartedTime = Date.MinValue And _session.SessionState = ContainerSessionState.Queued Then
                             _session.DownloadStartedTime = Now
                             _session.SessionState = ContainerSessionState.DownloadRunning
                         End If
@@ -674,7 +664,7 @@ Decrypt:
             If Not IsNothing(_overrride_item) Then
                 _item = _overrride_item
             Else
-                _item = wir.Result
+                _item = CType(wir.Result, DownloadItem)
             End If
 
             If IsNothing(_item) Then
@@ -1025,7 +1015,7 @@ Decrypt:
 
         ActiveTasks.Add(_mytask)
 
-        If Application.Current.Resources("DownloadStopped") = False Then
+        If CBool(Application.Current.Resources("DownloadStopped")) = False Then
             _mytask.SetTaskStatus(TaskStatus.Canceled, "Diese Funktion kann nicht genutzt werden so lange der Download aktiv ist")
         Else
 
@@ -1077,7 +1067,7 @@ Decrypt:
 
         End With
 
-        If _ofd.ShowDialog = DialogResult.Cancel Then Return
+        If CType(_ofd.ShowDialog, Global.System.Windows.Forms.DialogResult) = DialogResult.Cancel Then Return
 
         For Each _file In _ofd.FileNames
             OpenSFDLFile(_file)
@@ -1173,7 +1163,7 @@ Decrypt:
 
     Private Async Sub ShowHelp()
 
-        Await DialogCoordinator.Instance.ShowMessageAsync(Me, "SFDL.NET 3", "Version: 3.0.0.3 RC3")
+        Await DialogCoordinator.Instance.ShowMessageAsync(Me, "SFDL.NET 3", "Version: 3.0.0.3 RC4")
 
     End Sub
 
@@ -1299,9 +1289,9 @@ Decrypt:
 
             If parameter.GetType Is GetType(String) Then
 
-                If Not String.IsNullOrWhiteSpace(parameter) Then
+                If Not String.IsNullOrWhiteSpace(CType(parameter, String)) Then
 
-                    Dim _container_sessionid As Guid = Guid.Parse(parameter)
+                    Dim _container_sessionid As Guid = Guid.Parse(CType(parameter, String))
 
                     _container_session = ContainerSessions.Where(Function(mysession) mysession.ID.Equals(_container_sessionid)).FirstOrDefault
 
