@@ -712,7 +712,7 @@ Class DownloadHelper
                 RaiseEvent ServerFull(_item)
             Else
 
-                If (_item.RetryPossible And _item.RetryCount < 3) And Not _item.DownloadStatus = NET3.DownloadItem.Status.Stopped Then
+                If (_item.RetryPossible And _item.RetryCount < _settings.MaxRetry) And Not _item.DownloadStatus = NET3.DownloadItem.Status.Stopped Then
                     _item.DownloadStatus = NET3.DownloadItem.Status.RetryWait
                     System.Threading.Thread.Sleep(_settings.RetryWaitTime * 1000)
                     _item.RetryCount += 1

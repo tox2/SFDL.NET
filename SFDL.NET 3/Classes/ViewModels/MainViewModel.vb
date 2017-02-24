@@ -902,8 +902,6 @@ Decrypt:
 
         Await Task.Run(Sub()
 
-                           Application.Current.Resources("DownloadStopped") = True
-
                            For Each _session In ContainerSessions
 
                                If Not IsNothing(_session.WIG) Then
@@ -913,6 +911,8 @@ Decrypt:
                            Next
 
                            _eta_thread.Cancel()
+
+                           Application.Current.Resources("DownloadStopped") = True
 
                        End Sub)
 

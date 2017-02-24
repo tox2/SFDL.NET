@@ -424,10 +424,10 @@
     <value>Beinhaltenden Ordner öffnen</value>
   </data>
   <data name="DownloadStatus_Retry" xml:space="preserve">
-    <value>Retry</value>
+    <value>Retry {0}/{1}</value>
   </data>
   <data name="DownloadStatus_RetryWait" xml:space="preserve">
-    <value>Retry - Warte</value>
+    <value>Retry {0}/{1} - Warte</value>
   </data>
   <data name="DownloadStatus_AlreadyDownloaded" xml:space="preserve">
     <value>Datei bereits vollständig</value>

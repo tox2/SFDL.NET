@@ -394,10 +394,10 @@
     <value>Open Containing Folder</value>
   </data>
   <data name="DownloadStatus_Retry" xml:space="preserve">
-    <value>Retry</value>
+    <value>Retry {0}/{1}</value>
   </data>
   <data name="DownloadStatus_RetryWait" xml:space="preserve">
-    <value>Retry - waiting</value>
+    <value>Retry {0}/{1}  - waiting</value>
   </data>
   <data name="DownloadStatus_AlreadyDownloaded" xml:space="preserve">
     <value>File already complete</value>

@@ -236,7 +236,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Retry ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Retry {0}/{1} ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_Retry() As String
             Get
@@ -245,7 +245,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Retry - Warte ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Retry {0}/{1} - Warte ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_RetryWait() As String
             Get

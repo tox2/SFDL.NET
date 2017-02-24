@@ -150,11 +150,15 @@ Public Class DownloadItem
 
                 Case Status.RetryWait
 
-                    Return Strings.DownloadStatus_RetryWait
+                    Dim _settings As Settings = Application.Current.Resources("Settings")
+
+                    Return String.Format(Strings.DownloadStatus_RetryWait, Me.RetryCount, _settings.MaxRetry)
 
                 Case Status.Retry
 
-                    Return Strings.DownloadStatus_Retry
+                    Dim _settings As Settings = Application.Current.Resources("Settings")
+
+                    Return String.Format(Strings.DownloadStatus_Retry, Me.RetryCount, _settings.MaxRetry)
 
                 Case Status.AlreadyDownloaded
 
