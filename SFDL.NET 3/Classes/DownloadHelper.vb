@@ -306,14 +306,20 @@ Class DownloadHelper
 
                 If IsNothing(_glb_ftp_client) Then
                     SetupFTPClient(_glb_ftp_client, _connection_info)
-                    _glb_ftp_session = _glb_ftp_client.Session
                 End If
 
             End SyncLock
 
-            'ToDo: Prüfen ob Verbindung zum Server hergestellt werden kann ->> Fehlerbehandlung
+            If IsNothing(_glb_ftp_session) And _single_session_mode = True Then
+                _glb_ftp_session = _glb_ftp_client.Session
+            End If
 
-            '_ftp_session = _glb_ftp_client.Session
+            If _single_session_mode = True Then
+                DownloadItem(_item, _glb_ftp_session)
+            Else
+                _ftp_session = _glb_ftp_client.Session
+                DownloadItem(_item, _ftp_session)
+            End If
 
             DownloadItem(_item, _glb_ftp_session)
 
@@ -330,7 +336,13 @@ Class DownloadHelper
             _item.DownloadStatus = NET3.DownloadItem.Status.Failed_AuthError
             ParseFTPException(ex, _item)
         Finally
-            PostDownload(_item, _glb_ftp_session)
+
+            If _single_session_mode = True Then
+                PostDownload(_item, _glb_ftp_session)
+            Else
+                PostDownload(_item, _ftp_session)
+            End If
+
         End Try
 
         Return _item

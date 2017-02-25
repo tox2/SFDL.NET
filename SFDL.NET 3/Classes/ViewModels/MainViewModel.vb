@@ -522,11 +522,7 @@ Decrypt:
 
                     Dim DLItemQuery As IEnumerable(Of DownloadItem)
 
-                    If _settings.InstantVideo = True Then
-                        DLItemQuery = (From myitem In DownloadItems Where myitem.ParentContainerID.Equals(_session.ID) And (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Retry) Order By myitem.RequiredForInstantVideo Descending).Take(_thread_pull_count)
-                    Else
-                        DLItemQuery = (From myitem In DownloadItems Where myitem.ParentContainerID.Equals(_session.ID) And (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Retry)).Take(_thread_pull_count)
-                    End If
+                    DLItemQuery = (From myitem In DownloadItems Where myitem.ParentContainerID.Equals(_session.ID) And (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Retry)).Take(_thread_pull_count)
 
                     For Each _dlitem In DLItemQuery
 
@@ -540,7 +536,11 @@ Decrypt:
                         _dlitem.RetryPossible = False
                         _dlitem.DownloadStatus = DownloadItem.Status.Running
 
-                        _session.WIG.QueueWorkItem(New Func(Of DownloadItem, String, Connection, Boolean, DownloadItem)(AddressOf _download_helper.DownloadContainerItem), _dlitem, _settings.DownloadDirectory, _session.ContainerFile.Connection, False, WorkItemPriority.Normal)
+                        If _settings.InstantVideo = True And _dlitem.RequiredForInstantVideo = True Then
+                            _session.WIG.QueueWorkItem(New Func(Of DownloadItem, String, Connection, Boolean, DownloadItem)(AddressOf _download_helper.DownloadContainerItem), _dlitem, _settings.DownloadDirectory, _session.ContainerFile.Connection, False, WorkItemPriority.Highest)
+                        Else
+                            _session.WIG.QueueWorkItem(New Func(Of DownloadItem, String, Connection, Boolean, DownloadItem)(AddressOf _download_helper.DownloadContainerItem), _dlitem, _settings.DownloadDirectory, _session.ContainerFile.Connection, False, WorkItemPriority.Normal)
+                        End If
 
                         _items_pulled = True
 
@@ -883,7 +883,7 @@ Decrypt:
 
                          ContainerSessions.Where(Function(mycontainer) mycontainer.ID.Equals(_item.ParentContainerID))(0).SingleSessionMode = True
 
-                         For Each _item In ContainerSessions.Where(Function(mycontainer) mycontainer.ID.Equals(_item.ParentContainerID))(0).DownloadItems
+                         For Each _item In ContainerSessions.Where(Function(mycontainer) mycontainer.ID.Equals(_item.ParentContainerID)).FirstOrDefault().DownloadItems
                              _item.SingleSessionMode = True
                          Next
 
