@@ -6,6 +6,7 @@ Public Class SettingsViewModel
 
     Private _settings As New Settings
     Private _selected_unrar_password As String = String.Empty
+    Private _selected_blacklist_item As String = String.Empty
 
     Public Sub New()
         _settings = CType(Application.Current.Resources("Settings"), Settings)
@@ -156,6 +157,26 @@ Public Class SettingsViewModel
             Return MahApps.Metro.ThemeManager.GetAppTheme(_settings.AppTheme)
         End Get
     End Property
+
+    Public Property DownloadItemBlacklist As ObjectModel.ObservableCollection(Of String)
+        Set(value As ObjectModel.ObservableCollection(Of String))
+            _settings.DownloadItemBlacklist = value
+            RaisePropertyChanged("DownloadItemBlacklist")
+        End Set
+        Get
+            Return _settings.DownloadItemBlacklist
+        End Get
+    End Property
+
+    Public Property SelectedBlacklistItem As String
+        Set(value As String)
+            _selected_blacklist_item = value
+        End Set
+        Get
+            Return _selected_blacklist_item
+        End Get
+    End Property
+
 
 #End Region
 
@@ -344,13 +365,71 @@ Public Class SettingsViewModel
         End Get
     End Property
 
+    Private Async Sub AddBlacklistItem()
+
+        Dim _new_blacklist_item As String = String.Empty
+        Dim _regex_fail As Boolean = False
+
+        _new_blacklist_item = Await DialogCoordinator.Instance.ShowInputAsync(Me, My.Resources.Strings.Settings_Input_AddBlacklistItem_Title, My.Resources.Strings.Settings_Input_AddBlacklistItem_Message)
+
+        Try
+
+            If Not String.IsNullOrWhiteSpace(_new_blacklist_item) Then
+                Dim _regex_test As Text.RegularExpressions.Regex
+                _regex_test = New Text.RegularExpressions.Regex(_new_blacklist_item)
+            End If
+
+        Catch ex As Exception
+            _regex_fail = True
+            'Regex not valid!
+        End Try
+
+        If _regex_fail = True Then
+            Await DialogCoordinator.Instance.ShowMessageAsync(Me, My.Resources.Strings.VariousStrings_Error, My.Resources.Strings.Settings_Input_AddBlacklistItem_RegexNotValid_Message, MessageDialogStyle.Affirmative)
+        Else
+            If Not _settings.DownloadItemBlacklist.Contains(_new_blacklist_item) And Not String.IsNullOrWhiteSpace(_new_blacklist_item) Then
+                Me.DownloadItemBlacklist.Add(_new_blacklist_item)
+            End If
+        End If
+
+    End Sub
+
+    Public ReadOnly Property AddBlacklistItemCommand As ICommand
+        Get
+            Return New DelegateCommand(AddressOf AddBlacklistItem)
+        End Get
+    End Property
+
+    Private Async Sub RemoveBlacklistItem()
+
+        If Not String.IsNullOrWhiteSpace(_selected_blacklist_item) Then
+
+            Dim _result As MessageDialogResult
+
+            _result = Await DialogCoordinator.Instance.ShowMessageAsync(Me, My.Resources.Strings.Settings_Question_RemoveBlacklistItem_Title, My.Resources.Strings.Settings_Question_RemoveBlacklistItem_Message, MessageDialogStyle.AffirmativeAndNegative)
+
+            If _result = MessageDialogResult.Affirmative Then
+                DownloadItemBlacklist.Remove(_selected_blacklist_item)
+            End If
+
+        End If
+
+    End Sub
+
+    Public ReadOnly Property RemoveBlacklistItemCommand As ICommand
+        Get
+            Return New DelegateCommand(AddressOf RemoveBlacklistItem)
+        End Get
+    End Property
+
+
     Private Async Sub AddUnRARPassword()
 
         Dim _new_password As String = String.Empty
 
         _new_password = Await DialogCoordinator.Instance.ShowInputAsync(Me, My.Resources.Strings.Settings_Input_AddUnRARPassword_Title, My.Resources.Strings.Settings_Input_AddUnRARPassword_Message)
 
-        If Not _settings.UnRARSettings.UnRARPasswordList.Contains(_new_password) Then
+        If Not _settings.UnRARSettings.UnRARPasswordList.Contains(_new_password) And Not String.IsNullOrWhiteSpace(_new_password) Then
             Me.UnRARPasswordList.Add(_new_password)
         End If
 

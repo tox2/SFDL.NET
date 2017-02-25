@@ -259,7 +259,7 @@ Decrypt:
                 _bulk_result = True
             End If
 
-            GenerateContainerSessionDownloadItems(_mycontainer_session, _settings.NotMarkAllContainerFiles)
+            GenerateContainerSessionDownloadItems(_mycontainer_session, _settings.NotMarkAllContainerFiles, _settings.DownloadItemBlacklist.ToList)
 
 
             If _bulk_result = False Or _mycontainer_session.DownloadItems.Count = 0 Then

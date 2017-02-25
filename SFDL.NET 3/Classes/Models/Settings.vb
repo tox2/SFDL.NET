@@ -17,6 +17,7 @@
     Public Property RemoteControlSettings As New RemoteControlSettings
     Public Property AppAccent As String = "Blue"
     Public Property AppTheme As String = "BaseLight"
+    Public Property DownloadItemBlacklist As New ObjectModel.ObservableCollection(Of String)
 
     Public Shared Function InitNewSettings() As Settings
 

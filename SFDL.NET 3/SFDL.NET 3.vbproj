@@ -113,7 +113,7 @@
     <Compile Include="Classes\Models\UnRARChain.vb" />
     <Compile Include="Classes\SingleInstance\SingleInstance.vb" />
     <Compile Include="Classes\ViewModels\MainViewModel.vb" />
-    <Compile Include="Classes\IDownloadStatusImage.vb" />
+    <Compile Include="Classes\Interfaces\IDownloadStatusImage.vb" />
     <Compile Include="Classes\XAML Converter\CollectionViewNameConverter.vb" />
     <Compile Include="Classes\XAML Converter\ExistingFileHandlingConverter.vb" />
     <Compile Include="Classes\XAML Converter\InvertBooleanConverter.vb" />

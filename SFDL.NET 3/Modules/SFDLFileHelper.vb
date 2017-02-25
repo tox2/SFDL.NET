@@ -154,7 +154,7 @@ Module SFDLFileHelper
 
     End Sub
 
-    Sub GenerateContainerSessionDownloadItems(ByVal _containersession As ContainerSession, ByVal _mark_files As Boolean)
+    Sub GenerateContainerSessionDownloadItems(ByVal _containersession As ContainerSession, ByVal _mark_files As Boolean, ByVal _blacklist As List(Of String))
 
         Dim _tmp_list As New List(Of DownloadItem)
 
@@ -169,11 +169,27 @@ Module SFDLFileHelper
 
                 With _dl_item
 
+                    Dim _blacklist_match As Boolean = False
+
                     .PackageName = _package.Name
                     .ParentContainerID = _containersession.ID
                     .LocalFile = GetDownloadFilePath(CType(Application.Current.Resources("Settings"), Settings), _containersession, _dl_item)
 
-                    If _mark_files = False Then
+#Region "Blacklist Check"
+
+                    For Each _blacklist_pattern In _blacklist
+
+                        Dim _blacklistpattern As Regex = New Regex(_blacklist_pattern)
+
+                        If _blacklistpattern.IsMatch(.FileName) Then
+                            _blacklist_match = True
+                        End If
+
+                    Next
+
+#End Region
+
+                    If _mark_files = False And _blacklist_match = False Then
                         .isSelected = True
                     Else
                         .isSelected = False

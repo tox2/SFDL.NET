@@ -448,4 +448,22 @@ Deswegen muss SFDL.NET 3 nun einmal als Administrator gestartet werden damit die
 
 Möchtest du SFDL.NET 3 nun als Administrator starten?</value>
   </data>
+  <data name="Settings_Input_AddBlacklistItem_Message" xml:space="preserve">
+    <value>Bitte gebe eine gültige RegEx Pattern ein welche du zur Blacklist hinzufügen möchtest</value>
+  </data>
+  <data name="Settings_Input_AddBlacklistItem_Title" xml:space="preserve">
+    <value>RegEx Pattern zu Blacklist hinzufügen</value>
+  </data>
+  <data name="Settings_Input_AddBlacklistItem_RegexNotValid_Message" xml:space="preserve">
+    <value>Das eingebene RegEx Pattern ist nicht valide!</value>
+  </data>
+  <data name="Settings_Question_RemoveBlacklistItem_Message" xml:space="preserve">
+    <value>Willst du das ausgewählte RegEx Pattern aus der Blacklist entfernen?</value>
+  </data>
+  <data name="Settings_Question_RemoveBlacklistItem_Title" xml:space="preserve">
+    <value>RegEx Pattern aus Blacklist entfernen</value>
+  </data>
+  <data name="VariousStrings_Error" xml:space="preserve">
+    <value>Fehler</value>
+  </data>
 </root>

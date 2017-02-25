@@ -152,13 +152,13 @@ Public Class DownloadItem
 
                     Dim _settings As Settings = CType(Application.Current.Resources("Settings"), Settings)
 
-                    Return String.Format(Strings.DownloadStatus_RetryWait, Me.RetryCount, _settings.MaxRetry)
+                    Return String.Format(Strings.DownloadStatus_RetryWait, Me.RetryCount + 1, _settings.MaxRetry)
 
                 Case Status.Retry
 
                     Dim _settings As Settings = CType(Application.Current.Resources("Settings"), Settings)
 
-                    Return String.Format(Strings.DownloadStatus_Retry, Me.RetryCount, _settings.MaxRetry)
+                    Return String.Format(Strings.DownloadStatus_Retry, Me.RetryCount + 1, _settings.MaxRetry)
 
                 Case Status.AlreadyDownloaded
 

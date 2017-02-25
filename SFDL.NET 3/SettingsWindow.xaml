@@ -189,48 +189,94 @@
                                           MinWidth="400"
                                           Header="{x:Static p:Strings.Settings_AdvancedDownloadSettings}">
                                     <Grid>
-                                        <StackPanel Orientation="Horizontal">
-                                            <StackPanel>
-                                                <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_ExistingFile}" />
-                                                <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_MaximumThreads}" />
-                                                <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_MaximumRetries}" />
-                                                <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_WaitTimeRetries}" />
-                                            </StackPanel>
-                                            <StackPanel>
-                                                <StackPanel Margin="0,8,0,0" Orientation="Horizontal">
-                                                    <RadioButton Margin="0,0,5,0"
+                                        <StackPanel >
+
+                                            <StackPanel Orientation="Horizontal">
+                                                <StackPanel>
+                                                    <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_ExistingFile}" />
+                                                    <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_MaximumThreads}" />
+                                                    <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_MaximumRetries}" />
+                                                    <Label Margin="5,5,5,0" Content="{x:Static p:Strings.Settings_WaitTimeRetries}" />
+                                                </StackPanel>
+                                                <StackPanel>
+                                                    <StackPanel Margin="0,8,0,0" Orientation="Horizontal">
+                                                        <RadioButton Margin="0,0,5,0"
                                                                  Content="{x:Static p:Strings.Settings_ExistingFile_Append}"
                                                                  GroupName="FileHandling"
                                                                  IsChecked="{Binding ExistingFileHandling,
                                                                                      Converter={StaticResource Filehandlingconvert},
                                                                                      ConverterParameter=ResumeFile}" />
-                                                    <RadioButton Content="{x:Static p:Strings.Settings_ExistingFile_Overwrite}"
+                                                        <RadioButton Content="{x:Static p:Strings.Settings_ExistingFile_Overwrite}"
                                                                  GroupName="FileHandling"
                                                                  IsChecked="{Binding ExistingFileHandling,
                                                                                      Converter={StaticResource Filehandlingconvert},
                                                                                      ConverterParameter=OverwriteFile}" />
-                                                </StackPanel>
+                                                    </StackPanel>
 
-                                                <Controls:NumericUpDown x:Name="NumMaxThreads"
+                                                    <Controls:NumericUpDown x:Name="NumMaxThreads"
                                                                         Width="147"
                                                                         Margin="5,5,5,0"
                                                                         Maximum="100"
                                                                         Minimum="1"
                                                                         Value="{Binding MaxDownloadThreads}" />
-                                                <Controls:NumericUpDown x:Name="NumMaxRetries"
+                                                    <Controls:NumericUpDown x:Name="NumMaxRetries"
                                                                         Width="147"
                                                                         Margin="5,5,5,0"
                                                                         Maximum="100"
                                                                         Minimum="1"
                                                                         Value="{Binding MaxRetry}" />
-                                                <Controls:NumericUpDown x:Name="NumWaitRetries"
+                                                    <Controls:NumericUpDown x:Name="NumWaitRetries"
                                                                         Width="147"
                                                                         Margin="5,5,5,0"
                                                                         Maximum="120"
                                                                         Minimum="1"
                                                                         Value="{Binding RetryWaitTime}" />
+
+                                                </StackPanel>
+
                                             </StackPanel>
+                                            <Separator Margin="3,5" />
+                                            <Label Content="Folgende Dateien auslassen:"></Label>
+
+                                            <StackPanel Orientation="Horizontal" >
+
+                                                <ListBox MinHeight="50" BorderThickness="1" MinWidth="350"
+                                                         ItemsSource="{Binding DownloadItemBlacklist}"
+                                                         SelectedItem="{Binding SelectedBlacklistItem,
+                                                                                Mode=TwoWay}"/>
+
+                                                <StackPanel>
+
+                                                    <Button Margin="5,0,0,5" Width="24" Height="24" Command="{Binding AddBlacklistItemCommand}" Background="{DynamicResource BaseColorBrush}">
+                                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                            <Rectangle Width="16"
+                                                                   Height="16"
+                                                                   Fill="{DynamicResource AccentColorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                                <Rectangle.OpacityMask>
+                                                                    <VisualBrush Visual="{StaticResource appbar_add}" />
+                                                                </Rectangle.OpacityMask>
+                                                            </Rectangle>
+                                                        </StackPanel>
+                                                    </Button>
+                                                    <Button Margin="5,0,0,5" Width="24" Height="24" Background="{DynamicResource BaseColorBrush}" Command="{Binding RemoveBlacklistItemCommand}">
+                                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                            <Rectangle Width="16"
+                                                                   Height="16"
+                                                                   Fill="{DynamicResource AccentColorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                                <Rectangle.OpacityMask>
+                                                                    <VisualBrush Visual="{StaticResource appbar_checkmark_cross}" />
+                                                                </Rectangle.OpacityMask>
+                                                            </Rectangle>
+                                                        </StackPanel>
+                                                    </Button>
+
+                                                </StackPanel>
+
+                                            </StackPanel>
+                                            
                                         </StackPanel>
+                                                         
+
                                     </Grid>
                                 </GroupBox>
 
@@ -287,20 +333,31 @@
                                                          SelectedItem="{Binding SelectedUnRARPassword,
                                                                                 Mode=TwoWay}" />
                                                 <StackPanel>
-                                                    <Button x:Name="CmdAddUnrarPw"
-                                                            Width="24"
-                                                            Height="24"
-                                                            Margin="5,5,5,0"
-                                                            Background="{DynamicResource BaseColorBrush}"
-                                                            Command="{Binding AddUnRARPasswordCommand}"
-                                                            Content="+" />
-                                                    <Button x:Name="CmdRemoveUnrarPw"
-                                                            Width="24"
-                                                            Height="24"
-                                                            Margin="5,5,5,0"
-                                                            Background="{DynamicResource BaseColorBrush}"
-                                                            Command="{Binding RemoveUnRARPasswordCommand}"
-                                                            Content="-" />
+
+                                                    <Button x:Name="CmdAddUnrarPw" Margin="5,0,0,5" Width="24" Height="24" Command="{Binding AddUnRARPasswordCommand}" Background="{DynamicResource BaseColorBrush}">
+                                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                            <Rectangle Width="16"
+                                                                   Height="16"
+                                                                   Fill="{DynamicResource AccentColorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                                <Rectangle.OpacityMask>
+                                                                    <VisualBrush Visual="{StaticResource appbar_add}" />
+                                                                </Rectangle.OpacityMask>
+                                                            </Rectangle>
+                                                        </StackPanel>
+                                                    </Button>
+
+                                                    <Button x:Name="CmdRemoveUnrarPw1" Margin="5,0,0,5" Width="24" Height="24" Background="{DynamicResource BaseColorBrush}" Command="{Binding RemoveUnRARPasswordCommand}">
+                                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                            <Rectangle Width="16"
+                                                                   Height="16"
+                                                                   Fill="{DynamicResource AccentColorBrush}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                                <Rectangle.OpacityMask>
+                                                                    <VisualBrush Visual="{StaticResource appbar_checkmark_cross}" />
+                                                                </Rectangle.OpacityMask>
+                                                            </Rectangle>
+                                                        </StackPanel>
+                                                    </Button>
+                                                    
                                                 </StackPanel>
                                             </StackPanel>
                                         </StackPanel>

@@ -7,6 +7,7 @@ Class DownloadHelper
 
     Private _log As NLog.Logger = NLog.LogManager.GetLogger("DownloadHelper")
     Private _glb_ftp_client As ArxOne.Ftp.FtpClient = Nothing
+    Private _glb_ftp_session As ArxOne.Ftp.FtpSession = Nothing
     Private _settings As New Settings
     Private _obj_ftp_client_lock As New Object
     Private _obj_dl_count_lok As New Object
@@ -305,15 +306,16 @@ Class DownloadHelper
 
                 If IsNothing(_glb_ftp_client) Then
                     SetupFTPClient(_glb_ftp_client, _connection_info)
+                    _glb_ftp_session = _glb_ftp_client.Session
                 End If
 
             End SyncLock
 
             'ToDo: Prüfen ob Verbindung zum Server hergestellt werden kann ->> Fehlerbehandlung
 
-            _ftp_session = _glb_ftp_client.Session
+            '_ftp_session = _glb_ftp_client.Session
 
-            DownloadItem(_item, _ftp_session)
+            DownloadItem(_item, _glb_ftp_session)
 
         Catch ex As DownloadStoppedException
             _log.Info("Download Stopped")
@@ -328,7 +330,7 @@ Class DownloadHelper
             _item.DownloadStatus = NET3.DownloadItem.Status.Failed_AuthError
             ParseFTPException(ex, _item)
         Finally
-            PostDownload(_item, _ftp_session)
+            PostDownload(_item, _glb_ftp_session)
         End Try
 
         Return _item
