@@ -467,13 +467,17 @@ Decrypt:
 
         Dim _log As Logger = LogManager.GetLogger("QueryDownloadItems")
 
+#Region "Update STP with Current Settings"
+
+        _stp.MaxThreads = _settings.MaxDownloadThreads + 1 '+1 for ETA Thread
+
+#End Region
+
         For Each _session In ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning)
 
             Dim _wig As IWorkItemsGroup
             Dim _wig_start As New WIGStartInfo
-            Dim _thread_pull_count As Integer
-            Dim _threads_availible As Integer = 0
-            Dim _items_pulled As Boolean = False
+            Dim _ssm_flag As Boolean = False
 
             SyncLock _session.SynLock
 
@@ -488,72 +492,43 @@ Decrypt:
 
                 End If
 
-                If _session.SingleSessionMode = True Then
+                If _session.SingleSessionMode = True Or _stp.MaxThreads - 1 = 1 Then '-1 for ETA Thread
                     _session.WIG.Concurrency = 1
+                    _ssm_flag = True
                 End If
 
-                _log.Debug("STP InUseThreads:{0}", _stp.InUseThreads)
 
-                _threads_availible = _stp.MaxThreads - _stp.InUseThreads
+                Dim DLItemQuery As IEnumerable(Of DownloadItem)
 
-                _log.Debug("Threads availible:{0}", _threads_availible)
+                DLItemQuery = (From myitem In DownloadItems Where myitem.ParentContainerID.Equals(_session.ID) And (myitem.DownloadStatus = DownloadItem.Status.Queued And IsNothing(myitem.IWorkItemResult) = True) Or myitem.DownloadStatus = DownloadItem.Status.Retry)
 
-                _log.Debug("WIG InUseThreads:{0}", _session.WIG.InUseThreads)
-                _log.Debug("Waiting Callbacks:{0}", _session.WIG.WaitingCallbacks)
+                For Each _dlitem In DLItemQuery
 
-                If _session.WIG.InUseThreads >= _session.ContainerFile.MaxDownloadThreads Then
-                    _log.Info(String.Format("Session {0} hat ihr Limit ({1}) erreicht!", _session.DisplayName, _session.ContainerFile.MaxDownloadThreads))
-                    _thread_pull_count = 0
-                Else
+                    Dim _prio As WorkItemPriority = WorkItemPriority.Normal
 
-                    _thread_pull_count = _session.ContainerFile.MaxDownloadThreads - _session.WIG.InUseThreads
-
-                    If _threads_availible < _thread_pull_count Then
-                        _thread_pull_count = _threads_availible
+                    If _session.DownloadStartedTime = Date.MinValue And _session.SessionState = ContainerSessionState.Queued Then
+                        _session.DownloadStartedTime = Now
+                        _session.SessionState = ContainerSessionState.DownloadRunning
                     End If
 
-                    _log.Debug("Threads to pull: {0}", _thread_pull_count)
+                    _dlitem.SizeDownloaded = 0
 
-                End If
+                    _dlitem.LocalFileSize = 0
 
-                If _thread_pull_count <= 0 Then
-                    _log.Info(String.Format("Hole keine neuen Threads für Session {0}", _session.DisplayName))
-                Else
+                    _dlitem.RetryPossible = False
 
-                    Dim DLItemQuery As IEnumerable(Of DownloadItem)
-
-                    DLItemQuery = (From myitem In DownloadItems Where myitem.ParentContainerID.Equals(_session.ID) And (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Retry)).Take(_thread_pull_count)
-
-                    For Each _dlitem In DLItemQuery
-
-                        If _session.DownloadStartedTime = Date.MinValue And _session.SessionState = ContainerSessionState.Queued Then
-                            _session.DownloadStartedTime = Now
-                            _session.SessionState = ContainerSessionState.DownloadRunning
+                    If _settings.InstantVideo = True And _dlitem.RequiredForInstantVideo = True Then
+                        _prio = WorkItemPriority.AboveNormal
+                    Else
+                        If _dlitem.DownloadStatus = DownloadItem.Status.Retry Then
+                            _prio = WorkItemPriority.Highest
                         End If
-
-                        _dlitem.SizeDownloaded = 0
-                        _dlitem.LocalFileSize = 0
-                        _dlitem.RetryPossible = False
-                        _dlitem.DownloadStatus = DownloadItem.Status.Running
-
-                        If _settings.InstantVideo = True And _dlitem.RequiredForInstantVideo = True Then
-                            _session.WIG.QueueWorkItem(New Func(Of DownloadItem, String, Connection, Boolean, DownloadItem)(AddressOf _download_helper.DownloadContainerItem), _dlitem, _settings.DownloadDirectory, _session.ContainerFile.Connection, False, WorkItemPriority.Highest)
-                        Else
-                            _session.WIG.QueueWorkItem(New Func(Of DownloadItem, String, Connection, Boolean, DownloadItem)(AddressOf _download_helper.DownloadContainerItem), _dlitem, _settings.DownloadDirectory, _session.ContainerFile.Connection, False, WorkItemPriority.Normal)
-                        End If
-
-                        _items_pulled = True
-
-                    Next
-
-
-                    If _items_pulled = False And _session.WIG.InUseThreads = 0 Then
-                        _log.Warn("Potential RaceCondition - CallingCallback manually")
-                        DownloadCompleteCallback(Nothing, DownloadItems.Where(Function(myitem) myitem.ParentContainerID.Equals(_session.ID)).FirstOrDefault)
-
                     End If
 
-                End If
+                    _dlitem.IWorkItemResult = _session.WIG.QueueWorkItem(New Func(Of DownloadItem, String, Connection, Boolean, DownloadItem)(AddressOf _download_helper.DownloadContainerItem), _dlitem, _settings.DownloadDirectory, _session.ContainerFile.Connection, _ssm_flag, _prio)
+
+                Next
+
 
             End SyncLock
 
@@ -613,6 +588,7 @@ Decrypt:
                                                                        If _dlitem.isSelected Then
 
                                                                            _dlitem.DownloadStatus = DownloadItem.Status.Queued
+                                                                           _dlitem.IWorkItemResult = Nothing
                                                                            _dlitem.DownloadProgress = 0
                                                                            _dlitem.DownloadSpeed = String.Empty
                                                                            _dlitem.SingleSessionMode = False
@@ -870,14 +846,9 @@ Decrypt:
 
     Private Sub ServerFullEvent(_item As DownloadItem)
 
-
         Task.Run(Sub()
 
                      Dim _log As Logger = LogManager.GetLogger("ItemDownloadCompleteEvent")
-
-                     _log.Debug("Item {0} war als Download gequed und ist jetzt fertig - Reduziere aktiven Thread Count für diese Session", _item.FileName)
-
-                     _item.DownloadStatus = DownloadItem.Status.Queued
 
                      SyncLock ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID)).SynLock
 

@@ -1,4 +1,5 @@
 ﻿Imports System.ComponentModel
+Imports Amib.Threading
 Imports SFDL.Container
 Imports SFDL.NET3.My.Resources
 
@@ -52,7 +53,11 @@ Public Class DownloadItem
 
                 If value = True Then
                     DownloadStatus = Status.Queued
+                    IWorkItemResult = Nothing
                 Else
+                    If IsNothing(IWorkItemResult) = False And DownloadStatus = Status.Queued Then
+                        IWorkItemResult.Cancel()
+                    End If
                     DownloadStatus = Status.None
                 End If
 
@@ -152,13 +157,13 @@ Public Class DownloadItem
 
                     Dim _settings As Settings = CType(Application.Current.Resources("Settings"), Settings)
 
-                    Return String.Format(Strings.DownloadStatus_RetryWait, Me.RetryCount + 1, _settings.MaxRetry)
+                    Return String.Format(Strings.DownloadStatus_RetryWait, Me.RetryCount, _settings.MaxRetry)
 
                 Case Status.Retry
 
                     Dim _settings As Settings = CType(Application.Current.Resources("Settings"), Settings)
 
-                    Return String.Format(Strings.DownloadStatus_Retry, Me.RetryCount + 1, _settings.MaxRetry)
+                    Return String.Format(Strings.DownloadStatus_Retry, Me.RetryCount, _settings.MaxRetry)
 
                 Case Status.AlreadyDownloaded
 
@@ -319,6 +324,7 @@ Public Class DownloadItem
     Public Property FirstUnRarFile As Boolean = False
     Public Property RequiredForInstantVideo As Boolean = False
     Public Property SingleSessionMode As Boolean = False
+    Public Property IWorkItemResult As IWorkItemResult(Of DownloadItem) = Nothing
 
     Private _is_expanded As Boolean = True
     Public Property IsExpanded As Boolean
