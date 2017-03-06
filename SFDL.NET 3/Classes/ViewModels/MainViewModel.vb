@@ -394,24 +394,30 @@ Decrypt:
 
                         _size_remaining = _total_size - _total_size_downloaded
 
-                        If _size_remaining > 0 And _total_speed > 0 Then
+                    If _size_remaining > 0 And _total_speed > 0 Then
 
-                            _time_remaining = Math.Round(Double.Parse(CStr(((_size_remaining / 1024) / _total_speed) / 60)), 2)
+                        _time_remaining = Math.Round(Double.Parse(CStr(((_size_remaining / 1024) / _total_speed) / 60)), 2)
 
-                            If _mytask.TaskStatus = TaskStatus.Running Then
+                        If _mytask.TaskStatus = TaskStatus.Running Then
 
-                                If _total_speed >= 1024 Then
-                                    _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - Speed: {0} MB/s | ETA: {1} | {2} %", Math.Round(_total_speed / 1024, 2), ConvertDecimal2Time(_time_remaining), _percent_done))
-                                Else
-                                    _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - Speed: {0} KB/s | ETA: {1} | {2} %", Math.Round(_total_speed, 2), ConvertDecimal2Time(_time_remaining), _percent_done))
-                                End If
+                            Application.Current.Dispatcher.BeginInvoke(New Action(Function()
+                                                                                      WindowInstance.TaskbarItemInfo.ProgressValue = _percent_done / 100.0
+                                                                                  End Function))
 
+                            If _total_speed >= 1024 Then
+                                _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - Speed: {0} MB/s | ETA: {1} | {2} %", Math.Round(_total_speed / 1024, 2), ConvertDecimal2Time(_time_remaining), _percent_done))
                             Else
-                                _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - {0} %", CInt((_total_size_downloaded / _total_size) * 100)))
+                                _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - Speed: {0} KB/s | ETA: {1} | {2} %", Math.Round(_total_speed, 2), ConvertDecimal2Time(_time_remaining), _percent_done))
                             End If
+
                         Else
+                            _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - {0} %", CInt((_total_size_downloaded / _total_size) * 100)))
+                        End If
+
+                    Else
                         '_log.Debug("Nothing to Calculate")
                     End If
+
 
                 Else
                     Debug.WriteLine("Keine Berechnung Fenster ist runtergeklappt!")
@@ -426,6 +432,10 @@ Decrypt:
         End While
 
         _log.Debug("ETA While beendet!")
+
+        DispatchService.DispatchService.Invoke(Sub()
+                                                   WindowInstance.TaskbarItemInfo.ProgressState = Shell.TaskbarItemProgressState.None
+                                               End Sub)
 
         PostDownload()
 
@@ -555,9 +565,6 @@ Decrypt:
 
             ActiveTasks.Add(_mytask)
 
-
-
-
 #Region "Cleanup"
 
 
@@ -626,6 +633,10 @@ Decrypt:
 
             _mytask.SetTaskStatus(TaskStatus.Running, "Download läuft...")
 
+            DispatchService.DispatchService.Invoke(Sub()
+                                                       WindowInstance.TaskbarItemInfo.ProgressState = Shell.TaskbarItemProgressState.Normal
+                                                   End Sub)
+
             _eta_thread = _stp.QueueWorkItem(New Func(Of AppTask, Boolean)(AddressOf CalculateETA), _mytask)
 
             QueryDownloadItems()
@@ -653,7 +664,7 @@ Decrypt:
             End If
 
             If IsNothing(_item) Then
-                Throw New Exception("Item is Null")
+                Throw New Exception("Item Is Null")
             End If
 
             _mysession = ContainerSessions.First(Function(mysession) mysession.ID.Equals(_item.ParentContainerID))
@@ -723,7 +734,7 @@ Decrypt:
 
             Task.Run(Sub()
 
-#Region "Check if Download or Any Session is Complete"
+#Region "Check If Download Or Any Session Is Complete"
 
                          SyncLock _mysession.SynLock
 

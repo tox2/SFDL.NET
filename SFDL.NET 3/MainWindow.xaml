@@ -22,6 +22,10 @@
                       WindowStartupLocation="CenterScreen"
                       WindowState="{Binding WindowState}">
 
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo/>
+    </Window.TaskbarItemInfo>
+
     <Window.Resources>
         <ResourceDictionary>
             <local:InvertBooleanConverter x:Key="boolConvert" />
