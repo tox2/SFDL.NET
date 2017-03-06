@@ -297,6 +297,7 @@ Class DownloadHelper
         Dim _ftp_session As ArxOne.Ftp.FtpSession = Nothing
         Dim _ftp_client As ArxOne.Ftp.FtpClient = Nothing
         Dim _ftp_server_uid As String
+        Dim _batr As New BasicAvailabilityTestResult
 
         Try
 
@@ -311,9 +312,24 @@ Class DownloadHelper
                 _log.Info("FTP Server UID {0}", _ftp_server_uid)
 
                 If _ftp_client_collection.ContainsKey(_ftp_server_uid) = False Then
+
                     _log.Info("There is no FTP Client for this Connection - Creating a new one")
-                    SetupFTPClient(_ftp_client, _connection_info)
-                    _ftp_client_collection.Add(_ftp_server_uid, _ftp_client)
+
+                    _log.Info("Starting Basic availability Test...")
+
+                    _batr = BasicAvailabilityTest(_connection_info)
+
+                    If _batr.PingTest = False Or _batr.PortTest = False Then
+                        _log.Info("Basic availability Test  failed!")
+                        Throw New BasicAvailabilityTestFailedException("Test Failed")
+                    Else
+                        _log.Info("Basic availability Test passed!")
+
+                        SetupFTPClient(_ftp_client, _connection_info)
+                        _ftp_client_collection.Add(_ftp_server_uid, _ftp_client)
+
+                    End If
+
                 Else
                     _log.Info("There is already an FTP Client for this Connection")
                     _ftp_client = _ftp_client_collection(_ftp_server_uid)
@@ -335,17 +351,15 @@ Class DownloadHelper
 
             End SyncLock
 
-            _item.DownloadStatus = NET3.DownloadItem.Status.Running
-
             DownloadItem(_item, _ftp_session)
 
         Catch ex As DownloadStoppedException
             _log.Info("Download Stopped")
             _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
 
-        Catch ex As AggregateException
+        Catch ex As BasicAvailabilityTestFailedException
             _log.Error(ex, ex.Message)
-            _item.DownloadStatus = NET3.DownloadItem.Status.Failed_AuthError
+            _item.DownloadStatus = NET3.DownloadItem.Status.Failed_ConnectionError
 
         Catch ex As Exception
             _log.Error(ex, ex.Message)
@@ -438,6 +452,8 @@ Class DownloadHelper
             If _skip_download = True Then
                 _log.Info("Datei ist bereits vollständig - Überspringe FTP Connect!")
             Else
+
+                _item.DownloadStatus = NET3.DownloadItem.Status.Running
 
                 Using _ftp_read_stream = ArxOne.Ftp.FtpClientUtility.Retr(_ftp_session.Connection.Client, New ArxOne.Ftp.FtpPath(_item.FullPath), ArxOne.Ftp.FtpTransferMode.Binary, _restart, _ftp_session)
 

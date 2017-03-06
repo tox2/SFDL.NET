@@ -776,7 +776,7 @@ Decrypt:
                                              _sr_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("Speedreport erstellt | {0}", GenerateSimpleSpeedreport(_mysession)))
 
                                          Catch ex As NoSpeedreportDataException
-                                             _sr_task.SetTaskStatus(TaskStatus.RanToCompletion, "Speedreport Generation skipped")
+                                             _sr_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("Speedreport | {0}", GenerateSimpleSpeedreport(_mysession)))
 
                                          Catch ex As Exception
                                              _sr_task.SetTaskStatus(TaskStatus.Faulted, "Speedreport Generation failed")

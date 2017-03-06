@@ -1,9 +1,8 @@
-﻿Imports System.Text
+﻿Imports System.Net.Sockets
+Imports System.Text
 Imports ArxOne.Ftp
 
 Module FTPHelper
-
-    Private _log As NLog.Logger = NLog.LogManager.GetLogger("FTPClient")
 
     Sub SetupFTPClient(ByRef _ftp_client As ArxOne.Ftp.FtpClient, ByVal _connection_info As SFDL.Container.Connection)
 
@@ -73,9 +72,71 @@ Module FTPHelper
 
     End Sub
 
+    Public Function BasicAvailabilityTest(ByVal _connection_info As SFDL.Container.Connection) As BasicAvailabilityTestResult
+
+        Dim _rt As New BasicAvailabilityTestResult
+        Dim _log As NLog.Logger = NLog.LogManager.GetLogger("BasicAvailabilityTest")
+
+#Region "Ping Test"
+
+        Try
+
+            If My.Computer.Network.Ping(_connection_info.Host, 500) = True Then
+                _rt.PingTest = True
+            Else
+                _log.Error("Ping Test Failed")
+            End If
+
+        Catch ex As Exception
+            _log.Error("Ping Test Failed")
+        End Try
+
+#End Region
+
+
+#Region "Port Test"
+        If TestPort(_connection_info.Host, _connection_info.Port) = True Then
+            _rt.PortTest = True
+        Else
+            _log.Error("Port Test Failed")
+        End If
+#End Region
+
+        Return _rt
+
+    End Function
+    Private Function TestPort(ByVal _server As String, ByVal _port As Integer) As Boolean
+
+        Dim _rt As Boolean = False
+        Dim _tcpclient As New TcpClient
+
+        Try
+
+            _tcpclient = New TcpClient(_server, _port)
+
+            System.Threading.Thread.Sleep(500)
+
+            _rt = True
+
+        Catch ex As Exception
+            _rt = False
+        Finally
+
+            If _tcpclient.Connected = True Then
+                _tcpclient.Close()
+            End If
+
+        End Try
+
+        Return _rt
+
+    End Function
+
     Private Sub _log_ftp(sender As Object, e As ArxOne.Ftp.ProtocolMessageEventArgs)
 
+        Dim _log As NLog.Logger = NLog.LogManager.GetLogger("FTPClient")
         Dim _log_line As New StringBuilder
+
 
         If Not IsNothing(e.RequestCommand) Then
             _log_line.AppendLine(e.RequestCommand)

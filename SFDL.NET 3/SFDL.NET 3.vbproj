@@ -96,11 +96,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\Exceptions\BasicAvailabilityTestFailedException.vb" />
     <Compile Include="Classes\Exceptions\NoSpeedreportDataException.vb" />
     <Compile Include="Classes\FixedWidthColumn.vb" />
     <Compile Include="Classes\FileAssociation\FileAssociation.vb" />
     <Compile Include="Classes\DispatchService.vb" />
     <Compile Include="Classes\Exceptions\DownloadStoppedException.vb" />
+    <Compile Include="Classes\Models\BasicAvailabilityTestResult.vb" />
     <Compile Include="Classes\Models\CrackUnRARPasswordResult.vb" />
     <Compile Include="Classes\Models\InstantVideoStream.vb" />
     <Compile Include="Classes\SFDL Converter\Converter.vb" />
