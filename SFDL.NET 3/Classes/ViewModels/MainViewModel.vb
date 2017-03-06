@@ -186,6 +186,10 @@ Public Class MainViewModel
             Me.WindowState = WindowState.Normal
         End If
 
+        WindowInstance.Activate()
+        WindowInstance.Focus()
+
+
         _mytask.SetTaskStatus(TaskStatus.Running, String.Format("SFDL Datei '{0}' wird geöffnet...", _sfdl_container_path))
 
         Try
@@ -1309,6 +1313,7 @@ Decrypt:
 
 #Region "Allgemeine Properties"
 
+    Public Property WindowInstance As Window
 
     Private _window_state As WindowState = WindowState.Normal
     Public Property WindowState As WindowState

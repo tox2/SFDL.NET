@@ -10,11 +10,13 @@ Public Class MainWindow
 
     Public Sub New()
 
+        Dim _mvvm As New MainViewModel
         ' Dieser Aufruf ist für den Designer erforderlich.
         InitializeComponent()
-        Me.DataContext = New MainViewModel
 
+        _mvvm.WindowInstance = Me
 
+        Me.DataContext = _mvvm
 
     End Sub
 
@@ -307,4 +309,5 @@ Public Class MainWindow
 
 
     End Sub
+
 End Class
