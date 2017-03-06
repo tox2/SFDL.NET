@@ -324,6 +324,7 @@ Public Class DownloadItem
     Public Property FirstUnRarFile As Boolean = False
     Public Property RequiredForInstantVideo As Boolean = False
     Public Property SingleSessionMode As Boolean = False
+    <Xml.Serialization.XmlIgnore>
     Public Property IWorkItemResult As IWorkItemResult(Of DownloadItem) = Nothing
 
     Private _is_expanded As Boolean = True
