@@ -268,11 +268,11 @@ Module SFDLFileHelper
 
                     _entry = FTPHelper.TryParseLine(_item, _bulk_folder)
 
-                    If _entry.Path.ToString.Contains("\") Then
-                        _path_seperator = "\"
-                    End If
-
                     If Not IsNothing(_entry) Then
+
+                        If _entry.Path.ToString.Contains("\") Then
+                            _path_seperator = "\"
+                        End If
 
                         If _entry.Type = ArxOne.Ftp.FtpEntryType.Directory And Not (_entry.Name.ToString.Equals(".") Or _entry.Name.ToString.Equals("..")) Then
                             _rt_list.AddRange(GetRecursiveListing(_entry.Path.ToString, _ftp, _packagename, True))

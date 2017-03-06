@@ -6,8 +6,8 @@ Class DownloadHelper
     Implements IDisposable
 
     Private _log As NLog.Logger = NLog.LogManager.GetLogger("DownloadHelper")
-    Private _glb_ftp_client As ArxOne.Ftp.FtpClient = Nothing
-    Private _glb_ftp_session As ArxOne.Ftp.FtpSession = Nothing
+    Private _ftp_client_collection As New Dictionary(Of String, ArxOne.Ftp.FtpClient)
+    Private _ftp_session_collection As New Dictionary(Of String, ArxOne.Ftp.FtpSession)
     Private _settings As New Settings
     Private _obj_ftp_client_lock As New Object
     Private _obj_dl_count_lok As New Object
@@ -295,6 +295,8 @@ Class DownloadHelper
     Function DownloadContainerItem(_item As DownloadItem, ByVal _download_dir As String, ByVal _connection_info As SFDL.Container.Connection, ByVal _single_session_mode As Boolean) As DownloadItem
 
         Dim _ftp_session As ArxOne.Ftp.FtpSession = Nothing
+        Dim _ftp_client As ArxOne.Ftp.FtpClient = Nothing
+        Dim _ftp_server_uid As String
 
         Try
 
@@ -304,24 +306,38 @@ Class DownloadHelper
 
             SyncLock _obj_ftp_client_lock
 
-                If IsNothing(_glb_ftp_client) Then
-                    SetupFTPClient(_glb_ftp_client, _connection_info)
+                _ftp_server_uid = System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(String.Format("{0}{1}{2}{3}", _connection_info.Host, _connection_info.Port, _connection_info.Username, _connection_info.Password).ToLower))
+
+                _log.Info("FTP Server UID {0}", _ftp_server_uid)
+
+                If _ftp_client_collection.ContainsKey(_ftp_server_uid) = False Then
+                    _log.Info("There is no FTP Client for this Connection - Creating a new one")
+                    SetupFTPClient(_ftp_client, _connection_info)
+                    _ftp_client_collection.Add(_ftp_server_uid, _ftp_client)
+                Else
+                    _log.Info("There is already an FTP Client for this Connection")
+                    _ftp_client = _ftp_client_collection(_ftp_server_uid)
+                End If
+
+                If _single_session_mode = True Then
+
+                    If _ftp_session_collection.ContainsKey(_ftp_server_uid) = False Then
+                        _log.Info("SSM Mode - No FTP Session for this Connection found - Creating a new one")
+                        _ftp_session = _ftp_client.Session
+                        _ftp_session_collection.Add(_ftp_server_uid, _ftp_session)
+                    Else
+                        _log.Info("SSM Mode - Using existing FTP Session for this Connection")
+                        _ftp_session = _ftp_session_collection(_ftp_server_uid)
+                    End If
+                Else
+                    _ftp_session = _ftp_client.Session
                 End If
 
             End SyncLock
 
             _item.DownloadStatus = NET3.DownloadItem.Status.Running
 
-            If IsNothing(_glb_ftp_session) And _single_session_mode = True Then
-                _glb_ftp_session = _glb_ftp_client.Session
-            End If
-
-            If _single_session_mode = True Then
-                DownloadItem(_item, _glb_ftp_session)
-            Else
-                _ftp_session = _glb_ftp_client.Session
-                DownloadItem(_item, _ftp_session)
-            End If
+            DownloadItem(_item, _ftp_session)
 
         Catch ex As DownloadStoppedException
             _log.Info("Download Stopped")
@@ -337,11 +353,7 @@ Class DownloadHelper
             ParseFTPException(ex, _item)
         Finally
 
-            If _single_session_mode = True Then
-                PostDownload(_item, _glb_ftp_session)
-            Else
-                PostDownload(_item, _ftp_session)
-            End If
+            PostDownload(_item, _ftp_session)
 
         End Try
 
@@ -748,7 +760,13 @@ Class DownloadHelper
             If disposing Then
                 Try
 
-                    _glb_ftp_client.Dispose()
+                    For Each _client In _ftp_client_collection
+                        Try
+                            _client.Value.Dispose()
+                        Catch ex As Exception
+                        End Try
+                    Next
+
                 Catch ex As Exception
                 End Try
             End If

@@ -81,7 +81,15 @@
             _size = CalculateSizeAsMB(_tmp_list)
             _speed = CalculateSpeed(session.DownloadStartedTime, session.DownloadStoppedTime, _tmp_list)
 
+            If Math.Round(_size, 2) = 0 Then
+                Throw New NoSpeedreportDataException
+            End If
+
             _rt_speedreport = String.Format("{0} in {1} heruntergeladen @ ~ {2}", Math.Round(_size, 2) & " MB", SecToHMS(DateDiff(DateInterval.Second, session.DownloadStartedTime, session.DownloadStoppedTime)), Math.Round(_speed, 2) & " KB/s")
+
+        Catch ex As NoSpeedreportDataException
+            _log.Info("Nothing was downloaded - Skipping Speedreport generation")
+            _rt_speedreport = "nodata"
 
         Catch ex As Exception
             _log.Error(ex, ex.Message)
@@ -113,6 +121,10 @@
             _size = CalculateSizeAsMB(_tmp_list)
             _speed = CalculateSpeed(session.DownloadStartedTime, session.DownloadStoppedTime, _tmp_list)
 
+            If Math.Round(_size, 2) = 0 Then
+                Throw New NoSpeedreportDataException
+            End If
+
             _rt_speedreport = _speedreportSettings.SpeedreportTemplate
 
             _rt_speedreport = _rt_speedreport.Replace("%%USERNAME%%", _speedreportSettings.SpeedreportUsername)
@@ -124,6 +136,9 @@
             _rt_speedreport = _rt_speedreport.Replace("%%DLTIME%%", SecToHMS(DateDiff(DateInterval.Second, session.DownloadStartedTime, session.DownloadStoppedTime)))
             _rt_speedreport = _rt_speedreport.Replace("%%SFDL_SIZE%%", Math.Round(_size, 2) & " MB")
 
+        Catch ex As NoSpeedreportDataException
+            _log.Info("Nothing was downloaded - Skipping Speedreport generation")
+            _rt_speedreport = "nodata"
 
         Catch ex As Exception
             _log.Error(ex, ex.Message)

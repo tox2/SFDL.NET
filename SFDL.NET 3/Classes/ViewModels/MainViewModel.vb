@@ -757,19 +757,26 @@ Decrypt:
 
                                              ActiveTasks.Add(_sr_task)
 
+                                             _sr_filepath = _mysession.LocalDownloadRoot
+
+                                             _sr_filepath = Path.Combine(_sr_filepath, "speedreport.txt")
+
                                              _speedreport = GenerateSpeedreport(_mysession, _settings.SpeedReportSettings)
+
+                                             If _speedreport.Equals("nodata") And System.IO.File.Exists(_sr_filepath) Then
+                                                 Throw New NoSpeedreportDataException
+                                             End If
 
                                              If String.IsNullOrWhiteSpace(_speedreport) Then
                                                  Throw New Exception("Speedreport failed")
                                              End If
 
-                                             _sr_filepath = _mysession.LocalDownloadRoot
-
-                                             _sr_filepath = Path.Combine(_sr_filepath, "speedreport.txt")
-
                                              My.Computer.FileSystem.WriteAllText(_sr_filepath, _speedreport, False, Encoding.Default)
 
                                              _sr_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("Speedreport erstellt | {0}", GenerateSimpleSpeedreport(_mysession)))
+
+                                         Catch ex As NoSpeedreportDataException
+                                             _sr_task.SetTaskStatus(TaskStatus.RanToCompletion, "Speedreport Generation skipped")
 
                                          Catch ex As Exception
                                              _sr_task.SetTaskStatus(TaskStatus.Faulted, "Speedreport Generation failed")
