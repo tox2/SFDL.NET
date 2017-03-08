@@ -1014,6 +1014,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Dateiname ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property VariousStrings_Filename() As String
+            Get
+                Return ResourceManager.GetString("VariousStrings_Filename", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Gesamtdownloadgröße ähnelt.
         '''</summary>
         Public Shared ReadOnly Property VariousStrings_FullDownloadSize() As String

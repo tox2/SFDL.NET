@@ -436,4 +436,7 @@ Do you want SFDL.NET 3 now start as an administrator?</value>
   <data name="VariousStrings_Error" xml:space="preserve">
     <value>Error</value>
   </data>
+  <data name="VariousStrings_Filename" xml:space="preserve">
+    <value>Filename</value>
+  </data>
 </root>

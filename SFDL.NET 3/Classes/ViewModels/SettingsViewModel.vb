@@ -489,9 +489,9 @@ Public Class SettingsViewModel
 
                 Me.SpeedreportTemplate = Me.SpeedreportTemplate & Space(1) & "%%DLTIME%%" & Space(1)
 
-            Case "sfdl_description"
+            Case "sfdl_filename"
 
-                Me.SpeedreportTemplate = Me.SpeedreportTemplate & Space(1) & "%%SFDL_DESC%%" & Space(1)
+                Me.SpeedreportTemplate = Me.SpeedreportTemplate & Space(1) & "%%SFDL_FILENAME%%" & Space(1)
 
             Case "sfdl_uploader"
 
