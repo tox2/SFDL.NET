@@ -351,7 +351,14 @@ Class DownloadHelper
 
             End SyncLock
 
-            DownloadItem(_item, _ftp_session)
+            If _item.DownloadStatus = NET3.DownloadItem.Status.Retry Or _item.DownloadStatus = NET3.DownloadItem.Status.RetryWait Then
+                _log.Debug("{0} - Starting Dowload in Retry Mode", _item.FileName)
+                DownloadItem(_item, _ftp_session, True)
+            Else
+                DownloadItem(_item, _ftp_session)
+            End If
+
+
 
         Catch ex As DownloadStoppedException
             _log.Info("Download Stopped")
@@ -376,7 +383,7 @@ Class DownloadHelper
     End Function
 
 
-    Private Sub DownloadItem(ByVal _item As DownloadItem, ByVal _ftp_session As ArxOne.Ftp.FtpSession)
+    Private Sub DownloadItem(ByVal _item As DownloadItem, ByVal _ftp_session As ArxOne.Ftp.FtpSession, Optional _isRetry As Boolean = False)
 
         Dim _filemode As IO.FileMode
         Dim _restart As Long = 0
@@ -432,7 +439,7 @@ Class DownloadHelper
                 Throw New NotEnoughFreeDiskSpaceException("Zu wenig Speicherplatz!")
             End If
 
-            If _settings.ExistingFileHandling = ExistingFileHandling.ResumeFile And IO.File.Exists(_item.LocalFile) Then
+            If (_settings.ExistingFileHandling = ExistingFileHandling.ResumeFile Or _isRetry = True) And IO.File.Exists(_item.LocalFile) Then
 
                 _filemode = IO.FileMode.Append
                 _restart = New IO.FileInfo(_item.LocalFile).Length
