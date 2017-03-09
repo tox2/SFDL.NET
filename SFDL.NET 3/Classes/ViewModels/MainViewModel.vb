@@ -1138,7 +1138,11 @@ Decrypt:
     Private Sub ExpandAllPackages()
 
         For Each _item In DownloadItems.Select(Function(myitem) myitem.GroupDescriptionIdentifier).Distinct
-            DownloadItems.Where(Function(myitem) myitem.GroupDescriptionIdentifier.Equals(_item)).FirstOrDefault.IsExpanded = True
+
+            For Each _dlitem In DownloadItems.Where(Function(myitem) myitem.GroupDescriptionIdentifier.Equals(_item))
+                _dlitem.IsExpanded = True
+            Next
+
         Next
 
     End Sub
@@ -1152,7 +1156,9 @@ Decrypt:
     Private Sub CollapseAllPackages()
 
         For Each _item In DownloadItems.Select(Function(myitem) myitem.GroupDescriptionIdentifier).Distinct
-            DownloadItems.Where(Function(myitem) myitem.GroupDescriptionIdentifier.Equals(_item)).FirstOrDefault.IsExpanded = False
+            For Each _dlitem In DownloadItems.Where(Function(myitem) myitem.GroupDescriptionIdentifier.Equals(_item))
+                _dlitem.IsExpanded = False
+            Next
         Next
 
     End Sub
@@ -1165,7 +1171,7 @@ Decrypt:
 
     Private Async Sub ShowHelp()
 
-        Await DialogCoordinator.Instance.ShowMessageAsync(Me, "SFDL.NET 3", "Version: 3.0.0.3 RC4")
+        Await DialogCoordinator.Instance.ShowMessageAsync(Me, "SFDL.NET 3", "Version: 3.0.0.5 RC5")
 
     End Sub
 

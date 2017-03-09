@@ -119,6 +119,7 @@
     <Compile Include="Classes\Interfaces\IDownloadStatusImage.vb" />
     <Compile Include="Classes\XAML Converter\CollectionViewNameConverter.vb" />
     <Compile Include="Classes\XAML Converter\ExistingFileHandlingConverter.vb" />
+    <Compile Include="Classes\XAML Converter\GroupItemIsExpandedConverter.vb" />
     <Compile Include="Classes\XAML Converter\InvertBooleanConverter.vb" />
     <Compile Include="Classes\DelegateCommand.vb" />
     <Compile Include="Classes\Models\RemoteControlSettings.vb" />
