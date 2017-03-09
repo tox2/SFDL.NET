@@ -10,51 +10,26 @@ Module InstantVideoHelper
 
         Try
 
-            Select Case _chain.MasterUnRarChainFile.DownloadStatus
 
-                Case DownloadItem.Status.Completed
-                        'ok
-
-                Case DownloadItem.Status.Completed_HashInvalid
-                        'ok
-
-                Case DownloadItem.Status.Completed_HashValid
-                        'ok
-
-                Case DownloadItem.Status.AlreadyDownloaded
-                    'ok
-
-                Case Else
-
+            If Not IO.File.Exists(_chain.MasterUnRarChainFile.LocalFile) Then
+                _rt = False
+            Else
+                If Not New IO.FileInfo(_chain.MasterUnRarChainFile.LocalFile).Length.Equals(_chain.MasterUnRarChainFile.FileSize) Then
                     _rt = False
-
-
-            End Select
+                End If
+            End If
 
             For Each _chainmember In _chain.ChainMemberFiles.Where(Function(_my_item) _my_item.RequiredForInstantVideo = True)
 
                 _log.Debug("{0} is needed for InstantVideo!", _chainmember.FileName)
 
-                Select Case _chainmember.DownloadStatus
-
-                    Case DownloadItem.Status.Completed
-                        'ok
-
-                    Case DownloadItem.Status.Completed_HashInvalid
-                        'ok
-
-                    Case DownloadItem.Status.Completed_HashValid
-                        'ok
-
-                    Case DownloadItem.Status.AlreadyDownloaded
-                        'ok
-
-                    Case Else
-
+                If Not IO.File.Exists(_chainmember.LocalFile) Then
+                    _rt = False
+                Else
+                    If Not New IO.FileInfo(_chainmember.LocalFile).Length.Equals(_chainmember.FileSize) Then
                         _rt = False
-
-                End Select
-
+                    End If
+                End If
 
             Next
 
