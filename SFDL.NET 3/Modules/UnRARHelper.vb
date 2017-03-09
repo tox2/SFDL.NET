@@ -1,16 +1,6 @@
 ﻿Imports System.Text.RegularExpressions
 
 Module UnRARHelper
-    Function isx64() As Boolean
-
-        If IntPtr.Size = 8 Then
-            Return True
-        Else
-            Return False
-        End If
-
-    End Function
-
     Function isUnRarChainComplete(ByVal _chain As UnRARChain) As Boolean
 
         Dim _log As NLog.Logger = NLog.LogManager.GetLogger("isUnRarChainComplete")
@@ -163,7 +153,7 @@ Module UnRARHelper
 
         Try
 
-            If isx64() = True Then
+            If Environment.Is64BitOperatingSystem Then
                 _crark_bin = IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "bin", "cRARk_x64.exe")
             Else
                 _crark_bin = IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "bin", "cRARk_x86.exe")
@@ -192,7 +182,7 @@ Module UnRARHelper
 
             _crark_process.Start()
 
-            _crark_process.WaitForExit()
+            _crark_process.WaitForExit(TimeSpan.FromSeconds(60).TotalMilliseconds)
 
             _crark_raw_output = _crark_process.StandardOutput.ReadToEnd
 

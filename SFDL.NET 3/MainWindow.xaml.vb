@@ -65,7 +65,7 @@ Public Class MainWindow
 
         LoadTheme()
 
-        If isx64() = True Then
+        If Environment.Is64BitOperatingSystem Then
 
             If IO.File.Exists(IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "bin", "unrar.exe")) = False Or IO.File.Exists(IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "bin", "cRARk_x64.exe")) = False Then
                 Await ShowMessageAsync(My.Resources.Strings.VariousStrings_Warning, My.Resources.Strings.VariousStrings_UnRARExecutableMissingException)
