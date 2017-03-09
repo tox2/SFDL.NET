@@ -427,7 +427,7 @@
     <value>Retry {0}/{1}</value>
   </data>
   <data name="DownloadStatus_RetryWait" xml:space="preserve">
-    <value>Warte {0} Sek. auf Retry {0}/{1}</value>
+    <value>Warte {0} Sek. auf Retry {1}/{2}</value>
   </data>
   <data name="DownloadStatus_AlreadyDownloaded" xml:space="preserve">
     <value>Datei bereits vollständig</value>

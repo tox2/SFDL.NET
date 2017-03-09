@@ -397,7 +397,7 @@
     <value>Retry {0}/{1}</value>
   </data>
   <data name="DownloadStatus_RetryWait" xml:space="preserve">
-    <value>Waiting {0} Sec. for next Retry {0}/{1}</value>
+    <value>Waiting {0} Sec. for next Retry {1}/{2}</value>
   </data>
   <data name="DownloadStatus_AlreadyDownloaded" xml:space="preserve">
     <value>File already complete</value>

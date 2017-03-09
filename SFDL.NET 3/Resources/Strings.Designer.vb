@@ -245,7 +245,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Warte {0} Sek. auf Retry {0}/{1} ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Warte {0} Sek. auf Retry {1}/{2} ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_RetryWait() As String
             Get
