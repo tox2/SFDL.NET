@@ -30,7 +30,6 @@
         <ResourceDictionary>
             <local:InvertBooleanConverter x:Key="boolConvert" />
             <local:CollectionViewNameConverter x:Key="CollectionViewNameConv" />
-            <local:GroupItemIsExpandedConverter x:Key="GroupItemIsExpandedConv" />
 
             <VisualBrush x:Key="DownloadStatusNone" Visual="{StaticResource appbar_sign_parking}" />
             <VisualBrush x:Key="DownloadStatusQueued" Visual="{StaticResource appbar_clock}" />
@@ -618,8 +617,6 @@
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate>
-                                                <!--<Expander IsExpanded="{Binding RelativeSource={RelativeSource FindAncestor,
-                                                                                                                     AncestorType={x:Type GroupItem}},Path=DataContext, Converter={StaticResource GroupItemIsExpandedConv}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">-->
                                                 <Expander IsExpanded="True">
                                                     <Expander.Header>
                                                         <DockPanel LastChildFill="False">
@@ -668,10 +665,8 @@
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate>
-                                                
+
                                                 <Expander IsExpanded="{Binding Items[0].IsExpanded}">
-                                                <!--<Expander IsExpanded="{Binding RelativeSource={RelativeSource FindAncestor,
-                                                                                                                     AncestorType={x:Type GroupItem}},Path=DataContext, Converter={StaticResource GroupItemIsExpandedConv}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">-->
                                                     <Expander.Header>
                                                         <DockPanel LastChildFill="False">
                                                             <StackPanel Orientation="Horizontal">
