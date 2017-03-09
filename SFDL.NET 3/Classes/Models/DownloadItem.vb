@@ -20,6 +20,7 @@ Public Class DownloadItem
     Private _status_image As String = "Resources/Icons/appbar.sign.parking.png"
     Private _status As Status = Status.None
     Private _id As Guid
+    Private _tmp_preserve_status As Boolean = False
 
     Public Sub Init(ByVal _fileitem As FileItem)
 
@@ -39,7 +40,13 @@ Public Class DownloadItem
         _id = New Guid
 
     End Sub
+    Public Sub PreserveStatusAndUnCheck()
 
+        _tmp_preserve_status = True
+        Me.isSelected = False
+        _tmp_preserve_status = False
+
+    End Sub
 
     Public Property isSelected As Boolean
         Set(value As Boolean)
@@ -50,16 +57,18 @@ Public Class DownloadItem
 
                 _selected = value
 
-                If value = True Then
-                    IWorkItemResult = Nothing
+                If _tmp_preserve_status = True Then
+                    'nothing else to do
                 Else
 
-                    If IsNothing(IWorkItemResult) = False And DownloadStatus = Status.Queued Then
-                        IWorkItemResult.Cancel()
+                    If value = True Then
+                        IWorkItemResult = Nothing
+                    Else
+                        If IsNothing(IWorkItemResult) = False And DownloadStatus = Status.Queued Then
+                            IWorkItemResult.Cancel()
+                        End If
+                        DownloadStatus = Status.None
                     End If
-
-                    DownloadStatus = Status.None
-
                 End If
 
                 RaisePropertyChanged("isSelected")

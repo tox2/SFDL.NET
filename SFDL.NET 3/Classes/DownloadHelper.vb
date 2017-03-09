@@ -640,9 +640,10 @@ Class DownloadHelper
 
             _item.DownloadSpeed = String.Empty
 
+            _item.PreserveStatusAndUnCheck()
+
             If CBool(Application.Current.Resources("DownloadStopped")) = False And _item.DownloadStatus = NET3.DownloadItem.Status.Completed Then
 
-                _item.isSelected = False
                 _item.DownloadStatus = NET3.DownloadItem.Status.Completed
 
                 If _item.HashType = Container.HashType.None Then

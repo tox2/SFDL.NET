@@ -33,7 +33,7 @@ Module InstantVideoHelper
 
             For Each _chainmember In _chain.ChainMemberFiles.Where(Function(_my_item) _my_item.RequiredForInstantVideo = True)
 
-                _log.Debug("{0} wird für InstantVideo benötigt!", _chainmember.FileName)
+                _log.Debug("{0} is needed for InstantVideo!", _chainmember.FileName)
 
                 Select Case _chainmember.DownloadStatus
 

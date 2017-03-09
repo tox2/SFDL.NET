@@ -21,12 +21,20 @@ Module UnRARHelper
 
             If Not IO.File.Exists(_chain.MasterUnRarChainFile.LocalFile) Then
                 _rt = False
+            Else
+                If Not New IO.FileInfo(_chain.MasterUnRarChainFile.LocalFile).Length.Equals(_chain.MasterUnRarChainFile.FileSize) Then
+                    _rt = False
+                End If
             End If
 
             For Each _chainmember As DownloadItem In _chain.ChainMemberFiles
 
                 If Not IO.File.Exists(_chainmember.LocalFile) Then
                     _rt = False
+                Else
+                    If Not New IO.FileInfo(_chainmember.LocalFile).Length.Equals(_chainmember.FileSize) Then
+                        _rt = False
+                    End If
                 End If
 
             Next
