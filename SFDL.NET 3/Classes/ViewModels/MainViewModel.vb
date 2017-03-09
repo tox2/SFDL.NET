@@ -431,7 +431,7 @@ Decrypt:
 
         End While
 
-        _log.Debug("ETA While beendet!")
+        _log.Debug("ETA While exited!")
 
         DispatchService.DispatchService.Invoke(Sub()
                                                    WindowInstance.TaskbarItemInfo.ProgressState = Shell.TaskbarItemProgressState.None
@@ -680,7 +680,7 @@ Decrypt:
 
                                      _chain.UnRARRunning = True
 
-                                     _log.Debug("Chain {0} ist komplett!", _chain.MasterUnRarChainFile.FileName.ToString)
+                                     _log.Debug("Chain {0} is complete", _chain.MasterUnRarChainFile.FileName.ToString)
 
                                      If _settings.UnRARSettings.UnRARAfterDownload = True And _chain.UnRARDone = False Then
 
@@ -690,16 +690,20 @@ Decrypt:
 
                                          ActiveTasks.Add(_unrar_task)
 
-                                         If UnRAR(_chain, _unrar_task, _settings.UnRARSettings) = True Then
-                                             _chain.UnRARDone = True
-                                         Else
-                                             _chain.UnRARDone = False
-                                         End If
+                                         UnRAR(_chain, _unrar_task, _settings.UnRARSettings)
+
+                                         _chain.UnRARDone = True
+
+                                         'If UnRAR(_chain, _unrar_task, _settings.UnRARSettings) = True Then
+                                         '    _chain.UnRARDone = True
+                                         'Else
+                                         '    _chain.UnRARDone = False
+                                         'End If
 
                                          _chain.UnRARRunning = False
 
                                      Else
-                                         _log.Info("UnRARChain ist noch nicht vollständig oder diese wird bereits entpackt/bearbeitet")
+                                         _log.Info("UnRARChain is not yet complete or it is already unpacked / processed ")
                                      End If
 
                                  Else
@@ -726,7 +730,7 @@ Decrypt:
                              Next
 
                          Else
-                             _log.Info("Dieser Container hat keine UnRarChain")
+                             _log.Info("This container has no UnRARChain!")
                          End If
 
                      End Sub)
@@ -798,7 +802,7 @@ Decrypt:
                                                If ContainerSessions.Where(Function(mysession) mysession.SessionState = ContainerSessionState.Queued Or mysession.SessionState = ContainerSessionState.DownloadRunning).Count = 0 Or Application.Current.Resources("DownloadStopped") = True Then
 
                                                    'Alle DL Fertig
-                                                   _log.Info("Alle Downloads Abgeschlossen/Gestoppt")
+                                                   _log.Info("All downloads cancled/stopped")
                                                    _eta_thread.Cancel()
 
                                                Else

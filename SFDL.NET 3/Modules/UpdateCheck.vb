@@ -55,10 +55,10 @@ Module UpdateCheck
             _update_app_version = Version.Parse(My.Computer.FileSystem.ReadAllText(_tmp_file).ToString.Trim)
 
             If _current_app_version.CompareTo(_update_app_version) = -1 Then '1 = älter 0=gleich -1=neuer
-                _log.Info("Neue Version ist Online")
+                _log.Info("New version is availible")
                 _rt = True
             Else
-                _log.Info("Keine neue Version verfügbar!")
+                _log.Info("No new version availible!")
             End If
 
         Catch ex As Exception

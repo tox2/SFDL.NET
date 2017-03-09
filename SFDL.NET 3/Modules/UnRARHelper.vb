@@ -21,25 +21,25 @@ Module UnRARHelper
 
             If IO.File.Exists(_chain.MasterUnRarChainFile.LocalFile) Then
 
-                Select Case _chain.MasterUnRarChainFile.DownloadStatus
+                'Select Case _chain.MasterUnRarChainFile.DownloadStatus
 
-                    Case DownloadItem.Status.AlreadyDownloaded
-                        'ok
+                '    Case DownloadItem.Status.AlreadyDownloaded
+                '        'ok
 
-                    Case DownloadItem.Status.Completed
-                    'ok
+                '    Case DownloadItem.Status.Completed
+                '    'ok
 
-                    Case DownloadItem.Status.Completed_HashInvalid
-                    'ok
+                '    Case DownloadItem.Status.Completed_HashInvalid
+                '    'ok
 
-                    Case DownloadItem.Status.Completed_HashValid
-                        'ok
+                '    Case DownloadItem.Status.Completed_HashValid
+                '        'ok
 
-                    Case Else
+                '    Case Else
 
-                        _rt = False
+                '        _rt = False
 
-                End Select
+                'End Select
 
 
             Else
@@ -51,23 +51,23 @@ Module UnRARHelper
 
                 If IO.File.Exists(_chainmember.LocalFile) Then
 
-                    Select Case _chainmember.DownloadStatus
+                    'Select Case _chainmember.DownloadStatus
 
-                        Case DownloadItem.Status.AlreadyDownloaded
-                            'ok
+                    '    Case DownloadItem.Status.AlreadyDownloaded
+                    '        'ok
 
-                        Case DownloadItem.Status.Completed
-                    'ok
+                    '    Case DownloadItem.Status.Completed
+                    ''ok
 
-                        Case DownloadItem.Status.Completed_HashInvalid
-                    'ok
+                    '    Case DownloadItem.Status.Completed_HashInvalid
+                    ''ok
 
-                        Case DownloadItem.Status.Completed_HashValid
-                            'ok
-                        Case Else
-                            _rt = False
+                    '    Case DownloadItem.Status.Completed_HashValid
+                    '        'ok
+                    '    Case Else
+                    '        _rt = False
 
-                    End Select
+                    'End Select
 
                 Else
                     _rt = False

@@ -10,7 +10,7 @@
         Dim xmlKD As Xml.XmlElement
         Dim _country_code As String
 
-        _log.Info(String.Format("Ermittle WohIs für IP {0}", _ip))
+        _log.Info(String.Format("Queryring WohIs für IP {0}", _ip))
 
         _country_code = ""
 
@@ -28,7 +28,7 @@
 
         Next
 
-        _log.Info(String.Format("Ermittle ermittelter CounterCode: {0}", _country_code))
+        _log.Info(String.Format("CounterCode determined : {0}", _country_code))
 
         Return _country_code
 

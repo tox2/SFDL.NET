@@ -305,6 +305,7 @@ Class DownloadHelper
                 Throw New DownloadStoppedException("Canceld!")
             End If
 
+
             SyncLock _obj_ftp_client_lock
 
                 _ftp_server_uid = System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(String.Format("{0}{1}{2}{3}", _connection_info.Host, _connection_info.Port, _connection_info.Username, _connection_info.Password).ToLower))
@@ -350,6 +351,8 @@ Class DownloadHelper
                 End If
 
             End SyncLock
+
+            _item.DownloadStatus = NET3.DownloadItem.Status.Running
 
             If _item.DownloadStatus = NET3.DownloadItem.Status.Retry Or _item.DownloadStatus = NET3.DownloadItem.Status.RetryWait Then
                 _log.Debug("{0} - Starting Dowload in Retry Mode", _item.FileName)
@@ -414,29 +417,29 @@ Class DownloadHelper
             End If
 
             If String.IsNullOrWhiteSpace(_item.LocalFile) Then
-                Throw New Exception("Dateipfad ist leer!")
+                Throw New Exception("Filepath is empty!")
             End If
 
             If IO.Directory.Exists(IO.Path.GetDirectoryName(_item.LocalFile)) = False Then
-                _log.Warn("Ziel Verzeichnis existiert nicht - erstelle")
+                _log.Warn("Target directory not exists --> creating")
                 IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(_item.LocalFile))
             End If
 
             If _item.LocalFile.Length >= 255 Then
-                Throw New FileNameTooLongException("Dateipfad ist zu lang! - Kann Datei nicht schreiben!")
+                Throw New FileNameTooLongException("File path is too long! -Can't write file!")
             End If
 
             If _item.FileSize = 0 Then
-                _log.Warn("Keine Dateigröße hinterlegt - versuche diese nun zu ermitteln")
+                _log.Warn("No fie size found - trying to determining")
                 GetItemFileSize(_item, _ftp_session)
             End If
 
             _disk_free_space = My.Computer.FileSystem.GetDriveInfo(IO.Path.GetPathRoot(_settings.DownloadDirectory)).AvailableFreeSpace
 
-            _log.Info("Freier Speicherplatz: {0}", _disk_free_space)
+            _log.Info("Free disk space: {0}", _disk_free_space)
 
             If _item.FileSize > _disk_free_space Then
-                Throw New NotEnoughFreeDiskSpaceException("Zu wenig Speicherplatz!")
+                Throw New NotEnoughFreeDiskSpaceException("Not enough disk space!")
             End If
 
             If (_settings.ExistingFileHandling = ExistingFileHandling.ResumeFile Or _isRetry = True) And IO.File.Exists(_item.LocalFile) Then
@@ -449,7 +452,7 @@ Class DownloadHelper
                     _skip_download = True
                 Else
                     _item.LocalFileSize = _restart
-                    _log.Info("Datei ist zwar bereits lokal vorhanden aber nicht vollständig")
+                    _log.Info("File already exists but is not fully downloaded")
                 End If
 
             Else
@@ -457,10 +460,8 @@ Class DownloadHelper
             End If
 
             If _skip_download = True Then
-                _log.Info("Datei ist bereits vollständig - Überspringe FTP Connect!")
+                _log.Info("File already completed - Skipping FTP Connect!")
             Else
-
-                _item.DownloadStatus = NET3.DownloadItem.Status.Running
 
                 Using _ftp_read_stream = ArxOne.Ftp.FtpClientUtility.Retr(_ftp_session.Connection.Client, New ArxOne.Ftp.FtpPath(_item.FullPath), ArxOne.Ftp.FtpTransferMode.Binary, _restart, _ftp_session)
 
@@ -562,7 +563,7 @@ Class DownloadHelper
         Catch ex As ArxOne.Ftp.Exceptions.FtpAuthenticationException
 
             If _item.IWorkItemResult.IsCanceled = True Or CBool(Application.Current.Resources("DownloadStopped")) = True Then
-                _log.Info("Download wurde gestoppt!")
+                _log.Info("Download has been stopped")
                 _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
             Else
                 _log.Error(ex, ex.Message)
@@ -572,7 +573,7 @@ Class DownloadHelper
         Catch ex As ArxOne.Ftp.Exceptions.FtpFileException
 
             If CBool(Application.Current.Resources("DownloadStopped")) = True Then
-                _log.Info("Download wurde gestoppt!")
+                _log.Info("Download has been stopped")
                 _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
             Else
                 _log.Error(ex, ex.Message)
@@ -582,7 +583,7 @@ Class DownloadHelper
         Catch ex As ArxOne.Ftp.Exceptions.FtpProtocolException
 
             If _item.IWorkItemResult.IsCanceled = True Or CBool(Application.Current.Resources("DownloadStopped")) = True Then
-                _log.Info("Download wurde gestoppt!")
+                _log.Info("Download has been stopped")
                 _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
             Else
                 _log.Error(ex, ex.Message)
@@ -592,7 +593,7 @@ Class DownloadHelper
         Catch ex As ArxOne.Ftp.Exceptions.FtpTransportException
 
             If _item.IWorkItemResult.IsCanceled = True Or CBool(Application.Current.Resources("DownloadStopped")) = True Then
-                _log.Info("Download wurde gestoppt!")
+                _log.Info("Download has been stopped!")
                 _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
             Else
                 _log.Error(ex, ex.Message)
@@ -602,7 +603,7 @@ Class DownloadHelper
         Catch ex As ArxOne.Ftp.Exceptions.FtpException
 
             If _item.IWorkItemResult.IsCanceled = True Or CBool(Application.Current.Resources("DownloadStopped")) = True Then
-                _log.Info("Download wurde gestoppt!")
+                _log.Info("Download has been stopped!")
                 _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
             Else
                 _log.Error(ex, ex.Message)
@@ -611,7 +612,7 @@ Class DownloadHelper
 
         Catch ex As Exception
             If _item.IWorkItemResult.IsCanceled = True Or CBool(Application.Current.Resources("DownloadStopped")) = True Then
-                _log.Info("Download wurde gestoppt!")
+                _log.Info("Download has been stopped!")
                 _item.DownloadStatus = NET3.DownloadItem.Status.Stopped
             Else
                 _log.Error(ex, ex.Message)
@@ -674,20 +675,20 @@ Class DownloadHelper
                     End If
 
                     If Not String.IsNullOrWhiteSpace(_hashcommand) Then
-                        _log.Info("Server Support Hash Alogrightm {0}", _hashcommand)
+                        _log.Info("Server supports Hash Alogrightm {0}", _hashcommand)
 
                         _reply = _ftp_session.Expect(_ftp_session.SendCommand(_hashcommand, _item.FullPath), 250)
 
                         If _reply.Code.IsSuccess = True Then
 
-                            _log.Info("Hash Serverseitig erfolgreich ermittelt!")
+                            _log.Info("Hash server side successfully determined!")
 
                             _item.HashType = _hashtype
                             _tmp_hash = _reply.Lines(0).ToString.Replace(_item.FullPath, "")
                             _tmp_hash = _tmp_hash.Replace(Chr(34), "")
                             _item.FileHash = _tmp_hash.Trim
                         Else
-                            _log.Error("Hash konnte nicht ermittelt werden!")
+                            _log.Error("Hash could not be determined")
                         End If
 
                     Else
@@ -707,7 +708,7 @@ Class DownloadHelper
 
                     Case Container.HashType.MD5
 
-                        _log.Info("Prüfe ob MD5 Hashes übereinstimmen")
+                        _log.Info("Check if MD5 hashes match")
 
                         If HashHelper.MD5FileHash(_item.LocalFile).ToLower.Equals(_item.FileHash.ToLower) Then
                             _log.Info("MD5 Hash is Valid!")
@@ -719,7 +720,7 @@ Class DownloadHelper
 
                     Case Container.HashType.SHA1
 
-                        _log.Info("Prüfe ob SHA1 Hashes übereinstimmen")
+                        _log.Info("Check if SHA1 hashes match ")
 
                         If HashHelper.SHA1FileHash(_item.LocalFile).ToLower.Equals(_item.FileHash.ToLower) Then
                             _log.Info("SHA1 Hash is Valid!")
@@ -731,7 +732,7 @@ Class DownloadHelper
 
                     Case Container.HashType.CRC
 
-                        _log.Info("Prüfe ob CRC Hashes übereinstimmen")
+                        _log.Info("Check if CRC hashes match ")
 
                         If HashHelper.CRC32FileHash(_item.LocalFile).ToLower.Equals(_item.FileHash.ToLower) Then
                             _log.Info("CRC Hash is Valid!")
@@ -744,7 +745,7 @@ Class DownloadHelper
                 End Select
 
             Else
-                _log.Info("Download wurde gestoppt oder Item wurde nicht vollständig heruntergeladen - Überspringe Hash Check")
+                _log.Info("Download was stopped or item was not fully downloaded - skipping Hash Check")
             End If
 
         Catch ex As DownloadStoppedException
@@ -766,7 +767,7 @@ Class DownloadHelper
                 _item.DownloadStatus = NET3.DownloadItem.Status.RetryWait
                 System.Threading.Thread.Sleep(_settings.RetryWaitTime * 1000)
                 _item.RetryCount += 1
-                _log.Info("Setze Item auf die Retry Warteliste")
+                _log.Info("Spooling item to the retry waitinglist")
                 _item.DownloadStatus = NET3.DownloadItem.Status.Retry
             End If
 
