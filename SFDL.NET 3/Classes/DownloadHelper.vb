@@ -292,7 +292,7 @@ Class DownloadHelper
 
 #End Region
 
-    Function DownloadContainerItem(_item As DownloadItem, ByVal _download_dir As String, ByVal _connection_info As SFDL.Container.Connection, ByVal _single_session_mode As Boolean) As DownloadItem
+    Function DownloadContainerItem(ByVal _item As DownloadItem, ByVal _args As DownloadContainerItemsArgs) As DownloadItem
 
         Dim _ftp_session As ArxOne.Ftp.FtpSession = Nothing
         Dim _ftp_client As ArxOne.Ftp.FtpClient = Nothing
@@ -308,7 +308,7 @@ Class DownloadHelper
 
             SyncLock _obj_ftp_client_lock
 
-                _ftp_server_uid = System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(String.Format("{0}{1}{2}{3}", _connection_info.Host, _connection_info.Port, _connection_info.Username, _connection_info.Password).ToLower))
+                _ftp_server_uid = System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(String.Format("{0}{1}{2}{3}", _args.ConnectionInfo.Host, _args.ConnectionInfo.Port, _args.ConnectionInfo.Username, _args.ConnectionInfo.Password).ToLower))
 
                 _log.Info("FTP Server UID {0}", _ftp_server_uid)
 
@@ -318,7 +318,7 @@ Class DownloadHelper
 
                     _log.Info("Starting Basic availability Test...")
 
-                    _batr = BasicAvailabilityTest(_connection_info)
+                    _batr = BasicAvailabilityTest(_args.ConnectionInfo)
 
                     If _batr.PingTest = False Or _batr.PortTest = False Then
                         _log.Info("Basic availability Test  failed!")
@@ -326,7 +326,7 @@ Class DownloadHelper
                     Else
                         _log.Info("Basic availability Test passed!")
 
-                        SetupFTPClient(_ftp_client, _connection_info)
+                        SetupFTPClient(_ftp_client, _args.ConnectionInfo)
                         _ftp_client_collection.Add(_ftp_server_uid, _ftp_client)
 
                     End If
@@ -336,7 +336,7 @@ Class DownloadHelper
                     _ftp_client = _ftp_client_collection(_ftp_server_uid)
                 End If
 
-                If _single_session_mode = True Then
+                If _args.SingleSessionMode = True Then
 
                     If _ftp_session_collection.ContainsKey(_ftp_server_uid) = False Then
                         _log.Info("SSM Mode - No FTP Session for this Connection found - Creating a new one")
@@ -352,16 +352,7 @@ Class DownloadHelper
 
             End SyncLock
 
-            _item.DownloadStatus = NET3.DownloadItem.Status.Running
-
-            If _item.DownloadStatus = NET3.DownloadItem.Status.Retry Or _item.DownloadStatus = NET3.DownloadItem.Status.RetryWait Then
-                _log.Debug("{0} - Starting Dowload in Retry Mode", _item.FileName)
-                DownloadItem(_item, _ftp_session, True)
-            Else
-                DownloadItem(_item, _ftp_session)
-            End If
-
-
+            DownloadItem(_item, _ftp_session, _args.RetryMode)
 
         Catch ex As DownloadStoppedException
             _log.Info("Download Stopped")
@@ -462,6 +453,8 @@ Class DownloadHelper
             If _skip_download = True Then
                 _log.Info("File already completed - Skipping FTP Connect!")
             Else
+
+                _item.DownloadStatus = NET3.DownloadItem.Status.Running
 
                 Using _ftp_read_stream = ArxOne.Ftp.FtpClientUtility.Retr(_ftp_session.Connection.Client, New ArxOne.Ftp.FtpPath(_item.FullPath), ArxOne.Ftp.FtpTransferMode.Binary, _restart, _ftp_session)
 

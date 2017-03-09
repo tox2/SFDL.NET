@@ -21,14 +21,13 @@ Public Class DownloadItem
     Private _status As Status = Status.None
     Private _id As Guid
 
-
     Public Sub Init(ByVal _fileitem As FileItem)
 
         DirectoryPath = _fileitem.DirectoryPath
         DirectoryRoot = _fileitem.DirectoryRoot
         DownloadProgress = 0
         DownloadSpeed = String.Empty
-        DownloadStatus = Status.Queued
+        DownloadStatus = Status.None
         FileName = _fileitem.FileName
         FileHash = _fileitem.FileHash
         FileSize = _fileitem.FileSize
@@ -45,20 +44,22 @@ Public Class DownloadItem
     Public Property isSelected As Boolean
         Set(value As Boolean)
 
-            If (DownloadStatus = Status.Running Or DownloadStatus = Status.Retry) Or DownloadStatus = Status.RetryWait Then
+            If (DownloadStatus = Status.Running Or DownloadStatus = Status.Retry) Or (DownloadStatus = Status.RetryWait) Then
                 'do nothing
             Else
 
                 _selected = value
 
                 If value = True Then
-                    DownloadStatus = Status.Queued
                     IWorkItemResult = Nothing
                 Else
+
                     If IsNothing(IWorkItemResult) = False And DownloadStatus = Status.Queued Then
                         IWorkItemResult.Cancel()
                     End If
+
                     DownloadStatus = Status.None
+
                 End If
 
                 RaisePropertyChanged("isSelected")
@@ -157,7 +158,7 @@ Public Class DownloadItem
 
                     Dim _settings As Settings = CType(Application.Current.Resources("Settings"), Settings)
 
-                    Return String.Format(Strings.DownloadStatus_RetryWait, Me.RetryCount, _settings.MaxRetry)
+                    Return String.Format(Strings.DownloadStatus_RetryWait, _settings.RetryWaitTime, Me.RetryCount, _settings.MaxRetry)
 
                 Case Status.Retry
 
@@ -177,6 +178,7 @@ Public Class DownloadItem
 
         End Get
     End Property
+
 
     Public Property DownloadStatus As Status
         Set(value As Status)
@@ -363,6 +365,7 @@ Public Class DownloadItem
         AlreadyDownloaded
 
     End Enum
+
 
 #Region "IDisposable Support"
     Private disposedValue As Boolean ' Dient zur Erkennung redundanter Aufrufe.

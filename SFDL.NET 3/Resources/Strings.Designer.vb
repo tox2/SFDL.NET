@@ -245,7 +245,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Retry {0}/{1} - Warte ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Warte {0} Sek. auf Retry {0}/{1} ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_RetryWait() As String
             Get
@@ -259,6 +259,15 @@ Namespace My.Resources
         Public Shared ReadOnly Property DownloadStatus_Running() As String
             Get
                 Return ResourceManager.GetString("DownloadStatus_Running", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Download eingereit warte auf Start.... ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property DownloadStatus_RunningWait() As String
+            Get
+                Return ResourceManager.GetString("DownloadStatus_RunningWait", resourceCulture)
             End Get
         End Property
         

@@ -104,6 +104,7 @@
     <Compile Include="Classes\Exceptions\DownloadStoppedException.vb" />
     <Compile Include="Classes\Models\BasicAvailabilityTestResult.vb" />
     <Compile Include="Classes\Models\CrackUnRARPasswordResult.vb" />
+    <Compile Include="Classes\Models\DownloadContainerItemsArgs.vb" />
     <Compile Include="Classes\Models\InstantVideoStream.vb" />
     <Compile Include="Classes\SFDL Converter\Converter.vb" />
     <Compile Include="Classes\SingleInstance\ArgumentsReceivedEventArgs.vb" />

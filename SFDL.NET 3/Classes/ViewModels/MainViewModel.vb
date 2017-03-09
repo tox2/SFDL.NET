@@ -307,7 +307,7 @@ Decrypt:
 
         Try
 
-            If DownloadItems.Where(Function(myitem) myitem.DownloadStatus = DownloadItem.Status.Queued).Count = 0 Then
+            If DownloadItems.Where(Function(myitem) myitem.isSelected = True).Count = 0 Then
                 Throw New Exception("You must select minimum 1 Item to Download!")
             End If
 
@@ -492,6 +492,8 @@ Decrypt:
             Dim _wig As IWorkItemsGroup
             Dim _wig_start As New WIGStartInfo
             Dim _ssm_flag As Boolean = False
+            Dim DLItemQuery As IEnumerable(Of DownloadItem)
+            Dim _args As New DownloadContainerItemsArgs
 
             SyncLock _session.SynLock
 
@@ -508,13 +510,11 @@ Decrypt:
 
                 If _session.SingleSessionMode = True Or _stp.MaxThreads - 1 = 1 Then '-1 for ETA Thread
                     _session.WIG.Concurrency = 1
-                    _ssm_flag = True
+                    _args.SingleSessionMode = True
                 End If
 
 
-                Dim DLItemQuery As IEnumerable(Of DownloadItem)
-
-                DLItemQuery = (From myitem In DownloadItems Where myitem.ParentContainerID.Equals(_session.ID) And (myitem.DownloadStatus = DownloadItem.Status.Queued And IsNothing(myitem.IWorkItemResult) = True) Or myitem.DownloadStatus = DownloadItem.Status.Retry)
+                DLItemQuery = (From myitem In DownloadItems Where myitem.ParentContainerID.Equals(_session.ID) And (myitem.isSelected = True And IsNothing(myitem.IWorkItemResult) = True) Or myitem.DownloadStatus = DownloadItem.Status.Retry)
 
                 For Each _dlitem In DLItemQuery
 
@@ -531,15 +531,25 @@ Decrypt:
 
                     _dlitem.RetryPossible = False
 
+                    With _args
+                        .ConnectionInfo = _session.ContainerFile.Connection
+                        .DownloadDirectory = _settings.DownloadDirectory
+                    End With
+
+                    _log.Debug(String.Format("Spooling Item {0}", _dlitem.FileName))
+
                     If _settings.InstantVideo = True And _dlitem.RequiredForInstantVideo = True Then
                         _prio = WorkItemPriority.AboveNormal
-                    Else
-                        If _dlitem.DownloadStatus = DownloadItem.Status.Retry Then
-                            _prio = WorkItemPriority.Highest
-                        End If
                     End If
 
-                    _dlitem.IWorkItemResult = _session.WIG.QueueWorkItem(New Func(Of DownloadItem, String, Connection, Boolean, DownloadItem)(AddressOf _download_helper.DownloadContainerItem), _dlitem, _settings.DownloadDirectory, _session.ContainerFile.Connection, _ssm_flag, _prio)
+                    If _dlitem.DownloadStatus = DownloadItem.Status.Retry Then
+                        _prio = WorkItemPriority.Highest
+                        _args.RetryMode = True
+                    End If
+
+                    _dlitem.DownloadStatus = DownloadItem.Status.Queued
+
+                    _dlitem.IWorkItemResult = _session.WIG.QueueWorkItem(New Func(Of DownloadItem, DownloadContainerItemsArgs, DownloadItem)(AddressOf _download_helper.DownloadContainerItem), _dlitem, _args, _prio)
 
                 Next
 
@@ -598,7 +608,6 @@ Decrypt:
 
                                                                        If _dlitem.isSelected Then
 
-                                                                           _dlitem.DownloadStatus = DownloadItem.Status.Queued
                                                                            _dlitem.IWorkItemResult = Nothing
                                                                            _dlitem.DownloadProgress = 0
                                                                            _dlitem.DownloadSpeed = String.Empty
@@ -744,55 +753,63 @@ Decrypt:
 
                              If _mysession.SessionState = ContainerSessionState.Queued Or _mysession.SessionState = ContainerSessionState.DownloadRunning Then
 
-                                 If _mysession.DownloadItems.Where(Function(myitem) (myitem.DownloadStatus = DownloadItem.Status.Queued Or myitem.DownloadStatus = DownloadItem.Status.Running) Or (myitem.DownloadStatus = DownloadItem.Status.Retry Or myitem.DownloadStatus = DownloadItem.Status.RetryWait)).Count = 0 Or Application.Current.Resources("DownloadStopped") = True Then 'Alle Items sind heruntergeladen oder Download ist gestoppt
+                                 Dim DLItemQuery As New List(Of DownloadItem)
+
+                                 DLItemQuery.AddRange(_mysession.DownloadItems.Where(Function(myitem) (myitem.DownloadStatus = DownloadItem.Status.Queued)))
+                                 DLItemQuery.AddRange(_mysession.DownloadItems.Where(Function(myitem) (myitem.DownloadStatus = DownloadItem.Status.Running)))
+                                 DLItemQuery.AddRange(_mysession.DownloadItems.Where(Function(myitem) (myitem.DownloadStatus = DownloadItem.Status.Retry)))
+                                 DLItemQuery.AddRange(_mysession.DownloadItems.Where(Function(myitem) (myitem.DownloadStatus = DownloadItem.Status.RetryWait)))
+                                 DLItemQuery.AddRange(_mysession.DownloadItems.Where(Function(myitem) (myitem.isSelected = True)))
+
+                                 If DLItemQuery.Count = 0 Or Application.Current.Resources("DownloadStopped") = True Then
 
                                      _mysession.SessionState = ContainerSessionState.DownloadComplete
-                                     _mysession.DownloadStoppedTime = Now
+                                         _mysession.DownloadStoppedTime = Now
 #Region "Speedreport"
-                                     If _settings.SpeedReportSettings.SpeedreportEnabled = True Then
+                                         If _settings.SpeedReportSettings.SpeedreportEnabled = True Then
 
-                                         Dim _speedreport As String = String.Empty
-                                         Dim _sr_filepath As String = String.Empty
-                                         Dim _sr_task As New AppTask("Speedreport wird erstellt")
+                                             Dim _speedreport As String = String.Empty
+                                             Dim _sr_filepath As String = String.Empty
+                                             Dim _sr_task As New AppTask("Speedreport wird erstellt")
 
-                                         Try
+                                             Try
 
-                                             AddHandler _sr_task.TaskDone, AddressOf TaskDoneEvent
+                                                 AddHandler _sr_task.TaskDone, AddressOf TaskDoneEvent
 
-                                             ActiveTasks.Add(_sr_task)
+                                                 ActiveTasks.Add(_sr_task)
 
-                                             _sr_filepath = _mysession.LocalDownloadRoot
+                                                 _sr_filepath = _mysession.LocalDownloadRoot
 
-                                             _sr_filepath = Path.Combine(_sr_filepath, "speedreport.txt")
+                                                 _sr_filepath = Path.Combine(_sr_filepath, "speedreport.txt")
 
-                                             _speedreport = GenerateSpeedreport(_mysession, _settings.SpeedReportSettings)
+                                                 _speedreport = GenerateSpeedreport(_mysession, _settings.SpeedReportSettings)
 
-                                             If _speedreport.Equals("nodata") And System.IO.File.Exists(_sr_filepath) Then
-                                                 Throw New NoSpeedreportDataException
-                                             End If
+                                                 If _speedreport.Equals("nodata") And System.IO.File.Exists(_sr_filepath) Then
+                                                     Throw New NoSpeedreportDataException
+                                                 End If
 
-                                             If String.IsNullOrWhiteSpace(_speedreport) Then
-                                                 Throw New Exception("Speedreport failed")
-                                             End If
+                                                 If String.IsNullOrWhiteSpace(_speedreport) Then
+                                                     Throw New Exception("Speedreport failed")
+                                                 End If
 
-                                             My.Computer.FileSystem.WriteAllText(_sr_filepath, _speedreport, False, Encoding.Default)
+                                                 My.Computer.FileSystem.WriteAllText(_sr_filepath, _speedreport, False, Encoding.Default)
 
-                                             _sr_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("Speedreport erstellt | {0}", GenerateSimpleSpeedreport(_mysession)))
+                                                 _sr_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("Speedreport erstellt | {0}", GenerateSimpleSpeedreport(_mysession)))
 
-                                         Catch ex As NoSpeedreportDataException
-                                             _sr_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("Speedreport | {0}", GenerateSimpleSpeedreport(_mysession)))
+                                             Catch ex As NoSpeedreportDataException
+                                                 _sr_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("Speedreport | {0}", GenerateSimpleSpeedreport(_mysession)))
 
-                                         Catch ex As Exception
-                                             _sr_task.SetTaskStatus(TaskStatus.Faulted, "Speedreport Generation failed")
-                                         End Try
+                                             Catch ex As Exception
+                                                 _sr_task.SetTaskStatus(TaskStatus.Faulted, "Speedreport Generation failed")
+                                             End Try
 
-                                     End If
+                                         End If
 
 #End Region
+                                     End If
+
+
                                  End If
-
-
-                             End If
 
                          End SyncLock
 #End Region

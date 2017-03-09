@@ -427,7 +427,7 @@
     <value>Retry {0}/{1}</value>
   </data>
   <data name="DownloadStatus_RetryWait" xml:space="preserve">
-    <value>Retry {0}/{1} - Warte</value>
+    <value>Warte {0} Sek. auf Retry {0}/{1}</value>
   </data>
   <data name="DownloadStatus_AlreadyDownloaded" xml:space="preserve">
     <value>Datei bereits vollständig</value>
@@ -468,5 +468,8 @@ Möchtest du SFDL.NET 3 nun als Administrator starten?</value>
   </data>
   <data name="VariousStrings_Filename" xml:space="preserve">
     <value>Dateiname</value>
+  </data>
+  <data name="DownloadStatus_RunningWait" xml:space="preserve">
+    <value>Download eingereit warte auf Start....</value>
   </data>
 </root>
