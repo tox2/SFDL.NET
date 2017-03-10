@@ -1642,6 +1642,7 @@ Decrypt:
                 Else
                     _containerInfo_selectedItem = value
                     ContainerInfoServerWhois = Nothing
+                    ContainerInfoTotalSize = Nothing
                 End If
             End If
 
