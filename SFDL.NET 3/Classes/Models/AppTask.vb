@@ -31,7 +31,7 @@ Public Class AppTask
 
             Case TaskStatus.Faulted
 
-                _taskstatusimage = "Faulted"
+                _taskstatusimage = "Failed"
 
             Case TaskStatus.Canceled
 

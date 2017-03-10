@@ -49,13 +49,13 @@ Public Class MainViewModel
 
         LoadSavedSessions()
 
-#Disable Warning BC42358 ' Da auf diesen Aufruf nicht gewartet wird, wird die Ausführung der aktuellen Methode vor Abschluss des Aufrufs fortgesetzt.
-        IsNewUpdateAvailible()
-#Enable Warning BC42358 ' Da auf diesen Aufruf nicht gewartet wird, wird die Ausführung der aktuellen Methode vor Abschluss des Aufrufs fortgesetzt.
+        If _settings.SearchUpdates = True Then
+            NewUpdateAvailableVisibility = New NotifyTaskCompletion(Of Visibility)(IsNewUpdateAvailible)
+        End If
 
     End Sub
 
-#Region "Private Subs"
+#Region "Public Subs"
 
     Public Sub SaveSessions()
 
@@ -83,6 +83,10 @@ Public Class MainViewModel
         Next
 
     End Sub
+
+#End Region
+
+#Region "Private Subs"
 
     Private Sub LoadSavedSessions()
 
@@ -1358,6 +1362,29 @@ Decrypt:
 
 #Region "Allgemeine Properties"
 
+    Private _max_download_speed As String
+    Public Property MaxDownloadSpeed As String
+
+        Set(value As String)
+
+            If Equals(value, _max_download_speed) Then
+                Return
+            End If
+
+            If IsNumeric(value) Or String.IsNullOrEmpty(value) Then
+                _max_download_speed = value
+            Else
+                Return
+            End If
+
+            RaisePropertyChanged("MaxDownloadSpeed")
+
+        End Set
+        Get
+            Return _max_download_speed
+        End Get
+    End Property
+
     Public Property WindowInstance As Window
 
     Private _window_state As WindowState = WindowState.Normal
@@ -1390,6 +1417,16 @@ Decrypt:
         End Get
     End Property
 
+    Private _newupdate_available_visibility As NotifyTaskCompletion(Of Visibility)
+
+    Public Property NewUpdateAvailableVisibility As NotifyTaskCompletion(Of Visibility)
+        Set(value As NotifyTaskCompletion(Of Visibility))
+            _newupdate_available_visibility = value
+        End Set
+        Get
+            Return _newupdate_available_visibility
+        End Get
+    End Property
 
 #End Region
 
@@ -1517,29 +1554,6 @@ Decrypt:
 
 #End Region
 
-    Private _max_download_speed As String
-    Public Property MaxDownloadSpeed As String
-
-        Set(value As String)
-
-            If Equals(value, _max_download_speed) Then
-                Return
-            End If
-
-            If IsNumeric(value) Or String.IsNullOrEmpty(value) Then
-                _max_download_speed = value
-            Else
-                Return
-            End If
-
-            RaisePropertyChanged("MaxDownloadSpeed")
-
-        End Set
-        Get
-            Return _max_download_speed
-        End Get
-    End Property
-
 #Region "DragnDrop"
 
     Public ReadOnly Property PreviewDropCommand() As ICommand
@@ -1580,6 +1594,26 @@ Decrypt:
             Next
         End If
 
+
+    End Sub
+
+#End Region
+
+#Region "NewUpdate"
+
+    Public ReadOnly Property OpenNewUpdateWebsiteCommand As ICommand
+        Get
+            Return New DelegateCommand(AddressOf OpenNewUpdateWebsite)
+        End Get
+    End Property
+
+    Sub OpenNewUpdateWebsite()
+
+        Try
+            Process.Start("https://github.com/n0ix/SFDL.NET/releases")
+        Catch ex As Exception
+            Debug.WriteLine("Failed to open Browser!")
+        End Try
 
     End Sub
 

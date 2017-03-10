@@ -128,17 +128,6 @@ Public Class MainWindow
 
 #End Region
 
-        If _settings.SearchUpdates = True Then
-
-            _new_update = Await IsNewUpdateAvailible()
-
-        If _new_update = True Then
-                Await ShowMessageAsync("Update Check", "Es ist ein neues Update verfügbar!" & vbNewLine & "Die neuste Version kannst du auf http://www.sfdl.net herunterladen.")
-            End If
-
-        End If
-
-
     End Sub
 
     Private Sub ComB_Container_Info_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComB_Container_Info.SelectionChanged
@@ -208,7 +197,6 @@ Public Class MainWindow
 
         End If
 
-
     End Sub
 
     Private Async Sub SFDL_MainWindow_Closing(sender As Object, e As CancelEventArgs) Handles SFDL_MainWindow.Closing
@@ -276,38 +264,5 @@ Public Class MainWindow
 
     End Sub
 
-    Private Async Sub cmd_play_instant_video_Click(sender As Object, e As RoutedEventArgs) Handles cmd_play_instant_video.Click
-
-        Dim _sel_object As Object
-        Dim _error As Boolean = False
-
-        Try
-
-            _sel_object = InstantVideoStreamList.SelectedItem
-
-            If Not IsNothing(_sel_object) AndAlso _sel_object.GetType.Equals(GetType(InstantVideoStream)) Then
-
-                Dim _inst_stream As InstantVideoStream = TryCast(_sel_object, InstantVideoStream)
-
-                Dim _vlc_args As String = String.Empty
-
-                Dim _app_task As New AppTask(String.Format("Starte InstantVideo für Archiv {0}", _inst_stream.File))
-
-                _vlc_args = String.Format("{0} --no-qt-error-dialogs", Chr(34) & _inst_stream.File & Chr(34))
-
-                System.Diagnostics.Process.Start(Chr(34) & GetVLCExecutable() & Chr(34), _vlc_args)
-
-            End If
-
-        Catch ex As Exception
-            _error = True
-        End Try
-
-        If _error = True Then
-            Await ShowMessageAsync("InstantVideo Fehler", "Das ausgewählte InstatVideo konnte nicht gestartet werden!")
-        End If
-
-
-    End Sub
 
 End Class

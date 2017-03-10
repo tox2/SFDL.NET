@@ -54,7 +54,7 @@
             <VisualBrush x:Key="DownloadStatusIOError" Visual="{StaticResource appbar_type_bit}" />
 
 
-            <VisualBrush x:Key="TaskStatusFaulted" Visual="{StaticResource appbar_stop}" />
+            <VisualBrush x:Key="TaskStatusFailed" Visual="{StaticResource appbar_stop}" />
             <VisualBrush x:Key="TaskStatusCanceled" Visual="{StaticResource appbar_stop}" />
             <VisualBrush x:Key="TaskStatusRunning" Visual="{StaticResource appbar_control_fastforward_variant}" />
             <VisualBrush x:Key="TaskStatusRanToCompletion" Visual="{StaticResource appbar_check}" />
@@ -65,6 +65,24 @@
         </ResourceDictionary>
     </Window.Resources>
 
+    <Controls:MetroWindow.RightWindowCommands>
+        <Controls:WindowCommands>
+            <Button Visibility="{Binding NewUpdateAvailableVisibility.Result}" Command="{Binding OpenNewUpdateWebsiteCommand}">
+                <StackPanel Orientation="Horizontal">
+                  <Rectangle Width="16" Height="16"
+                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_alert}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Margin="4 0 0 0"
+                   VerticalAlignment="Center"
+                   Text="Neue Version verfügbar!" />
+                </StackPanel>
+            </Button>
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.RightWindowCommands>
+
     <Controls:MetroWindow.Flyouts>
         <Controls:FlyoutsControl x:Name="ContainerInfoFlyout">
             <Controls:Flyout Width="400"
@@ -74,6 +92,7 @@
                              Theme="Adapt">
 
                 <Grid>
+
                     <StackPanel>
 
                         <StackPanel Orientation="Horizontal">
@@ -783,8 +802,8 @@
                                                                 <Style TargetType="{x:Type Rectangle}">
                                                                     <Setter Property="OpacityMask" Value="{StaticResource TaskStatusRunning}" />
                                                                     <Style.Triggers>
-                                                                        <DataTrigger Binding="{Binding TaskStatusImage}" Value="Faulted">
-                                                                            <Setter Property="OpacityMask" Value="{StaticResource TaskStatusFaulted}" />
+                                                                        <DataTrigger Binding="{Binding TaskStatusImage}" Value="Failed">
+                                                                            <Setter Property="OpacityMask" Value="{StaticResource TaskStatusFailed}" />
                                                                         </DataTrigger>
                                                                         <DataTrigger Binding="{Binding TaskStatusImage}" Value="Canceled">
                                                                             <Setter Property="OpacityMask" Value="{StaticResource TaskStatusCanceled}" />
@@ -809,6 +828,8 @@
                             </ListView>
                         </TabItem>
                         <TabItem Controls:ControlsHelper.HeaderFontSize="12" Header="Aufgaben Historie">
+
+                    
                             <ListView x:Name="ListViewDoneTasks"
                                       MinHeight="100"
                                       ItemsSource="{Binding DoneTasks}">
@@ -818,10 +839,30 @@
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
-                                                        <Image Height="20"
-                                                               Margin="0,0,5,0"
-                                                               Source="{Binding TaskStatusImage}" />
-                                                        <TextBlock Text="{Binding TaskDisplayText}" />
+                                                        <Rectangle Width="16"
+                                                                   Height="16"
+                                                                   Fill="{DynamicResource AccentColorBrush}">
+                                                            <Rectangle.Style>
+                                                                <Style TargetType="{x:Type Rectangle}">
+                                                                    <Setter Property="OpacityMask" Value="{StaticResource TaskStatusRunning}" />
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding TaskStatusImage}" Value="Failed">
+                                                                            <Setter Property="OpacityMask" Value="{StaticResource TaskStatusFailed}" />
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding TaskStatusImage}" Value="Canceled">
+                                                                            <Setter Property="OpacityMask" Value="{StaticResource TaskStatusCanceled}" />
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding TaskStatusImage}" Value="Running">
+                                                                            <Setter Property="OpacityMask" Value="{StaticResource TaskStatusRunning}" />
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding TaskStatusImage}" Value="RanToCompletion">
+                                                                            <Setter Property="OpacityMask" Value="{StaticResource TaskStatusRanToCompletion}" />
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Rectangle.Style>
+                                                        </Rectangle>
+                                                        <TextBlock Margin="5,0,0,0" Text="{Binding TaskDisplayText}" />
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>

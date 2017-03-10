@@ -96,6 +96,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\NotifyTaskCompletion.vb" />
     <Compile Include="Classes\Exceptions\BasicAvailabilityTestFailedException.vb" />
     <Compile Include="Classes\Exceptions\NoSpeedreportDataException.vb" />
     <Compile Include="Classes\FixedWidthColumn.vb" />
