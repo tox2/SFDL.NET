@@ -113,7 +113,7 @@ Module SFDLFileHelper
 
             .Description = _decrypt_helper.DecryptString(.Description, _password)
             .Uploader = _decrypt_helper.DecryptString(.Uploader, _password)
-            .Encrypted = False
+            '.Encrypted = False
 
         End With
 

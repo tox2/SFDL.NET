@@ -1,20 +1,63 @@
-﻿Module WhoisHelper
+﻿Imports System.IO
+Imports System.Net.Http
+
+Module WhoisHelper
 
     Private _log As NLog.Logger = NLog.LogManager.GetLogger("WhoisHelper")
+    Private Async Function DownloadFile(ByVal _url As String) As Task(Of String)
+
+        Dim _http_client As HttpClient = New HttpClient
+        Dim _http_response As HttpResponseMessage
+        Dim _content As HttpContent
+        Dim _local_tmp_filepath As String = String.Empty
+
+        Try
+
+            _http_client.BaseAddress = New Uri(_url)
+            ' _http_client.Timeout = TimeSpan.FromSeconds(_timeout)
+
+            _http_response = Await _http_client.GetAsync(_url)
+
+            _http_response.EnsureSuccessStatusCode()
+
+            Await _http_response.Content.LoadIntoBufferAsync()
+
+            _content = _http_response.Content
+
+            _local_tmp_filepath = IO.Path.Combine(My.Computer.FileSystem.SpecialDirectories.Temp, IO.Path.GetRandomFileName)
+
+            Using _filestream As New IO.FileStream(_local_tmp_filepath, IO.FileMode.Create, IO.FileAccess.Write)
+
+                Await _content.CopyToAsync(_filestream)
+
+            End Using
+
+        Catch ex As Exception
+
+        End Try
+
+        Return _local_tmp_filepath
+
+    End Function
+
     ''' <summary>
     ''' Funktion zum umsetzten der IP-Addresse in einen Ländercode
     ''' </summary>
-    Public Function Resolve(ByVal _ip As String) As String
+    Public Async Function Resolve(ByVal _ip As String) As Task(Of WhoIsResult)
 
         Dim XMLReader As New Xml.XmlDocument
         Dim xmlKD As Xml.XmlElement
         Dim _country_code As String
+        Dim _local_xml As String
+        Dim _rt As New WhoIsResult
 
         _log.Info(String.Format("Queryring WohIs für IP {0}", _ip))
 
-        _country_code = ""
+        _country_code = "N/A"
 
-        XMLReader.Load("http://xml.utrace.de/?query=" & _ip)
+        _local_xml = Await DownloadFile("http://xml.utrace.de/?query=" & _ip)
+
+        XMLReader.Load(_local_xml)
 
         xmlKD = CType(XMLReader.DocumentElement.ChildNodes(0), Xml.XmlElement)
 
@@ -30,59 +73,50 @@
 
         _log.Info(String.Format("CounterCode determined : {0}", _country_code))
 
-        Return _country_code
+
+        _rt.CountryCode = _country_code
+        _rt.CountryImage = Await DownloadFlagImage(_country_code)
+
+        If IO.File.Exists(_local_xml) Then 'CleanUp
+            IO.File.Delete(_local_xml)
+        End If
+
+        Return _rt
 
     End Function
 
-    Public Function DownloadFlagImage(ByVal _countrycode As String) As System.Drawing.Image
+    Private Async Function DownloadFlagImage(ByVal _countrycode As String) As Task(Of BitmapImage)
 
         Dim _flag As System.Drawing.Image
+        Dim _bitmap_flag As BitmapImage
+        Dim _local_flag As String
+        Dim _memory_stream As MemoryStream
 
-        _flag = DownloadImage("http://n1.dlcache.com/flags/" & _countrycode.ToLower & ".gif")
+        _local_flag = Await DownloadFile("http://n1.dlcache.com/flags/" & _countrycode.ToLower & ".gif")
 
-        Return _flag
+        _flag = System.Drawing.Image.FromFile(_local_flag)
 
-    End Function
+        _bitmap_flag = New BitmapImage
 
-    ''' <summary>
-    ''' Function to download Image from website
-    ''' </summary>
-    ''' <param name="_URL">URL address to download image</param>
-    ''' <return>Image</return>
-    Private Function DownloadImage(ByVal _URL As String) As System.Drawing.Image
+        _bitmap_flag.BeginInit()
 
-        Dim _tmpImage As System.Drawing.Image = Nothing
+        _memory_stream = New MemoryStream
 
-        Try
-            ' Open a connection
-            Dim _HttpWebRequest As System.Net.HttpWebRequest = CType(System.Net.HttpWebRequest.Create(_URL), System.Net.HttpWebRequest)
+        _flag.Save(_memory_stream, System.Drawing.Imaging.ImageFormat.Bmp)
 
-            _HttpWebRequest.AllowWriteStreamBuffering = True
+        _memory_stream.Seek(0, SeekOrigin.Begin)
 
-            ' You can also specify additional header values like the user agent or the referer: (Optional)
-            _HttpWebRequest.UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)"
+        _bitmap_flag.StreamSource = _memory_stream
 
-            ' set timeout for 20 seconds (Optional)
-            _HttpWebRequest.Timeout = 20000
+        _bitmap_flag.EndInit()
 
-            ' Request response:
-            Dim _WebResponse As System.Net.WebResponse = _HttpWebRequest.GetResponse()
+        _flag.Dispose()
 
-            ' Open data stream:
-            Dim _WebStream As System.IO.Stream = _WebResponse.GetResponseStream()
+        If IO.File.Exists(_local_flag) Then 'CleanUp
+            IO.File.Delete(_local_flag)
+        End If
 
-            ' convert webstream to image
-            _tmpImage = System.Drawing.Image.FromStream(_WebStream)
-
-            ' Cleanup
-            _WebResponse.Close()
-        Catch _Exception As Exception
-            ' Error
-            Console.WriteLine("Exception caught in process: {0}", _Exception.ToString())
-            Return Nothing
-        End Try
-
-        Return _tmpImage
+        Return _bitmap_flag
 
     End Function
 

@@ -101,7 +101,8 @@
                                    FontWeight="Bold" />
                             <ComboBox x:Name="ComB_Container_Info"
                                       DisplayMemberPath="DisplayName"
-                                      ItemsSource="{Binding ContainerSessions}" />
+                                      ItemsSource="{Binding ContainerSessions}"
+                                      SelectedItem="{Binding ContainerInfoSelectedItem}"/>
                         </StackPanel>
 
                         <Separator Margin="3,5" />
@@ -110,9 +111,9 @@
                             <Label Content="Uploader:"
                                    FontSize="14"
                                    FontWeight="Bold" />
-                            <Label x:Name="txt_containerinfo_upper" FontSize="14" />
+                            <Label x:Name="txt_containerinfo_upper" FontSize="14" Content="{Binding ContainerInfoSelectedItem.ContainerFile.Uploader}" />
                         </StackPanel>
-
+                        
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Server Standort:"
                                    FontSize="14"
@@ -120,8 +121,22 @@
                             <Image x:Name="img_containerinfo_serverlocation"
                                    Width="32"
                                    Height="32"
-                                   Margin="0,0,2,0" />
-                            <Label x:Name="txt_containerinfo_serverlocation" FontSize="14" />
+                                   Margin="0,0,2,0" Source="{Binding ContainerInfoServerWhois.Result.CountryImage}"/>
+                            <Label x:Name="txt_containerinfo_serverlocation" FontSize="14" Content="{Binding ContainerInfoServerWhois.Result.CountryCode}" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" >
+                            <Label Content="Max Threads:"
+                                   FontSize="14"
+                                   FontWeight="Bold" />
+                            <Label x:Name="txt_containerinfo_maxthreads" FontSize="14" Content="{Binding ContainerInfoSelectedItem.ContainerFile.MaxDownloadThreads}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" >
+                            <Label Content="Encrypted:"
+                                   FontSize="14"
+                                   FontWeight="Bold" />
+                            <Label x:Name="txt_containerinfo_encrypted" FontSize="14" Content="{Binding ContainerInfoSelectedItem.ContainerFile.Encrypted}"/>
                         </StackPanel>
 
                     </StackPanel>

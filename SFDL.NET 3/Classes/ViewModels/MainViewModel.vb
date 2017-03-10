@@ -1110,16 +1110,6 @@ Decrypt:
         End Get
     End Property
 
-    Public ReadOnly Property ShowContainerInfoCommand As ICommand
-        Get
-            Return New DelegateCommand(AddressOf ShowContainerInfo)
-        End Get
-    End Property
-
-    Private Sub ShowContainerInfo()
-        ContainerInfoOpen = True
-    End Sub
-
     Public ReadOnly Property MarkAllItemsCommand As ICommand
         Get
             Return New DelegateCommand(AddressOf MarkAllItems)
@@ -1405,28 +1395,6 @@ Decrypt:
         End Get
     End Property
 
-    Private _container_info_shown As Boolean = False
-
-    Public Property ContainerInfoOpen As Boolean
-        Set(value As Boolean)
-            _container_info_shown = value
-            RaisePropertyChanged("ContainerInfoOpen")
-        End Set
-        Get
-            Return _container_info_shown
-        End Get
-    End Property
-
-    Private _newupdate_available_visibility As NotifyTaskCompletion(Of Visibility)
-
-    Public Property NewUpdateAvailableVisibility As NotifyTaskCompletion(Of Visibility)
-        Set(value As NotifyTaskCompletion(Of Visibility))
-            _newupdate_available_visibility = value
-        End Set
-        Get
-            Return _newupdate_available_visibility
-        End Get
-    End Property
 
 #End Region
 
@@ -1601,6 +1569,19 @@ Decrypt:
 
 #Region "NewUpdate"
 
+
+    Private _newupdate_available_visibility As NotifyTaskCompletion(Of Visibility)
+
+    Public Property NewUpdateAvailableVisibility As NotifyTaskCompletion(Of Visibility)
+        Set(value As NotifyTaskCompletion(Of Visibility))
+            _newupdate_available_visibility = value
+            RaisePropertyChanged("NewUpdateAvailableVisibility")
+        End Set
+        Get
+            Return _newupdate_available_visibility
+        End Get
+    End Property
+
     Public ReadOnly Property OpenNewUpdateWebsiteCommand As ICommand
         Get
             Return New DelegateCommand(AddressOf OpenNewUpdateWebsite)
@@ -1616,6 +1597,77 @@ Decrypt:
         End Try
 
     End Sub
+
+#End Region
+
+#Region "ContainerInfo Commands and Properties"
+
+    Private _container_info_shown As Boolean = False
+
+    Public Property ContainerInfoOpen As Boolean
+        Set(value As Boolean)
+            _container_info_shown = value
+            RaisePropertyChanged("ContainerInfoOpen")
+        End Set
+        Get
+            Return _container_info_shown
+        End Get
+    End Property
+
+    Public ReadOnly Property ShowContainerInfoCommand As ICommand
+        Get
+            Return New DelegateCommand(AddressOf ShowContainerInfo)
+        End Get
+    End Property
+
+    Private Sub ShowContainerInfo()
+        ContainerInfoOpen = True
+    End Sub
+
+    Private _containerInfo_selectedItem As ContainerSession
+
+    Public Property ContainerInfoSelectedItem As ContainerSession
+
+        Set(value As ContainerSession)
+
+            Dim _change As Boolean = False
+
+            If IsNothing(_containerInfo_selectedItem) Then
+                _containerInfo_selectedItem = value
+                _change = True
+            Else
+                If Not IsNothing(value) AndAlso Not _containerInfo_selectedItem.ID.Equals(value.ID) Then
+                    _containerInfo_selectedItem = value
+                    _change = True
+                Else
+                    _containerInfo_selectedItem = value
+                    ContainerInfoServerWhois = Nothing
+                End If
+            End If
+
+            RaisePropertyChanged("ContainerInfoSelectedItem")
+
+            If _change = True Then
+                ContainerInfoServerWhois = New NotifyTaskCompletion(Of WhoIsResult)(WhoisHelper.Resolve(_containerInfo_selectedItem.ContainerFile.Connection.Host))
+            End If
+
+        End Set
+        Get
+            Return _containerInfo_selectedItem
+        End Get
+    End Property
+
+    Private _containerinfo_serverwhois As NotifyTaskCompletion(Of WhoIsResult)
+
+    Public Property ContainerInfoServerWhois As NotifyTaskCompletion(Of WhoIsResult)
+        Set(value As NotifyTaskCompletion(Of WhoIsResult))
+            _containerinfo_serverwhois = value
+            RaisePropertyChanged("ContainerInfoServerWhois")
+        End Set
+        Get
+            Return _containerinfo_serverwhois
+        End Get
+    End Property
 
 #End Region
 
