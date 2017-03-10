@@ -77,21 +77,23 @@ Module FTPHelper
         Dim _rt As New BasicAvailabilityTestResult
         Dim _log As NLog.Logger = NLog.LogManager.GetLogger("BasicAvailabilityTest")
 
-#Region "Ping Test"
+        _rt.PingTest = True
 
-        Try
+        '#Region "Ping Test"
 
-            If My.Computer.Network.Ping(_connection_info.Host, 500) = True Then
-                _rt.PingTest = True
-            Else
-                _log.Error("Ping Test Failed")
-            End If
+        '        Try
 
-        Catch ex As Exception
-            _log.Error("Ping Test Failed")
-        End Try
+        '            If My.Computer.Network.Ping(_connection_info.Host, 500) = True Then
+        '                _rt.PingTest = True
+        '            Else
+        '                _log.Error("Ping Test Failed")
+        '            End If
 
-#End Region
+        '        Catch ex As Exception
+        '            _log.Error("Ping Test Failed")
+        '        End Try
+
+        '#End Region
 
 
 #Region "Port Test"
