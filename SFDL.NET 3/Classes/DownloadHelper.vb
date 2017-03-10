@@ -320,7 +320,7 @@ Class DownloadHelper
 
                     _batr = BasicAvailabilityTest(_args.ConnectionInfo)
 
-                    If _batr.PingTest = False Or _batr.PortTest = False Then
+                    If _batr.PingTest = False And _batr.PortTest = False Then 'Both Test has to fail
                         _log.Info("Basic availability Test  failed!")
                         Throw New BasicAvailabilityTestFailedException("Test Failed")
                     Else
