@@ -1645,10 +1645,13 @@ Decrypt:
                 End If
             End If
 
+
+
             RaisePropertyChanged("ContainerInfoSelectedItem")
 
             If _change = True Then
                 ContainerInfoServerWhois = New NotifyTaskCompletion(Of WhoIsResult)(WhoisHelper.Resolve(_containerInfo_selectedItem.ContainerFile.Connection.Host))
+                ContainerInfoTotalSize = New NotifyTaskCompletion(Of Double)(SFDLFileHelper.GetContainerTotalSize(_containerInfo_selectedItem))
             End If
 
         End Set
@@ -1666,6 +1669,18 @@ Decrypt:
         End Set
         Get
             Return _containerinfo_serverwhois
+        End Get
+    End Property
+
+    Private _containerinfo_totalsize As NotifyTaskCompletion(Of Double)
+
+    Public Property ContainerInfoTotalSize As NotifyTaskCompletion(Of Double)
+        Set(value As NotifyTaskCompletion(Of Double))
+            _containerinfo_totalsize = value
+            RaisePropertyChanged("ContainerInfoTotalSize")
+        End Set
+        Get
+            Return _containerinfo_totalsize
         End Get
     End Property
 

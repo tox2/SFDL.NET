@@ -5,6 +5,29 @@ Module SFDLFileHelper
 
     Private _log As NLog.Logger = NLog.LogManager.GetLogger("SFDLFileHelper")
 
+
+    Public Async Function GetContainerTotalSize(ByVal _container As ContainerSession) As Task(Of Double)
+
+        Dim _full_session_size As Double
+
+        _full_session_size = Await System.Threading.Tasks.Task.Run(Function()
+
+                                                                       Dim _rt As Double
+
+                                                                       System.Threading.Tasks.Parallel.ForEach(_container.DownloadItems, Sub(ByVal _file)
+
+                                                                                                                                             _rt += _file.FileSize
+
+                                                                                                                                         End Sub)
+
+                                                                       Return _rt
+
+                                                                       'Return _container.DownloadItems.Aggregate(_full_session_size, Function(current, _file) current + _file.FileSize)
+                                                                   End Function)
+
+        Return _full_session_size
+
+    End Function
     Sub CheckAndFixPackageName(ByRef _container As ContainerSession)
 
         Dim _count As Integer = 1
