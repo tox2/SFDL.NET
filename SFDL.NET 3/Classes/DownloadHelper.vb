@@ -11,6 +11,7 @@ Class DownloadHelper
     Private _settings As New Settings
     Private _obj_ftp_client_lock As New Object
     Private _obj_dl_count_lok As New Object
+    Private _obj_precheck_lock As New Object
     Private _dl_count As Integer = 0
 
 
@@ -21,6 +22,13 @@ Class DownloadHelper
     Public Event ServerFull(ByVal _item As DownloadItem)
 
 #Region "Private Subs"
+
+    Private Function IsDiskFull(ex As Exception) As Boolean
+        Const HR_ERROR_HANDLE_DISK_FULL As Integer = CInt(112) '0x80070027
+        Const HR_ERROR_DISK_FULL As Integer = CInt(-2147024784) '0x80070070
+
+        Return ex.HResult = HR_ERROR_HANDLE_DISK_FULL OrElse ex.HResult = HR_ERROR_DISK_FULL
+    End Function
 
     Private Sub ThrottleByteTransfer(maxBytesPerSecond As Integer, bytesTotal As Long, elapsed As TimeSpan, bytesPerSec As Integer)
         ' we only throttle if the maxBytesPerSecond is not zero (zero turns off the throttle)
@@ -412,6 +420,7 @@ Class DownloadHelper
             End If
 
             If IO.Directory.Exists(IO.Path.GetDirectoryName(_item.LocalFile)) = False Then
+
                 _log.Warn("Target directory not exists --> creating")
                 IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(_item.LocalFile))
             End If
@@ -425,13 +434,14 @@ Class DownloadHelper
                 GetItemFileSize(_item, _ftp_session)
             End If
 
-            _disk_free_space = My.Computer.FileSystem.GetDriveInfo(IO.Path.GetPathRoot(_settings.DownloadDirectory)).AvailableFreeSpace
+            '_disk_free_space = My.Computer.FileSystem.GetDriveInfo(IO.Path.GetPathRoot(_settings.DownloadDirectory)).AvailableFreeSpace
 
-            _log.Info("Free disk space: {0}", _disk_free_space)
+            '_log.Info("Free disk space: {0}", _disk_free_space)
 
-            If _item.FileSize > _disk_free_space Then
-                Throw New NotEnoughFreeDiskSpaceException("Not enough disk space!")
-            End If
+            'If _item.FileSize > _disk_free_space Then
+            '    Throw New NotEnoughFreeDiskSpaceException("Not enough disk space!")
+            'End If
+
 
             If (_settings.ExistingFileHandling = ExistingFileHandling.ResumeFile Or _isRetry = True) And IO.File.Exists(_item.LocalFile) Then
 
@@ -553,6 +563,7 @@ Class DownloadHelper
             _log.Warn(ex, ex.Message)
             _item.DownloadStatus = NET3.DownloadItem.Status.Failed_FileNameTooLong
 
+
         Catch ex As ArxOne.Ftp.Exceptions.FtpAuthenticationException
 
             If _item.IWorkItemResult.IsCanceled = True Or CBool(Application.Current.Resources("DownloadStopped")) = True Then
@@ -602,6 +613,17 @@ Class DownloadHelper
                 _log.Error(ex, ex.Message)
                 ParseFTPException(ex, _item)
             End If
+
+        Catch ex As IO.IOException
+
+            _log.Error(ex, ex.Message)
+
+            If IsDiskFull(ex) = True Then
+                _item.DownloadStatus = NET3.DownloadItem.Status.Failed_NotEnoughDiskSpace
+            Else
+                _item.DownloadStatus = NET3.DownloadItem.Status.Failed_IOError
+            End If
+
 
         Catch ex As Exception
             If _item.IWorkItemResult.IsCanceled = True Or CBool(Application.Current.Resources("DownloadStopped")) = True Then
