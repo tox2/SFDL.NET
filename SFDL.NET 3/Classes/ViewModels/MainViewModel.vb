@@ -404,9 +404,9 @@ Decrypt:
 
                         If _mytask.TaskStatus = TaskStatus.Running Then
 
-                            Application.Current.Dispatcher.BeginInvoke(New Action(Function()
+                            Application.Current.Dispatcher.BeginInvoke(New Action(Sub()
                                                                                       WindowInstance.TaskbarItemInfo.ProgressValue = _percent_done / 100.0
-                                                                                  End Function))
+                                                                                  End Sub))
 
                             If _total_speed >= 1024 Then
                                 _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - Speed: {0} MB/s | ETA: {1} | {2} %", Math.Round(_total_speed / 1024, 2), ConvertDecimal2Time(_time_remaining), _percent_done))

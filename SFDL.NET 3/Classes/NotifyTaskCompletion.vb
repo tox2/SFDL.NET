@@ -15,7 +15,9 @@ Public NotInheritable Class NotifyTaskCompletion(Of TResult)
         Task = _task
 
         If Not Task.IsCompleted Then
+#Disable Warning BC42358 ' Da auf diesen Aufruf nicht gewartet wird, wird die Ausführung der aktuellen Methode vor Abschluss des Aufrufs fortgesetzt.
             WatchTaskAsync(Task)
+#Enable Warning BC42358 ' Da auf diesen Aufruf nicht gewartet wird, wird die Ausführung der aktuellen Methode vor Abschluss des Aufrufs fortgesetzt.
         End If
 
     End Sub

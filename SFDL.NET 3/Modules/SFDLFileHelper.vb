@@ -246,7 +246,7 @@ Module SFDLFileHelper
 
     Function GetBulkFileList(ByRef _container_session As ContainerSession) As Boolean
 
-        Dim _ftp As ArxOne.Ftp.FtpClient
+        Dim _ftp As ArxOne.Ftp.FtpClient = Nothing
         Dim _rt As Boolean = True
 
         Try
