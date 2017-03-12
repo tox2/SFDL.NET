@@ -45,12 +45,14 @@ Class Application
                 Application.Current.Resources.Add("DownloadStopped", False)
 
 
-                If _settings.PreventStandby = True Then
-                        StandyHandler.PreventStandby()
-                        _log.Info("System Standby is now blocked")
-                    End If
+                System.Threading.Thread.CurrentThread.CurrentUICulture = Globalization.CultureInfo.GetCultureInfoByIetfLanguageTag(_settings.Language)
 
-                    SingleInstance.ListenForArgumentsFromSuccessiveInstances()
+                If _settings.PreventStandby = True Then
+                    StandyHandler.PreventStandby()
+                    _log.Info("System Standby is now blocked")
+                End If
+
+                SingleInstance.ListenForArgumentsFromSuccessiveInstances()
 
                 Else
                     ' if there is an argument available, fire it

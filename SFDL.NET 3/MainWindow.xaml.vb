@@ -154,33 +154,53 @@ Public Class MainWindow
 
         Dim _somthing_running As Boolean = False
 
-        If _force_exit = False Then
+        Dim _log As Logger = LogManager.GetLogger("SFDL_MainWindow_Closing")
 
-            For Each _container_session In MainViewModel.ThisInstance.ContainerSessions
+        Try
 
-                If _container_session.SessionState = ContainerSessionState.DownloadRunning Or _container_session.UnRarChains.Where(Function(mychain) mychain.UnRARRunning = True).Count >= 1 Then
-                    _somthing_running = True
+
+            If _force_exit = False Then
+
+                For Each _container_session In MainViewModel.ThisInstance.ContainerSessions
+
+                    If _container_session.SessionState = ContainerSessionState.DownloadRunning Or _container_session.UnRarChains.Where(Function(mychain) mychain.UnRARRunning = True).Count >= 1 Then
+                        _somthing_running = True
+                    End If
+
+                Next
+
+                If _somthing_running = True Then
+
+                    Dim _result As MessageDialogResult
+                    Dim _dialog_settings As New MetroDialogSettings
+
+                    _dialog_settings.AffirmativeButtonText = My.Resources.Strings.VariousStrings_AffirmativeButton
+                    _dialog_settings.NegativeButtonText = My.Resources.Strings.VariousStrings_NegativeButton
+
+                    e.Cancel = True
+
+                    _result = Await ShowMessageAsync(My.Resources.Strings.ExitApplication_Prompt_Title, My.Resources.Strings.ExitApplication_Prompt_Message, MessageDialogStyle.AffirmativeAndNegative, _dialog_settings)
+
+                    If _result = MessageDialogResult.Affirmative Then
+                        _force_exit = True
+                        Application.Current.Shutdown()
+                    End If
+
+                Else
+
+                    If MainViewModel.ThisInstance.WindowState = WindowState.Normal Or MainViewModel.ThisInstance.WindowState = WindowState.Maximized Then
+
+                        My.Settings.UserWindowState = MainViewModel.ThisInstance.WindowState
+
+                        My.Settings.UserWindowHeight = Me.Height
+                        My.Settings.UserWindowWitdh = Me.Width
+
+                        My.Settings.Save()
+
+                    End If
+
+                    MainViewModel.ThisInstance.SaveSessions()
                 End If
-
-            Next
-
-            If _somthing_running = True Then
-
-                Dim _result As MessageDialogResult
-                Dim _dialog_settings As New MetroDialogSettings
-
-                _dialog_settings.AffirmativeButtonText = My.Resources.Strings.VariousStrings_AffirmativeButton
-                _dialog_settings.NegativeButtonText = My.Resources.Strings.VariousStrings_NegativeButton
-
-                e.Cancel = True
-
-                _result = Await ShowMessageAsync(My.Resources.Strings.ExitApplication_Prompt_Title, My.Resources.Strings.ExitApplication_Prompt_Message, MessageDialogStyle.AffirmativeAndNegative, _dialog_settings)
-
-                If _result = MessageDialogResult.Affirmative Then
-                    _force_exit = True
-                    Application.Current.Shutdown()
-                End If
-
             Else
 
                 If MainViewModel.ThisInstance.WindowState = WindowState.Normal Or MainViewModel.ThisInstance.WindowState = WindowState.Maximized Then
@@ -195,23 +215,12 @@ Public Class MainWindow
                 End If
 
                 MainViewModel.ThisInstance.SaveSessions()
-            End If
-        Else
-
-            If MainViewModel.ThisInstance.WindowState = WindowState.Normal Or MainViewModel.ThisInstance.WindowState = WindowState.Maximized Then
-
-                My.Settings.UserWindowState = MainViewModel.ThisInstance.WindowState
-
-                My.Settings.UserWindowHeight = Me.Height
-                My.Settings.UserWindowWitdh = Me.Width
-
-                My.Settings.Save()
 
             End If
 
-            MainViewModel.ThisInstance.SaveSessions()
-
-        End If
+        Catch ex As Exception
+            _log.Error(ex, ex.Message)
+        End Try
 
     End Sub
 
