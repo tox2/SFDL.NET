@@ -82,7 +82,7 @@
                     <TextBlock
                         Margin="4,0,0,0"
                         VerticalAlignment="Center"
-                        Text="Neue Version verfügbar!" />
+                        Text="{x:Static p:Strings.VariousStrings_NewUpdateAvailable}" />
                 </StackPanel>
             </Button>
         </Controls:WindowCommands>
@@ -104,7 +104,7 @@
                         <StackPanel Orientation="Horizontal">
                             <Label
                                 Margin="0,0,5,0"
-                                Content="SFDL wählen:"
+                                Content="{x:Static p:Strings.ContainerInfo_ChooseSFDL}"
                                 FontWeight="Bold" />
                             <ComboBox
                                 x:Name="ComB_Container_Info"
@@ -113,13 +113,13 @@
                                 SelectedItem="{Binding ContainerInfoSelectedItem}" />
                         </StackPanel>
 
-                        <GroupBox Header="SFDL File Information">
+                        <GroupBox Header="{x:Static p:Strings.ContainerInfo_GroupBoxHeader}">
 
                             <StackPanel>
 
                                 <StackPanel Orientation="Horizontal">
                                     <Label
-                                        Content="Uploader:"
+                                        Content="{x:Static p:Strings.ContainerInfo_Uploader}"
                                         FontSize="14"
                                         FontWeight="Bold" />
                                     <Label
@@ -130,7 +130,7 @@
 
                                 <StackPanel Orientation="Horizontal">
                                     <Label
-                                        Content="Server Standort:"
+                                        Content="{x:Static p:Strings.ContainerInfo_ServerLocation}"
                                         FontSize="14"
                                         FontWeight="Bold" />
                                     <Image
@@ -147,7 +147,7 @@
 
                                 <StackPanel Orientation="Horizontal">
                                     <Label
-                                        Content="Max Threads:"
+                                        Content="{x:Static p:Strings.ContainerInfo_MaxThreads}"
                                         FontSize="14"
                                         FontWeight="Bold" />
                                     <Label
@@ -158,7 +158,7 @@
 
                                 <StackPanel Orientation="Horizontal">
                                     <Label
-                                        Content="Encrypted:"
+                                        Content="{x:Static p:Strings.ContainerInfo_Encrypted}"
                                         FontSize="14"
                                         FontWeight="Bold" />
                                     <Label
@@ -169,7 +169,7 @@
 
                                 <StackPanel Orientation="Horizontal">
                                     <Label
-                                        Content="Total Packages:"
+                                        Content="{x:Static p:Strings.ContainerInfo_PackagesCount}"
                                         FontSize="14"
                                         FontWeight="Bold" />
                                     <Label Content="{Binding ContainerInfoSelectedItem.ContainerFile.Packages.Count}" FontSize="14" />
@@ -177,7 +177,7 @@
 
                                 <StackPanel Orientation="Horizontal">
                                     <Label
-                                        Content="Total Container Size:"
+                                        Content="{x:Static p:Strings.ContainerInfo_TotalSize}"
                                         FontSize="14"
                                         FontWeight="Bold" />
                                     <Label Content="{Binding ContainerInfoTotalSize.Result, Converter={StaticResource FileSizeConv}}" FontSize="14" />
@@ -205,7 +205,7 @@
 
                     <StackPanel>
 
-                        <Label Margin="0,0,0,3" Content="Verfügbare InstantVideo Streams:" />
+                        <Label Margin="0,0,0,3" Content="{x:Static p:Strings.InstantVideo_AvailableStreams}" />
 
                         <TreeView Name="InstantVideoStreamList" ItemsSource="{Binding ContainerSessions}">
                             <TreeView.Resources>
@@ -267,7 +267,7 @@
                                         <VisualBrush Visual="{StaticResource appbar_monitor_film}" />
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
-                                <TextBlock Text="Play" />
+                                <TextBlock Text="{x:Static p:Strings.VariousStrings_Play}" />
                             </StackPanel>
                         </Button>
 

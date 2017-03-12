@@ -439,4 +439,37 @@ Do you want SFDL.NET 3 now start as an administrator?</value>
   <data name="VariousStrings_Filename" xml:space="preserve">
     <value>Filename</value>
   </data>
+  <data name="ContainerInfo_ChooseSFDL" xml:space="preserve">
+    <value>Choose SFDL</value>
+  </data>
+  <data name="ContainerInfo_Encrypted" xml:space="preserve">
+    <value>Encrypted:</value>
+  </data>
+  <data name="ContainerInfo_GroupBoxHeader" xml:space="preserve">
+    <value>SFDL File Information</value>
+  </data>
+  <data name="ContainerInfo_MaxThreads" xml:space="preserve">
+    <value>Max Thread Count:</value>
+  </data>
+  <data name="ContainerInfo_PackagesCount" xml:space="preserve">
+    <value>Packages count:</value>
+  </data>
+  <data name="ContainerInfo_ServerLocation" xml:space="preserve">
+    <value>Server location:</value>
+  </data>
+  <data name="ContainerInfo_TotalSize" xml:space="preserve">
+    <value>Total size:</value>
+  </data>
+  <data name="ContainerInfo_Uploader" xml:space="preserve">
+    <value>Uploader:</value>
+  </data>
+  <data name="InstantVideo_AvailableStreams" xml:space="preserve">
+    <value>Available InstantVideo Streams:</value>
+  </data>
+  <data name="VariousStrings_NewUpdateAvailable" xml:space="preserve">
+    <value>New Update Available!</value>
+  </data>
+  <data name="VariousStrings_Play" xml:space="preserve">
+    <value>Play</value>
+  </data>
 </root>

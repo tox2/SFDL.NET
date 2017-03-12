@@ -65,6 +65,78 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL wählen: ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property ContainerInfo_ChooseSFDL() As String
+            Get
+                Return ResourceManager.GetString("ContainerInfo_ChooseSFDL", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Verschlüsselt: ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property ContainerInfo_Encrypted() As String
+            Get
+                Return ResourceManager.GetString("ContainerInfo_Encrypted", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL Datei Informationen ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property ContainerInfo_GroupBoxHeader() As String
+            Get
+                Return ResourceManager.GetString("ContainerInfo_GroupBoxHeader", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Max Anzahl Threads: ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property ContainerInfo_MaxThreads() As String
+            Get
+                Return ResourceManager.GetString("ContainerInfo_MaxThreads", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Anzahl Packete: ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property ContainerInfo_PackagesCount() As String
+            Get
+                Return ResourceManager.GetString("ContainerInfo_PackagesCount", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Server Standort: ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property ContainerInfo_ServerLocation() As String
+            Get
+                Return ResourceManager.GetString("ContainerInfo_ServerLocation", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Gesamtgröße: ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property ContainerInfo_TotalSize() As String
+            Get
+                Return ResourceManager.GetString("ContainerInfo_TotalSize", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Uploader: ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property ContainerInfo_Uploader() As String
+            Get
+                Return ResourceManager.GetString("ContainerInfo_Uploader", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die SFDL Container schließen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadItems_ContextMenu_CloseSFDLContainer() As String
@@ -299,6 +371,15 @@ Namespace My.Resources
         Public Shared ReadOnly Property InstallPathChangedPrompt() As String
             Get
                 Return ResourceManager.GetString("InstallPathChangedPrompt", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Verfügbare InstantVideo Streams: ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property InstantVideo_AvailableStreams() As String
+            Get
+                Return ResourceManager.GetString("InstantVideo_AvailableStreams", resourceCulture)
             End Get
         End Property
         
@@ -1046,6 +1127,24 @@ Namespace My.Resources
         Public Shared ReadOnly Property VariousStrings_NeededDownloadTime() As String
             Get
                 Return ResourceManager.GetString("VariousStrings_NeededDownloadTime", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Neues Update verfügbar! ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property VariousStrings_NewUpdateAvailable() As String
+            Get
+                Return ResourceManager.GetString("VariousStrings_NewUpdateAvailable", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Abspielen ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property VariousStrings_Play() As String
+            Get
+                Return ResourceManager.GetString("VariousStrings_Play", resourceCulture)
             End Get
         End Property
         

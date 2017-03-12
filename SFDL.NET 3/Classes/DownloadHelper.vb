@@ -389,7 +389,6 @@ Class DownloadHelper
 
         Dim _filemode As IO.FileMode
         Dim _restart As Long = 0
-        Dim _disk_free_space As Long
 
         'IO Stream Variablen
         'Const Length As Integer = 256
@@ -433,14 +432,6 @@ Class DownloadHelper
                 _log.Warn("No fie size found - trying to determining")
                 GetItemFileSize(_item, _ftp_session)
             End If
-
-            '_disk_free_space = My.Computer.FileSystem.GetDriveInfo(IO.Path.GetPathRoot(_settings.DownloadDirectory)).AvailableFreeSpace
-
-            '_log.Info("Free disk space: {0}", _disk_free_space)
-
-            'If _item.FileSize > _disk_free_space Then
-            '    Throw New NotEnoughFreeDiskSpaceException("Not enough disk space!")
-            'End If
 
 
             If (_settings.ExistingFileHandling = ExistingFileHandling.ResumeFile Or _isRetry = True) And IO.File.Exists(_item.LocalFile) Then
