@@ -1182,7 +1182,7 @@ Decrypt:
 
     Private Async Sub ShowHelp()
 
-        Await DialogCoordinator.Instance.ShowMessageAsync(Me, "SFDL.NET 3", "Version: 3.0.0.5 RC5")
+        Await DialogCoordinator.Instance.ShowMessageAsync(Me, "SFDL.NET 3", String.Format("Version: {0}", My.Application.Info.Version.ToString))
 
     End Sub
 
