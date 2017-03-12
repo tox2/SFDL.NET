@@ -1,4 +1,4 @@
-SFDL.NET is a Simple FTP Download Manager written in VB.NET
+SFDL.NET is a Simple FTP Download Manager written in VB.NET wich uses the WPF Framework
 
 ##System Requirements
 
