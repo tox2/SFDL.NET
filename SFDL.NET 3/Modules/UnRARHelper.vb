@@ -278,7 +278,7 @@ Module UnRARHelper
 
                     If Not _percent = -1 Then
                         _log.Debug("{0} % entpackt", _percent)
-                        _app_task.SetTaskStatus(TaskStatus.Running, String.Format("{0} - {1}% Entpackt", _filename, _percent))
+                        _app_task.SetTaskStatus(TaskStatus.Running, String.Format(My.Resources.Strings.UnRAR_AppTask_Status_1_Message, _filename, _percent))
                     End If
 
                 Catch ex As Exception
@@ -336,20 +336,20 @@ Module UnRARHelper
 
         Try
 
-            _app_task.SetTaskStatus(TaskStatus.Running, String.Format("Cracking Password {0}", IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
+            _app_task.SetTaskStatus(TaskStatus.Running, String.Format(My.Resources.Strings.UnRAR_AppTask_Status_3_Message, IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
 
             _crark_result = CrackUnRARPassword(_unrarchain.MasterUnRarChainFile.LocalFile)
 
             If (_unrar_settings.UseUnRARPasswordList = False Or _unrar_settings.UnRARPasswordList.Count = 0) And _crark_result.PasswordNeeded = True Then
-                Throw New Exception("We need a password to extract but i am not allowed to do any password test or there no passwords in the list")
+                Throw New Exception(My.Resources.Strings.UnRAR_Exception_NoPasswordsInList)
             End If
 
             If _crark_result.ErrorOccured = True Then
-                Throw New Exception("Failed to Crack UnRAR Password!" & vbNewLine & _crark_result.ErrorMessage)
+                Throw New Exception(My.Resources.Strings.UnRAR_Exception_CrackPasswordFailed)
             End If
 
             If _crark_result.PasswordNeeded = True And _crark_result.PasswordFound = False Then
-                Throw New Exception("No valid UnrRAR Password found!")
+                Throw New Exception(My.Resources.Strings.UnRAR_Exception_NoValidPasswordFound)
             End If
 
             _log.Info("Now passing all needed Arguments to UnRar Binary and wait the extraction to finish")
@@ -360,7 +360,7 @@ Module UnRARHelper
 
                     Try
 
-                        _app_task.SetTaskStatus(TaskStatus.Running, "Lösche Archive....")
+                        _app_task.SetTaskStatus(TaskStatus.Running, My.Resources.Strings.UnRAR_AppTask_Status_2_Message)
 
                         For Each _file In _unrarchain.ChainMemberFiles
                             IO.File.Delete(_file.LocalFile)
@@ -368,19 +368,19 @@ Module UnRARHelper
 
                         IO.File.Delete(_unrarchain.MasterUnRarChainFile.LocalFile)
 
-                        _app_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("Archiv {0} | Entpacken: Erfolgreich | Archive löschen: Erfolgreich", IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
+                        _app_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format(My.Resources.Strings.UnRAR_AppTask_Completed_1_Message, IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
 
                     Catch ex As Exception
                         _log.Error(ex, ex.Message)
-                        _app_task.SetTaskStatus(TaskStatus.Faulted, String.Format("Archiv {0} | Entpacken: Erfolgreich | Archive löschen: Fehlgeschlagen", IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
+                        _app_task.SetTaskStatus(TaskStatus.Faulted, String.Format(My.Resources.Strings.UnRAR_AppTask_Faulted_1_Message, IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
                     End Try
 
                 Else
-                    _app_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("Archiv {0} | Entpacken: Erfolgreich", IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
+                    _app_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format(My.Resources.Strings.UnRAR_AppTask_Completed_2_Message, IO.Path.GetFileName(_unrarchain.MasterUnRarChainFile.LocalFile)))
                 End If
 
             Else
-                Throw New Exception("Entpacken ist fehlgeschlagen!")
+                Throw New Exception(My.Resources.Strings.UnRAR_AppTask_Faulted_2_Message)
             End If
 
         Catch ex As Exception

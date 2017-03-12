@@ -475,6 +475,15 @@ Möchtest du SFDL.NET 3 nun als Administrator starten?</value>
   <data name="AppTasks_ListView_TaskHistory_Header" xml:space="preserve">
     <value>Aufgaben Historie</value>
   </data>
+  <data name="CloseSFDLContainer_AppTask_Completed_Message" xml:space="preserve">
+    <value>SFDL Container '{0}' geschlossen</value>
+  </data>
+  <data name="CloseSFDLContainer_AppTask_Faulted_Message" xml:space="preserve">
+    <value>Kann Session nicht schließen da diese aktiv ist (Download oder UnRAR)</value>
+  </data>
+  <data name="CloseSFDLContainer_AppTask_Start_Message" xml:space="preserve">
+    <value>SFDL Container wird entfernt/geschlossen....</value>
+  </data>
   <data name="ContainerInfo_ChooseSFDL" xml:space="preserve">
     <value>SFDL wählen:</value>
   </data>
@@ -499,17 +508,159 @@ Möchtest du SFDL.NET 3 nun als Administrator starten?</value>
   <data name="ContainerInfo_Uploader" xml:space="preserve">
     <value>Uploader:</value>
   </data>
+  <data name="ETA_AppTask_Start" xml:space="preserve">
+    <value>Download wird gestartet...</value>
+  </data>
+  <data name="ETA_AppTask_Status_1_Message" xml:space="preserve">
+    <value>Download läuft - Speed: {0} MB/s | ETA: {1} | {2} %</value>
+  </data>
+  <data name="ETA_AppTask_Status_2_Message" xml:space="preserve">
+    <value>Download läuft - {0} %</value>
+  </data>
+  <data name="ETA_AppTask_Status_3_Message" xml:space="preserve">
+    <value>Download läuft...</value>
+  </data>
+  <data name="ExitApplication_Prompt_Message" xml:space="preserve">
+    <value>Es läuft aktuell noch ein Download oder UnRAR - Möchtest du die Anwendung trotzdem beenden?</value>
+  </data>
+  <data name="ExitApplication_Prompt_Title" xml:space="preserve">
+    <value>SFDL.NET beenden</value>
+  </data>
   <data name="InstantVideo_AvailableStreams" xml:space="preserve">
     <value>Verfügbare InstantVideo Streams:</value>
+  </data>
+  <data name="InstantVideo_Message_VLCNotInstalled_Message" xml:space="preserve">
+    <value>Der VLC PLayer ist auf deinem System nicht installiert. Bitte installiere den VLC Player um Instant Video zu nutzen!</value>
+  </data>
+  <data name="OpenFileDialog_Title" xml:space="preserve">
+    <value>SFDL Datei(en) öffnen</value>
+  </data>
+  <data name="OpenSFDL_AppTask_Completed_1_Message" xml:space="preserve">
+    <value>SFDL '{0}' geöffnet und anschließend gelöscht</value>
+  </data>
+  <data name="OpenSFDL_AppTask_Completed_2_Message" xml:space="preserve">
+    <value>SFDL '{0}' geöffnet</value>
+  </data>
+  <data name="OpenSFDL_AppTask_Faulted_Message" xml:space="preserve">
+    <value>SFDL '{0}' teilweise geöffnet - Ein oder mehrere Packages konnten nicht gelesen werden.</value>
+  </data>
+  <data name="OpenSFDL_AppTask_Start_Message" xml:space="preserve">
+    <value>SFDL Datei '{0}' wird geöffnet...</value>
+  </data>
+  <data name="OpenSFDL_Decrypt_Aborted_Message" xml:space="preserve">
+    <value>'{0}' - SFDL entschlüsseln abgebrochen</value>
+  </data>
+  <data name="OpenSFDL_Exception_FTPDown" xml:space="preserve">
+    <value>'{0}' - Try FTP Link, Server is propaply down</value>
+  </data>
+  <data name="OpenSFDL_Exception_SFDLContainerAlreadyOpen" xml:space="preserve">
+    <value>SFDL Container '{0}' ist bereits geöffnet!</value>
+  </data>
+  <data name="OpenSFDL_Exception_SFDLFileNotCompatible" xml:space="preserve">
+    <value>'{0}' - Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!</value>
+  </data>
+  <data name="OpenSFDL_Prompt_Decrypt_Message" xml:space="preserve">
+    <value>Bitte gib ein Passwort ein um den SFDL Container {0} zu entschlüsseln</value>
+  </data>
+  <data name="OpenSFDL_Prompt_Decrypt_Title" xml:space="preserve">
+    <value>SFDL entschlüsseln</value>
+  </data>
+  <data name="PostDownload_AppTask_Completed_1_Message" xml:space="preserve">
+    <value>{0} Download gestoppt</value>
+  </data>
+  <data name="PostDownload_AppTask_Completed_2_Message" xml:space="preserve">
+    <value>{0} Download beendet</value>
+  </data>
+  <data name="PreDownloadCheck_Exception_DownloadDirectoryNotExists" xml:space="preserve">
+    <value>Download Verzeichnis existiert nicht!</value>
+  </data>
+  <data name="PreDownloadCheck_Exception_NoDownloadDirectory" xml:space="preserve">
+    <value>Du hat keinen Download Pfad in den Einstellungen hinterlegt!</value>
+  </data>
+  <data name="PreDownloadCheck_Exception_NothingSelected" xml:space="preserve">
+    <value>Du musst mind. ein Item zum Download auswählen!</value>
+  </data>
+  <data name="RemoveAllCompletedDownloads_AppTask_Completed_Message" xml:space="preserve">
+    <value>Fertiggestellte Container entfernt/geschlossen</value>
+  </data>
+  <data name="RemoveAllCompletedDownloads_AppTask_Faulted_Message" xml:space="preserve">
+    <value>Keine fertiggestellte Container vorhanden</value>
+  </data>
+  <data name="RemoveAllCompletedDownloads_AppTask_Start_Message" xml:space="preserve">
+    <value>Entferne/Schließe fertiggestellte Container...</value>
+  </data>
+  <data name="RemoveAllDownloads_AppTask_Complete_Message" xml:space="preserve">
+    <value>Alle Container entfernt/geschlossen</value>
+  </data>
+  <data name="RemoveAllDownloads_AppTask_Faulted_Message" xml:space="preserve">
+    <value>Diese Funktion kann nicht genutzt werden so lange der Download aktiv ist</value>
+  </data>
+  <data name="RemoveAllDownloads_AppTask_Start_Message" xml:space="preserve">
+    <value>Entferne/Schließe alle Container...</value>
   </data>
   <data name="Settings_AdvancedDownloadSettings" xml:space="preserve">
     <value>Erweiterte Download Einstellungen</value>
   </data>
+  <data name="Settings_DownloadDirectory_ChooseFolder" xml:space="preserve">
+    <value>Du musst einen Ordner wählen</value>
+  </data>
+  <data name="Settings_DownloadDirectory_DirectoryNotFalid" xml:space="preserve">
+    <value>Das gewählte Verzeichnis existiert nicht!</value>
+  </data>
   <data name="Settings_ExcludeFiles" xml:space="preserve">
     <value>Folgende Dateien ausslassen:</value>
   </data>
+  <data name="Settings_SaveSettings_DownloadActive_Message" xml:space="preserve">
+    <value>Alle Einstellung wurden nicht übernommen da aktuell ein Download aktiv ist.
+Starte den Download neu damit alle Einstellungen übernommen werden</value>
+  </data>
   <data name="Settings_Style" xml:space="preserve">
     <value>Aussehen</value>
+  </data>
+  <data name="Speedreport_AppTask_Completed_Message" xml:space="preserve">
+    <value>Speedreport erstellt | {0}</value>
+  </data>
+  <data name="Speedreport_AppTask_Start_Message" xml:space="preserve">
+    <value>Speedreport wird erstellt</value>
+  </data>
+  <data name="Speedreport_Exception_SpeedreportFailed" xml:space="preserve">
+    <value>Speedreport erstellung fehlgeschlagen</value>
+  </data>
+  <data name="UnRAR_AppTask_Completed_1_Message" xml:space="preserve">
+    <value>Archiv {0} | Entpacken: Erfolgreich | Archive löschen: Erfolgreich</value>
+  </data>
+  <data name="UnRAR_AppTask_Completed_2_Message" xml:space="preserve">
+    <value>Archiv {0} | Entpacken: Erfolgreich</value>
+  </data>
+  <data name="UnRAR_AppTask_Faulted_1_Message" xml:space="preserve">
+    <value>Archiv {0} | Entpacken: Erfolgreich | Archive löschen: Fehlgeschlagen</value>
+  </data>
+  <data name="UnRAR_AppTask_Faulted_2_Message" xml:space="preserve">
+    <value>Entpacken ist fehlgeschlagen!</value>
+  </data>
+  <data name="UnRAR_AppTask_Start_Message" xml:space="preserve">
+    <value>Archiv {0} wird entpackt....</value>
+  </data>
+  <data name="UnRAR_AppTask_Status_1_Message" xml:space="preserve">
+    <value>{0} - {1}% Entpackt</value>
+  </data>
+  <data name="UnRAR_AppTask_Status_2_Message" xml:space="preserve">
+    <value>Lösche Archive....</value>
+  </data>
+  <data name="UnRAR_AppTask_Status_3_Message" xml:space="preserve">
+    <value>Cracke Passwort {0}</value>
+  </data>
+  <data name="UnRAR_Exception_CrackPasswordFailed" xml:space="preserve">
+    <value>Cracken des UnRAR Passworts fehlgeschlagen!</value>
+  </data>
+  <data name="UnRAR_Exception_NoPasswordsInList" xml:space="preserve">
+    <value>Ich brauche ein Passwort zum entpacken, allerdings sind keine Passworter in der Liste oder ich darf diese nicht verwenden</value>
+  </data>
+  <data name="UnRAR_Exception_NoValidPasswordFound" xml:space="preserve">
+    <value>Kein passendes UnRAR Passwort gefunden</value>
+  </data>
+  <data name="VariousStrings_AffirmativeButton" xml:space="preserve">
+    <value>Ja</value>
   </data>
   <data name="VariousStrings_Copy" xml:space="preserve">
     <value>Kopieren</value>
@@ -519,6 +670,9 @@ Möchtest du SFDL.NET 3 nun als Administrator starten?</value>
   </data>
   <data name="VariousStrings_Enabled" xml:space="preserve">
     <value>Aktiviert</value>
+  </data>
+  <data name="VariousStrings_NegativeButton" xml:space="preserve">
+    <value>Nein</value>
   </data>
   <data name="VariousStrings_NewUpdateAvailable" xml:space="preserve">
     <value>Neues Update verfügbar!</value>

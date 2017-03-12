@@ -194,7 +194,7 @@ Public Class MainViewModel
         WindowInstance.Focus()
 
 
-        _mytask.SetTaskStatus(TaskStatus.Running, String.Format("SFDL Datei '{0}' wird geöffnet...", _sfdl_container_path))
+        _mytask.SetTaskStatus(TaskStatus.Running, String.Format(My.Resources.Strings.OpenSFDL_AppTask_Start_Message, _sfdl_container_path))
 
         Try
 
@@ -203,17 +203,17 @@ Public Class MainViewModel
             Select Case GetContainerVersion(_sfdl_container_path)
 
                 Case 0 'Invalid
-                    Throw New Exception(String.Format("'{0}' - Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!", Path.GetFileName(_sfdl_container_path)))
+                    Throw New Exception(String.Format(My.Resources.Strings.OpenSFDL_Exception_SFDLFileNotCompatible, Path.GetFileName(_sfdl_container_path)))
 
                 Case <= 5 'SFDL v1 - not supported anymore
-                    Throw New Exception(String.Format("'{0}' - Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!", Path.GetFileName(_sfdl_container_path)))
+                    Throw New Exception(String.Format(My.Resources.Strings.OpenSFDL_Exception_SFDLFileNotCompatible, Path.GetFileName(_sfdl_container_path)))
 
                 Case <= 9 'SFDL v2  - try to convert
                     _mylegacycontainer = CType(XMLDeSerialize(_mylegacycontainer, _sfdl_container_path), SFDLFile)
                     Converter.ConvertSFDLv2ToSFDLv3(_mylegacycontainer, _mycontainer)
 
                 Case > 10 'Invalid
-                    Throw New Exception(String.Format("'{0}' - Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel!", Path.GetFileName(_sfdl_container_path)))
+                    Throw New Exception(String.Format(My.Resources.Strings.OpenSFDL_Exception_SFDLFileNotCompatible, Path.GetFileName(_sfdl_container_path)))
 
                 Case Else 'Valid v3 Container
 
@@ -226,10 +226,10 @@ Public Class MainViewModel
 
                 Try
 Decrypt:
-                    _decrypt_password = Await DialogCoordinator.Instance.ShowInputAsync(Me, "SFDL entschlüsseln", String.Format("Bitte gib ein Passwort ein um den SFDL Container {0} zu entschlüsseln", Path.GetFileName(_sfdl_container_path)))
+                    _decrypt_password = Await DialogCoordinator.Instance.ShowInputAsync(Me, My.Resources.Strings.OpenSFDL_Prompt_Decrypt_Title, String.Format(My.Resources.Strings.OpenSFDL_Prompt_Decrypt_Message, Path.GetFileName(_sfdl_container_path)))
 
                     If String.IsNullOrWhiteSpace(_decrypt_password) Then
-                        Throw New Exception(String.Format("'{0}' - SFDL entschlüsseln abgebrochen", Path.GetFileName(_sfdl_container_path)))
+                        Throw New Exception(String.Format(My.Resources.Strings.OpenSFDL_Decrypt_Aborted_Message, Path.GetFileName(_sfdl_container_path)))
                     End If
 
                     _decrypt.DecryptString(_mycontainer.Connection.Host, _decrypt_password)
@@ -258,7 +258,7 @@ Decrypt:
             GenerateContainerFingerprint(_mycontainer_session)
 
             If Not ContainerSessions.Where(Function(mycon) mycon.Fingerprint.Equals(_mycontainer_session.Fingerprint)).Count = 0 Then
-                Throw New Exception(String.Format("SFDL Container '{0}' ist bereits geöffnet!", Path.GetFileName(_sfdl_container_path)))
+                Throw New Exception(String.Format(My.Resources.Strings.OpenSFDL_Exception_SFDLContainerAlreadyOpen, Path.GetFileName(_sfdl_container_path)))
             End If
 
             If Not _mycontainer_session.ContainerFile.Packages.Where(Function(mypackage) mypackage.BulkFolderMode = True).Count = 0 Then
@@ -271,7 +271,7 @@ Decrypt:
 
 
             If _bulk_result = False Or _mycontainer_session.DownloadItems.Count = 0 Then
-                Throw New Exception(String.Format("'{0}' - Try FTP Link, Server is propaply down", Path.GetFileName(_sfdl_container_path)))
+                Throw New Exception(String.Format(My.Resources.Strings.OpenSFDL_Exception_FTPDown, Path.GetFileName(_sfdl_container_path)))
             End If
 
             GenerateContainerSessionChains(_mycontainer_session)
@@ -286,14 +286,14 @@ Decrypt:
 
 
             If _bulk_result = False And Not _mycontainer_session.DownloadItems.Count = 0 Then
-                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL '{0}' teilweise geöffnet - Ein oder mehrere Packages konnten nicht gelesen werden.", Path.GetFileName(_sfdl_container_path)))
+                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format(My.Resources.Strings.OpenSFDL_AppTask_Faulted_Message, Path.GetFileName(_sfdl_container_path)))
             Else
 
                 If _settings.DeleteSFDLAfterOpen = True Then
                     File.Delete(_sfdl_container_path)
-                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL '{0}' geöffnet und anschließend gelöscht", Path.GetFileName(_sfdl_container_path)))
+                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format(My.Resources.Strings.OpenSFDL_AppTask_Completed_1_Message, Path.GetFileName(_sfdl_container_path)))
                 Else
-                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL '{0}' geöffnet", Path.GetFileName(_sfdl_container_path)))
+                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format(My.Resources.Strings.OpenSFDL_AppTask_Completed_2_Message, Path.GetFileName(_sfdl_container_path)))
                 End If
 
             End If
@@ -312,15 +312,15 @@ Decrypt:
         Try
 
             If DownloadItems.Where(Function(myitem) myitem.isSelected = True).Count = 0 Then
-                Throw New Exception("You must select minimum 1 Item to Download!")
+                Throw New Exception(My.Resources.Strings.PreDownloadCheck_Exception_NothingSelected)
             End If
 
             If String.IsNullOrWhiteSpace(_settings.DownloadDirectory) Then
-                Throw New Exception("Du hat keinen Download Pfad in den Einstellungen hinterlegt!")
+                Throw New Exception(My.Resources.Strings.PreDownloadCheck_Exception_NoDownloadDirectory)
             End If
 
             If Directory.Exists(_settings.DownloadDirectory) = False Then
-                Throw New Exception("Download Verzeichnis existiert nicht!")
+                Throw New Exception(My.Resources.Strings.PreDownloadCheck_Exception_DownloadDirectoryNotExists)
             End If
 
         Catch ex As Exception
@@ -409,13 +409,13 @@ Decrypt:
                                                                                   End Sub))
 
                             If _total_speed >= 1024 Then
-                                _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - Speed: {0} MB/s | ETA: {1} | {2} %", Math.Round(_total_speed / 1024, 2), ConvertDecimal2Time(_time_remaining), _percent_done))
+                                _mytask.SetTaskStatus(TaskStatus.Running, String.Format(My.Resources.Strings.ETA_AppTask_Status_1_Message, Math.Round(_total_speed / 1024, 2), ConvertDecimal2Time(_time_remaining), _percent_done))
                             Else
-                                _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - Speed: {0} KB/s | ETA: {1} | {2} %", Math.Round(_total_speed, 2), ConvertDecimal2Time(_time_remaining), _percent_done))
+                                _mytask.SetTaskStatus(TaskStatus.Running, String.Format(My.Resources.Strings.ETA_AppTask_Status_1_Message, Math.Round(_total_speed, 2), ConvertDecimal2Time(_time_remaining), _percent_done))
                             End If
 
                         Else
-                            _mytask.SetTaskStatus(TaskStatus.Running, String.Format("Download läuft - {0} %", CInt((_total_size_downloaded / _total_size) * 100)))
+                            _mytask.SetTaskStatus(TaskStatus.Running, String.Format(My.Resources.Strings.ETA_AppTask_Status_2_Message, CInt((_total_size_downloaded / _total_size) * 100)))
                         End If
 
                     Else
@@ -424,7 +424,7 @@ Decrypt:
 
 
                 Else
-                    Debug.WriteLine("Keine Berechnung Fenster ist runtergeklappt!")
+                    _log.Debug("Skipping Calculate - Window is Minimized")
                 End If
 
             Catch ex As Exception
@@ -458,9 +458,9 @@ Decrypt:
             For Each _mytask As AppTask In _mytasklist
 
                 If CBool(Application.Current.Resources("DownloadStopped")) = False Then
-                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download beendet", Now.ToString))
+                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format(My.Resources.Strings.PostDownload_AppTask_Completed_2_Message, Now.ToString))
                 Else
-                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("{0} Download gestoppt", Now.ToString))
+                    _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format(My.Resources.Strings.PostDownload_AppTask_Completed_1_Message, Now.ToString))
                 End If
 
             Next
@@ -567,7 +567,7 @@ Decrypt:
     Private Sub StartDownload()
 
         Dim _log As Logger = LogManager.GetLogger("StartDownload")
-        Dim _mytask As New AppTask("Download wird gestartet...", "ETATask")
+        Dim _mytask As New AppTask(My.Resources.Strings.ETA_AppTask_Start, "ETATask")
         Dim _error As Boolean = False
 
         Try
@@ -635,7 +635,7 @@ Decrypt:
 #End Region
 
             If PreDownloadCheck(_mytask) = False Then
-                Throw New Exception("PreDownload Check Fehlgeschlagen!")
+                Throw New Exception("PreDownload Check has failed!")
             End If
 
             Application.Current.Resources("DownloadStopped") = False
@@ -644,7 +644,7 @@ Decrypt:
 
             ButtonDownloadStartStop = False
 
-            _mytask.SetTaskStatus(TaskStatus.Running, "Download läuft...")
+            _mytask.SetTaskStatus(TaskStatus.Running, My.Resources.Strings.ETA_AppTask_Status_3_Message)
 
             DispatchService.DispatchService.Invoke(Sub()
                                                        WindowInstance.TaskbarItemInfo.ProgressState = Shell.TaskbarItemProgressState.Normal
@@ -697,7 +697,7 @@ Decrypt:
 
                                      If _settings.UnRARSettings.UnRARAfterDownload = True And _chain.UnRARDone = False Then
 
-                                         _unrar_task = New AppTask(String.Format("Archiv {0} wird entpackt....", Path.GetFileName(_chain.MasterUnRarChainFile.LocalFile)))
+                                         _unrar_task = New AppTask(String.Format(My.Resources.Strings.UnRAR_AppTask_Start_Message, Path.GetFileName(_chain.MasterUnRarChainFile.LocalFile)))
 
                                          AddHandler _unrar_task.TaskDone, AddressOf TaskDoneEvent
 
@@ -774,9 +774,9 @@ Decrypt:
 
                                              Dim _speedreport As String = String.Empty
                                              Dim _sr_filepath As String = String.Empty
-                                             Dim _sr_task As New AppTask("Speedreport wird erstellt")
+                                         Dim _sr_task As New AppTask(My.Resources.Strings.Speedreport_AppTask_Start_Message)
 
-                                             Try
+                                         Try
 
                                                  AddHandler _sr_task.TaskDone, AddressOf TaskDoneEvent
 
@@ -793,19 +793,19 @@ Decrypt:
                                                  End If
 
                                                  If String.IsNullOrWhiteSpace(_speedreport) Then
-                                                     Throw New Exception("Speedreport failed")
-                                                 End If
+                                                 Throw New Exception("speedreport failed")
+                                             End If
 
                                                  My.Computer.FileSystem.WriteAllText(_sr_filepath, _speedreport, False, Encoding.Default)
 
-                                                 _sr_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("Speedreport erstellt | {0}", GenerateSimpleSpeedreport(_mysession)))
+                                             _sr_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format(My.Resources.Strings.Speedreport_AppTask_Completed_Message, GenerateSimpleSpeedreport(_mysession)))
 
-                                             Catch ex As NoSpeedreportDataException
+                                         Catch ex As NoSpeedreportDataException
                                                  _sr_task.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("Speedreport | {0}", GenerateSimpleSpeedreport(_mysession)))
 
                                              Catch ex As Exception
-                                                 _sr_task.SetTaskStatus(TaskStatus.Faulted, "Speedreport Generation failed")
-                                             End Try
+                                             _sr_task.SetTaskStatus(TaskStatus.Faulted, My.Resources.Strings.Speedreport_Exception_SpeedreportFailed)
+                                         End Try
 
                                          End If
 
@@ -992,7 +992,7 @@ Decrypt:
 
     Private Sub RemoveAllCompletedDownloads()
 
-        Dim _mytask As New AppTask("Entferne/Schließe fertiggestellte Container...")
+        Dim _mytask As New AppTask(My.Resources.Strings.RemoveAllCompletedDownloads_AppTask_Start_Message)
         Dim _tmp_list As New List(Of DownloadItem)
         Dim _container_session_list As List(Of ContainerSession)
 
@@ -1015,9 +1015,9 @@ Decrypt:
         Next
 
         If Not _container_session_list.Count = 0 Then
-            _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "Fertiggestellte Container entfernt/geschlossen")
+            _mytask.SetTaskStatus(TaskStatus.RanToCompletion, My.Resources.Strings.RemoveAllCompletedDownloads_AppTask_Completed_Message)
         Else
-            _mytask.SetTaskStatus(TaskStatus.Faulted, "Keine fertiggestellte Container vorhanden")
+            _mytask.SetTaskStatus(TaskStatus.Faulted, My.Resources.Strings.RemoveAllCompletedDownloads_AppTask_Faulted_Message)
         End If
 
 
@@ -1032,20 +1032,20 @@ Decrypt:
 
     Private Sub RemoveAllDownloads()
 
-        Dim _mytask As New AppTask("Entferne/Schließe alle Container...")
+        Dim _mytask As New AppTask(My.Resources.Strings.RemoveAllCompletedDownloads_AppTask_Start_Message)
 
         AddHandler _mytask.TaskDone, AddressOf TaskDoneEvent
 
         ActiveTasks.Add(_mytask)
 
         If CBool(Application.Current.Resources("DownloadStopped")) = False Then
-            _mytask.SetTaskStatus(TaskStatus.Canceled, "Diese Funktion kann nicht genutzt werden so lange der Download aktiv ist")
+            _mytask.SetTaskStatus(TaskStatus.Canceled, My.Resources.Strings.RemoveAllCompletedDownloads_AppTask_Faulted_Message)
         Else
 
             DownloadItems.Clear()
             ContainerSessions.Clear()
 
-            _mytask.SetTaskStatus(TaskStatus.RanToCompletion, "Alle Container entfernt/geschlossen")
+            _mytask.SetTaskStatus(TaskStatus.RanToCompletion, My.Resources.Strings.RemoveAllCompletedDownloads_AppTask_Completed_Message)
 
         End If
 
@@ -1085,7 +1085,7 @@ Decrypt:
         With _ofd
 
             .Multiselect = True
-            .Title = "SFDL Datei(en) öffnen"
+            .Title = My.Resources.Strings.OpenFileDialog_Title
             .Filter = "SFDL Files (*.sfdl)|*.sfdl"
 
         End With
@@ -1196,7 +1196,7 @@ Decrypt:
     Private Async Sub InstantVideo()
 
         If CheckIfVLCInstalled() = False Then
-            Await DialogCoordinator.Instance.ShowMessageAsync(Me, "InstantVideo", "Der VLC PLayer ist auf deinem System nicht installiert. Bitte installiere den VLC Player um Instant Video zu nutzen!")
+            Await DialogCoordinator.Instance.ShowMessageAsync(Me, "InstantVideo", My.Resources.Strings.InstantVideo_Message_VLCNotInstalled_Message)
         Else
 
             InstantVideoOpen = True
@@ -1296,7 +1296,7 @@ Decrypt:
 
     Private Sub CloseSFDLContainer(ByVal parameter As Object)
 
-        Dim _mytask As New AppTask("SFDL Container wird entfernt/geschlossen....")
+        Dim _mytask As New AppTask(My.Resources.Strings.CloseSFDLContainer_AppTask_Start_Message)
 
         If Not IsNothing(parameter) Then
 
@@ -1328,7 +1328,7 @@ Decrypt:
 
 
             If _container_session.SessionState = ContainerSessionState.DownloadRunning Or _container_session.UnRarChains.Where(Function(mychain) mychain.UnRARRunning = True).Count >= 1 Then
-                _mytask.SetTaskStatus(TaskStatus.Faulted, "Kann Session nicht schließen da diese aktiv ist (Download oder UnRAR)")
+                _mytask.SetTaskStatus(TaskStatus.Faulted, My.Resources.Strings.CloseSFDLContainer_AppTask_Faulted_Message)
             Else
 
                 _tmp_list = DownloadItems.Where(Function(myitem) _container_session.ID.Equals(myitem.ParentContainerID)).ToList
@@ -1337,7 +1337,7 @@ Decrypt:
                     DownloadItems.Remove(_item)
                 Next
 
-                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format("SFDL Container '{0}' geschlossen", Path.GetFileName(_container_session.ContainerFileName)))
+                _mytask.SetTaskStatus(TaskStatus.RanToCompletion, String.Format(My.Resources.Strings.CloseSFDLContainer_AppTask_Completed_Message, Path.GetFileName(_container_session.ContainerFileName)))
 
                 ContainerSessions.Remove(_container_session)
 
@@ -1534,6 +1534,8 @@ Decrypt:
     Private _PreviewDropCommand As ICommand
     Private Sub HandlePreviewDrop(inObject As Object)
 
+        Dim _log As Logger = LogManager.GetLogger("HandlePreviewDrop")
+
         Dim ido As System.Windows.IDataObject = TryCast(inObject, System.Windows.IDataObject)
 
         If ido Is Nothing Then
@@ -1547,17 +1549,17 @@ Decrypt:
 
             For Each fullPath As String In filesOrDirectories
                 If Directory.Exists(fullPath) Then
-                    Debug.WriteLine("{0} is a directory", fullPath)
+                    _log.Debug("{0} is a directory", fullPath)
 
                 ElseIf File.Exists(fullPath) Then
-                    Debug.WriteLine("{0} is a file", fullPath)
+                    _log.Debug("{0} is a file", fullPath)
 
                     If Path.GetExtension(fullPath).ToLower = ".sfdl" Then
                         OpenSFDLFile(fullPath)
                     End If
 
                 Else
-                    Debug.WriteLine("{0} is not a file and not a directory", fullPath)
+                    _log.Debug("{0} is not a file and not a directory", fullPath)
                 End If
             Next
         End If

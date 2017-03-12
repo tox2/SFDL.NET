@@ -11,18 +11,7 @@ Module SFDLFileHelper
         Dim _full_session_size As Double
 
         _full_session_size = Await System.Threading.Tasks.Task.Run(Function()
-
-                                                                       Dim _rt As Double
-
-                                                                       System.Threading.Tasks.Parallel.ForEach(_container.DownloadItems, Sub(ByVal _file)
-
-                                                                                                                                             _rt += _file.FileSize
-
-                                                                                                                                         End Sub)
-
-                                                                       Return _rt
-
-                                                                       'Return _container.DownloadItems.Aggregate(_full_session_size, Function(current, _file) current + _file.FileSize)
+                                                                       Return _container.DownloadItems.Aggregate(_full_session_size, Function(current, _file) current + _file.FileSize)
                                                                    End Function)
 
         Return _full_session_size

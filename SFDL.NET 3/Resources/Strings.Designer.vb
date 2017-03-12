@@ -83,6 +83,33 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL Container &apos;{0}&apos; geschlossen ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property CloseSFDLContainer_AppTask_Completed_Message() As String
+            Get
+                Return ResourceManager.GetString("CloseSFDLContainer_AppTask_Completed_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Kann Session nicht schließen da diese aktiv ist (Download oder UnRAR) ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property CloseSFDLContainer_AppTask_Faulted_Message() As String
+            Get
+                Return ResourceManager.GetString("CloseSFDLContainer_AppTask_Faulted_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL Container wird entfernt/geschlossen.... ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property CloseSFDLContainer_AppTask_Start_Message() As String
+            Get
+                Return ResourceManager.GetString("CloseSFDLContainer_AppTask_Start_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die SFDL wählen: ähnelt.
         '''</summary>
         Public Shared ReadOnly Property ContainerInfo_ChooseSFDL() As String
@@ -371,6 +398,60 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Download wird gestartet... ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property ETA_AppTask_Start() As String
+            Get
+                Return ResourceManager.GetString("ETA_AppTask_Start", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Download läuft - Speed: {0} MB/s | ETA: {1} | {2} % ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property ETA_AppTask_Status_1_Message() As String
+            Get
+                Return ResourceManager.GetString("ETA_AppTask_Status_1_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Download läuft - {0} % ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property ETA_AppTask_Status_2_Message() As String
+            Get
+                Return ResourceManager.GetString("ETA_AppTask_Status_2_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Download läuft... ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property ETA_AppTask_Status_3_Message() As String
+            Get
+                Return ResourceManager.GetString("ETA_AppTask_Status_3_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Es läuft aktuell noch ein Download oder UnRAR - Möchtest du die Anwendung trotzdem beenden? ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property ExitApplication_Prompt_Message() As String
+            Get
+                Return ResourceManager.GetString("ExitApplication_Prompt_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL.NET beenden ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property ExitApplication_Prompt_Title() As String
+            Get
+                Return ResourceManager.GetString("ExitApplication_Prompt_Title", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Tasks ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Expander_Header_Tasks() As String
@@ -398,6 +479,15 @@ Namespace My.Resources
         Public Shared ReadOnly Property InstantVideo_AvailableStreams() As String
             Get
                 Return ResourceManager.GetString("InstantVideo_AvailableStreams", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Der VLC PLayer ist auf deinem System nicht installiert. Bitte installiere den VLC Player um Instant Video zu nutzen! ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property InstantVideo_Message_VLCNotInstalled_Message() As String
+            Get
+                Return ResourceManager.GetString("InstantVideo_Message_VLCNotInstalled_Message", resourceCulture)
             End Get
         End Property
         
@@ -627,6 +717,204 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL Datei(en) öffnen ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property OpenFileDialog_Title() As String
+            Get
+                Return ResourceManager.GetString("OpenFileDialog_Title", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL &apos;{0}&apos; geöffnet und anschließend gelöscht ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property OpenSFDL_AppTask_Completed_1_Message() As String
+            Get
+                Return ResourceManager.GetString("OpenSFDL_AppTask_Completed_1_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL &apos;{0}&apos; geöffnet ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property OpenSFDL_AppTask_Completed_2_Message() As String
+            Get
+                Return ResourceManager.GetString("OpenSFDL_AppTask_Completed_2_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL &apos;{0}&apos; teilweise geöffnet - Ein oder mehrere Packages konnten nicht gelesen werden. ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property OpenSFDL_AppTask_Faulted_Message() As String
+            Get
+                Return ResourceManager.GetString("OpenSFDL_AppTask_Faulted_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL Datei &apos;{0}&apos; wird geöffnet... ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property OpenSFDL_AppTask_Start_Message() As String
+            Get
+                Return ResourceManager.GetString("OpenSFDL_AppTask_Start_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die &apos;{0}&apos; - SFDL entschlüsseln abgebrochen ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property OpenSFDL_Decrypt_Aborted_Message() As String
+            Get
+                Return ResourceManager.GetString("OpenSFDL_Decrypt_Aborted_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die &apos;{0}&apos; - Try FTP Link, Server is propaply down ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property OpenSFDL_Exception_FTPDown() As String
+            Get
+                Return ResourceManager.GetString("OpenSFDL_Exception_FTPDown", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL Container &apos;{0}&apos; ist bereits geöffnet! ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property OpenSFDL_Exception_SFDLContainerAlreadyOpen() As String
+            Get
+                Return ResourceManager.GetString("OpenSFDL_Exception_SFDLContainerAlreadyOpen", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die &apos;{0}&apos; - Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel! ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property OpenSFDL_Exception_SFDLFileNotCompatible() As String
+            Get
+                Return ResourceManager.GetString("OpenSFDL_Exception_SFDLFileNotCompatible", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Bitte gib ein Passwort ein um den SFDL Container {0} zu entschlüsseln ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property OpenSFDL_Prompt_Decrypt_Message() As String
+            Get
+                Return ResourceManager.GetString("OpenSFDL_Prompt_Decrypt_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL entschlüsseln ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property OpenSFDL_Prompt_Decrypt_Title() As String
+            Get
+                Return ResourceManager.GetString("OpenSFDL_Prompt_Decrypt_Title", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die {0} Download gestoppt ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property PostDownload_AppTask_Completed_1_Message() As String
+            Get
+                Return ResourceManager.GetString("PostDownload_AppTask_Completed_1_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die {0} Download beendet ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property PostDownload_AppTask_Completed_2_Message() As String
+            Get
+                Return ResourceManager.GetString("PostDownload_AppTask_Completed_2_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Download Verzeichnis existiert nicht! ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property PreDownloadCheck_Exception_DownloadDirectoryNotExists() As String
+            Get
+                Return ResourceManager.GetString("PreDownloadCheck_Exception_DownloadDirectoryNotExists", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Du hat keinen Download Pfad in den Einstellungen hinterlegt! ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property PreDownloadCheck_Exception_NoDownloadDirectory() As String
+            Get
+                Return ResourceManager.GetString("PreDownloadCheck_Exception_NoDownloadDirectory", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Du musst mind. ein Item zum Download auswählen! ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property PreDownloadCheck_Exception_NothingSelected() As String
+            Get
+                Return ResourceManager.GetString("PreDownloadCheck_Exception_NothingSelected", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Fertiggestellte Container entfernt/geschlossen ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property RemoveAllCompletedDownloads_AppTask_Completed_Message() As String
+            Get
+                Return ResourceManager.GetString("RemoveAllCompletedDownloads_AppTask_Completed_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Keine fertiggestellte Container vorhanden ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property RemoveAllCompletedDownloads_AppTask_Faulted_Message() As String
+            Get
+                Return ResourceManager.GetString("RemoveAllCompletedDownloads_AppTask_Faulted_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Entferne/Schließe fertiggestellte Container... ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property RemoveAllCompletedDownloads_AppTask_Start_Message() As String
+            Get
+                Return ResourceManager.GetString("RemoveAllCompletedDownloads_AppTask_Start_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Alle Container entfernt/geschlossen ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property RemoveAllDownloads_AppTask_Complete_Message() As String
+            Get
+                Return ResourceManager.GetString("RemoveAllDownloads_AppTask_Complete_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Diese Funktion kann nicht genutzt werden so lange der Download aktiv ist ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property RemoveAllDownloads_AppTask_Faulted_Message() As String
+            Get
+                Return ResourceManager.GetString("RemoveAllDownloads_AppTask_Faulted_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Entferne/Schließe alle Container... ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property RemoveAllDownloads_AppTask_Start_Message() As String
+            Get
+                Return ResourceManager.GetString("RemoveAllDownloads_AppTask_Start_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Erweiterte Download Einstellungen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_AdvancedDownloadSettings() As String
@@ -704,6 +992,24 @@ Namespace My.Resources
         Public Shared ReadOnly Property Settings_DownloadDir() As String
             Get
                 Return ResourceManager.GetString("Settings_DownloadDir", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Du musst einen Ordner wählen ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property Settings_DownloadDirectory_ChooseFolder() As String
+            Get
+                Return ResourceManager.GetString("Settings_DownloadDirectory_ChooseFolder", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Das gewählte Verzeichnis existiert nicht! ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property Settings_DownloadDirectory_DirectoryNotFalid() As String
+            Get
+                Return ResourceManager.GetString("Settings_DownloadDirectory_DirectoryNotFalid", resourceCulture)
             End Get
         End Property
         
@@ -987,6 +1293,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Alle Einstellung wurden nicht übernommen da aktuell ein Download aktiv ist.
+        '''Starte den Download neu damit alle Einstellungen übernommen werden ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property Settings_SaveSettings_DownloadActive_Message() As String
+            Get
+                Return ResourceManager.GetString("Settings_SaveSettings_DownloadActive_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Einstellungen erfolgreich gespeichert! ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_SaveSuccessful() As String
@@ -1095,6 +1411,141 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Speedreport erstellt | {0} ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property Speedreport_AppTask_Completed_Message() As String
+            Get
+                Return ResourceManager.GetString("Speedreport_AppTask_Completed_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Speedreport wird erstellt ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property Speedreport_AppTask_Start_Message() As String
+            Get
+                Return ResourceManager.GetString("Speedreport_AppTask_Start_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Speedreport erstellung fehlgeschlagen ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property Speedreport_Exception_SpeedreportFailed() As String
+            Get
+                Return ResourceManager.GetString("Speedreport_Exception_SpeedreportFailed", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Archiv {0} | Entpacken: Erfolgreich | Archive löschen: Erfolgreich ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property UnRAR_AppTask_Completed_1_Message() As String
+            Get
+                Return ResourceManager.GetString("UnRAR_AppTask_Completed_1_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Archiv {0} | Entpacken: Erfolgreich ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property UnRAR_AppTask_Completed_2_Message() As String
+            Get
+                Return ResourceManager.GetString("UnRAR_AppTask_Completed_2_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Archiv {0} | Entpacken: Erfolgreich | Archive löschen: Fehlgeschlagen ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property UnRAR_AppTask_Faulted_1_Message() As String
+            Get
+                Return ResourceManager.GetString("UnRAR_AppTask_Faulted_1_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Entpacken ist fehlgeschlagen! ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property UnRAR_AppTask_Faulted_2_Message() As String
+            Get
+                Return ResourceManager.GetString("UnRAR_AppTask_Faulted_2_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Archiv {0} wird entpackt.... ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property UnRAR_AppTask_Start_Message() As String
+            Get
+                Return ResourceManager.GetString("UnRAR_AppTask_Start_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die {0} - {1}% Entpackt ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property UnRAR_AppTask_Status_1_Message() As String
+            Get
+                Return ResourceManager.GetString("UnRAR_AppTask_Status_1_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Lösche Archive.... ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property UnRAR_AppTask_Status_2_Message() As String
+            Get
+                Return ResourceManager.GetString("UnRAR_AppTask_Status_2_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Cracke Passwort {0} ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property UnRAR_AppTask_Status_3_Message() As String
+            Get
+                Return ResourceManager.GetString("UnRAR_AppTask_Status_3_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Cracken des UnRAR Passworts fehlgeschlagen! ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property UnRAR_Exception_CrackPasswordFailed() As String
+            Get
+                Return ResourceManager.GetString("UnRAR_Exception_CrackPasswordFailed", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Ich brauche ein Passwort zum entpacken, allerdings sind keine Passworter in der Liste oder ich darf diese nicht verwenden ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property UnRAR_Exception_NoPasswordsInList() As String
+            Get
+                Return ResourceManager.GetString("UnRAR_Exception_NoPasswordsInList", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Kein passendes UnRAR Passwort gefunden ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property UnRAR_Exception_NoValidPasswordFound() As String
+            Get
+                Return ResourceManager.GetString("UnRAR_Exception_NoValidPasswordFound", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Ja ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property VariousStrings_AffirmativeButton() As String
+            Get
+                Return ResourceManager.GetString("VariousStrings_AffirmativeButton", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Kommentar ähnelt.
         '''</summary>
         Public Shared ReadOnly Property VariousStrings_Comment() As String
@@ -1190,6 +1641,15 @@ Namespace My.Resources
         Public Shared ReadOnly Property VariousStrings_NeededDownloadTime() As String
             Get
                 Return ResourceManager.GetString("VariousStrings_NeededDownloadTime", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Nein ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property VariousStrings_NegativeButton() As String
+            Get
+                Return ResourceManager.GetString("VariousStrings_NegativeButton", resourceCulture)
             End Get
         End Property
         

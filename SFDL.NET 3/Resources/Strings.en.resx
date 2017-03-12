@@ -466,17 +466,156 @@ Do you want SFDL.NET 3 now start as an administrator?</value>
   <data name="ContainerInfo_Uploader" xml:space="preserve">
     <value>Uploader:</value>
   </data>
+  <data name="ETA_AppTask_Start" xml:space="preserve">
+    <value>Download is beeing started....</value>
+  </data>
+  <data name="ETA_AppTask_Status_1_Message" xml:space="preserve">
+    <value>Download running - Speed: {0} MB/s | ETA: {1} | {2} %</value>
+  </data>
+  <data name="ETA_AppTask_Status_2_Message" xml:space="preserve">
+    <value>Download running - {0} %</value>
+  </data>
+  <data name="ETA_AppTask_Status_3_Message" xml:space="preserve">
+    <value>Download running...</value>
+  </data>
+  <data name="ExitApplication_Prompt_Message" xml:space="preserve">
+    <value>There is currently still a download or UnRAR Process running - Do you want to quit the application anyway?</value>
+  </data>
+  <data name="ExitApplication_Prompt_Title" xml:space="preserve">
+    <value>Exit SFDL.NET</value>
+  </data>
   <data name="InstantVideo_AvailableStreams" xml:space="preserve">
     <value>Available InstantVideo Streams:</value>
+  </data>
+  <data name="OpenFileDialog_Title" xml:space="preserve">
+    <value>Open SFDL File(s)</value>
+  </data>
+  <data name="OpenSFDL_AppTask_Completed_1_Message" xml:space="preserve">
+    <value>SFDL '{0}' opened and then deleted</value>
+  </data>
+  <data name="OpenSFDL_AppTask_Completed_2_Message" xml:space="preserve">
+    <value>SFDL '{0}' opened</value>
+  </data>
+  <data name="OpenSFDL_AppTask_Faulted_Message" xml:space="preserve">
+    <value>SFDL '{0}' partially open - One or more packages could not be read.</value>
+  </data>
+  <data name="OpenSFDL_AppTask_Start_Message" xml:space="preserve">
+    <value>SFDL File '{0}' is beeing opened....</value>
+  </data>
+  <data name="OpenSFDL_Decrypt_Aborted_Message" xml:space="preserve">
+    <value>'{0}' - SFDL decryption aborted</value>
+  </data>
+  <data name="OpenSFDL_Exception_FTPDown" xml:space="preserve">
+    <value>'{0}' - Try FTP Link, Server is propaply down</value>
+  </data>
+  <data name="OpenSFDL_Exception_SFDLContainerAlreadyOpen" xml:space="preserve">
+    <value>SFDL Container '{0}' is already opened</value>
+  </data>
+  <data name="OpenSFDL_Exception_SFDLFileNotCompatible" xml:space="preserve">
+    <value>'{0}' - This SFDL file is not compatible with this program version!</value>
+  </data>
+  <data name="OpenSFDL_Prompt_Decrypt_Message" xml:space="preserve">
+    <value>Please enter a password to decrypt {0} </value>
+  </data>
+  <data name="OpenSFDL_Prompt_Decrypt_Title" xml:space="preserve">
+    <value>Decrypt SFDL</value>
+  </data>
+  <data name="PostDownload_AppTask_Completed_1_Message" xml:space="preserve">
+    <value>{0} Download stopped</value>
+  </data>
+  <data name="PostDownload_AppTask_Completed_2_Message" xml:space="preserve">
+    <value>{0} Download exited</value>
+  </data>
+  <data name="PreDownloadCheck_Exception_DownloadDirectoryNotExists" xml:space="preserve">
+    <value>Download directory does not exists</value>
+  </data>
+  <data name="PreDownloadCheck_Exception_NoDownloadDirectory" xml:space="preserve">
+    <value>You has entered no download path in the preferences!</value>
+  </data>
+  <data name="PreDownloadCheck_Exception_NothingSelected" xml:space="preserve">
+    <value>You must select an item to download at least!</value>
+  </data>
+  <data name="RemoveAllCompletedDownloads_AppTask_Completed_Message" xml:space="preserve">
+    <value>Completed container removed/closed</value>
+  </data>
+  <data name="RemoveAllCompletedDownloads_AppTask_Faulted_Message" xml:space="preserve">
+    <value>No completed container available</value>
+  </data>
+  <data name="RemoveAllCompletedDownloads_AppTask_Start_Message" xml:space="preserve">
+    <value>Remove / close completed container...</value>
+  </data>
+  <data name="RemoveAllDownloads_AppTask_Complete_Message" xml:space="preserve">
+    <value>All containers removed / closed</value>
+  </data>
+  <data name="RemoveAllDownloads_AppTask_Faulted_Message" xml:space="preserve">
+    <value>This function can not be used as long as the download is active</value>
+  </data>
+  <data name="RemoveAllDownloads_AppTask_Start_Message" xml:space="preserve">
+    <value>emove / close all containers...</value>
   </data>
   <data name="Settings_AdvancedDownloadSettings" xml:space="preserve">
     <value>Advanced Download Settings</value>
   </data>
+  <data name="Settings_DownloadDirectory_ChooseFolder" xml:space="preserve">
+    <value>You have to choose a folder</value>
+  </data>
+  <data name="Settings_DownloadDirectory_DirectoryNotFalid" xml:space="preserve">
+    <value>The choosen directory does not exists!</value>
+  </data>
   <data name="Settings_ExcludeFiles" xml:space="preserve">
     <value>Exclude the following Files:</value>
   </data>
+  <data name="Settings_SaveSettings_DownloadActive_Message" xml:space="preserve">
+    <value>All settings are not accepted because currently a download is active.
+Restart the download so that all settings are accepted</value>
+  </data>
   <data name="Settings_Style" xml:space="preserve">
     <value>Style</value>
+  </data>
+  <data name="Speedreport_AppTask_Completed_Message" xml:space="preserve">
+    <value>Speedreport created | {0}</value>
+  </data>
+  <data name="Speedreport_AppTask_Start_Message" xml:space="preserve">
+    <value>Speedreport is beeing created</value>
+  </data>
+  <data name="Speedreport_Exception_SpeedreportFailed" xml:space="preserve">
+    <value>Speedreport creation failed</value>
+  </data>
+  <data name="UnRAR_AppTask_Completed_1_Message" xml:space="preserve">
+    <value>Archive {0} | Extraction: Successful | Delete archive: successful</value>
+  </data>
+  <data name="UnRAR_AppTask_Completed_2_Message" xml:space="preserve">
+    <value>Archive {0} | Extraction: Successful</value>
+  </data>
+  <data name="UnRAR_AppTask_Faulted_1_Message" xml:space="preserve">
+    <value>Archive {0} | Extraction: Successful | Delete archive: failed</value>
+  </data>
+  <data name="UnRAR_AppTask_Faulted_2_Message" xml:space="preserve">
+    <value>UnRAR failed!</value>
+  </data>
+  <data name="UnRAR_AppTask_Start_Message" xml:space="preserve">
+    <value>Archiv {0} is beeing extracted....</value>
+  </data>
+  <data name="UnRAR_AppTask_Status_1_Message" xml:space="preserve">
+    <value>{0} - {1}% extracted</value>
+  </data>
+  <data name="UnRAR_AppTask_Status_2_Message" xml:space="preserve">
+    <value>Deleting archives</value>
+  </data>
+  <data name="UnRAR_AppTask_Status_3_Message" xml:space="preserve">
+    <value>Cracking password {0}</value>
+  </data>
+  <data name="UnRAR_Exception_CrackPasswordFailed" xml:space="preserve">
+    <value>UnRAR password cracking failed!</value>
+  </data>
+  <data name="UnRAR_Exception_NoPasswordsInList" xml:space="preserve">
+    <value>We need a password to extract but i am not allowed to do any password test or there no passwords in the list</value>
+  </data>
+  <data name="UnRAR_Exception_NoValidPasswordFound" xml:space="preserve">
+    <value>No matching UnRAR password found</value>
+  </data>
+  <data name="VariousStrings_AffirmativeButton" xml:space="preserve">
+    <value>Yes</value>
   </data>
   <data name="VariousStrings_Copy" xml:space="preserve">
     <value>Copy</value>
@@ -486,6 +625,9 @@ Do you want SFDL.NET 3 now start as an administrator?</value>
   </data>
   <data name="VariousStrings_Enabled" xml:space="preserve">
     <value>Enabled</value>
+  </data>
+  <data name="VariousStrings_NegativeButton" xml:space="preserve">
+    <value>No</value>
   </data>
   <data name="VariousStrings_NewUpdateAvailable" xml:space="preserve">
     <value>New Update Available!</value>

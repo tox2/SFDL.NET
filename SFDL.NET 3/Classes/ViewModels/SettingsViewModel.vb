@@ -325,7 +325,7 @@ Public Class SettingsViewModel
             My.Computer.FileSystem.WriteAllText(_password_def_file, _password_def.ToString, False, System.Text.Encoding.Default)
 
             If CBool(Application.Current.Resources("DownloadStopped")) = False Then
-                Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowMessageAsync(Me, "Achtung", "Alle Einstellung wurden nicht übernommen da aktuell ein Download aktiv ist." & vbNewLine & "Starte den Download neu damit alle Einstellungen übernommen werden")
+                Await MahApps.Metro.Controls.Dialogs.DialogCoordinator.Instance.ShowMessageAsync(Me, My.Resources.Strings.VariousStrings_Warning, My.Resources.Strings.Settings_SaveSettings_DownloadActive_Message)
             End If
 
         Catch ex As Exception
@@ -515,10 +515,10 @@ Public Class SettingsViewModel
         Get
             If columnName = "DownloadDirectory" Then
                 If String.IsNullOrEmpty(Me.DownloadDirectory) Then
-                    Return "Du musst einen Ordner wählen"
+                    Return My.Resources.Strings.Settings_DownloadDirectory_ChooseFolder
                 End If
                 If Not IO.Directory.Exists(Me.DownloadDirectory) Then
-                    Return "Das gewählte Verzeichnis existiert nicht!"
+                    Return My.Resources.Strings.Settings_DownloadDirectory_DirectoryNotFalid
                 End If
             End If
             Return String.Empty

@@ -99,7 +99,7 @@ Public Class MainWindow
 
                 _file_assoiciation.Create()
 
-                _log.Info("SFDL Extension registriert!")
+                _log.Info("SFDL Extension registerd!")
 
                 UpdateInstallState()
 
@@ -115,8 +115,8 @@ Public Class MainWindow
             Dim _result As MessageDialogResult
             Dim _dialog_settings As New MetroDialogSettings
 
-            _dialog_settings.AffirmativeButtonText = "Ja, bitte"
-            _dialog_settings.NegativeButtonText = "Nein, danke"
+            _dialog_settings.AffirmativeButtonText = My.Resources.Strings.VariousStrings_AffirmativeButton
+            _dialog_settings.NegativeButtonText = My.Resources.Strings.VariousStrings_NegativeButton
 
             _result = Await ShowMessageAsync(My.Resources.Strings.VariousStrings_Warning, My.Resources.Strings.InstallPathChangedPrompt, MessageDialogStyle.AffirmativeAndNegative, _dialog_settings)
 
@@ -169,12 +169,12 @@ Public Class MainWindow
                 Dim _result As MessageDialogResult
                 Dim _dialog_settings As New MetroDialogSettings
 
-                _dialog_settings.AffirmativeButtonText = "Ja"
-                _dialog_settings.NegativeButtonText = "Nein"
+                _dialog_settings.AffirmativeButtonText = My.Resources.Strings.VariousStrings_AffirmativeButton
+                _dialog_settings.NegativeButtonText = My.Resources.Strings.VariousStrings_NegativeButton
 
                 e.Cancel = True
 
-                _result = Await ShowMessageAsync("SFDL.NET beenden", "Es läuft aktuell noch ein Download oder UnRAR - Möchtest du die Anwendung trotzdem beenden?", MessageDialogStyle.AffirmativeAndNegative, _dialog_settings)
+                _result = Await ShowMessageAsync(My.Resources.Strings.ExitApplication_Prompt_Title, My.Resources.Strings.ExitApplication_Prompt_Message, MessageDialogStyle.AffirmativeAndNegative, _dialog_settings)
 
                 If _result = MessageDialogResult.Affirmative Then
                     _force_exit = True
