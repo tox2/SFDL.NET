@@ -13,4 +13,4 @@ http://www.sfdl.net
 
 [![Screenshot01.png](https://s18.postimg.org/tylc2rp55/Screenshot01.png)](https://postimg.org/image/ffe71cw05/)
 
-[![Settings.gif](https://s21.postimg.org/oys5bf02v/Settings.gif)](https://postimg.org/image/sv5h7el2b/)
+[![Settings.gif](https://s7.postimg.org/xjizr8r3f/Settings.gif)](https://postimg.org/image/tae9p2ntz/)
