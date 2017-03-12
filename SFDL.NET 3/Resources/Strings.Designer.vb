@@ -65,6 +65,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Aktive Aufgaben ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property AppTasks_ListView_ActiveTasks_Header() As String
+            Get
+                Return ResourceManager.GetString("AppTasks_ListView_ActiveTasks_Header", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Aufgaben Historie ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property AppTasks_ListView_TaskHistory_Header() As String
+            Get
+                Return ResourceManager.GetString("AppTasks_ListView_TaskHistory_Header", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die SFDL wählen: ähnelt.
         '''</summary>
         Public Shared ReadOnly Property ContainerInfo_ChooseSFDL() As String
@@ -699,6 +717,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Folgende Dateien ausslassen: ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property Settings_ExcludeFiles() As String
+            Get
+                Return ResourceManager.GetString("Settings_ExcludeFiles", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Existierende Datei: ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_ExistingFile() As String
@@ -1005,6 +1032,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Aussehen ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property Settings_Style() As String
+            Get
+                Return ResourceManager.GetString("Settings_Style", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die SFDL Beschreibung verwenden ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_Subfolder_UseDescription() As String
@@ -1077,6 +1113,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Kopieren ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property VariousStrings_Copy() As String
+            Get
+                Return ResourceManager.GetString("VariousStrings_Copy", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Beschreibung ähnelt.
         '''</summary>
         Public Shared ReadOnly Property VariousStrings_Description() As String
@@ -1086,11 +1131,29 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Deaktiviert ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property VariousStrings_Disabled() As String
+            Get
+                Return ResourceManager.GetString("VariousStrings_Disabled", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Download Geschwindigkeit ähnelt.
         '''</summary>
         Public Shared ReadOnly Property VariousStrings_DownloadSpeed() As String
             Get
                 Return ResourceManager.GetString("VariousStrings_DownloadSpeed", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Aktiviert ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property VariousStrings_Enabled() As String
+            Get
+                Return ResourceManager.GetString("VariousStrings_Enabled", resourceCulture)
             End Get
         End Property
         

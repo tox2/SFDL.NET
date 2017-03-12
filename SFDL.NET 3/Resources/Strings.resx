@@ -231,9 +231,6 @@
   <data name="Settings_Subfolder_UseFilename" xml:space="preserve">
     <value>SFDL Dateiname verwenden</value>
   </data>
-  <data name="Settings_AdvancedDownloadSettings" xml:space="preserve">
-    <value>Erweiterte Download Einstellungen</value>
-  </data>
   <data name="Settings_AdvancedSettings" xml:space="preserve">
     <value>Erweiterte Einstellungen</value>
   </data>
@@ -472,6 +469,12 @@ Möchtest du SFDL.NET 3 nun als Administrator starten?</value>
   <data name="DownloadStatus_RunningWait" xml:space="preserve">
     <value>Download eingereit warte auf Start....</value>
   </data>
+  <data name="AppTasks_ListView_ActiveTasks_Header" xml:space="preserve">
+    <value>Aktive Aufgaben</value>
+  </data>
+  <data name="AppTasks_ListView_TaskHistory_Header" xml:space="preserve">
+    <value>Aufgaben Historie</value>
+  </data>
   <data name="ContainerInfo_ChooseSFDL" xml:space="preserve">
     <value>SFDL wählen:</value>
   </data>
@@ -498,6 +501,24 @@ Möchtest du SFDL.NET 3 nun als Administrator starten?</value>
   </data>
   <data name="InstantVideo_AvailableStreams" xml:space="preserve">
     <value>Verfügbare InstantVideo Streams:</value>
+  </data>
+  <data name="Settings_AdvancedDownloadSettings" xml:space="preserve">
+    <value>Erweiterte Download Einstellungen</value>
+  </data>
+  <data name="Settings_ExcludeFiles" xml:space="preserve">
+    <value>Folgende Dateien ausslassen:</value>
+  </data>
+  <data name="Settings_Style" xml:space="preserve">
+    <value>Aussehen</value>
+  </data>
+  <data name="VariousStrings_Copy" xml:space="preserve">
+    <value>Kopieren</value>
+  </data>
+  <data name="VariousStrings_Disabled" xml:space="preserve">
+    <value>Deaktiviert</value>
+  </data>
+  <data name="VariousStrings_Enabled" xml:space="preserve">
+    <value>Aktiviert</value>
   </data>
   <data name="VariousStrings_NewUpdateAvailable" xml:space="preserve">
     <value>Neues Update verfügbar!</value>

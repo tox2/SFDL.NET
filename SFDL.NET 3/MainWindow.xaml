@@ -902,7 +902,7 @@
                     MinHeight="100"
                     Header="{x:Static p:Strings.Expander_Header_Tasks}">
                     <TabControl Controls:TabControlHelper.IsUnderlined="True" TabStripPlacement="Bottom">
-                        <TabItem Controls:ControlsHelper.HeaderFontSize="12" Header="Aktive Aufgaben">
+                        <TabItem Controls:ControlsHelper.HeaderFontSize="12" Header="{x:Static p:Strings.AppTasks_ListView_ActiveTasks_Header}">
                             <ListView
                                 x:Name="ListViewActiveTasks"
                                 MinHeight="100"
@@ -947,7 +947,7 @@
                                 </ListView.View>
                             </ListView>
                         </TabItem>
-                        <TabItem Controls:ControlsHelper.HeaderFontSize="12" Header="Aufgaben Historie">
+                        <TabItem Controls:ControlsHelper.HeaderFontSize="12" Header="{x:Static p:Strings.AppTasks_ListView_TaskHistory_Header}">
 
 
                             <ListView
@@ -997,7 +997,7 @@
                                         <MenuItem
                                             Command="{Binding CopyDoneTaskTextCommand}"
                                             CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}"
-                                            Header="Kopieren">
+                                            Header="{x:Static p:Strings.VariousStrings_Copy}">
 
                                             <MenuItem.Icon>
                                                 <Rectangle

@@ -192,9 +192,6 @@
   <data name="Expander_Header_Tasks" xml:space="preserve">
     <value>Tasks</value>
   </data>
-  <data name="Settings_AdvancedDownloadSettings" xml:space="preserve">
-    <value>Advanced download settings</value>
-  </data>
   <data name="Settings_AdvancedSettings" xml:space="preserve">
     <value>Advanced Settings</value>
   </data>
@@ -439,6 +436,12 @@ Do you want SFDL.NET 3 now start as an administrator?</value>
   <data name="VariousStrings_Filename" xml:space="preserve">
     <value>Filename</value>
   </data>
+  <data name="AppTasks_ListView_ActiveTasks_Header" xml:space="preserve">
+    <value>Acrive Tasks</value>
+  </data>
+  <data name="AppTasks_ListView_TaskHistory_Header" xml:space="preserve">
+    <value>Task History</value>
+  </data>
   <data name="ContainerInfo_ChooseSFDL" xml:space="preserve">
     <value>Choose SFDL</value>
   </data>
@@ -465,6 +468,24 @@ Do you want SFDL.NET 3 now start as an administrator?</value>
   </data>
   <data name="InstantVideo_AvailableStreams" xml:space="preserve">
     <value>Available InstantVideo Streams:</value>
+  </data>
+  <data name="Settings_AdvancedDownloadSettings" xml:space="preserve">
+    <value>Advanced Download Settings</value>
+  </data>
+  <data name="Settings_ExcludeFiles" xml:space="preserve">
+    <value>Exclude the following Files:</value>
+  </data>
+  <data name="Settings_Style" xml:space="preserve">
+    <value>Style</value>
+  </data>
+  <data name="VariousStrings_Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="VariousStrings_Disabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="VariousStrings_Enabled" xml:space="preserve">
+    <value>Enabled</value>
   </data>
   <data name="VariousStrings_NewUpdateAvailable" xml:space="preserve">
     <value>New Update Available!</value>
