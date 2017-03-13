@@ -33,33 +33,33 @@
             <local:CollectionViewNameConverter x:Key="CollectionViewNameConv" />
             <local:FileSizeConverter x:Key="FileSizeConv" />
 
-            <VisualBrush x:Key="DownloadStatusNone" Visual="{StaticResource appbar_sign_parking}" />
-            <VisualBrush x:Key="DownloadStatusQueued" Visual="{StaticResource appbar_clock}" />
-            <VisualBrush x:Key="DownloadStatusCompleted" Visual="{StaticResource appbar_check}" />
-            <VisualBrush x:Key="DownloadStatusCompleted_HashValid" Visual="{StaticResource appbar_check}" />
-            <VisualBrush x:Key="DownloadStatusCompleted_HashInvalid" Visual="{StaticResource appbar_alert}" />
-            <VisualBrush x:Key="DownloadStatusRunning" Visual="{StaticResource appbar_cabinet_in}" />
-            <VisualBrush x:Key="DownloadStatusStopped" Visual="{StaticResource appbar_control_stop}" />
-            <VisualBrush x:Key="DownloadStatusFailed" Visual="{StaticResource appbar_stop}" />
-            <VisualBrush x:Key="DownloadStatusFailed_FileNameTooLong" Visual="{StaticResource appbar_dimension_arrow_line_width}" />
-            <VisualBrush x:Key="DownloadStatusFailed_NotEnoughDiskSpace" Visual="{StaticResource appbar_stop}" />
-            <VisualBrush x:Key="DownloadStatusFailed_ServerFull" Visual="{StaticResource appbar_cup_full}" />
-            <VisualBrush x:Key="DownloadStatusFailed_ServerDown" Visual="{StaticResource appbar_network_server_disconnect}" />
-            <VisualBrush x:Key="DownloadStatusFailed_ConnectionError" Visual="{StaticResource appbar_network_server_disconnect}" />
-            <VisualBrush x:Key="DownloadStatusFailed_AuthError" Visual="{StaticResource appbar_user_delete}" />
-            <VisualBrush x:Key="DownloadStatusFailed_FileNotFound" Visual="{StaticResource appbar_page_delete}" />
-            <VisualBrush x:Key="DownloadStatusFailed_DirectoryNotFound" Visual="{StaticResource appbar_page_delete}" />
-            <VisualBrush x:Key="DownloadStatusFailed_InternalServerError" Visual="{StaticResource appbar_monitor_delete}" />
-            <VisualBrush x:Key="DownloadStatusRetry" Visual="{StaticResource appbar_control_resume}" />
-            <VisualBrush x:Key="DownloadStatusRetryWait" Visual="{StaticResource appbar_control_resume}" />
-            <VisualBrush x:Key="DownloadStatusAlreadyDownloaded" Visual="{StaticResource appbar_check}" />
-            <VisualBrush x:Key="DownloadStatusIOError" Visual="{StaticResource appbar_type_bit}" />
+            <VisualBrush x:Key="DownloadStatusNone" Visual="{StaticResource appbar_sign_parking}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusQueued" Visual="{StaticResource appbar_clock}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusCompleted" Visual="{StaticResource appbar_check}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusCompleted_HashValid" Visual="{StaticResource appbar_check}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusCompleted_HashInvalid" Visual="{StaticResource appbar_alert}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusRunning" Visual="{StaticResource appbar_cabinet_in}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusStopped" Visual="{StaticResource appbar_control_stop}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed" Visual="{StaticResource appbar_stop}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed_FileNameTooLong" Visual="{StaticResource appbar_dimension_arrow_line_width}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed_NotEnoughDiskSpace" Visual="{StaticResource appbar_stop}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed_ServerFull" Visual="{StaticResource appbar_cup_full}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed_ServerDown" Visual="{StaticResource appbar_network_server_disconnect}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed_ConnectionError" Visual="{StaticResource appbar_network_server_disconnect}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed_AuthError" Visual="{StaticResource appbar_user_delete}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed_FileNotFound" Visual="{StaticResource appbar_page_delete}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed_DirectoryNotFound" Visual="{StaticResource appbar_page_delete}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed_InternalServerError" Visual="{StaticResource appbar_monitor_delete}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusRetry" Visual="{StaticResource appbar_control_resume}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusRetryWait" Visual="{StaticResource appbar_control_resume}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusAlreadyDownloaded" Visual="{StaticResource appbar_check}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusIOError" Visual="{StaticResource appbar_type_bit}" Stretch="Uniform"/>
 
 
-            <VisualBrush x:Key="TaskStatusFailed" Visual="{StaticResource appbar_stop}" />
-            <VisualBrush x:Key="TaskStatusCanceled" Visual="{StaticResource appbar_stop}" />
-            <VisualBrush x:Key="TaskStatusRunning" Visual="{StaticResource appbar_control_fastforward_variant}" />
-            <VisualBrush x:Key="TaskStatusRanToCompletion" Visual="{StaticResource appbar_check}" />
+            <VisualBrush x:Key="TaskStatusFailed" Visual="{StaticResource appbar_stop}" Stretch="Uniform"/>
+            <VisualBrush x:Key="TaskStatusCanceled" Visual="{StaticResource appbar_stop}" Stretch="Uniform"/>
+            <VisualBrush x:Key="TaskStatusRunning" Visual="{StaticResource appbar_control_fastforward_variant}" Stretch="Uniform"/>
+            <VisualBrush x:Key="TaskStatusRanToCompletion" Visual="{StaticResource appbar_check}" Stretch="Uniform"/>
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Icons.xaml" />
@@ -76,7 +76,7 @@
                         Height="16"
                         Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
                         <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_alert}" />
+                            <VisualBrush Visual="{StaticResource appbar_flag}" Stretch="Uniform"/>
                         </Rectangle.OpacityMask>
                     </Rectangle>
                     <TextBlock
@@ -219,7 +219,7 @@
                                             Margin="0,0,5,0"
                                             Fill="{DynamicResource AccentColorBrush}">
                                             <Rectangle.OpacityMask>
-                                                <VisualBrush Visual="{StaticResource appbar_film_list}" />
+                                                <VisualBrush Visual="{StaticResource appbar_film_list}" Stretch="Uniform"/>
                                             </Rectangle.OpacityMask>
                                         </Rectangle>
 
