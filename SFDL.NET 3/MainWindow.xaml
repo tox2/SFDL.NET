@@ -33,33 +33,33 @@
             <local:CollectionViewNameConverter x:Key="CollectionViewNameConv" />
             <local:FileSizeConverter x:Key="FileSizeConv" />
 
-            <VisualBrush x:Key="DownloadStatusNone" Visual="{StaticResource appbar_sign_parking}" />
-            <VisualBrush x:Key="DownloadStatusQueued" Visual="{StaticResource appbar_clock}" />
-            <VisualBrush x:Key="DownloadStatusCompleted" Visual="{StaticResource appbar_check}" />
-            <VisualBrush x:Key="DownloadStatusCompleted_HashValid" Visual="{StaticResource appbar_check}" />
-            <VisualBrush x:Key="DownloadStatusCompleted_HashInvalid" Visual="{StaticResource appbar_alert}" />
-            <VisualBrush x:Key="DownloadStatusRunning" Visual="{StaticResource appbar_cabinet_in}" />
-            <VisualBrush x:Key="DownloadStatusStopped" Visual="{StaticResource appbar_control_stop}" />
-            <VisualBrush x:Key="DownloadStatusFailed" Visual="{StaticResource appbar_stop}" />
-            <VisualBrush x:Key="DownloadStatusFailed_FileNameTooLong" Visual="{StaticResource appbar_dimension_arrow_line_width}" />
-            <VisualBrush x:Key="DownloadStatusFailed_NotEnoughDiskSpace" Visual="{StaticResource appbar_stop}" />
-            <VisualBrush x:Key="DownloadStatusFailed_ServerFull" Visual="{StaticResource appbar_cup_full}" />
-            <VisualBrush x:Key="DownloadStatusFailed_ServerDown" Visual="{StaticResource appbar_network_server_disconnect}" />
-            <VisualBrush x:Key="DownloadStatusFailed_ConnectionError" Visual="{StaticResource appbar_network_server_disconnect}" />
-            <VisualBrush x:Key="DownloadStatusFailed_AuthError" Visual="{StaticResource appbar_user_delete}" />
-            <VisualBrush x:Key="DownloadStatusFailed_FileNotFound" Visual="{StaticResource appbar_page_delete}" />
-            <VisualBrush x:Key="DownloadStatusFailed_DirectoryNotFound" Visual="{StaticResource appbar_page_delete}" />
-            <VisualBrush x:Key="DownloadStatusFailed_InternalServerError" Visual="{StaticResource appbar_monitor_delete}" />
-            <VisualBrush x:Key="DownloadStatusRetry" Visual="{StaticResource appbar_control_resume}" />
-            <VisualBrush x:Key="DownloadStatusRetryWait" Visual="{StaticResource appbar_control_resume}" />
-            <VisualBrush x:Key="DownloadStatusAlreadyDownloaded" Visual="{StaticResource appbar_check}" />
-            <VisualBrush x:Key="DownloadStatusIOError" Visual="{StaticResource appbar_type_bit}" />
+            <VisualBrush x:Key="DownloadStatusNone" Visual="{StaticResource appbar_sleep}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusQueued" Visual="{StaticResource appbar_cabinet_files}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusCompleted" Visual="{StaticResource appbar_check}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusCompleted_HashValid" Visual="{StaticResource appbar_check}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusCompleted_HashInvalid" Visual="{StaticResource appbar_warning}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusRunning" Visual="{StaticResource appbar_cabinet_in}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusStopped" Visual="{StaticResource appbar_control_stop}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed" Visual="{StaticResource appbar_stop}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed_FileNameTooLong" Visual="{StaticResource appbar_interface_textbox}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed_NotEnoughDiskSpace" Visual="{StaticResource appbar_transit_hazard}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed_ServerFull" Visual="{StaticResource appbar_cup_full}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed_ServerDown" Visual="{StaticResource appbar_network_server_disconnect}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed_ConnectionError" Visual="{StaticResource appbar_network_server_disconnect}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed_AuthError" Visual="{StaticResource appbar_user_delete}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed_FileNotFound" Visual="{StaticResource appbar_page_delete}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed_DirectoryNotFound" Visual="{StaticResource appbar_page_delete}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusFailed_InternalServerError" Visual="{StaticResource appbar_monitor_delete}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusRetry" Visual="{StaticResource appbar_reset}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusRetryWait" Visual="{StaticResource appbar_reset}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusAlreadyDownloaded" Visual="{StaticResource appbar_check}" Stretch="Uniform"/>
+            <VisualBrush x:Key="DownloadStatusIOError" Visual="{StaticResource appbar_type_bit}" Stretch="Uniform"/>
 
 
-            <VisualBrush x:Key="TaskStatusFailed" Visual="{StaticResource appbar_stop}" />
-            <VisualBrush x:Key="TaskStatusCanceled" Visual="{StaticResource appbar_stop}" />
-            <VisualBrush x:Key="TaskStatusRunning" Visual="{StaticResource appbar_control_fastforward_variant}" />
-            <VisualBrush x:Key="TaskStatusRanToCompletion" Visual="{StaticResource appbar_check}" />
+            <VisualBrush x:Key="TaskStatusFailed" Visual="{StaticResource appbar_stop}" Stretch="Uniform"/>
+            <VisualBrush x:Key="TaskStatusCanceled" Visual="{StaticResource appbar_cancel}" Stretch="Uniform"/>
+            <VisualBrush x:Key="TaskStatusRunning" Visual="{StaticResource appbar_progress}" Stretch="Uniform"/>
+            <VisualBrush x:Key="TaskStatusRanToCompletion" Visual="{StaticResource appbar_check}" Stretch="Uniform"/>
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Icons.xaml" />
@@ -76,7 +76,7 @@
                         Height="16"
                         Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
                         <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_alert}" />
+                            <VisualBrush Visual="{StaticResource appbar_shield_alert}" Stretch="Uniform"/>
                         </Rectangle.OpacityMask>
                     </Rectangle>
                     <TextBlock
@@ -219,7 +219,7 @@
                                             Margin="0,0,5,0"
                                             Fill="{DynamicResource AccentColorBrush}">
                                             <Rectangle.OpacityMask>
-                                                <VisualBrush Visual="{StaticResource appbar_film_list}" />
+                                                <VisualBrush Visual="{StaticResource appbar_film_list}" Stretch="Uniform"/>
                                             </Rectangle.OpacityMask>
                                         </Rectangle>
 
@@ -239,7 +239,7 @@
                                             Margin="0,0,5,0"
                                             Fill="{DynamicResource AccentColorBrush}">
                                             <Rectangle.OpacityMask>
-                                                <VisualBrush Visual="{StaticResource appbar_film_live}" />
+                                                <VisualBrush Visual="{StaticResource appbar_film_live}" Stretch="Uniform"/>
                                             </Rectangle.OpacityMask>
                                         </Rectangle>
                                         <TextBlock Text="{Binding DisplayName}" />
@@ -264,7 +264,7 @@
                                     Margin="5,0"
                                     Fill="{DynamicResource AccentColorBrush}">
                                     <Rectangle.OpacityMask>
-                                        <VisualBrush Visual="{StaticResource appbar_monitor_film}" />
+                                        <VisualBrush Visual="{StaticResource appbar_monitor_film}" Stretch="Uniform"/>
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                                 <TextBlock Text="{x:Static p:Strings.VariousStrings_Play}" />
@@ -297,7 +297,7 @@
                                 Height="16"
                                 Fill="{DynamicResource AccentColorBrush}">
                                 <Rectangle.OpacityMask>
-                                    <VisualBrush Visual="{StaticResource appbar_tiles_four}" />
+                                    <VisualBrush Visual="{StaticResource appbar_tiles_four}" Stretch="Uniform"/>
                                 </Rectangle.OpacityMask>
                             </Rectangle>
                         </MenuItem.Icon>
@@ -311,7 +311,7 @@
                                     Height="16"
                                     Fill="{DynamicResource AccentColorBrush}">
                                     <Rectangle.OpacityMask>
-                                        <VisualBrush Visual="{StaticResource appbar_folder_open}" />
+                                        <VisualBrush Visual="{StaticResource appbar_folder_open}" Stretch="Uniform"/>
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </MenuItem.Icon>
@@ -326,7 +326,7 @@
                                     Height="16"
                                     Fill="{DynamicResource AccentColorBrush}">
                                     <Rectangle.OpacityMask>
-                                        <VisualBrush Visual="{StaticResource appbar_cog}" />
+                                        <VisualBrush Visual="{StaticResource appbar_cog}" Stretch="Uniform"/>
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </MenuItem.Icon>
@@ -341,7 +341,7 @@
                                     Height="16"
                                     Fill="{DynamicResource AccentColorBrush}">
                                     <Rectangle.OpacityMask>
-                                        <VisualBrush Visual="{StaticResource appbar_power}" />
+                                        <VisualBrush Visual="{StaticResource appbar_door_leave}" Stretch="Uniform"/>
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </MenuItem.Icon>
@@ -355,7 +355,7 @@
                                 Height="16"
                                 Fill="{DynamicResource AccentColorBrush}">
                                 <Rectangle.OpacityMask>
-                                    <VisualBrush Visual="{StaticResource appbar_edit}" />
+                                    <VisualBrush Visual="{StaticResource appbar_edit}" Stretch="Uniform"/>
                                 </Rectangle.OpacityMask>
                             </Rectangle>
                         </MenuItem.Icon>
@@ -366,7 +366,7 @@
                                     Height="16"
                                     Fill="{DynamicResource AccentColorBrush}">
                                     <Rectangle.OpacityMask>
-                                        <VisualBrush Visual="{StaticResource appbar_close}" />
+                                        <VisualBrush Visual="{StaticResource appbar_close}" Stretch="Uniform"/>
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </MenuItem.Icon>
@@ -378,7 +378,7 @@
                                     Height="16"
                                     Fill="{DynamicResource AccentColorBrush}">
                                     <Rectangle.OpacityMask>
-                                        <VisualBrush Visual="{StaticResource appbar_delete}" />
+                                        <VisualBrush Visual="{StaticResource appbar_layer_delete}" Stretch="Uniform"/>
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </MenuItem.Icon>
@@ -391,7 +391,7 @@
                                     Height="16"
                                     Fill="{DynamicResource AccentColorBrush}">
                                     <Rectangle.OpacityMask>
-                                        <VisualBrush Visual="{StaticResource appbar_checkmark}" />
+                                        <VisualBrush Visual="{StaticResource appbar_checkmark}" Stretch="Uniform"/>
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </MenuItem.Icon>
@@ -403,7 +403,7 @@
                                     Height="16"
                                     Fill="{DynamicResource AccentColorBrush}">
                                     <Rectangle.OpacityMask>
-                                        <VisualBrush Visual="{StaticResource appbar_checkmark_uncrossed}" />
+                                        <VisualBrush Visual="{StaticResource appbar_checkmark_uncrossed}" Stretch="Uniform"/>
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </MenuItem.Icon>
@@ -416,7 +416,7 @@
                                     Height="16"
                                     Fill="{DynamicResource AccentColorBrush}">
                                     <Rectangle.OpacityMask>
-                                        <VisualBrush Visual="{StaticResource appbar_arrow_collapsed}" />
+                                        <VisualBrush Visual="{StaticResource appbar_section_collapse_all}" Stretch="Uniform"/>
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </MenuItem.Icon>
@@ -428,7 +428,7 @@
                                     Height="16"
                                     Fill="{DynamicResource AccentColorBrush}">
                                     <Rectangle.OpacityMask>
-                                        <VisualBrush Visual="{StaticResource appbar_arrow_expand}" />
+                                        <VisualBrush Visual="{StaticResource appbar_section_expand_all}" Stretch="Uniform"/>
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </MenuItem.Icon>
@@ -441,7 +441,7 @@
                                 Height="16"
                                 Fill="{DynamicResource AccentColorBrush}">
                                 <Rectangle.OpacityMask>
-                                    <VisualBrush Visual="{StaticResource appbar_star}" />
+                                    <VisualBrush Visual="{StaticResource appbar_star}" Stretch="Uniform" />
                                 </Rectangle.OpacityMask>
                             </Rectangle>
                         </MenuItem.Icon>
@@ -452,7 +452,7 @@
                                     Height="16"
                                     Fill="{DynamicResource AccentColorBrush}">
                                     <Rectangle.OpacityMask>
-                                        <VisualBrush Visual="{StaticResource appbar_door_leave}" />
+                                        <VisualBrush Visual="{StaticResource appbar_calendar_future}" Stretch="Uniform" />
                                     </Rectangle.OpacityMask>
                                 </Rectangle>
                             </MenuItem.Icon>
@@ -466,7 +466,7 @@
                                         Height="16"
                                         Fill="{DynamicResource AccentColorBrush}">
                                         <Rectangle.OpacityMask>
-                                            <VisualBrush Visual="{StaticResource appbar_power}" />
+                                            <VisualBrush Visual="{StaticResource appbar_door_leave}" Stretch="Uniform" />
                                         </Rectangle.OpacityMask>
                                     </Rectangle>
                                 </MenuItem.Icon>
@@ -481,36 +481,25 @@
                                         Height="16"
                                         Fill="{DynamicResource AccentColorBrush}">
                                         <Rectangle.OpacityMask>
-                                            <VisualBrush Visual="{StaticResource appbar_monitor_delete}" />
+                                            <VisualBrush Visual="{StaticResource appbar_power}" Stretch="Uniform"/>
                                         </Rectangle.OpacityMask>
                                     </Rectangle>
                                 </MenuItem.Icon>
                             </MenuItem>
                         </MenuItem>
                     </MenuItem>
-                    <MenuItem Header="{x:Static p:Strings.MainMenu_Help}">
+                    <MenuItem Command="{Binding ShowHelpCommand}" Header="{x:Static p:Strings.MainMenu_Help}">
                         <MenuItem.Icon>
                             <Rectangle
                                 Width="16"
                                 Height="16"
                                 Fill="{DynamicResource AccentColorBrush}">
                                 <Rectangle.OpacityMask>
-                                    <VisualBrush Visual="{StaticResource appbar_book_perspective_help}" />
+
+                                    <VisualBrush Visual="{StaticResource appbar_question}" Stretch="Uniform"/>
                                 </Rectangle.OpacityMask>
                             </Rectangle>
                         </MenuItem.Icon>
-                        <MenuItem Command="{Binding ShowHelpCommand}" Header="{x:Static p:Strings.MainMenu_Help}">
-                            <MenuItem.Icon>
-                                <Rectangle
-                                    Width="16"
-                                    Height="16"
-                                    Fill="{DynamicResource AccentColorBrush}">
-                                    <Rectangle.OpacityMask>
-                                        <VisualBrush Visual="{StaticResource appbar_information_circle}" />
-                                    </Rectangle.OpacityMask>
-                                </Rectangle>
-                            </MenuItem.Icon>
-                        </MenuItem>
                     </MenuItem>
 
                 </Menu>
@@ -527,7 +516,7 @@
                         Margin="5,0"
                         Fill="{DynamicResource AccentColorBrush}">
                         <Rectangle.OpacityMask>
-                            <VisualBrush Visual="{StaticResource appbar_control_play}" />
+                            <VisualBrush Visual="{StaticResource appbar_control_play}" Stretch="Uniform"/>
                         </Rectangle.OpacityMask>
                     </Rectangle>
 
@@ -541,7 +530,7 @@
                         Margin="5,0"
                         Fill="{DynamicResource AccentColorBrush}">
                         <Rectangle.OpacityMask>
-                            <VisualBrush Visual="{StaticResource appbar_control_stop}" />
+                            <VisualBrush Visual="{StaticResource appbar_control_stop}" Stretch="Uniform"/>
                         </Rectangle.OpacityMask>
                     </Rectangle>
                     <Button
@@ -555,7 +544,7 @@
                         Margin="5,0"
                         Fill="{DynamicResource AccentColorBrush}">
                         <Rectangle.OpacityMask>
-                            <VisualBrush Visual="{StaticResource appbar_movie_clapper}" />
+                            <VisualBrush Visual="{StaticResource appbar_movie_clapper}" Stretch="Uniform"/>
                         </Rectangle.OpacityMask>
                     </Rectangle>
                     <Button
@@ -565,11 +554,11 @@
                     <Separator Margin="5,2" />
                     <Rectangle
                         Width="25"
-                        Height="16"
+                        Height="25"
                         Margin="5,0"
                         Fill="{DynamicResource AccentColorBrush}">
                         <Rectangle.OpacityMask>
-                            <VisualBrush Visual="{StaticResource appbar_gauge_25}" />
+                            <VisualBrush Visual="{StaticResource appbar_gauge_75}" Stretch="Uniform"/>
                         </Rectangle.OpacityMask>
                     </Rectangle>
                     <TextBox
@@ -595,20 +584,20 @@
                             Margin="5,0"
                             Fill="{DynamicResource AccentColorBrush}">
                             <Rectangle.OpacityMask>
-                                <VisualBrush Visual="{StaticResource appbar_layer}" />
+                                <VisualBrush Visual="{StaticResource appbar_layer}" Stretch="Uniform"/>
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </StackPanel>
                 </Button>
             </Grid>
 
-            <Grid DockPanel.Dock="Bottom">
+            <Grid DockPanel.Dock="Top">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" MinHeight="250" />
                     <RowDefinition Height="5" />
                     <RowDefinition
                         Height="*"
-                        MinHeight="100"
+                        MinHeight="120"
                         MaxHeight="200" />
                 </Grid.RowDefinitions>
 
@@ -622,6 +611,7 @@
 
                     <ListView.View>
                         <GridView>
+                           
                             <local:FixedWidthColumn FixedWidth="30">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -631,6 +621,7 @@
                             </local:FixedWidthColumn>
                             <GridViewColumn
                                 Width="370"
+                                
                                 DisplayMemberBinding="{Binding FileName}"
                                 Header="{x:Static p:Strings.ListView_DownloadItems_Header_Filename}" />
                             <GridViewColumn
@@ -772,7 +763,7 @@
                                                                         Height="8"
                                                                         Fill="{DynamicResource AccentColorBrush}">
                                                                         <Rectangle.OpacityMask>
-                                                                            <VisualBrush Visual="{StaticResource appbar_close}" />
+                                                                            <VisualBrush Visual="{StaticResource appbar_close}" Stretch="Uniform"/>
                                                                         </Rectangle.OpacityMask>
                                                                     </Rectangle>
                                                                 </StackPanel>
@@ -833,7 +824,7 @@
                                         Height="16"
                                         Fill="{DynamicResource AccentColorBrush}">
                                         <Rectangle.OpacityMask>
-                                            <VisualBrush Visual="{StaticResource appbar_folder_open}" />
+                                            <VisualBrush Visual="{StaticResource appbar_folder_open}" Stretch="Uniform" />
                                         </Rectangle.OpacityMask>
                                     </Rectangle>
                                 </MenuItem.Icon>
@@ -849,7 +840,7 @@
                                         Height="16"
                                         Fill="{DynamicResource AccentColorBrush}">
                                         <Rectangle.OpacityMask>
-                                            <VisualBrush Visual="{StaticResource appbar_close}" />
+                                            <VisualBrush Visual="{StaticResource appbar_close}" Stretch="Uniform" />
                                         </Rectangle.OpacityMask>
                                     </Rectangle>
                                 </MenuItem.Icon>
@@ -865,7 +856,7 @@
                                         Height="16"
                                         Fill="{DynamicResource AccentColorBrush}">
                                         <Rectangle.OpacityMask>
-                                            <VisualBrush Visual="{StaticResource appbar_checkmark}" />
+                                            <VisualBrush Visual="{StaticResource appbar_checkmark}" Stretch="Uniform"/>
                                         </Rectangle.OpacityMask>
                                     </Rectangle>
                                 </MenuItem.Icon>
@@ -881,7 +872,7 @@
                                         Height="16"
                                         Fill="{DynamicResource AccentColorBrush}">
                                         <Rectangle.OpacityMask>
-                                            <VisualBrush Visual="{StaticResource appbar_checkmark_uncrossed}" />
+                                            <VisualBrush Visual="{StaticResource appbar_checkmark_uncrossed}" Stretch="Uniform" />
                                         </Rectangle.OpacityMask>
                                     </Rectangle>
                                 </MenuItem.Icon>
@@ -893,24 +884,28 @@
 
                 <GridSplitter
                     Grid.Row="1"
-                    Height="5"
+                    Height="2"
                     HorizontalAlignment="Stretch"
                     ResizeDirection="Rows" />
 
                 <GroupBox
                     Grid.Row="2"
-                    MinHeight="100"
+                    MinHeight="110"
                     Header="{x:Static p:Strings.Expander_Header_Tasks}">
                     <TabControl Controls:TabControlHelper.IsUnderlined="True" TabStripPlacement="Bottom">
                         <TabItem Controls:ControlsHelper.HeaderFontSize="12" Header="{x:Static p:Strings.AppTasks_ListView_ActiveTasks_Header}">
                             <ListView
                                 x:Name="ListViewActiveTasks"
-                                MinHeight="100"
                                 ItemsSource="{Binding ActiveTasks}"
                                 ScrollViewer.VerticalScrollBarVisibility="Auto">
                                 <ListView.View>
                                     <GridView AllowsColumnReorder="False">
-                                        <GridViewColumn Width="877">
+                                        <GridView.ColumnHeaderContainerStyle>
+                                            <Style TargetType="GridViewColumnHeader">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </Style>
+                                        </GridView.ColumnHeaderContainerStyle>
+                                        <GridViewColumn Width="800" >
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
@@ -946,17 +941,22 @@
                                     </GridView>
                                 </ListView.View>
                             </ListView>
+                            
                         </TabItem>
                         <TabItem Controls:ControlsHelper.HeaderFontSize="12" Header="{x:Static p:Strings.AppTasks_ListView_TaskHistory_Header}">
 
 
                             <ListView
                                 x:Name="ListViewDoneTasks"
-                                MinHeight="100"
                                 ItemsSource="{Binding DoneTasks}">
                                 <ListView.View>
                                     <GridView AllowsColumnReorder="False">
-                                        <GridViewColumn Width="877">
+                                        <GridView.ColumnHeaderContainerStyle>
+                                            <Style TargetType="GridViewColumnHeader">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </Style>
+                                        </GridView.ColumnHeaderContainerStyle>
+                                        <GridViewColumn Width="800" >
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
@@ -1005,7 +1005,7 @@
                                                     Height="16"
                                                     Fill="{DynamicResource AccentColorBrush}">
                                                     <Rectangle.OpacityMask>
-                                                        <VisualBrush Visual="{StaticResource appbar_page_copy}" />
+                                                        <VisualBrush Visual="{StaticResource appbar_page_copy}" Stretch="Uniform"/>
                                                     </Rectangle.OpacityMask>
                                                 </Rectangle>
                                             </MenuItem.Icon>
