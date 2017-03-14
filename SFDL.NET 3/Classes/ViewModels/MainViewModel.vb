@@ -118,7 +118,7 @@ Public Class MainViewModel
 
                     _new_session.InitCollectionSync()
 
-                    GenerateContainerSessionChains(_new_session)
+                    'GenerateContainerSessionChains(_new_session)
 
                     For Each _item In _new_session.DownloadItems
 
