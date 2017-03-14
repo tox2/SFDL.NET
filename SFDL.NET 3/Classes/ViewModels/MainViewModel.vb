@@ -1200,6 +1200,34 @@ Decrypt:
 
             InstantVideoOpen = True
 
+            Dim _mystream As InstantVideoStream = Nothing
+            Dim _error As Boolean = False
+
+            Try
+
+                _mystream = ContainerSessions.SelectMany(Of InstantVideoStream)(Function(mysession) mysession.InstantVideoStreams).Where(Function(insteam) insteam.IsSelected = True).FirstOrDefault
+
+                If Not IsNothing(_mystream) Then
+
+                    Dim _vlc_args As String = String.Empty
+
+                    Dim _app_task As New AppTask(String.Format("Starte InstantVideo für Archiv {0}", _mystream.File))
+
+                    _vlc_args = String.Format("{0} --no-qt-error-dialogs", Chr(34) & _mystream.File & Chr(34))
+
+                    System.Diagnostics.Process.Start(Chr(34) & GetVLCExecutable() & Chr(34), _vlc_args)
+
+                End If
+
+            Catch ex As Exception
+                _error = True
+            End Try
+
+            If _error = True Then
+                Await DialogCoordinator.Instance.ShowMessageAsync(Me, "InstantVideo Fehler", "Das ausgewählte InstatVideo konnte nicht gestartet werden!")
+            End If
+
+
         End If
 
     End Sub
