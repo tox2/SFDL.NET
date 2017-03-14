@@ -411,7 +411,7 @@ Decrypt:
                             If _total_speed >= 1024 Then
                                 _mytask.SetTaskStatus(TaskStatus.Running, String.Format(My.Resources.Strings.ETA_AppTask_Status_1_Message, Math.Round(_total_speed / 1024, 2), ConvertDecimal2Time(_time_remaining), _percent_done))
                             Else
-                                _mytask.SetTaskStatus(TaskStatus.Running, String.Format(My.Resources.Strings.ETA_AppTask_Status_1_Message, Math.Round(_total_speed, 2), ConvertDecimal2Time(_time_remaining), _percent_done))
+                                _mytask.SetTaskStatus(TaskStatus.Running, String.Format(My.Resources.Strings.ETA_AppTask_Status_4_Message, Math.Round(_total_speed, 2), ConvertDecimal2Time(_time_remaining), _percent_done))
                             End If
 
                         Else

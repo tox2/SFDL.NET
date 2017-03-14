@@ -635,4 +635,7 @@ Restart the download so that all settings are accepted</value>
   <data name="VariousStrings_Play" xml:space="preserve">
     <value>Play</value>
   </data>
+  <data name="ETA_AppTask_Status_4_Message" xml:space="preserve">
+    <value>Download running - Speed: {0} KB/s | ETA: {1} | {2} %</value>
+  </data>
 </root>
