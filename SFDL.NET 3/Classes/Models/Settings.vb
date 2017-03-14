@@ -46,7 +46,7 @@
 
             Dim _template As New Text.StringBuilder
 
-            _template.AppendLine("SFDL: %%SFDL_DESC%%")
+            _template.AppendLine("SFDL: %%SFDL_FILENAME%%")
             _template.AppendLine("Upper: %%SFDL_UPPER%%")
             _template.AppendLine("")
             _template.AppendLine("%%SFDL_SIZE%% in %%DLTIME%% heruntergeladen @ %%SPEED%% (Im Durchschnitt)")
