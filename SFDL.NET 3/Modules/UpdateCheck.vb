@@ -41,7 +41,7 @@ Module UpdateCheck
 
     End Function
 
-    Public Async Function IsNewUpdateAvailible() As Task(Of Visibility)
+    Public Async Function IsNewUpdateAvailible(ByVal _settings As Settings) As Task(Of Visibility)
 
         Dim _current_app_version As Version = My.Application.Info.Version
         Dim _update_app_version As Version
@@ -50,15 +50,19 @@ Module UpdateCheck
 
         Try
 
-            _tmp_file = Await DownloadVersionFile(UPDATEFILE)
+            If _settings.SearchUpdates = True Then
 
-            _update_app_version = Version.Parse(My.Computer.FileSystem.ReadAllText(_tmp_file).ToString.Trim)
+                _tmp_file = Await DownloadVersionFile(UPDATEFILE)
 
-            If _current_app_version.CompareTo(_update_app_version) = -1 Then '1 = älter 0=gleich -1=neuer
-                _log.Info("New version is availible")
-                _rt = Visibility.Visible
-            Else
-                _log.Info("No new version availible!")
+                _update_app_version = Version.Parse(My.Computer.FileSystem.ReadAllText(_tmp_file).ToString.Trim)
+
+                If _current_app_version.CompareTo(_update_app_version) = -1 Then '1 = älter 0=gleich -1=neuer
+                    _log.Info("New version is availible")
+                    _rt = Visibility.Visible
+                Else
+                    _log.Info("No new version availible!")
+                End If
+
             End If
 
         Catch ex As Exception

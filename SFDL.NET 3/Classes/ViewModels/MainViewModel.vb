@@ -49,9 +49,8 @@ Public Class MainViewModel
 
         LoadSavedSessions()
 
-        If _settings.SearchUpdates = True Then
-            NewUpdateAvailableVisibility = New NotifyTaskCompletion(Of Visibility)(IsNewUpdateAvailible)
-        End If
+        NewUpdateAvailableVisibility = New NotifyTaskCompletion(Of Visibility)(IsNewUpdateAvailible(_settings))
+
 
     End Sub
 
