@@ -683,4 +683,7 @@ Starten Sie den Download neu damit alle Einstellungen übernommen werden.</value
   <data name="Settings_Title" xml:space="preserve">
     <value>Einstellungen</value>
   </data>
+  <data name="ETA_AppTask_Status_4_Message" xml:space="preserve">
+    <value>Download läuft - Speed: {0} KB/s | ETA: {1} | {2} %</value>
+  </data>
 </root>

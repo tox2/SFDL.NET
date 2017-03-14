@@ -638,4 +638,7 @@ Restart the download to apply these settings.</value>
   <data name="Settings_Title" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="ETA_AppTask_Status_4_Message" xml:space="preserve">
+    <value>Download running - Speed: {0} KB/s | ETA: {1} | {2} %</value>
+  </data>
 </root>

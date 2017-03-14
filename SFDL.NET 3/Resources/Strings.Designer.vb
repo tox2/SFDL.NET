@@ -434,6 +434,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Download läuft - Speed: {0} KB/s | ETA: {1} | {2} % ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property ETA_AppTask_Status_4_Message() As String
+            Get
+                Return ResourceManager.GetString("ETA_AppTask_Status_4_Message", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Es läuft aktuell noch ein Download oder Entpackvorgang. Wollen Sie die Anwendung trotzdem beenden? ähnelt.
         '''</summary>
         Public Shared ReadOnly Property ExitApplication_Prompt_Message() As String
