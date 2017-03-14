@@ -1375,6 +1375,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Einstellungen ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property Settings_Title() As String
+            Get
+                Return ResourceManager.GetString("Settings_Title", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die Archiv Einstellungen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_UnrarSettings() As String
