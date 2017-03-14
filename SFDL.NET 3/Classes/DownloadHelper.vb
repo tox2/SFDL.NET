@@ -425,7 +425,7 @@ Class DownloadHelper
             End If
 
             If _item.LocalFile.Length >= 255 Then
-                Throw New FileNameTooLongException("File path is too long! -Can't write file!")
+                Throw New FileNameTooLongException("File path is too long! - Can't write file!")
             End If
 
             If _item.FileSize = 0 Then
@@ -681,26 +681,78 @@ Class DownloadHelper
                         _hashtype = Container.HashType.CRC
                     End If
 
+#Region "Try to get FTP Server Hash"
+
+
                     If Not String.IsNullOrWhiteSpace(_hashcommand) Then
-                        _log.Info("Server supports Hash Alogrightm {0}", _hashcommand)
 
-                        _reply = _ftp_session.Expect(_ftp_session.SendCommand(_hashcommand, _item.FullPath), 250)
+                        Try
 
-                        If _reply.Code.IsSuccess = True Then
+                            _log.Info("Server supports Hash Alogrightm {0}", _hashcommand)
 
-                            _log.Info("Hash server side successfully determined!")
+                            _reply = _ftp_session.Expect(_ftp_session.SendCommand(_hashcommand, _item.FullPath), 250)
 
-                            _item.HashType = _hashtype
-                            _tmp_hash = _reply.Lines(0).ToString.Replace(_item.FullPath, "")
-                            _tmp_hash = _tmp_hash.Replace(Chr(34), "")
-                            _item.FileHash = _tmp_hash.Trim
-                        Else
-                            _log.Error("Hash could not be determined")
-                        End If
+                            If _reply.Code.IsSuccess = True Then
+
+                                _log.Info("Hash server side successfully determined!")
+
+                                _item.HashType = _hashtype
+                                _tmp_hash = _reply.Lines(0).ToString.Replace(_item.FullPath, "")
+                                _tmp_hash = _tmp_hash.Replace(Chr(34), "")
+                                _item.FileHash = _tmp_hash.Trim
+
+                            Else
+                                Throw New ArxOne.Ftp.Exceptions.FtpFileException("Hash could not be determined", New ArxOne.Ftp.FtpReplyCode(550))
+                            End If
+
+                        Catch ex As ArxOne.Ftp.Exceptions.FtpFileException
+
+                            If ex.Code.Code = 550 Then 'FileNotFound
+
+                                Try
+
+                                    _log.Warn("Hash could Not be detemined - Trying alternate method")
+
+                                    'Try to ChangeDir
+                                    _reply = _ftp_session.Expect(_ftp_session.SendCommand("CWD", _item.DirectoryPath), 250)
+
+                                    If _reply.Code.IsSuccess = True Then
+
+                                        _log.Debug("Directory sucessfully changed")
+
+                                        _reply = _ftp_session.Expect(_ftp_session.SendCommand(_hashcommand, _item.FileName), 250)
+
+                                        If _reply.Code.IsSuccess = True Then
+
+                                            _log.Info("Hash server side successfully determined via alternate Method!")
+
+                                            _item.HashType = _hashtype
+                                            _tmp_hash = _reply.Lines(0).ToString.Replace(_item.FullPath, "")
+                                            _tmp_hash = _tmp_hash.Replace(Chr(34), "")
+                                            _item.FileHash = _tmp_hash.Trim
+
+                                        Else
+                                            _log.Error("Alternate Method failed - Hash could not be determined")
+                                        End If
+
+                                    End If
+
+                                Catch exalternate As Exception
+                                    _log.Error(exalternate, "Hash could not be determined")
+                                End Try
+
+                            End If
+
+
+                        Catch ex As Exception
+                            _log.Error(ex, "Hash could not be determined")
+                        End Try
 
                     Else
                         _log.Info("Server does not Support any Hash Algorithm")
                     End If
+
+#End Region
 
 
                 Else
