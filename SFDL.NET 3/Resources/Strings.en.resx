@@ -154,7 +154,7 @@
     <value>Settings</value>
   </data>
   <data name="MainMenu_Help" xml:space="preserve">
-    <value>Help</value>
+    <value>About</value>
   </data>
   <data name="MainMenu_Help_About" xml:space="preserve">
     <value>About</value>
@@ -497,7 +497,7 @@ Do you want to restart the application with administrator rights, now?</value>
     <value>SFDL '{0}' opened</value>
   </data>
   <data name="OpenSFDL_AppTask_Faulted_Message" xml:space="preserve">
-    <value>SFDL '{0}' partially opened - One or more packages could not be read.</value>
+    <value>SFDL '{0}' partially opened - One or serveral Containers could not be read.</value>
   </data>
   <data name="OpenSFDL_AppTask_Start_Message" xml:space="preserve">
     <value>SFDL File '{0}' is being opened....</value>

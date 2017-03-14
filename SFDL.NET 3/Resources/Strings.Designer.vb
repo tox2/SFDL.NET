@@ -92,7 +92,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Kann Session nicht schließen da diese aktiv ist (Download oder UnRAR) ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Kann die Sitzung nicht schließen da diese aktiv ist (Download oder Entpackvorgang) ähnelt.
         '''</summary>
         Public Shared ReadOnly Property CloseSFDLContainer_AppTask_Faulted_Message() As String
             Get
@@ -137,7 +137,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Max Anzahl Threads: ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Maximal erlaubte Threads Anzahl: ähnelt.
         '''</summary>
         Public Shared ReadOnly Property ContainerInfo_MaxThreads() As String
             Get
@@ -146,7 +146,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Anzahl Packete: ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Anzahl der Pakete: ähnelt.
         '''</summary>
         Public Shared ReadOnly Property ContainerInfo_PackagesCount() As String
             Get
@@ -191,7 +191,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Alle Dateien im diesem Paket makieren ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Alle Dateien im diesem Paket markieren ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadItems_ContextMenu_MarkAllItemsInPackage() As String
             Get
@@ -209,7 +209,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Alle Dateien im diesem Paket demakieren ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Alle Dateien im diesem Paket demarkieren ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadItems_ContextMenu_UnMarkAllItemsInPackage() As String
             Get
@@ -218,7 +218,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Datei bereits vollständig ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Datei bereits Vollständig ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_AlreadyDownloaded() As String
             Get
@@ -254,7 +254,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Unbekannte Fehler ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Fehler: Unbekannt ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_Failed() As String
             Get
@@ -263,7 +263,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Authentifizierungs Fehler ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Fehler: Authentifizierung ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_Failed_AuthError() As String
             Get
@@ -272,7 +272,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Verbindungsfehler ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Fehler: Verbindung ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_Failed_ConnectionError() As String
             Get
@@ -281,7 +281,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Verzeichnis nicht gefunden ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Fehler: Verzeichnis nicht gefunden ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_Failed_DirectoryNotFound() As String
             Get
@@ -290,7 +290,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Fehler - Dateiname zu lang ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Fehler: Dateiname zu lang ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_Failed_FileNameTooLong() As String
             Get
@@ -299,7 +299,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Datei nicht gefunden ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Fehler: Datei nicht gefunden ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_Failed_FileNotFound() As String
             Get
@@ -308,7 +308,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Serverfehler ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Fehler: Serverfehler ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_Failed_InternalServerError() As String
             Get
@@ -317,7 +317,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Fehler - Zu wenig Speicherplatz ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Fehler: Zu wenig Speicherplatz ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_Failed_NotEnoughDiskSpace() As String
             Get
@@ -326,7 +326,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Server nicht erreichbar ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Fehler: Server nicht erreichbar ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_Failed_ServerDown() As String
             Get
@@ -335,7 +335,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Fehler - Server voll ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Fehler: Server Voll ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_Failed_ServerFull() As String
             Get
@@ -344,7 +344,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Wartend ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die In Warteschlange ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_Queued() As String
             Get
@@ -380,7 +380,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Download eingereit warte auf Start.... ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Download wartet auf Start.... ähnelt.
         '''</summary>
         Public Shared ReadOnly Property DownloadStatus_RunningWait() As String
             Get
@@ -434,7 +434,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Es läuft aktuell noch ein Download oder UnRAR - Möchtest du die Anwendung trotzdem beenden? ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Es läuft aktuell noch ein Download oder Entpackvorgang. Wollen Sie die Anwendung trotzdem beenden? ähnelt.
         '''</summary>
         Public Shared ReadOnly Property ExitApplication_Prompt_Message() As String
             Get
@@ -452,7 +452,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Tasks ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Aufgaben ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Expander_Header_Tasks() As String
             Get
@@ -461,11 +461,11 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL.NET 3 wird zum ersten mal gestartet oder der Installationspfad hat sich geändert.
+        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL.NET 3 wird zum ersten Mal gestartet oder der Installationspfad hat sich geändert.
         '''
-        '''Deswegen muss SFDL.NET 3 nun einmal als Administrator gestartet werden damit die Dateiendung SFDL sowie ClicknLoad richtig installiert wird
+        '''Deshalb muss SFDL.NET 3 einmalig &quot;als Administrator&quot; gestartet werden damit die Dateiendung *.sfdl registriert wird.
         '''
-        '''Möchtest du SFDL.NET 3 nun als Administrator starten? ähnelt.
+        '''Wollen Sie die Anwendung jetzt mit Administratorrechte neustarten? ähnelt.
         '''</summary>
         Public Shared ReadOnly Property InstallPathChangedPrompt() As String
             Get
@@ -474,7 +474,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Verfügbare InstantVideo Streams: ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Verfügbare Instant Video Streams: ähnelt.
         '''</summary>
         Public Shared ReadOnly Property InstantVideo_AvailableStreams() As String
             Get
@@ -483,7 +483,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Der VLC PLayer ist auf deinem System nicht installiert. Bitte installiere den VLC Player um Instant Video zu nutzen! ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Der VLC PLayer ist auf dem System nicht installiert. Bitte installieren Sie den VLC Player um Instant Video zu nutzen! ähnelt.
         '''</summary>
         Public Shared ReadOnly Property InstantVideo_Message_VLCNotInstalled_Message() As String
             Get
@@ -609,7 +609,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Hilfe ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Über ähnelt.
         '''</summary>
         Public Shared ReadOnly Property MainMenu_Help() As String
             Get
@@ -636,7 +636,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Alle Pakete erweitern ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Alle Pakete ausklappen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property MainMenu_Modifiy_ExpandAllPackages() As String
             Get
@@ -645,7 +645,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Alle Dateien makieren ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Alle Dateien markieren ähnelt.
         '''</summary>
         Public Shared ReadOnly Property MainMenu_Modifiy_MarkAllFiles() As String
             Get
@@ -654,7 +654,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Alle Dateien demakieren ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Alle Dateien demarkieren ähnelt.
         '''</summary>
         Public Shared ReadOnly Property MainMenu_Modifiy_UnmarkAllFiles() As String
             Get
@@ -681,7 +681,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Alle fertigen Downloads entfernen ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Alle abgeschlossenen Downloads entfernen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property MainMenu_Modify_RemoveAllCompletedDownloads() As String
             Get
@@ -717,7 +717,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL Datei(en) öffnen ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL Datei(en) öffnen: ähnelt.
         '''</summary>
         Public Shared ReadOnly Property OpenFileDialog_Title() As String
             Get
@@ -744,7 +744,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL &apos;{0}&apos; teilweise geöffnet - Ein oder mehrere Packages konnten nicht gelesen werden. ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL &apos;{0}&apos; teilweise geöffnet - Einer oder mehrere Container konnten nicht gelesen werden. ähnelt.
         '''</summary>
         Public Shared ReadOnly Property OpenSFDL_AppTask_Faulted_Message() As String
             Get
@@ -753,7 +753,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL Datei &apos;{0}&apos; wird geöffnet... ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL Container &apos;{0}&apos; wird geöffnet... ähnelt.
         '''</summary>
         Public Shared ReadOnly Property OpenSFDL_AppTask_Start_Message() As String
             Get
@@ -771,7 +771,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die &apos;{0}&apos; - Try FTP Link, Server is propaply down ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die &apos;{0}&apos; - Versuch denn FTP Link, Server ist wahrscheinlich offline ähnelt.
         '''</summary>
         Public Shared ReadOnly Property OpenSFDL_Exception_FTPDown() As String
             Get
@@ -789,7 +789,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die &apos;{0}&apos; - Diese SFDL Datei ist mit dieser Programmversion nicht kompatibel! ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die &apos;{0}&apos; - Dieser SFDL Container ist inkompatibel mit dieser Programmversion! ähnelt.
         '''</summary>
         Public Shared ReadOnly Property OpenSFDL_Exception_SFDLFileNotCompatible() As String
             Get
@@ -798,7 +798,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Bitte gib ein Passwort ein um den SFDL Container {0} zu entschlüsseln ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Bitte geben Sie ein Passwort ein um den SFDL Container {0} zu entschlüsseln: ähnelt.
         '''</summary>
         Public Shared ReadOnly Property OpenSFDL_Prompt_Decrypt_Message() As String
             Get
@@ -852,7 +852,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Du musst mind. ein Item zum Download auswählen! ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Du musst mind. einen Eintrag zum Download auswählen! ähnelt.
         '''</summary>
         Public Shared ReadOnly Property PreDownloadCheck_Exception_NothingSelected() As String
             Get
@@ -861,7 +861,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Fertiggestellte Container entfernt/geschlossen ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Abgeschlossene Container entfernt/geschlossen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property RemoveAllCompletedDownloads_AppTask_Completed_Message() As String
             Get
@@ -870,7 +870,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Keine fertiggestellte Container vorhanden ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Keine abgeschlossene Container vorhanden ähnelt.
         '''</summary>
         Public Shared ReadOnly Property RemoveAllCompletedDownloads_AppTask_Faulted_Message() As String
             Get
@@ -879,7 +879,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Entferne/Schließe fertiggestellte Container... ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Entferne/Schließe abgeschlossene Container... ähnelt.
         '''</summary>
         Public Shared ReadOnly Property RemoveAllCompletedDownloads_AppTask_Start_Message() As String
             Get
@@ -897,7 +897,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Diese Funktion kann nicht genutzt werden so lange der Download aktiv ist ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Diese Funktion kann nicht genutzt werden solange der Download aktiv ist. ähnelt.
         '''</summary>
         Public Shared ReadOnly Property RemoveAllDownloads_AppTask_Faulted_Message() As String
             Get
@@ -1023,7 +1023,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Folgende Dateien ausslassen: ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Folgende Dateien ignorieren: ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_ExcludeFiles() As String
             Get
@@ -1068,7 +1068,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Bitte gebe eine gültige RegEx Pattern ein welche du zur Blacklist hinzufügen möchtest ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Bitte geben Sie ein gültiges RegEx. Pattern an, welches zur Blacklist hinzugefügt wird. ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_Input_AddBlacklistItem_Message() As String
             Get
@@ -1077,7 +1077,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Das eingebene RegEx Pattern ist nicht valide! ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Das eingebene RegEx. Pattern ist nicht gültig! ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_Input_AddBlacklistItem_RegexNotValid_Message() As String
             Get
@@ -1086,7 +1086,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die RegEx Pattern zu Blacklist hinzufügen ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die RegEx. Pattern zur Blacklist hinzufügen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_Input_AddBlacklistItem_Title() As String
             Get
@@ -1095,7 +1095,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Bitte gebe das Kennwort ein welche du hinzufügen möchtest ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Bitte geben Sie das Kennwort ein, welches zur Liste hinzugefügt wird. ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_Input_AddUnRARPassword_Message() As String
             Get
@@ -1104,7 +1104,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Passwort hinufügen ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Passwort hinzufügen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_Input_AddUnRARPassword_Title() As String
             Get
@@ -1113,7 +1113,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Instant Video aktivieren ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Instant Video ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_InstantVideo() As String
             Get
@@ -1212,7 +1212,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Willst du das ausgewählte RegEx Pattern aus der Blacklist entfernen? ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Wollen Sie das ausgewählte RegEx. Pattern aus der Blacklist entfernen? ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_Question_RemoveBlacklistItem_Message() As String
             Get
@@ -1221,7 +1221,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die RegEx Pattern aus Blacklist entfernen ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die RegEx. Pattern aus Blacklist entfernen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_Question_RemoveBlacklistItem_Title() As String
             Get
@@ -1230,7 +1230,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Willst du das ausgewählte Passwort entfernen? ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Wollen Sie das ausgewählte Passwort entfernen? ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_Question_RemoveUnRARPassword_Message() As String
             Get
@@ -1266,7 +1266,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Archive nach erfolgreichem Entpacken löschen ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Archive nach erfolgreichem Entpacken löschen lassen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_RemoveRARFiles() As String
             Get
@@ -1275,7 +1275,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL Datei nach dem öffnen löschen ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die SFDL Datei nach dem Öffnen löschen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_RemoveSFDL() As String
             Get
@@ -1284,7 +1284,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Beim speichern der EInstellungen ist ein Fehler aufgetreten! ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Beim Speichern der Einstellungen ist ein Fehler aufgetreten! ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_SaveError() As String
             Get
@@ -1293,8 +1293,8 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Alle Einstellung wurden nicht übernommen da aktuell ein Download aktiv ist.
-        '''Starte den Download neu damit alle Einstellungen übernommen werden ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Einige Einstellung wurden nicht übernommen, da aktuell ein Download aktiv ist.
+        '''Starten Sie den Download neu damit alle Einstellungen übernommen werden. ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_SaveSettings_DownloadActive_Message() As String
             Get
@@ -1375,7 +1375,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die UnRAR Einstellungen ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Archiv Einstellungen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Settings_UnrarSettings() As String
             Get
@@ -1429,7 +1429,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Speedreport erstellung fehlgeschlagen ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Speedreport Erstellung fehlgeschlagen! ähnelt.
         '''</summary>
         Public Shared ReadOnly Property Speedreport_Exception_SpeedreportFailed() As String
             Get
@@ -1465,7 +1465,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Entpacken ist fehlgeschlagen! ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Entpacken: Fehlgeschlagen ähnelt.
         '''</summary>
         Public Shared ReadOnly Property UnRAR_AppTask_Faulted_2_Message() As String
             Get
@@ -1501,7 +1501,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Cracke Passwort {0} ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Cracke Passwort Archiv: {0} ähnelt.
         '''</summary>
         Public Shared ReadOnly Property UnRAR_AppTask_Status_3_Message() As String
             Get
@@ -1510,7 +1510,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Cracken des UnRAR Passworts fehlgeschlagen! ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Cracken des Passworts fehlgeschlagen! ähnelt.
         '''</summary>
         Public Shared ReadOnly Property UnRAR_Exception_CrackPasswordFailed() As String
             Get
@@ -1519,7 +1519,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Ich brauche ein Passwort zum entpacken, allerdings sind keine Passworter in der Liste oder ich darf diese nicht verwenden ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Zum Entpacken ist ein Passwort nötig, allerdings sind keine Passworter in der Liste oder das Verwenden dieser ist nicht erlaubt. ähnelt.
         '''</summary>
         Public Shared ReadOnly Property UnRAR_Exception_NoPasswordsInList() As String
             Get
@@ -1528,7 +1528,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Kein passendes UnRAR Passwort gefunden ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Kein passendes Passwort gefunden! ähnelt.
         '''</summary>
         Public Shared ReadOnly Property UnRAR_Exception_NoValidPasswordFound() As String
             Get
@@ -1699,7 +1699,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Die UnRAR Binary welche zum automatischen entpacken benötigt wird ist nicht vorhanden! ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Die Entpack-Programme, welche zum automatischen Entpacken benötigt werden, sind nicht vorhanden! ähnelt.
         '''</summary>
         Public Shared ReadOnly Property VariousStrings_UnRARExecutableMissingException() As String
             Get
@@ -1708,7 +1708,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Upper ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Uploader ähnelt.
         '''</summary>
         Public Shared ReadOnly Property VariousStrings_Uploader() As String
             Get
