@@ -9,7 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:p="clr-namespace:SFDL.NET3.My.Resources"
     x:Name="SDFL_SettingsWindow"
-    Title="Einstellungen"
+    Title="{x:Static p:Strings.Settings_Title}"
     Dialog:DialogParticipation.Register="{Binding}"
     BorderThickness="2"
     GlowBrush="{DynamicResource AccentColorBrush2}"
@@ -57,7 +57,7 @@
                                                     Height="16"
                                                     Data="F1 M 16.6668,20L 13,28.5336L 13,16L 23,16L 23,15C 23,13.8954 23.8954,13 25,13L 32,13C 33.1046,13 35,14.8954 35,16L 35,20L 16.6668,20 Z M 35,32L 28,32L 13,32L 17.5833,21L 39.5833,21L 35,32 Z "
                                                     Fill="{TemplateBinding Foreground}"
-                                                    Stretch="Fill" />
+                                                    Stretch="Uniform" />
                                             </Canvas>
                                         </Grid>
                                     </Grid>
@@ -81,7 +81,10 @@
 
                             <StackPanel Orientation="Horizontal">
 
-                                <GroupBox x:Name="GroupBoxGeneralSettings" Header="{x:Static p:Strings.Settings_GeneralSettings}">
+                                <GroupBox
+                                    x:Name="GroupBoxGeneralSettings"
+                                    MinWidth="330"
+                                    Header="{x:Static p:Strings.Settings_GeneralSettings}">
                                     <Grid>
                                         <StackPanel Orientation="Horizontal">
                                             <StackPanel Margin="0,0,10,0">
@@ -169,7 +172,7 @@
 
                                 <GroupBox
                                     x:Name="GroupBoxDownloadSettings"
-                                    MinWidth="332"
+                                    MinWidth="330"
                                     Header="{x:Static p:Strings.Settings_DownloadSettings}">
                                     <Grid>
                                         <StackPanel>
@@ -221,21 +224,21 @@
 
                                                     <Controls:NumericUpDown
                                                         x:Name="NumMaxThreads"
-                                                        Width="147"
+                                                        Width="150"
                                                         Margin="5,5,5,0"
                                                         Maximum="100"
                                                         Minimum="1"
                                                         Value="{Binding MaxDownloadThreads}" />
                                                     <Controls:NumericUpDown
                                                         x:Name="NumMaxRetries"
-                                                        Width="147"
+                                                        Width="150"
                                                         Margin="5,5,5,0"
                                                         Maximum="100"
                                                         Minimum="1"
                                                         Value="{Binding MaxRetry}" />
                                                     <Controls:NumericUpDown
                                                         x:Name="NumWaitRetries"
-                                                        Width="147"
+                                                        Width="150"
                                                         Margin="5,5,5,0"
                                                         Maximum="120"
                                                         Minimum="1"
@@ -275,7 +278,7 @@
                                                                 VerticalAlignment="Center"
                                                                 Fill="{DynamicResource AccentColorBrush}">
                                                                 <Rectangle.OpacityMask>
-                                                                    <VisualBrush Visual="{StaticResource appbar_add}" />
+                                                                    <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_add}" />
                                                                 </Rectangle.OpacityMask>
                                                             </Rectangle>
                                                         </StackPanel>
@@ -297,7 +300,7 @@
                                                                 VerticalAlignment="Center"
                                                                 Fill="{DynamicResource AccentColorBrush}">
                                                                 <Rectangle.OpacityMask>
-                                                                    <VisualBrush Visual="{StaticResource appbar_checkmark_cross}" />
+                                                                    <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_checkmark_cross}" />
                                                                 </Rectangle.OpacityMask>
                                                             </Rectangle>
                                                         </StackPanel>
@@ -340,7 +343,10 @@
                 <TabItem Controls:ControlsHelper.HeaderFontSize="15" Header="{x:Static p:Strings.Settings_UnrarSettings}">
                     <Grid>
                         <StackPanel>
-                            <GroupBox x:Name="GroupBoxUnrarSettings" Header="{x:Static p:Strings.Settings_UnrarSettings}">
+                            <GroupBox
+                                x:Name="GroupBoxUnrarSettings"
+                                MinWidth="340"
+                                Header="{x:Static p:Strings.Settings_UnrarSettings}">
                                 <Grid>
                                     <StackPanel Orientation="Horizontal">
                                         <StackPanel>
@@ -390,7 +396,7 @@
                                                                 VerticalAlignment="Center"
                                                                 Fill="{DynamicResource AccentColorBrush}">
                                                                 <Rectangle.OpacityMask>
-                                                                    <VisualBrush Visual="{StaticResource appbar_add}" />
+                                                                    <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_add}" />
                                                                 </Rectangle.OpacityMask>
                                                             </Rectangle>
                                                         </StackPanel>
@@ -414,7 +420,7 @@
                                                                 VerticalAlignment="Center"
                                                                 Fill="{DynamicResource AccentColorBrush}">
                                                                 <Rectangle.OpacityMask>
-                                                                    <VisualBrush Visual="{StaticResource appbar_checkmark_cross}" />
+                                                                    <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_checkmark_cross}" />
                                                                 </Rectangle.OpacityMask>
                                                             </Rectangle>
                                                         </StackPanel>
@@ -488,7 +494,7 @@
                                                             Height="16"
                                                             Fill="{DynamicResource AccentColorBrush}">
                                                             <Rectangle.OpacityMask>
-                                                                <VisualBrush Visual="{StaticResource appbar_code_xml}" />
+                                                                <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_code_xml}" />
                                                             </Rectangle.OpacityMask>
                                                         </Rectangle>
                                                     </MenuItem.Icon>
@@ -502,7 +508,7 @@
                                                                 Height="16"
                                                                 Fill="{DynamicResource AccentColorBrush}">
                                                                 <Rectangle.OpacityMask>
-                                                                    <VisualBrush Visual="{StaticResource appbar_user}" />
+                                                                    <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_user}" />
                                                                 </Rectangle.OpacityMask>
                                                             </Rectangle>
                                                         </MenuItem.Icon>
@@ -517,7 +523,7 @@
                                                                 Height="16"
                                                                 Fill="{DynamicResource AccentColorBrush}">
                                                                 <Rectangle.OpacityMask>
-                                                                    <VisualBrush Visual="{StaticResource appbar_connection_quality_veryhigh}" />
+                                                                    <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_connection_quality_veryhigh}" />
                                                                 </Rectangle.OpacityMask>
                                                             </Rectangle>
                                                         </MenuItem.Icon>
@@ -532,7 +538,7 @@
                                                                 Height="16"
                                                                 Fill="{DynamicResource AccentColorBrush}">
                                                                 <Rectangle.OpacityMask>
-                                                                    <VisualBrush Visual="{StaticResource appbar_notification_above}" />
+                                                                    <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_notification}" />
                                                                 </Rectangle.OpacityMask>
                                                             </Rectangle>
                                                         </MenuItem.Icon>
@@ -547,7 +553,7 @@
                                                                 Height="16"
                                                                 Fill="{DynamicResource AccentColorBrush}">
                                                                 <Rectangle.OpacityMask>
-                                                                    <VisualBrush Visual="{StaticResource appbar_gauge_75}" />
+                                                                    <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_gauge_75}" />
                                                                 </Rectangle.OpacityMask>
                                                             </Rectangle>
                                                         </MenuItem.Icon>
@@ -563,7 +569,7 @@
                                                                 Height="16"
                                                                 Fill="{DynamicResource AccentColorBrush}">
                                                                 <Rectangle.OpacityMask>
-                                                                    <VisualBrush Visual="{StaticResource appbar_hourglass}" />
+                                                                    <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_timer}" />
                                                                 </Rectangle.OpacityMask>
                                                             </Rectangle>
                                                         </MenuItem.Icon>
@@ -582,7 +588,7 @@
                                                             Height="16"
                                                             Fill="{DynamicResource AccentColorBrush}">
                                                             <Rectangle.OpacityMask>
-                                                                <VisualBrush Visual="{StaticResource appbar_information_circle}" />
+                                                                <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_information_circle}" />
                                                             </Rectangle.OpacityMask>
                                                         </Rectangle>
                                                     </MenuItem.Icon>
@@ -597,7 +603,7 @@
                                                                 Height="16"
                                                                 Fill="{DynamicResource AccentColorBrush}">
                                                                 <Rectangle.OpacityMask>
-                                                                    <VisualBrush Visual="{StaticResource appbar_interface_textbox}" />
+                                                                    <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_interface_textbox}" />
                                                                 </Rectangle.OpacityMask>
                                                             </Rectangle>
                                                         </MenuItem.Icon>
@@ -612,7 +618,7 @@
                                                                 Height="16"
                                                                 Fill="{DynamicResource AccentColorBrush}">
                                                                 <Rectangle.OpacityMask>
-                                                                    <VisualBrush Visual="{StaticResource appbar_people_up}" />
+                                                                    <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_people_up}" />
                                                                 </Rectangle.OpacityMask>
                                                             </Rectangle>
                                                         </MenuItem.Icon>
@@ -627,7 +633,7 @@
                                                                 Height="16"
                                                                 Fill="{DynamicResource AccentColorBrush}">
                                                                 <Rectangle.OpacityMask>
-                                                                    <VisualBrush Visual="{StaticResource appbar_leaderboard}" />
+                                                                    <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_pie}" />
                                                                 </Rectangle.OpacityMask>
                                                             </Rectangle>
                                                         </MenuItem.Icon>
@@ -638,7 +644,7 @@
                                         </ToolBar>
                                         <TextBox
                                             x:Name="TxtSpeedreportTemplate"
-                                            MinHeight="123"
+                                            MinHeight="100"
                                             AcceptsReturn="True"
                                             BorderThickness="1"
                                             IsEnabled="{Binding SpeedreportEnabled}"
@@ -711,7 +717,7 @@
                         Margin="0,0,5,0"
                         Fill="{DynamicResource AccentColorBrush}">
                         <Rectangle.OpacityMask>
-                            <VisualBrush Visual="{StaticResource appbar_save}" />
+                            <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_save}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
                     <TextBlock
